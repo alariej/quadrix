@@ -1,0 +1,1594 @@
+{
+    "😀": {
+        "text": "😀",
+        "name": "grinning face"
+    },
+    "😃": {
+        "text": "😃",
+        "name": "grinning face with big eyes"
+    },
+    "😄": {
+        "text": "😄",
+        "name": "grinning face with smiling eyes"
+    },
+    "😁": {
+        "text": "😁",
+        "name": "beaming face with smiling eyes"
+    },
+    "😆": {
+        "text": "😆",
+        "name": "grinning squinting face"
+    },
+    "😅": {
+        "text": "😅",
+        "name": "grinning face with sweat"
+    },
+    "😂": {
+        "text": "😂",
+        "name": "face with tears of joy"
+    },
+    "🙂": {
+        "text": "🙂",
+        "name": "slightly smiling face"
+    },
+    "😉": {
+        "text": "😉",
+        "name": "winking face"
+    },
+    "😊": {
+        "text": "😊",
+        "name": "smiling face with smiling eyes"
+    },
+    "😍": {
+        "text": "😍",
+        "name": "smiling face with heart-eyes"
+    },
+    "😘": {
+        "text": "😘",
+        "name": "face blowing a kiss"
+    },
+    "😚": {
+        "text": "😚",
+        "name": "kissing face with closed eyes"
+    },
+    "😋": {
+        "text": "😋",
+        "name": "face savoring food"
+    },
+    "😜": {
+        "text": "😜",
+        "name": "winking face with tongue"
+    },
+    "😝": {
+        "text": "😝",
+        "name": "squinting face with tongue"
+    },
+    "😏": {
+        "text": "😏",
+        "name": "smirking face"
+    },
+    "😒": {
+        "text": "😒",
+        "name": "unamused face"
+    },
+    "😌": {
+        "text": "😌",
+        "name": "relieved face"
+    },
+    "😔": {
+        "text": "😔",
+        "name": "pensive face"
+    },
+    "😪": {
+        "text": "😪",
+        "name": "sleepy face"
+    },
+    "😷": {
+        "text": "😷",
+        "name": "face with medical mask"
+    },
+    "😵": {
+        "text": "😵",
+        "name": "dizzy face"
+    },
+    "😎": {
+        "text": "😎",
+        "name": "smiling face with sunglasses"
+    },
+    "😕": {
+        "text": "😕",
+        "name": "confused face"
+    },
+    "😟": {
+        "text": "😟",
+        "name": "worried face"
+    },
+    "😲": {
+        "text": "😲",
+        "name": "astonished face"
+    },
+    "😳": {
+        "text": "😳",
+        "name": "flushed face"
+    },
+    "😨": {
+        "text": "😨",
+        "name": "fearful face"
+    },
+    "😰": {
+        "text": "😰",
+        "name": "anxious face with sweat"
+    },
+    "😥": {
+        "text": "😥",
+        "name": "sad but relieved face"
+    },
+    "😢": {
+        "text": "😢",
+        "name": "crying face"
+    },
+    "😭": {
+        "text": "😭",
+        "name": "loudly crying face"
+    },
+    "😱": {
+        "text": "😱",
+        "name": "face screaming in fear"
+    },
+    "😖": {
+        "text": "😖",
+        "name": "confounded face"
+    },
+    "😣": {
+        "text": "😣",
+        "name": "persevering face"
+    },
+    "😞": {
+        "text": "😞",
+        "name": "disappointed face"
+    },
+    "😓": {
+        "text": "😓",
+        "name": "downcast face with sweat"
+    },
+    "😩": {
+        "text": "😩",
+        "name": "weary face"
+    },
+    "😫": {
+        "text": "😫",
+        "name": "tired face"
+    },
+    "😤": {
+        "text": "😤",
+        "name": "face with steam from nose"
+    },
+    "😡": {
+        "text": "😡",
+        "name": "pouting face"
+    },
+    "😠": {
+        "text": "😠",
+        "name": "angry face"
+    },
+    "👿": {
+        "text": "👿",
+        "name": "angry face with horns"
+    },
+    "💀": {
+        "text": "💀",
+        "name": "skull"
+    },
+    "💩": {
+        "text": "💩",
+        "name": "pile of poo"
+    },
+    "👹": {
+        "text": "👹",
+        "name": "ogre"
+    },
+    "👺": {
+        "text": "👺",
+        "name": "goblin"
+    },
+    "👻": {
+        "text": "👻",
+        "name": "ghost"
+    },
+    "👽": {
+        "text": "👽",
+        "name": "alien"
+    },
+    "👾": {
+        "text": "👾",
+        "name": "alien monster"
+    },
+    "😺": {
+        "text": "😺",
+        "name": "grinning cat"
+    },
+    "😸": {
+        "text": "😸",
+        "name": "grinning cat with smiling eyes"
+    },
+    "😹": {
+        "text": "😹",
+        "name": "cat with tears of joy"
+    },
+    "😻": {
+        "text": "😻",
+        "name": "smiling cat with heart-eyes"
+    },
+    "😼": {
+        "text": "😼",
+        "name": "cat with wry smile"
+    },
+    "😽": {
+        "text": "😽",
+        "name": "kissing cat"
+    },
+    "🙀": {
+        "text": "🙀",
+        "name": "weary cat"
+    },
+    "😿": {
+        "text": "😿",
+        "name": "crying cat"
+    },
+    "😾": {
+        "text": "😾",
+        "name": "pouting cat"
+    },
+    "🙈": {
+        "text": "🙈",
+        "name": "see-no-evil monkey"
+    },
+    "🙉": {
+        "text": "🙉",
+        "name": "hear-no-evil monkey"
+    },
+    "🙊": {
+        "text": "🙊",
+        "name": "speak-no-evil monkey"
+    },
+    "💋": {
+        "text": "💋",
+        "name": "kiss mark"
+    },
+    "💌": {
+        "text": "💌",
+        "name": "love letter"
+    },
+    "💘": {
+        "text": "💘",
+        "name": "heart with arrow"
+    },
+    "💝": {
+        "text": "💝",
+        "name": "heart with ribbon"
+    },
+    "💖": {
+        "text": "💖",
+        "name": "sparkling heart"
+    },
+    "💗": {
+        "text": "💗",
+        "name": "growing heart"
+    },
+    "💓": {
+        "text": "💓",
+        "name": "beating heart"
+    },
+    "💞": {
+        "text": "💞",
+        "name": "revolving hearts"
+    },
+    "💕": {
+        "text": "💕",
+        "name": "two hearts"
+    },
+    "💔": {
+        "text": "💔",
+        "name": "broken heart"
+    },
+    "❤": {
+        "text": "❤",
+        "name": "red heart"
+    },
+    "💥": {
+        "text": "💥",
+        "name": "collision"
+    },
+    "💫": {
+        "text": "💫",
+        "name": "dizzy"
+    },
+    "💦": {
+        "text": "💦",
+        "name": "sweat droplets"
+    },
+    "💨": {
+        "text": "💨",
+        "name": "dashing away"
+    },
+    "💣": {
+        "text": "💣",
+        "name": "bomb"
+    },
+    "💬": {
+        "text": "💬",
+        "name": "speech balloon"
+    },
+    "💤": {
+        "text": "💤",
+        "name": "zzz"
+    },
+    "👋": {
+        "text": "👋",
+        "name": "waving hand"
+    },
+    "✋": {
+        "text": "✋",
+        "name": "raised hand"
+    },
+    "👌": {
+        "text": "👌",
+        "name": "OK hand"
+    },
+    "✌": {
+        "text": "✌",
+        "name": "victory hand"
+    },
+    "👈": {
+        "text": "👈",
+        "name": "backhand index pointing left"
+    },
+    "👉": {
+        "text": "👉",
+        "name": "backhand index pointing right"
+    },
+    "👆": {
+        "text": "👆",
+        "name": "backhand index pointing up"
+    },
+    "👇": {
+        "text": "👇",
+        "name": "backhand index pointing down"
+    },
+    "☝": {
+        "text": "☝",
+        "name": "index pointing up"
+    },
+    "👍": {
+        "text": "👍",
+        "name": "thumbs up"
+    },
+    "👎": {
+        "text": "👎",
+        "name": "thumbs down"
+    },
+    "✊": {
+        "text": "✊",
+        "name": "raised fist"
+    },
+    "👊": {
+        "text": "👊",
+        "name": "oncoming fist"
+    },
+    "👏": {
+        "text": "👏",
+        "name": "clapping hands"
+    },
+    "🙌": {
+        "text": "🙌",
+        "name": "raising hands"
+    },
+    "👐": {
+        "text": "👐",
+        "name": "open hands"
+    },
+    "🙏": {
+        "text": "🙏",
+        "name": "folded hands"
+    },
+    "💅": {
+        "text": "💅",
+        "name": "nail polish"
+    },
+    "💪": {
+        "text": "💪",
+        "name": "flexed biceps"
+    },
+    "👂": {
+        "text": "👂",
+        "name": "ear"
+    },
+    "👃": {
+        "text": "👃",
+        "name": "nose"
+    },
+    "👀": {
+        "text": "👀",
+        "name": "eyes"
+    },
+    "👅": {
+        "text": "👅",
+        "name": "tongue"
+    },
+    "👄": {
+        "text": "👄",
+        "name": "mouth"
+    },
+    "👶": {
+        "text": "👶",
+        "name": "baby"
+    },
+    "👦": {
+        "text": "👦",
+        "name": "boy"
+    },
+    "👧": {
+        "text": "👧",
+        "name": "girl"
+    },
+    "👱": {
+        "text": "👱",
+        "name": "person: blond hair"
+    },
+    "👨": {
+        "text": "👨",
+        "name": "man"
+    },
+    "👩": {
+        "text": "👩",
+        "name": "woman"
+    },
+    "👴": {
+        "text": "👴",
+        "name": "old man"
+    },
+    "👵": {
+        "text": "👵",
+        "name": "old woman"
+    },
+    "🙍": {
+        "text": "🙍",
+        "name": "person frowning"
+    },
+    "🙎": {
+        "text": "🙎",
+        "name": "person pouting"
+    },
+    "🙅": {
+        "text": "🙅",
+        "name": "person gesturing NO"
+    },
+    "🙆": {
+        "text": "🙆",
+        "name": "person gesturing OK"
+    },
+    "💁": {
+        "text": "💁",
+        "name": "person tipping hand"
+    },
+    "🙋": {
+        "text": "🙋",
+        "name": "person raising hand"
+    },
+    "🙇": {
+        "text": "🙇",
+        "name": "person bowing"
+    },
+    "👮": {
+        "text": "👮",
+        "name": "police officer"
+    },
+    "💂": {
+        "text": "💂",
+        "name": "guard"
+    },
+    "👷": {
+        "text": "👷",
+        "name": "construction worker"
+    },
+    "👸": {
+        "text": "👸",
+        "name": "princess"
+    },
+    "👳": {
+        "text": "👳",
+        "name": "person wearing turban"
+    },
+    "👲": {
+        "text": "👲",
+        "name": "man with skullcap"
+    },
+    "👰": {
+        "text": "👰",
+        "name": "bride with veil"
+    },
+    "👼": {
+        "text": "👼",
+        "name": "baby angel"
+    },
+    "🎅": {
+        "text": "🎅",
+        "name": "Santa Claus"
+    },
+    "💆": {
+        "text": "💆",
+        "name": "person getting massage"
+    },
+    "💇": {
+        "text": "💇",
+        "name": "person getting haircut"
+    },
+    "🚶": {
+        "text": "🚶",
+        "name": "person walking"
+    },
+    "🏃": {
+        "text": "🏃",
+        "name": "person running"
+    },
+    "💃": {
+        "text": "💃",
+        "name": "woman dancing"
+    },
+    "👯": {
+        "text": "👯",
+        "name": "people with bunny ears"
+    },
+    "🏂": {
+        "text": "🏂",
+        "name": "snowboarder"
+    },
+    "🏄": {
+        "text": "🏄",
+        "name": "person surfing"
+    },
+    "🏊": {
+        "text": "🏊",
+        "name": "person swimming"
+    },
+    "🛀": {
+        "text": "🛀",
+        "name": "person taking bath"
+    },
+    "👫": {
+        "text": "👫",
+        "name": "woman and man holding hands"
+    },
+    "💏": {
+        "text": "💏",
+        "name": "kiss"
+    },
+    "💑": {
+        "text": "💑",
+        "name": "couple with heart"
+    },
+    "👪": {
+        "text": "👪",
+        "name": "family"
+    },
+    "👤": {
+        "text": "👤",
+        "name": "bust in silhouette"
+    },
+    "👣": {
+        "text": "👣",
+        "name": "footprints"
+    },
+    "🐵": {
+        "text": "🐵",
+        "name": "monkey face"
+    },
+    "🐒": {
+        "text": "🐒",
+        "name": "monkey"
+    },
+    "🐶": {
+        "text": "🐶",
+        "name": "dog face"
+    },
+    "🐩": {
+        "text": "🐩",
+        "name": "poodle"
+    },
+    "🐺": {
+        "text": "🐺",
+        "name": "wolf"
+    },
+    "🐱": {
+        "text": "🐱",
+        "name": "cat face"
+    },
+    "🐯": {
+        "text": "🐯",
+        "name": "tiger face"
+    },
+    "🐴": {
+        "text": "🐴",
+        "name": "horse face"
+    },
+    "🐎": {
+        "text": "🐎",
+        "name": "horse"
+    },
+    "🐮": {
+        "text": "🐮",
+        "name": "cow face"
+    },
+    "🐷": {
+        "text": "🐷",
+        "name": "pig face"
+    },
+    "🐗": {
+        "text": "🐗",
+        "name": "boar"
+    },
+    "🐽": {
+        "text": "🐽",
+        "name": "pig nose"
+    },
+    "🐑": {
+        "text": "🐑",
+        "name": "ewe"
+    },
+    "🐫": {
+        "text": "🐫",
+        "name": "two-hump camel"
+    },
+    "🐘": {
+        "text": "🐘",
+        "name": "elephant"
+    },
+    "🐭": {
+        "text": "🐭",
+        "name": "mouse face"
+    },
+    "🐹": {
+        "text": "🐹",
+        "name": "hamster"
+    },
+    "🐰": {
+        "text": "🐰",
+        "name": "rabbit face"
+    },
+    "🐻": {
+        "text": "🐻",
+        "name": "bear"
+    },
+    "🐨": {
+        "text": "🐨",
+        "name": "koala"
+    },
+    "🐼": {
+        "text": "🐼",
+        "name": "panda"
+    },
+    "🐾": {
+        "text": "🐾",
+        "name": "paw prints"
+    },
+    "🐔": {
+        "text": "🐔",
+        "name": "chicken"
+    },
+    "🐣": {
+        "text": "🐣",
+        "name": "hatching chick"
+    },
+    "🐤": {
+        "text": "🐤",
+        "name": "baby chick"
+    },
+    "🐥": {
+        "text": "🐥",
+        "name": "front-facing baby chick"
+    },
+    "🐦": {
+        "text": "🐦",
+        "name": "bird"
+    },
+    "🐧": {
+        "text": "🐧",
+        "name": "penguin"
+    },
+    "🐸": {
+        "text": "🐸",
+        "name": "frog"
+    },
+    "🐢": {
+        "text": "🐢",
+        "name": "turtle"
+    },
+    "🐍": {
+        "text": "🐍",
+        "name": "snake"
+    },
+    "🐲": {
+        "text": "🐲",
+        "name": "dragon face"
+    },
+    "🐳": {
+        "text": "🐳",
+        "name": "spouting whale"
+    },
+    "🐬": {
+        "text": "🐬",
+        "name": "dolphin"
+    },
+    "🐟": {
+        "text": "🐟",
+        "name": "fish"
+    },
+    "🐠": {
+        "text": "🐠",
+        "name": "tropical fish"
+    },
+    "🐡": {
+        "text": "🐡",
+        "name": "blowfish"
+    },
+    "🐙": {
+        "text": "🐙",
+        "name": "octopus"
+    },
+    "🐚": {
+        "text": "🐚",
+        "name": "spiral shell"
+    },
+    "🐌": {
+        "text": "🐌",
+        "name": "snail"
+    },
+    "🐛": {
+        "text": "🐛",
+        "name": "bug"
+    },
+    "🐜": {
+        "text": "🐜",
+        "name": "ant"
+    },
+    "🐝": {
+        "text": "🐝",
+        "name": "honeybee"
+    },
+    "🐞": {
+        "text": "🐞",
+        "name": "lady beetle"
+    },
+    "💐": {
+        "text": "💐",
+        "name": "bouquet"
+    },
+    "🌸": {
+        "text": "🌸",
+        "name": "cherry blossom"
+    },
+    "💮": {
+        "text": "💮",
+        "name": "white flower"
+    },
+    "🌹": {
+        "text": "🌹",
+        "name": "rose"
+    },
+    "🌺": {
+        "text": "🌺",
+        "name": "hibiscus"
+    },
+    "🌻": {
+        "text": "🌻",
+        "name": "sunflower"
+    },
+    "🌼": {
+        "text": "🌼",
+        "name": "blossom"
+    },
+    "🌷": {
+        "text": "🌷",
+        "name": "tulip"
+    },
+    "🌱": {
+        "text": "🌱",
+        "name": "seedling"
+    },
+    "🌴": {
+        "text": "🌴",
+        "name": "palm tree"
+    },
+    "🌵": {
+        "text": "🌵",
+        "name": "cactus"
+    },
+    "🌾": {
+        "text": "🌾",
+        "name": "sheaf of rice"
+    },
+    "🌿": {
+        "text": "🌿",
+        "name": "herb"
+    },
+    "🍀": {
+        "text": "🍀",
+        "name": "four leaf clover"
+    },
+    "🍁": {
+        "text": "🍁",
+        "name": "maple leaf"
+    },
+    "🍂": {
+        "text": "🍂",
+        "name": "fallen leaf"
+    },
+    "🍃": {
+        "text": "🍃",
+        "name": "leaf fluttering in wind"
+    },
+    "🍇": {
+        "text": "🍇",
+        "name": "grapes"
+    },
+    "🍈": {
+        "text": "🍈",
+        "name": "melon"
+    },
+    "🍉": {
+        "text": "🍉",
+        "name": "watermelon"
+    },
+    "🍊": {
+        "text": "🍊",
+        "name": "tangerine"
+    },
+    "🍌": {
+        "text": "🍌",
+        "name": "banana"
+    },
+    "🍍": {
+        "text": "🍍",
+        "name": "pineapple"
+    },
+    "🍎": {
+        "text": "🍎",
+        "name": "red apple"
+    },
+    "🍏": {
+        "text": "🍏",
+        "name": "green apple"
+    },
+    "🍑": {
+        "text": "🍑",
+        "name": "peach"
+    },
+    "🍒": {
+        "text": "🍒",
+        "name": "cherries"
+    },
+    "🍓": {
+        "text": "🍓",
+        "name": "strawberry"
+    },
+    "🍅": {
+        "text": "🍅",
+        "name": "tomato"
+    },
+    "🍆": {
+        "text": "🍆",
+        "name": "eggplant"
+    },
+    "🌽": {
+        "text": "🌽",
+        "name": "ear of corn"
+    },
+    "🍄": {
+        "text": "🍄",
+        "name": "mushroom"
+    },
+    "🌰": {
+        "text": "🌰",
+        "name": "chestnut"
+    },
+    "🍞": {
+        "text": "🍞",
+        "name": "bread"
+    },
+    "🍖": {
+        "text": "🍖",
+        "name": "meat on bone"
+    },
+    "🍗": {
+        "text": "🍗",
+        "name": "poultry leg"
+    },
+    "🍔": {
+        "text": "🍔",
+        "name": "hamburger"
+    },
+    "🍟": {
+        "text": "🍟",
+        "name": "french fries"
+    },
+    "🍕": {
+        "text": "🍕",
+        "name": "pizza"
+    },
+    "🍳": {
+        "text": "🍳",
+        "name": "cooking"
+    },
+    "🍲": {
+        "text": "🍲",
+        "name": "pot of food"
+    },
+    "🍱": {
+        "text": "🍱",
+        "name": "bento box"
+    },
+    "🍘": {
+        "text": "🍘",
+        "name": "rice cracker"
+    },
+    "🍙": {
+        "text": "🍙",
+        "name": "rice ball"
+    },
+    "🍚": {
+        "text": "🍚",
+        "name": "cooked rice"
+    },
+    "🍛": {
+        "text": "🍛",
+        "name": "curry rice"
+    },
+    "🍜": {
+        "text": "🍜",
+        "name": "steaming bowl"
+    },
+    "🍝": {
+        "text": "🍝",
+        "name": "spaghetti"
+    },
+    "🍠": {
+        "text": "🍠",
+        "name": "roasted sweet potato"
+    },
+    "🍢": {
+        "text": "🍢",
+        "name": "oden"
+    },
+    "🍣": {
+        "text": "🍣",
+        "name": "sushi"
+    },
+    "🍤": {
+        "text": "🍤",
+        "name": "fried shrimp"
+    },
+    "🍥": {
+        "text": "🍥",
+        "name": "fish cake with swirl"
+    },
+    "🍡": {
+        "text": "🍡",
+        "name": "dango"
+    },
+    "🍦": {
+        "text": "🍦",
+        "name": "soft ice cream"
+    },
+    "🍧": {
+        "text": "🍧",
+        "name": "shaved ice"
+    },
+    "🍨": {
+        "text": "🍨",
+        "name": "ice cream"
+    },
+    "🍩": {
+        "text": "🍩",
+        "name": "doughnut"
+    },
+    "🍪": {
+        "text": "🍪",
+        "name": "cookie"
+    },
+    "🎂": {
+        "text": "🎂",
+        "name": "birthday cake"
+    },
+    "🍰": {
+        "text": "🍰",
+        "name": "shortcake"
+    },
+    "🍫": {
+        "text": "🍫",
+        "name": "chocolate bar"
+    },
+    "🍬": {
+        "text": "🍬",
+        "name": "candy"
+    },
+    "🍭": {
+        "text": "🍭",
+        "name": "lollipop"
+    },
+    "🍮": {
+        "text": "🍮",
+        "name": "custard"
+    },
+    "🍯": {
+        "text": "🍯",
+        "name": "honey pot"
+    },
+    "☕": {
+        "text": "☕",
+        "name": "hot beverage"
+    },
+    "🍵": {
+        "text": "🍵",
+        "name": "teacup without handle"
+    },
+    "🍶": {
+        "text": "🍶",
+        "name": "sake"
+    },
+    "🍷": {
+        "text": "🍷",
+        "name": "wine glass"
+    },
+    "🍸": {
+        "text": "🍸",
+        "name": "cocktail glass"
+    },
+    "🍹": {
+        "text": "🍹",
+        "name": "tropical drink"
+    },
+    "🍺": {
+        "text": "🍺",
+        "name": "beer mug"
+    },
+    "🍻": {
+        "text": "🍻",
+        "name": "clinking beer mugs"
+    },
+    "🍴": {
+        "text": "🍴",
+        "name": "fork and knife"
+    },
+    "🔪": {
+        "text": "🔪",
+        "name": "kitchen knife"
+    },
+    "🌏": {
+        "text": "🌏",
+        "name": "globe showing Asia-Australia"
+    },
+    "🗾": {
+        "text": "🗾",
+        "name": "map of Japan"
+    },
+    "🌋": {
+        "text": "🌋",
+        "name": "volcano"
+    },
+    "🗻": {
+        "text": "🗻",
+        "name": "mount fuji"
+    },
+    "🏠": {
+        "text": "🏠",
+        "name": "house"
+    },
+    "🏡": {
+        "text": "🏡",
+        "name": "house with garden"
+    },
+    "🏢": {
+        "text": "🏢",
+        "name": "office building"
+    },
+    "🏣": {
+        "text": "🏣",
+        "name": "Japanese post office"
+    },
+    "🏥": {
+        "text": "🏥",
+        "name": "hospital"
+    },
+    "🏦": {
+        "text": "🏦",
+        "name": "bank"
+    },
+    "🏨": {
+        "text": "🏨",
+        "name": "hotel"
+    },
+    "🏩": {
+        "text": "🏩",
+        "name": "love hotel"
+    },
+    "🏪": {
+        "text": "🏪",
+        "name": "convenience store"
+    },
+    "🏫": {
+        "text": "🏫",
+        "name": "school"
+    },
+    "🏬": {
+        "text": "🏬",
+        "name": "department store"
+    },
+    "🏭": {
+        "text": "🏭",
+        "name": "factory"
+    },
+    "🏯": {
+        "text": "🏯",
+        "name": "Japanese castle"
+    },
+    "🏰": {
+        "text": "🏰",
+        "name": "castle"
+    },
+    "💒": {
+        "text": "💒",
+        "name": "wedding"
+    },
+    "🗼": {
+        "text": "🗼",
+        "name": "Tokyo tower"
+    },
+    "🗽": {
+        "text": "🗽",
+        "name": "Statue of Liberty"
+    },
+    "⛪": {
+        "text": "⛪",
+        "name": "church"
+    },
+    "⛲": {
+        "text": "⛲",
+        "name": "fountain"
+    },
+    "⛺": {
+        "text": "⛺",
+        "name": "tent"
+    },
+    "🌁": {
+        "text": "🌁",
+        "name": "foggy"
+    },
+    "🌃": {
+        "text": "🌃",
+        "name": "night with stars"
+    },
+    "🌄": {
+        "text": "🌄",
+        "name": "sunrise over mountains"
+    },
+    "🌅": {
+        "text": "🌅",
+        "name": "sunrise"
+    },
+    "🌆": {
+        "text": "🌆",
+        "name": "cityscape at dusk"
+    },
+    "🌇": {
+        "text": "🌇",
+        "name": "sunset"
+    },
+    "🌉": {
+        "text": "🌉",
+        "name": "bridge at night"
+    },
+    "♨": {
+        "text": "♨",
+        "name": "hot springs"
+    },
+    "🎠": {
+        "text": "🎠",
+        "name": "carousel horse"
+    },
+    "🎡": {
+        "text": "🎡",
+        "name": "ferris wheel"
+    },
+    "🎢": {
+        "text": "🎢",
+        "name": "roller coaster"
+    },
+    "💈": {
+        "text": "💈",
+        "name": "barber pole"
+    },
+    "🎪": {
+        "text": "🎪",
+        "name": "circus tent"
+    },
+    "🚃": {
+        "text": "🚃",
+        "name": "railway car"
+    },
+    "🚄": {
+        "text": "🚄",
+        "name": "high-speed train"
+    },
+    "🚅": {
+        "text": "🚅",
+        "name": "bullet train"
+    },
+    "🚇": {
+        "text": "🚇",
+        "name": "metro"
+    },
+    "🚉": {
+        "text": "🚉",
+        "name": "station"
+    },
+    "🚌": {
+        "text": "🚌",
+        "name": "bus"
+    },
+    "🚑": {
+        "text": "🚑",
+        "name": "ambulance"
+    },
+    "🚒": {
+        "text": "🚒",
+        "name": "fire engine"
+    },
+    "🚓": {
+        "text": "🚓",
+        "name": "police car"
+    },
+    "🚕": {
+        "text": "🚕",
+        "name": "taxi"
+    },
+    "🚗": {
+        "text": "🚗",
+        "name": "automobile"
+    },
+    "🚙": {
+        "text": "🚙",
+        "name": "sport utility vehicle"
+    },
+    "🚚": {
+        "text": "🚚",
+        "name": "delivery truck"
+    },
+    "🚲": {
+        "text": "🚲",
+        "name": "bicycle"
+    },
+    "🚏": {
+        "text": "🚏",
+        "name": "bus stop"
+    },
+    "⛽": {
+        "text": "⛽",
+        "name": "fuel pump"
+    },
+    "🚨": {
+        "text": "🚨",
+        "name": "police car light"
+    },
+    "🚥": {
+        "text": "🚥",
+        "name": "horizontal traffic light"
+    },
+    "🚧": {
+        "text": "🚧",
+        "name": "construction"
+    },
+    "⚓": {
+        "text": "⚓",
+        "name": "anchor"
+    },
+    "⛵": {
+        "text": "⛵",
+        "name": "sailboat"
+    },
+    "🚤": {
+        "text": "🚤",
+        "name": "speedboat"
+    },
+    "🚢": {
+        "text": "🚢",
+        "name": "ship"
+    },
+    "✈": {
+        "text": "✈",
+        "name": "airplane"
+    },
+    "💺": {
+        "text": "💺",
+        "name": "seat"
+    },
+    "🚀": {
+        "text": "🚀",
+        "name": "rocket"
+    },
+    "⌛": {
+        "text": "⌛",
+        "name": "hourglass done"
+    },
+    "⏳": {
+        "text": "⏳",
+        "name": "hourglass not done"
+    },
+    "⌚": {
+        "text": "⌚",
+        "name": "watch"
+    },
+    "⏰": {
+        "text": "⏰",
+        "name": "alarm clock"
+    },
+    "🌑": {
+        "text": "🌑",
+        "name": "new moon"
+    },
+    "🌓": {
+        "text": "🌓",
+        "name": "first quarter moon"
+    },
+    "🌔": {
+        "text": "🌔",
+        "name": "waxing gibbous moon"
+    },
+    "🌕": {
+        "text": "🌕",
+        "name": "full moon"
+    },
+    "🌙": {
+        "text": "🌙",
+        "name": "crescent moon"
+    },
+    "🌛": {
+        "text": "🌛",
+        "name": "first quarter moon face"
+    },
+    "☀": {
+        "text": "☀",
+        "name": "sun"
+    },
+    "🌟": {
+        "text": "🌟",
+        "name": "glowing star"
+    },
+    "🌠": {
+        "text": "🌠",
+        "name": "shooting star"
+    },
+    "🌌": {
+        "text": "🌌",
+        "name": "milky way"
+    },
+    "☁": {
+        "text": "☁",
+        "name": "cloud"
+    },
+    "⛅": {
+        "text": "⛅",
+        "name": "sun behind cloud"
+    },
+    "🌀": {
+        "text": "🌀",
+        "name": "cyclone"
+    },
+    "🌈": {
+        "text": "🌈",
+        "name": "rainbow"
+    },
+    "🌂": {
+        "text": "🌂",
+        "name": "closed umbrella"
+    },
+    "☔": {
+        "text": "☔",
+        "name": "umbrella with rain drops"
+    },
+    "⚡": {
+        "text": "⚡",
+        "name": "high voltage"
+    },
+    "❄": {
+        "text": "❄",
+        "name": "snowflake"
+    },
+    "⛄": {
+        "text": "⛄",
+        "name": "snowman without snow"
+    },
+    "🔥": {
+        "text": "🔥",
+        "name": "fire"
+    },
+    "💧": {
+        "text": "💧",
+        "name": "droplet"
+    },
+    "🌊": {
+        "text": "🌊",
+        "name": "water wave"
+    },
+    "🎃": {
+        "text": "🎃",
+        "name": "jack-o-lantern"
+    },
+    "🎄": {
+        "text": "🎄",
+        "name": "Christmas tree"
+    },
+    "🎆": {
+        "text": "🎆",
+        "name": "fireworks"
+    },
+    "🎇": {
+        "text": "🎇",
+        "name": "sparkler"
+    },
+    "✨": {
+        "text": "✨",
+        "name": "sparkles"
+    },
+    "🎈": {
+        "text": "🎈",
+        "name": "balloon"
+    },
+    "🎉": {
+        "text": "🎉",
+        "name": "party popper"
+    },
+    "🎊": {
+        "text": "🎊",
+        "name": "confetti ball"
+    },
+    "🎋": {
+        "text": "🎋",
+        "name": "tanabata tree"
+    },
+    "🎍": {
+        "text": "🎍",
+        "name": "pine decoration"
+    },
+    "🎎": {
+        "text": "🎎",
+        "name": "Japanese dolls"
+    },
+    "🎏": {
+        "text": "🎏",
+        "name": "carp streamer"
+    },
+    "🎐": {
+        "text": "🎐",
+        "name": "wind chime"
+    },
+    "🎑": {
+        "text": "🎑",
+        "name": "moon viewing ceremony"
+    },
+    "🎀": {
+        "text": "🎀",
+        "name": "ribbon"
+    },
+    "🎁": {
+        "text": "🎁",
+        "name": "wrapped gift"
+    },
+    "🎫": {
+        "text": "🎫",
+        "name": "ticket"
+    },
+    "🏆": {
+        "text": "🏆",
+        "name": "trophy"
+    },
+    "⚽": {
+        "text": "⚽",
+        "name": "soccer ball"
+    },
+    "⚾": {
+        "text": "⚾",
+        "name": "baseball"
+    },
+    "🏀": {
+        "text": "🏀",
+        "name": "basketball"
+    },
+    "🏈": {
+        "text": "🏈",
+        "name": "american football"
+    },
+    "🎾": {
+        "text": "🎾",
+        "name": "tennis"
+    },
+    "🎳": {
+        "text": "🎳",
+        "name": "bowling"
+    },
+    "⛳": {
+        "text": "⛳",
+        "name": "flag in hole"
+    },
+    "🎣": {
+        "text": "🎣",
+        "name": "fishing pole"
+    },
+    "🎽": {
+        "text": "🎽",
+        "name": "running shirt"
+    },
+    "🎿": {
+        "text": "🎿",
+        "name": "skis"
+    },
+    "🎯": {
+        "text": "🎯",
+        "name": "direct hit"
+    },
+    "🎱": {
+        "text": "🎱",
+        "name": "pool 8 ball"
+    },
+    "🔮": {
+        "text": "🔮",
+        "name": "crystal ball"
+    },
+    "🎮": {
+        "text": "🎮",
+        "name": "video game"
+    },
+    "🎰": {
+        "text": "🎰",
+        "name": "slot machine"
+    },
+    "🎲": {
+        "text": "🎲",
+        "name": "game die"
+    },
+    "♠": {
+        "text": "♠",
+        "name": "spade suit"
+    },
+    "♥": {
+        "text": "♥",
+        "name": "heart suit"
+    },
+    "♦": {
+        "text": "♦",
+        "name": "diamond suit"
+    },
+    "♣": {
+        "text": "♣",
+        "name": "club suit"
+    },
+    "🃏": {
+        "text": "🃏",
+        "name": "joker"
+    },
+    "🀄": {
+        "text": "🀄",
+        "name": "mahjong red dragon"
+    },
+    "🎴": {
+        "text": "🎴",
+        "name": "flower playing cards"
+    },
+    "🎭": {
+        "text": "🎭",
+        "name": "performing arts"
+    },
+    "🎨": {
+        "text": "🎨",
+        "name": "artist palette"
+    }
+}

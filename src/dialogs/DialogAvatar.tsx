@@ -1,0 +1,334 @@
+import React, { ReactElement } from 'react';
+import RX from 'reactxp';
+import ApiClient from '../matrix/ApiClient';
+import DataStore from '../stores/DataStore';
+import DialogContainer from '../modules/DialogContainer';
+import FileHandler from '../modules/FileHandler';
+import { save, cancel, Languages } from '../translations';
+import UiStore from '../stores/UiStore';
+import { ComponentBase } from 'resub';
+import { LOGO_BACKGROUND, BUTTON_MODAL_TEXT, FONT_LARGE, BORDER_RADIUS, INPUT_BORDER, OBJECT_MARGIN, BUTTON_LONG_WIDTH, CONTAINER_PADDING,
+    BUTTON_HEIGHT, AVATAR_BACKGROUND, AVATAR_LARGE_WIDTH } from '../ui';
+import utils from '../utils/Utils';
+import IconSvg, { SvgFile } from '../components/IconSvg';
+import { ErrorResponse_, RoomPhase, RoomType, StateEventContent_ } from '../models/MatrixApi';
+import { FileObject } from '../models/FileObject';
+
+const styles = {
+    modalScreen: RX.Styles.createViewStyle({
+        flex: 1,
+        alignSelf: 'stretch',
+    }),
+    avatarContainer: RX.Styles.createViewStyle({
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: AVATAR_LARGE_WIDTH,
+        marginVertical: OBJECT_MARGIN,
+    }),
+    avatar: RX.Styles.createImageStyle({
+        flex: 1,
+        width: AVATAR_LARGE_WIDTH,
+        borderRadius: AVATAR_LARGE_WIDTH / 2,
+        overlayColor: AVATAR_BACKGROUND,
+    }),
+    spinnerContainer: RX.Styles.createViewStyle({
+        position: 'absolute',
+        height: AVATAR_LARGE_WIDTH,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }),
+    textDialog: RX.Styles.createTextStyle({
+        textAlign: 'center',
+        color: BUTTON_MODAL_TEXT,
+        fontSize: FONT_LARGE,
+        margin: 12,
+    }),
+    inputBox: RX.Styles.createTextInputStyle({
+        fontSize: FONT_LARGE,
+        paddingHorizontal: CONTAINER_PADDING,
+        height: BUTTON_HEIGHT,
+        borderRadius: BORDER_RADIUS,
+        width: BUTTON_LONG_WIDTH,
+        borderWidth: 1,
+        borderColor: INPUT_BORDER,
+        marginTop: OBJECT_MARGIN,
+        alignSelf: 'center'
+    }),
+};
+
+interface AvatarProps extends RX.CommonProps {
+    avatarUrl: string;
+    roomName: string;
+    roomType: RoomType;
+    roomPhase: RoomPhase;
+    roomId: string;
+}
+
+interface AvatarState {
+    confirmDisabled: boolean;
+    showSpinner: boolean;
+    offline: boolean;
+}
+
+export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState> {
+
+    private powerLevel: number;
+    private language: Languages = 'en';
+    private avatarUrl = '';
+    private avatarFile: FileObject | undefined;
+    private roomName: string;
+    private roomNameRemote: string;
+    private canChange = false;
+
+    constructor(props: AvatarProps) {
+        super(props);
+
+        this.avatarUrl = props.avatarUrl;
+        this.powerLevel = DataStore.getPowerLevel(props.roomId, ApiClient.credentials.userIdFull);
+        this.language = UiStore.getLanguage();
+        this.roomName = props.roomName;
+        this.roomNameRemote = props.roomName;
+
+        this.canChange = props.roomType !== 'direct' && props.roomPhase === 'join' && this.powerLevel === 100;
+    }
+
+    protected _buildState(_props: AvatarProps, initState: boolean): Partial<AvatarState> {
+
+        if (initState) {
+            return {
+                confirmDisabled: true,
+                showSpinner: false,
+                offline: UiStore.getOffline(),
+            }
+        }
+
+        return { offline: UiStore.getOffline() };
+    }
+
+    private setConfirmDisabled = () => {
+
+        const confirmDisabled =
+            (!this.avatarFile || !this.avatarUrl) &&
+            (!this.roomName || this.roomNameRemote === this.roomName);
+        this.setState({ confirmDisabled: confirmDisabled, });
+    }
+
+    private pickAvatar = async () => {
+
+        if (!this.canChange) { return }
+
+        const file = await FileHandler.pickFile(true).catch(_error => null);
+
+        if (file) {
+
+            this.avatarFile = file;
+            this.avatarUrl = file.uri;
+
+            this.setConfirmDisabled();
+        }
+    }
+
+    private saveNewValues = () => {
+
+        RX.UserInterface.dismissKeyboard();
+
+        this.setState({
+            confirmDisabled: true,
+            showSpinner: true,
+        });
+
+        Promise.all([this.saveName(), this.saveAvatar()])
+            .then(_response => {
+
+                this.setState({
+                    showSpinner: false,
+                });
+
+                RX.Modal.dismissAll();
+
+            }, (error: ErrorResponse_) => {
+
+                // TODO: translation?
+                const text = (
+                    <RX.Text style={ styles.textDialog }>
+                        { error.body && error.body.error ? error.body.error : '[Unknown error]' }
+                    </RX.Text>
+                );
+
+                RX.Modal.show(<DialogContainer content={ text } modalId={ 'errordialog' }/>, 'errordialog');
+            })
+            .catch((error: ErrorResponse_) => {
+
+                const text = (
+                    <RX.Text style={ styles.textDialog }>
+                        { error.body && error.body.error ? error.body.error : '[Unknown error]' }
+                    </RX.Text>
+                );
+
+                RX.Modal.show(<DialogContainer content={ text } modalId={ 'errordialog' }/>, 'errordialog');
+            });
+    }
+
+    private saveName = async (): Promise<void> => {
+
+        if (!this.roomName || this.roomName === this.roomNameRemote) { return Promise.resolve() }
+
+        const content = {
+            name: this.roomName,
+        };
+
+        await ApiClient.sendStateEvent(this.props.roomId, 'm.room.name', content, '').catch(error => { return Promise.reject(error) });
+
+        this.roomNameRemote = this.roomName;
+
+        return Promise.resolve();
+    }
+
+    private saveAvatar = async (): Promise<void> => {
+
+        if (!this.avatarUrl || !this.avatarFile) { return Promise.resolve() }
+
+        const fetchProgress = (_progress: number) => {
+            // not used yet
+        }
+
+        const fileUri = await FileHandler.uploadFile(ApiClient.credentials, this.avatarFile, fetchProgress)
+            .catch(error => { return Promise.reject(error) });
+
+        if (!fileUri) { return Promise.reject('No URI found') }
+
+        const content: StateEventContent_ = {
+            url: fileUri,
+            size: this.avatarFile.size,
+            mimetype: this.avatarFile.type,
+        };
+
+        await ApiClient.sendStateEvent(this.props.roomId, 'm.room.avatar', content, '').catch(error => { return Promise.reject(error) });
+
+        this.avatarUrl = utils.mxcToHttp(fileUri, ApiClient.credentials.homeServer);
+
+        this.avatarFile = undefined;
+
+        return Promise.resolve();
+    }
+
+    private changeRoomName = (roomName: string) => {
+
+        this.roomName = roomName;
+
+        this.setConfirmDisabled();
+    }
+
+    public render(): JSX.Element | null {
+
+        let spinner;
+        if (this.state.showSpinner) {
+            spinner = (
+                <RX.View style={ styles.spinnerContainer }>
+                    <RX.ActivityIndicator color={ LOGO_BACKGROUND } size={ 'large' } />
+                </RX.View>
+            );
+        }
+
+        let avatar: ReactElement;
+        if (!this.avatarUrl) {
+            if (this.props.roomType === 'direct') {
+                avatar = (
+                    <IconSvg
+                        source= { require('../resources/svg/contact.json') as SvgFile }
+                        fillColor={ BUTTON_MODAL_TEXT }
+                        height={ AVATAR_LARGE_WIDTH * 0.5 }
+                        width={ AVATAR_LARGE_WIDTH * 0.5 }
+                    />
+                )
+            } else if (this.props.roomType === 'notepad') {
+                avatar = (
+                    <IconSvg
+                        source= { require('../resources/svg/notepad.json') as SvgFile }
+                        fillColor={ BUTTON_MODAL_TEXT }
+                        height={ AVATAR_LARGE_WIDTH * 0.6 }
+                        width={ AVATAR_LARGE_WIDTH * 0.6 }
+                        style={{ marginLeft: AVATAR_LARGE_WIDTH / 14, marginBottom: AVATAR_LARGE_WIDTH / 14 }}
+                    />
+                )
+            } else if (this.props.roomType === 'group') {
+                avatar = (
+                    <IconSvg
+                        source= { require('../resources/svg/group.json') as SvgFile }
+                        fillColor={ BUTTON_MODAL_TEXT }
+                        height={ AVATAR_LARGE_WIDTH * 0.7 }
+                        width={ AVATAR_LARGE_WIDTH * 0.7 }
+                    />
+                )
+            } else if (this.props.roomType === 'community') {
+                avatar = (
+                    <IconSvg
+                        source= { require('../resources/svg/community.json') as SvgFile }
+                        fillColor={ BUTTON_MODAL_TEXT }
+                        height={ AVATAR_LARGE_WIDTH * 0.6 }
+                        width={ AVATAR_LARGE_WIDTH * 0.6 }
+                    />
+                )
+            }
+        } else {
+            avatar = (
+                <RX.Image
+                    resizeMode={ 'cover' }
+                    style={ styles.avatar }
+                    source={ this.avatarUrl }
+                />
+            )
+        }
+
+        let roomName;
+        if (this.canChange) {
+            roomName = (
+                <RX.TextInput
+                    style={ styles.inputBox }
+                    onChangeText={ text => this.changeRoomName(text) }
+                    value={ this.roomName }
+                    disableFullscreenUI={ true }
+                    autoCapitalize={ 'none' }
+                    keyboardType={ 'default' }
+                    autoCorrect={ false }
+                    tabIndex={ 1 }
+                    editable={ this.canChange }
+                />
+            );
+        }
+
+        const content = (
+            <RX.View>
+                { roomName }
+                <RX.View
+                    style={ [styles.avatarContainer, { cursor: this.canChange ? 'pointer' : 'default' }] }
+                    onPress={ () => { this.pickAvatar().catch(_error => null) } }
+                    disableTouchOpacityAnimation={ true }
+                    activeOpacity={ 1 }
+                >
+                    { avatar! }
+                    { spinner }
+                </RX.View>
+            </RX.View>
+        );
+
+        const dialogAvatar = (
+            <DialogContainer
+                content={ content }
+                confirmButton={ this.canChange }
+                confirmButtonText={ save[this.language] }
+                cancelButton={ this.canChange }
+                cancelButtonText={ cancel[this.language] }
+                onConfirm={ this.saveNewValues }
+                onCancel={ () => RX.Modal.dismissAll() }
+                confirmDisabled={ this.state.confirmDisabled || this.state.offline }
+            />
+        )
+
+        return (
+            <RX.View style={ styles.modalScreen }>
+                { dialogAvatar }
+            </RX.View>
+        );
+    }
+}

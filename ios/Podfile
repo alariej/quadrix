@@ -1,0 +1,31 @@
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+
+platform :ios, '11.0'
+
+target 'quadrix' do
+  config = use_native_modules!
+
+  use_react_native!(:path => config["reactNativePath"])
+
+  pod 'react-native-image-resizer', :path => '../node_modules/react-native-image-resizer'
+
+  pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
+
+  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
+
+  pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
+
+  pod 'react-native-document-picker', :path => '../node_modules/react-native-document-picker'
+
+  pod 'RNShare', :path => '../node_modules/react-native-share'
+
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
+  pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
+
+  target 'quadrixTests' do
+    inherit! :complete
+    # Pods for testing
+  end
+end

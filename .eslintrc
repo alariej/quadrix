@@ -1,0 +1,46 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "warnOnUnsupportedTypeScriptVersion": false,
+    "ecmaFeatures": { "jsx": true },
+    "ecmaVersion": 2018,
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "react",
+    "reactxp"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:reactxp/recommended",
+    "plugin:react/recommended"
+  ],
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "rules": {
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/restrict-plus-operands": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/indent": ["error", 4],
+    "react/jsx-curly-brace-presence": [2, { "props": "always" }],
+    "max-len": ["error", 140],
+    "indent": "off"
+  },
+  "globals": {
+    "__DEV__": true
+  },
+  "settings": {
+    "react": { "version": "latest" }
+  }
+}
