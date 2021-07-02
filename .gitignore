@@ -71,3 +71,4 @@ ios/quadrix.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
 #
 android/app/google-services.json
 ios/GoogleService-Info.plist
+ios/Podfile.lock
