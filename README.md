@@ -40,14 +40,18 @@
 </p>
 
 ## Installation:
-```
-npm install
-```
+For all platforms:
+- `npm install`
+
+Additionally for iOS:
+- `cd ios`
+- `pod install`
+
 ## Main Commands:
 
 - `npm run start:web` - runs the Web version of the app and serves it on http://localhost:9999
-- `npm run start:ios` - runs the iOS version of the app and opens it on a connected iPhone
 - `npm run start:android` - runs the Android version of the app and opens it on a connected Android device
+- `npm run start:ios` - runs the iOS version of the app and opens it on a connected iPhone
 
 ## Issues & Bugs:
 
@@ -68,5 +72,6 @@ Copyright (c) 2021 Jean-François Alarie
 ## Contact:
 
 - Matrix: @alariej:matrix.org
+- Matrix: #quadrix:matrix.org
 - Email: alariej (at) quadrix.chat
 - LinkedIn: [www.linkedin.com/in/alariej](https://www.linkedin.com/in/alariej)
