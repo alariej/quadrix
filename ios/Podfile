@@ -8,16 +8,6 @@ target 'quadrix' do
 
   use_react_native!(:path => config["reactNativePath"])
 
-
-
-  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
-
-  pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
-
-  pod 'react-native-document-picker', :path => '../node_modules/react-native-document-picker'
-
-
-
   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
 
   target 'quadrixTests' do
