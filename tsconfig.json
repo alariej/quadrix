@@ -25,6 +25,6 @@
     "lib": ["es5", "es2015", "dom"]
   },
 
-  "include": ["src/**/*", "web/**/*", "*.config.js", "index.js", "electron-main.js"],
+  "include": ["src/**/*", "web/**/*", "*.config.js", "index.js", "electron-main.js", "scripts/*"],
   "exclude": ["node_modules"]
 }
