@@ -85,8 +85,6 @@ class FileHandler {
             imageHeight: imageSize.height,
         }
 
-        console.log(file);
-
         return Promise.resolve(file);
     }
 
