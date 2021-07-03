@@ -49,9 +49,10 @@ Additionally for iOS:
 
 ## Main Commands:
 
-- `npm run start:web` - runs the Web version of the app and serves it on http://localhost:9999
-- `npm run start:android` - runs the Android version of the app and opens it on a connected Android device
-- `npm run start:ios` - runs the iOS version of the app and opens it on a connected iPhone
+- `npm run start:web` - starts Webpack and serves the web app on http://localhost:9999
+- `npm run start:rn-dev` - starts the React Native development server
+- `npm run start:android` - starts the Android version of the app and opens it on a connected Android device
+- `npm run start:ios` - starts the iOS version of the app and opens it in a simulator
 
 ## Issues & Bugs:
 
