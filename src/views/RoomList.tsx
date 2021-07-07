@@ -37,16 +37,14 @@ interface RoomListState {
 
 export default class RoomList extends ComponentBase<RoomListProps, RoomListState> {
 
-    protected _buildState(_nextProps: RoomListProps, initState: boolean, prevState: RoomListState): Partial<RoomListState> {
+    protected _buildState(_nextProps: RoomListProps, _initState: boolean, _prevState: RoomListState): Partial<RoomListState> {
 
         const partialState: Partial<RoomListState> = {};
 
-        if (initState || !prevState.syncComplete) {
-            partialState.syncComplete = DataStore.getSyncComplete();
+        partialState.syncComplete = DataStore.getSyncComplete();
 
-            if (partialState.syncComplete && RX.Modal.isDisplayed('modalspinnerroomlist')) {
-                RX.Modal.dismiss('modalspinnerroomlist');
-            }
+        if (partialState.syncComplete && RX.Modal.isDisplayed('syncspinner')) {
+            RX.Modal.dismiss('syncspinner');
         }
 
         const sortedRoomList =  DataStore.getSortedRoomList();
@@ -74,7 +72,7 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
         super.componentDidMount();
 
         if (!this.state.syncComplete) {
-            RX.Modal.show(<ModalSpinner/>, 'modalspinnerroomlist');
+            RX.Modal.show(<ModalSpinner/>, 'syncspinner');
         }
     }
 

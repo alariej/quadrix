@@ -15,6 +15,7 @@ import { deviceOffline } from '../translations';
 import JitsiMeet from '../modules/JitsiMeet';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { ComponentBase } from 'resub';
+import ModalSpinner from '../components/ModalSpinner';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -228,6 +229,9 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
             if (ApiClient.isSyncStopped()) {
 
+                RX.Modal.show(<ModalSpinner/>, 'syncspinner');
+                DataStore.setSyncComplete(false);
+
                 const nextSyncToken = ApiClient.getNextSyncToken();
                 ApiClient.startSync(nextSyncToken);
             }
@@ -249,6 +253,9 @@ export default class Main extends ComponentBase<MainProps, MainState> {
             UiStore.setOffline(false);
 
             if (ApiClient.isSyncStopped()) {
+
+                RX.Modal.show(<ModalSpinner/>, 'syncspinner');
+                DataStore.setSyncComplete(false);
 
                 const nextSyncToken = ApiClient.getNextSyncToken();
                 ApiClient.startSync(nextSyncToken);

@@ -670,7 +670,15 @@ class DataStore extends StoreBase {
 
     public updateRoomSummaryList(syncData: SyncResponse_) {
 
-        if (!syncData.rooms) { return }
+        if (!syncData.rooms) {
+
+            if (!this.syncComplete) {
+                this.syncComplete = true;
+                this.trigger(SyncCompleteTrigger);
+            }
+
+            return;
+        }
 
         let roomEventTriggers: RoomEventTriggers = {};
 
