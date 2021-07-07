@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { BUTTON_ROUND_BACKGROUND, HEADER_TEXT, BUTTON_ROUND_WIDTH, BORDER_RADIUS, CONTAINER_PADDING, HEADER_HEIGHT,
     SPACING, FONT_NORMAL, FONT_LARGE, AVATAR_SMALL_WIDTH, ICON_REDUCTION_FACTOR, BUTTON_UNREAD_TEXT, BUTTON_UNREAD_BACKGROUND, FONT_SMALL,
-    AVATAR_MARGIN, LOGO_BACKGROUND, AVATAR_BACKGROUND, BUTTON_MODAL_TEXT } from '../ui';
+    AVATAR_MARGIN, LOGO_BACKGROUND, AVATAR_BACKGROUND, BUTTON_MODAL_TEXT, TRANSPARENT_BACKGROUND } from '../ui';
 import { ComponentBase } from 'resub';
 import DataStore from '../stores/DataStore';
 import utils from '../utils/Utils';
@@ -31,6 +31,7 @@ const styles = {
         padding: CONTAINER_PADDING,
         borderRadius: BORDER_RADIUS,
         cursor: 'pointer',
+        backgroundColor: TRANSPARENT_BACKGROUND
     }),
     containerAvatar: RX.Styles.createViewStyle({
         justifyContent: 'center',

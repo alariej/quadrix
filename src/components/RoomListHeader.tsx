@@ -3,7 +3,7 @@ import RX from 'reactxp';
 import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
 import { BUTTON_ROUND_BACKGROUND, HEADER_TEXT, MODAL_CONTENT_TEXT, LINK_TEXT, HEADER_HEIGHT, FONT_NORMAL,
-    BUTTON_ROUND_WIDTH, FONT_LARGE, BORDER_RADIUS, SPACING, ICON_REDUCTION_FACTOR, LOGO_BACKGROUND } from '../ui';
+    BUTTON_ROUND_WIDTH, FONT_LARGE, BORDER_RADIUS, SPACING, ICON_REDUCTION_FACTOR, LOGO_BACKGROUND, TRANSPARENT_BACKGROUND } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogNewRoom from '../dialogs/DialogNewRoom';
 import DialogContainer from '../modules/DialogContainer';
@@ -24,6 +24,7 @@ const styles = {
         justifyContent: 'center',
         borderRadius: BORDER_RADIUS,
         cursor: 'pointer',
+        backgroundColor: TRANSPARENT_BACKGROUND
     }),
     userName: RX.Styles.createViewStyle({
         flexDirection: 'row',
@@ -70,7 +71,8 @@ const styles = {
         color: LINK_TEXT,
         textDecorationLine: 'underline',
         textAlign: 'center',
-        marginVertical: 12,
+        padding: 12,
+        backgroundColor: TRANSPARENT_BACKGROUND,
     }),
     app_name: RX.Styles.createViewStyle({
         marginVertical: 12,
