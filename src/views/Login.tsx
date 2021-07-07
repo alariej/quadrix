@@ -437,7 +437,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
                 cancelButton={ true }
                 cancelButtonText={ this.state.register ? register[this.language] : login[this.language] }
                 onCancel={ this.onPressMainButton }
-                backgroundColor={ 'transparent' }
+                backgroundColor={ TRANSPARENT_BACKGROUND }
                 backgroundColorContent={ TRANSPARENT_BACKGROUND }
                 bottomElement={ bottomElement }
                 buttonStyle={ styles.mainButton }
