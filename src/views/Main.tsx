@@ -3,7 +3,7 @@ import RX, { Types } from 'reactxp';
 import RoomList from './RoomList';
 import Room from './Room';
 import { PAGE_MARGIN, MODAL_CONTENT_TEXT, FONT_LARGE, COMPOSER_BORDER, LOGO_BACKGROUND,
-    PAGE_WIDE_PADDING, BUTTON_LONG_TEXT, SPACING } from '../ui';
+    PAGE_WIDE_PADDING, BUTTON_LONG_TEXT, OBJECT_MARGIN } from '../ui';
 import DataStore from '../stores/DataStore';
 import { MessageEvent } from '../models/MessageEvent';
 import ApiClient from '../matrix/ApiClient';
@@ -48,10 +48,11 @@ const styles = {
         borderColor: COMPOSER_BORDER,
     }),
     textPlaceholder: RX.Styles.createTextStyle({
+        flexDirection: 'row',
         fontSize: FONT_LARGE,
         textAlign: 'center',
         color: BUTTON_LONG_TEXT,
-        marginBottom: SPACING,
+        marginBottom: OBJECT_MARGIN,
     }),
     viewPlaceholder: RX.Styles.createViewStyle({
         flex: 1,
@@ -407,7 +408,18 @@ export default class Main extends ComponentBase<MainProps, MainState> {
                 room = (
                     <RX.View style={ styles.viewPlaceholder }>
                         <RX.Text style={ styles.textPlaceholder }>
-                            CHAT.  ON.  MATRIX.
+                            <RX.Text>
+                                CHAT. ON.
+                            </RX.Text>
+                            <RX.Text style={{ fontSize: 20, fontWeight: 'normal', marginLeft: 4 }}>
+                                [
+                            </RX.Text>
+                            <RX.Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+                                matrix
+                            </RX.Text>
+                            <RX.Text style={{ fontSize: 20, fontWeight: 'normal' }}>
+                                ]
+                            </RX.Text>
                         </RX.Text>
                         <IconSvg
                             source= { require('../resources/svg/appname.json') as SvgFile }
