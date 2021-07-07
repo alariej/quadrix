@@ -107,7 +107,7 @@ class Sync {
                     this.incrementalSync('', 1000);
                 })
                 .catch((_error) => {
-                    RX.Alert.show('Sync Error', 'Hmmm, you might need to restart the app :-(');
+                    RX.Alert.show('Sync Error', 'Hmmm, you might need to kill and restart the app :-(');
                 });
         }
     }
