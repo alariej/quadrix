@@ -3,7 +3,7 @@ import RX, { Types } from 'reactxp';
 import RoomList from './RoomList';
 import Room from './Room';
 import { PAGE_MARGIN, MODAL_CONTENT_TEXT, FONT_LARGE, COMPOSER_BORDER, LOGO_BACKGROUND,
-    PAGE_WIDE_PADDING, BUTTON_LONG_TEXT, OBJECT_MARGIN } from '../ui';
+    PAGE_WIDE_PADDING, BUTTON_LONG_TEXT, OBJECT_MARGIN, TRANSPARENT_BACKGROUND } from '../ui';
 import DataStore from '../stores/DataStore';
 import { MessageEvent } from '../models/MessageEvent';
 import ApiClient from '../matrix/ApiClient';
@@ -229,8 +229,8 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
             if (ApiClient.isSyncStopped()) {
 
-                RX.Modal.show(<ModalSpinner/>, 'syncspinner');
                 DataStore.setSyncComplete(false);
+                RX.Modal.show(<ModalSpinner backgroundColor={ TRANSPARENT_BACKGROUND }/>, 'syncspinner');
 
                 const nextSyncToken = ApiClient.getNextSyncToken();
                 ApiClient.startSync(nextSyncToken);
@@ -254,8 +254,8 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
             if (ApiClient.isSyncStopped()) {
 
-                RX.Modal.show(<ModalSpinner/>, 'syncspinner');
                 DataStore.setSyncComplete(false);
+                RX.Modal.show(<ModalSpinner backgroundColor={ TRANSPARENT_BACKGROUND }/>, 'syncspinner');
 
                 const nextSyncToken = ApiClient.getNextSyncToken();
                 ApiClient.startSync(nextSyncToken);
