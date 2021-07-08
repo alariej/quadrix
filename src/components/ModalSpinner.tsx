@@ -6,7 +6,6 @@ const styles = {
     modalScreen: RX.Styles.createViewStyle({
         flex: 1,
         alignSelf: 'stretch',
-        backgroundColor: OPAQUE_BACKGROUND,
         justifyContent: 'center',
     }),
     modalView: RX.Styles.createViewStyle({
@@ -14,12 +13,16 @@ const styles = {
     }),
 };
 
-export default class ModalSpinner extends RX.Component<unknown, RX.Stateless> {
+interface SpinnerProps {
+    backgroundColor?: string;
+}
+
+export default class ModalSpinner extends RX.Component<SpinnerProps, RX.Stateless> {
 
     public render(): JSX.Element | null {
 
         return (
-            <RX.View style={ styles.modalScreen }>
+            <RX.View style={[styles.modalScreen, { backgroundColor: this.props.backgroundColor || OPAQUE_BACKGROUND }]}>
                 <RX.View style={ styles.modalView }>
                     <RX.ActivityIndicator color={ LOGO_BACKGROUND } size={ 'large' } />
                 </RX.View>
