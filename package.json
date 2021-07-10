@@ -1,8 +1,49 @@
 {
   "name": "quadrix",
-  "private": false,
+  "private": true,
   "main": "index.js",
   "version": "0.1.0-a.1",
+  "description": "Minimal, simple, multi-platform chat app for the Matrix protocol",
+  "author": "Jean-François Alarie <alariej@quadrix.chat>",
+  "homepage": "https://quadrix.chat",
+  "build": {
+    "appId": "chat.quadrix",
+    "productName": "quadrix",
+    "linux": {
+      "category": "Internet",
+      "target": [
+        "snap",
+        "deb"
+      ],
+      "icon": "src/resources/logos/logo256.png"
+    },
+    "snap": {
+      "summary": "Minimal, simple, multi-platform chat app for the Matrix protocol",
+      "confinement": "strict",
+      "grade": "stable",
+      "plugs": [
+        "default",
+        "desktop",
+        "home",
+        "audio-playback",
+        "audio-record",
+        "camera"
+      ]
+    },
+    "files": [
+      "**/*",
+      "!src/*.ts",
+      "!src/*.tsx",
+      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!**/node_modules/*.d.ts",
+      "!**/node_modules/.bin",
+      "!**/._*",
+      "!**/{.vscode,.git,.gitignore}",
+      "!android",
+      "!ios"
+    ]
+  },
   "scripts": {
     "rn-cli": "node scripts/react-native.js",
     "start:rn-dev": "npm run rn-cli -- start --reset-cache",
@@ -11,11 +52,8 @@
     "start:web": "cross-env platform=web webpack serve --config=web/webpack/dev.js --progress --mode=development --host 0.0.0.0",
     "build:web": "cross-env platform=web webpack --config=web/webpack/prod.js --progress --mode=production",
     "start:electron": "electron .",
-    "build:package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=dist-web/resources/images/logo.icns --prune=true --out=dist-web/mac-release-builds",
-    "build:package-win": "electron-packager . quadrix --overwrite --asar=true --platform=win32 --arch=ia32 --icon=dist-web/resources/images/logo.ico --prune=true --out=dist-web/win-release-builds --version-string.CompanyName=quadrix --version-string.FileDescription=quadrix --version-string.ProductName=\"quadrix.chat\"",
-    "build:package-linux": "electron-packager . quadrix --overwrite --asar=true --platform=linux --arch=x64 --icon=dist-web/resources/images/logo.png --prune=true --out=dist-web/linux-release-builds",
-    "build:installer-debian": "electron-installer-debian --src dist-web/linux-release-builds/quadrix-linux-x64/ --arch amd64 --config debian.json",
-    "build:installer-snap": "electron-installer-snap --src=dist-web/linux-release-builds/quadrix-linux-x64/",
+    "build:snap": "electron-builder --linux snap",
+    "build:deb": "electron-builder --linux deb",
     "lint": "eslint --config .eslintrc --ext .ts,.tsx src"
   },
   "devDependencies": {
@@ -32,7 +70,7 @@
     "compression-webpack-plugin": "^8.0.1",
     "cross-env": "^7.0.3",
     "electron": "^13.1.4",
-    "electron-packager": "^15.2.0",
+    "electron-builder": "^22.11.7",
     "eslint": "^7.29.0",
     "eslint-loader": "^4.0.2",
     "eslint-plugin-react": "^7.24.0",

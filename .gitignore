@@ -59,6 +59,7 @@ buck-out/
 # Web dist
 #
 dist-*
+dist/*
 ios/Pods/
 .vscode/launch.json
 .vscode/.react/debuggerWorker.js
