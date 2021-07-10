@@ -19,7 +19,7 @@
 ## One code base, several platforms:
 
 <p>
-    <a href="https://play.google.com">
+    <a href="https://https://play.google.com/store/apps/details?id=chat.quadrix.android">
         <img alt="Get it on Google Play" src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" height=48>
     </a>
     <a href="https://apps.apple.com">
@@ -28,7 +28,7 @@
 </p>
 
 <p>
-    <a href="https://snapcraft.io/">
+    <a href="https://snapcraft.io/quadrix">
         <img alt="Get it from the Snap Store" src="https://snapcraft.io/static/images/badges/en/snap-store-black.svg" height=48>
     </a>
     <a href="https://www.microsoft.com/store">
