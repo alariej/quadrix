@@ -5,22 +5,6 @@ let mainWindow;
 
 const createWindow = () => {
 
-    let logoFile;
-    switch (process.platform) {
-        case 'darwin':
-            logoFile = 'logo.icns';
-            break;
-        case 'win32':
-            logoFile = 'logo.ico';
-            break;
-        case 'linux':
-            logoFile = 'logo.png';
-            break;
-        default:
-            logoFile = 'logo.png';
-            break;
-    }
-
     mainWindow = new BrowserWindow({
         width: 1024,
         height: 720,
@@ -29,7 +13,9 @@ const createWindow = () => {
         frame: true,
         movable: true,
         backgroundColor: 'black',
-        icon: path.join(__dirname, 'dist-web', 'resources', 'images', logoFile),
+        icon: path.join(__dirname, 'dist-web', 'resources', 'images', 'logo.png'), // linux
+        // icon: path.join(__dirname, 'dist-web', 'resources', 'images', 'logo.ico'), // windows
+        // icon: path.join(__dirname, 'dist-web', 'resources', 'images', 'logo.icns'), // mac
         webPreferences: {
             nodeIntegration: true, // not used in electron v12
             contextIsolation: false, // required in electron v12
@@ -59,8 +45,8 @@ const createWindow = () => {
 
     Menu.setApplicationMenu(menu);
 
-    mainWindow.loadURL('http://localhost:9999').catch(_error => null);
-    // mainWindow.loadFile('dist-web/index.html').catch(_error => null);
+    // mainWindow.loadURL('http://localhost:9999').catch(_error => null);
+    mainWindow.loadFile('dist-web/index.html').catch(_error => null);
     // mainWindow.webContents.openDevTools()
 
     mainWindow.on('close', event => {
