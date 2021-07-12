@@ -75,3 +75,4 @@ ios/GoogleService-Info.plist
 ios/Podfile.lock
 android/app/upload.keystore
 android/keystore.properties
+ios/applesigningcertificate.p12
