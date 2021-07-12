@@ -35,8 +35,8 @@
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
 			</dict>
-		</dict>
-	</dict>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Calendar Permission</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera Permission</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
