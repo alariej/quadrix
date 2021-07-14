@@ -230,7 +230,10 @@ export default class Main extends ComponentBase<MainProps, MainState> {
             if (ApiClient.isSyncStopped()) {
 
                 DataStore.setSyncComplete(false);
-                RX.Modal.show(<ModalSpinner backgroundColor={ TRANSPARENT_BACKGROUND }/>, 'syncspinner');
+
+                if (!RX.Modal.isDisplayed('DialogRoomPicker')) {
+                    RX.Modal.show(<ModalSpinner backgroundColor={ TRANSPARENT_BACKGROUND }/>, 'syncspinner');
+                }
 
                 const nextSyncToken = ApiClient.getNextSyncToken();
                 ApiClient.startSync(nextSyncToken);
