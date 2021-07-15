@@ -2,7 +2,7 @@ import React from 'react';
 import RX from 'reactxp';
 import DataStore from '../stores/DataStore';
 import RoomTile from '../components/RoomTile';
-import { HEADER_TEXT, OPAQUE_BACKGROUND, BORDER_RADIUS, TILE_WIDTH, SPACING, TILE_HEIGHT, FONT_XLARGE } from '../ui';
+import { HEADER_TEXT, OPAQUE_BACKGROUND, BORDER_RADIUS, TILE_WIDTH, SPACING, TILE_HEIGHT, FONT_LARGE } from '../ui';
 import UiStore from '../stores/UiStore';
 
 const styles = {
@@ -26,8 +26,7 @@ const styles = {
         padding: SPACING,
     }),
     labelText: RX.Styles.createTextStyle({
-        fontSize: FONT_XLARGE,
-        fontWeight: 'bold',
+        fontSize: FONT_LARGE,
         color: HEADER_TEXT,
         textAlign: 'center',
     }),
