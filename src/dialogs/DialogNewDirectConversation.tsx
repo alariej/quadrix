@@ -19,6 +19,7 @@ const styles = {
     }),
     container: RX.Styles.createViewStyle({
         flex: 1,
+        alignSelf: 'stretch',
         justifyContent: 'center',
     }),
     userListContainer: RX.Styles.createViewStyle({
