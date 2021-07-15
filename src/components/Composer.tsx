@@ -21,7 +21,7 @@ import { TemporaryMessage } from '../models/MessageEvent';
 const styles = {
     container: RX.Styles.createViewStyle({
         flexDirection: 'row',
-        marginBottom: SPACING,
+        marginBottom: SPACING + 1,
         paddingBottom: SPACING - 1,
         borderBottomWidth: 1,
         borderColor: COMPOSER_BORDER,
