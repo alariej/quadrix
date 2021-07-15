@@ -2,7 +2,7 @@ import React from 'react';
 import RX from 'reactxp';
 import { BUTTON_LONG_BACKGROUND, BUTTON_MODAL_BACKGROUND, BUTTON_LONG_TEXT, INPUT_BACKGROUND, HEADER_TEXT,
     MODAL_CONTENT_TEXT, BORDER_RADIUS, CONTAINER_PADDING, BUTTON_LONG_WIDTH, FONT_LARGE, SPACING, BUTTON_HEIGHT, LOGO_BACKGROUND,
-    OBJECT_MARGIN, PLACEHOLDER_TEXT, TRANSPARENT_BACKGROUND } from '../ui';
+    OBJECT_MARGIN, PLACEHOLDER_TEXT, TRANSPARENT_BACKGROUND, FONT_NORMAL } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import ModalSpinner from '../components/ModalSpinner';
 import DialogContainer from '../modules/DialogContainer';
@@ -10,9 +10,10 @@ import DialogRegister from '../dialogs/DialogRegister';
 import RXNetInfo from 'reactxp-netinfo';
 import UiStore from '../stores/UiStore';
 import { haveAnAccount, noAccount, register, login, userPassword, repeatPassword, server, userServer, userId, passwordNoMatch,
-    userIdPasswordMissing, errorInvalidPassword, Languages } from '../translations';
+    userIdPasswordMissing, errorInvalidPassword, Languages, termsPrivacyLicense } from '../translations';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { ErrorResponse_ } from '../models/MatrixApi';
+import { TERMS_URL } from '../appconfig';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -40,7 +41,7 @@ const styles = {
         width: BUTTON_LONG_WIDTH,
         height: BUTTON_HEIGHT,
         borderRadius: BORDER_RADIUS,
-        marginBottom: OBJECT_MARGIN,
+        marginBottom: SPACING,
         backgroundColor: INPUT_BACKGROUND,
     }),
     mainButton: RX.Styles.createViewStyle({
@@ -63,8 +64,9 @@ const styles = {
     }),
     expandButton: RX.Styles.createViewStyle({
         position: 'absolute',
-        width: BUTTON_HEIGHT,
-        height: BUTTON_HEIGHT,
+        width: 28,
+        height: 48,
+        top: -(48 - BUTTON_HEIGHT) / 2,
         left: BUTTON_LONG_WIDTH,
         alignContent: 'center',
         alignItems: 'center',
@@ -74,6 +76,14 @@ const styles = {
         color: MODAL_CONTENT_TEXT,
         fontSize: FONT_LARGE,
         margin: 12,
+    }),
+    link: RX.Styles.createTextStyle({
+        fontSize: FONT_NORMAL,
+        color: 'white',
+        textDecorationLine: 'underline',
+        textAlign: 'center',
+        padding: 12,
+        backgroundColor: TRANSPARENT_BACKGROUND,
     }),
 };
 
@@ -313,6 +323,21 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
         this.setState({ register: !this.state.register });
     }
 
+    private openUrl = (url: string, event: RX.Types.SyntheticEvent) => {
+
+        event.stopPropagation();
+
+        if (UiStore.getIsElectron()) {
+
+            const { shell } = window.require('electron');
+            shell.openExternal(url).catch(_error => null);
+
+        } else {
+
+            RX.Linking.openUrl(url).catch(_error => null);
+        }
+    }
+
     public render(): JSX.Element | null {
 
         const userIdInput = (
@@ -451,7 +476,17 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
                 style={ styles.container }
                 onKeyPress={ this.onKeyPress }
             >
-                { loginDialog }
+                <RX.View style={ { flex: 1 } }>
+                    { loginDialog }
+                </RX.View>
+                <RX.View>
+                    <RX.Text
+                        style={ styles.link }
+                        onPress={ event => this.openUrl(TERMS_URL, event) }
+                    >
+                        { termsPrivacyLicense[this.language] }
+                    </RX.Text>
+                </RX.View>
             </RX.View>
         );
     }
