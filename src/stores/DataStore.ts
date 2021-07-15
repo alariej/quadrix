@@ -89,7 +89,10 @@ class DataStore extends StoreBase {
 
     private setRoomSummaryList(syncData: SyncResponse_) {
 
-        if (!syncData.rooms) { return }
+        if (!syncData.rooms) {
+            this.setSyncComplete(true);
+            return;
+        }
 
         for (const roomId in syncData.rooms.invite) {
 
@@ -510,8 +513,7 @@ class DataStore extends StoreBase {
             }
         }
 
-        this.syncComplete = true;
-        this.trigger(RoomListTrigger);
+        this.setSyncComplete(true);
     }
 
     private updateJoinRoom(roomObj: RoomData_, roomIndex: number): RoomEventTriggers {
@@ -673,8 +675,7 @@ class DataStore extends StoreBase {
         if (!syncData.rooms) {
 
             if (!this.syncComplete) {
-                this.syncComplete = true;
-                this.trigger(SyncCompleteTrigger);
+                this.setSyncComplete(true);
             }
 
             return;
@@ -792,8 +793,7 @@ class DataStore extends StoreBase {
         }
 
         if (!this.syncComplete) {
-            this.syncComplete = true;
-            this.trigger(SyncCompleteTrigger);
+            this.setSyncComplete(true);
         }
     }
 
