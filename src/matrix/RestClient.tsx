@@ -186,6 +186,7 @@ export default class RestClient extends GenericRestClient {
 
     // not used yet
     public inviteToRoomViaEmail(roomId: string, idServer: string, emailAddress: string): Promise<void> {
+
         const data = {
             id_server: idServer,
             medium: 'email',
@@ -243,7 +244,7 @@ export default class RestClient extends GenericRestClient {
 
     public getMatrixVersions(): Promise<unknown> {
 
-        /* 
+        /*
         this endpoint might get renamed to
         /_matrix/client/info
         and include additional server information
@@ -310,5 +311,15 @@ export default class RestClient extends GenericRestClient {
     public getPreviewUrl(url: string): Promise<PreviewUrl_> {
 
         return this.performApiGet<PreviewUrl_>('preview_url?url=' + url);
+    }
+
+    public reportMessage(roomId: string, eventId: string): Promise<void> {
+
+        const data = {
+            score: -100,
+            reason: "offensive / objectionable content",
+        };
+
+        return this.performApiPost<void>('rooms/' + roomId + '/report/' + eventId, data);
     }
 }

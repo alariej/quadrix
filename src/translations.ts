@@ -245,6 +245,18 @@ export const reply: Translation = {
     fr: 'Répondre',
 }
 
+export const report: Translation = {
+    en: 'Report',
+    de: 'Melden',
+    fr: 'Signaler',
+}
+
+export const messageHasBeenReported: Translation = {
+    en: 'The message has been reported to the server\'s operator',
+    de: 'Die Meldung wurde an den Betreiber des Servers gemeldet',
+    fr: 'Le message a été signalé à l\'opérateur du serveur',
+}
+
 export const forwardTo: Translation = {
     en: 'Forward to',
     de: 'Weiterleiten an',

@@ -492,6 +492,13 @@ class ApiClient {
         return restClient.getHomeserverInfo();
     }
 
+    public reportMessage(roomId: string, eventId: string): Promise<void> {
+
+        const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
+
+        return restClient.reportMessage(roomId, eventId);
+    }
+
     // local storage
 
     private storeCredentials(credentials: Credentials): void {

@@ -13,10 +13,10 @@ import ApiClient from '../matrix/ApiClient';
 import ModalSpinner from '../components/ModalSpinner';
 import DialogContainer from '../modules/DialogContainer';
 import { forward, reply, forwardTo, messageCouldNotBeSent, noApplicationWasFound, open, save, share, fileCouldNotAccess, fileHasBeenSaved,
-    fileHasBeenSavedAndroid, fileCouldNotBeSaved, Languages } from '../translations';
+    fileHasBeenSavedAndroid, fileCouldNotBeSaved, Languages, report, messageHasBeenReported } from '../translations';
 import FileHandler from '../modules/FileHandler';
 import ShareHandlerOutgoing from '../modules/ShareHandlerOutgoing';
-import { RoomType } from '../models/MatrixApi';
+import { ErrorResponse_, RoomType } from '../models/MatrixApi';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -374,6 +374,37 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
         ShareHandlerOutgoing.shareContent(this.props.event, onSuccess);
     }
 
+    private reportMessage = () => {
+
+        RX.Modal.show(<ModalSpinner/>, 'modalspinner');
+
+        ApiClient.reportMessage(this.props.roomId, this.props.event.eventId)
+            .then(_response => {
+
+                RX.Modal.dismiss('modalspinner');
+
+                const text = (
+                    <RX.Text style={ styles.textDialog }>
+                        { messageHasBeenReported[this.language] }
+                    </RX.Text>
+                );
+
+                RX.Modal.show(<DialogContainer content={ text } modalId={ 'messageReported' }/>, 'messageReported');
+            })
+            .catch((error: ErrorResponse_) => {
+
+                RX.Modal.dismiss('modalspinner');
+
+                const text = (
+                    <RX.Text style={ styles.textDialog }>
+                        { error.body && error.body.error ? error.body.error : '[Unknown error]' }
+                    </RX.Text>
+                );
+
+                RX.Modal.show(<DialogContainer content={ text } modalId={ 'errordialog' }/>, 'errordialog');
+            });
+    }
+
     public render(): JSX.Element | null {
 
         const isElectron = UiStore.getIsElectron();
@@ -386,6 +417,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
         let forwardButton: ReactElement | undefined;
         let replyButton: ReactElement | undefined;
         let forwardConfirmButton: ReactElement | undefined;
+        let reportButton: ReactElement | undefined;
         let n;
 
         if (!this.props.forwardToRoomId) {
@@ -478,6 +510,24 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                 </RX.Button>
             );
 
+            if (this.props.roomType === 'community') {
+                n++;
+                reportButton = (
+                    <RX.Button
+                        style={ [styles.buttonDialog, { width: BUTTON_SHORT_WIDTH }] }
+                        onPress={ this.reportMessage }
+                        disableTouchOpacityAnimation={ true }
+                        activeOpacity={ 1 }
+                        disabled={ this.state.offline }
+                        disabledOpacity={ 1 }
+                    >
+                        <RX.Text style={ [styles.buttonText, { color: this.state.offline ? BUTTON_DISABLED_TEXT : 'red' }] }>
+                            { report[this.language] }
+                        </RX.Text>
+                    </RX.Button>
+                );
+            }
+
         } else {
 
             n = 1;
@@ -521,6 +571,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                 { forwardButton }
                 { replyButton }
                 { forwardConfirmButton }
+                { reportButton }
             </RX.Animated.View>
         )
 
