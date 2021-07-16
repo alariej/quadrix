@@ -251,16 +251,34 @@ export const report: Translation = {
     fr: 'Signaler',
 }
 
+export const doYouReallyWantToReport: Translation = {
+    en: 'Do you really want to report this message as objectionable or offensive to the server\'s administrator?',
+    de: 'Möchten Sie diese Nachricht wirklich als anstößig oder beleidigend an den Administrator des Servers melden?',
+    fr: 'Voulez-vous vraiment signaler ce message comme étant répréhensible ou offensant à l\'administrateur du serveur?',
+}
+
 export const messageHasBeenReported: Translation = {
-    en: 'The message has been reported to the server\'s operator',
-    de: 'Die Meldung wurde an den Betreiber des Servers gemeldet',
-    fr: 'Le message a été signalé à l\'opérateur du serveur',
+    en: 'The message has been successfully reported to the server\'s administrator',
+    de: 'Die Nachricht wurde erfolgreich an den Administrator des Servers gemeldet',
+    fr: 'Le message a été signalé avec succès à l\'administrateur du serveur',
 }
 
 export const forwardTo: Translation = {
     en: 'Forward to',
     de: 'Weiterleiten an',
     fr: 'Faire suivre à'
+}
+
+export const pressOKToForward1: Translation = {
+    en: 'Press OK to forward the message to',
+    de: 'Drücken Sie OK, um die Nachricht an',
+    fr: 'Appuyez sur OK pour faire suivre le message à'
+}
+
+export const pressOKToForward2: Translation = {
+    en: '',
+    de: 'zu weiterleiten',
+    fr: ''
 }
 
 export const sendTo: Translation = {

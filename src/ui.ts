@@ -46,6 +46,7 @@ export const APP_BACKGROUND = [
     '#4D0328',
 ];
 export const OPAQUE_BACKGROUND = 'rgba(0, 0, 0, 0.7)';
+export const OPAQUE_LIGHT_BACKGROUND = 'rgba(0, 0, 0, 0.3)';
 export const OPAQUE_DARK_BACKGROUND = 'rgba(0, 0, 0, 0.85)';
 export const OPAQUE_DUMMY_BACKGROUND = 'rgba(0, 0, 0, 0.0)';
 export const TRANSPARENT_BACKGROUND = 'transparent';
