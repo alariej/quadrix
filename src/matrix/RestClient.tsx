@@ -317,7 +317,7 @@ export default class RestClient extends GenericRestClient {
 
         const data = {
             score: -100,
-            reason: "offensive / objectionable content",
+            reason: 'objectionable / offensive content',
         };
 
         return this.performApiPost<void>('rooms/' + roomId + '/report/' + eventId, data);
