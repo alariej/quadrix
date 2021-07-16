@@ -9,7 +9,6 @@ const styles = {
     modalScreen: RX.Styles.createViewStyle({
         flex: 1,
         alignSelf: 'stretch',
-        backgroundColor: OPAQUE_BACKGROUND,
         justifyContent: 'center',
     }),
     modalView: RX.Styles.createViewStyle({
@@ -35,6 +34,7 @@ const styles = {
 interface DialogRoomPickerProps {
     onPressRoom: (roomId: string) => void;
     label: string;
+    backgroundColor?: string,
 }
 
 export default class DialogRoomPicker extends RX.Component<DialogRoomPickerProps, RX.Stateless> {
@@ -61,7 +61,7 @@ export default class DialogRoomPicker extends RX.Component<DialogRoomPickerProps
 
         return (
             <RX.View
-                style={ styles.modalScreen }
+                style={ [styles.modalScreen, { backgroundColor: this.props.backgroundColor || OPAQUE_BACKGROUND }] }
                 onPress={() => RX.Modal.dismissAll() }
             >
 
