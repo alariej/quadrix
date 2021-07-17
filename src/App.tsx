@@ -34,6 +34,7 @@ export class App extends ComponentBase<AppProps, AppState> {
 
         RX.UserInterface.useCustomScrollbars(true);
         RX.StatusBar.setTranslucent(false);
+        RX.International.allowRTL(false);
 
         UiStore.setPlatform();
         UiStore.setDevice();
