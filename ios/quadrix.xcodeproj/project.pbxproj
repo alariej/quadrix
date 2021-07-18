@@ -20,6 +20,7 @@
 		A958EAAE260B7FDF007DC8CA /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A958EAAD260B7FDF007DC8CA /* ShareViewController.swift */; };
 		A958EAB1260B7FDF007DC8CA /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A958EAAF260B7FDF007DC8CA /* MainInterface.storyboard */; };
 		A958EAB5260B7FDF007DC8CA /* QuadrixShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A958EAAB260B7FDF007DC8CA /* QuadrixShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A959E1BA26A463C200460759 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A959E1BC26A463C200460759 /* InfoPlist.strings */; };
 		A977923B26565A9B009D2FE1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A977923A26565A9B009D2FE1 /* LaunchScreen.storyboard */; };
 		A977923C26565A9B009D2FE1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A977923A26565A9B009D2FE1 /* LaunchScreen.storyboard */; };
 		A977923E26565BFD009D2FE1 /* Launch.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A977923D26565BFD009D2FE1 /* Launch.xcassets */; };
@@ -83,6 +84,9 @@
 		A958EAAD260B7FDF007DC8CA /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		A958EAB0260B7FDF007DC8CA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		A958EAB2260B7FDF007DC8CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A959E1BB26A463C200460759 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A959E1BF26A4648700460759 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A959E1C026A464AB00460759 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A977923A26565A9B009D2FE1 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A977923D26565BFD009D2FE1 /* Launch.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Launch.xcassets; sourceTree = "<group>"; };
 		A98F90402623457E0074E4B9 /* Orientation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Orientation.h; sourceTree = "<group>"; };
@@ -144,6 +148,7 @@
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
+				A959E1BC26A463C200460759 /* InfoPlist.strings */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = quadrix;
@@ -317,6 +322,8 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
+				fr,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
@@ -347,6 +354,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A977923E26565BFD009D2FE1 /* Launch.xcassets in Resources */,
+				A959E1BA26A463C200460759 /* InfoPlist.strings in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				A977923B26565A9B009D2FE1 /* LaunchScreen.storyboard in Resources */,
 				A93A19B925F6C6FB009A1CF9 /* GoogleService-Info.plist in Resources */,
@@ -563,6 +571,16 @@
 				A958EAB0260B7FDF007DC8CA /* Base */,
 			);
 			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+		A959E1BC26A463C200460759 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A959E1BB26A463C200460759 /* en */,
+				A959E1BF26A4648700460759 /* de */,
+				A959E1C026A464AB00460759 /* fr */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

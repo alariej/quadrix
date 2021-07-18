@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  quadrix
+
+  Created by Jean-François Alarie on 18.07.21.
+  
+*/
+
+"NSCameraUsageDescription" = "Die Erlaubnis zur Verwendung der Kamera ist für Videokonferenzen erforderlich";
+"NSMicrophoneUsageDescription" = "Die Erlaubnis zur Verwendung des Mikrofons ist für Videokonferenzen erforderlich";
