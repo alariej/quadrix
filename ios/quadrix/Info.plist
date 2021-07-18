@@ -43,13 +43,13 @@
 		<false/>
 	</dict>
 	<key>NSCalendarsUsageDescription</key>
-	<string>Calendar Permission</string>
+	<string>The permission to use the calendar is not required and can be safely dismissed</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Camera Permission</string>
+	<string>The permission to use the camera is required for video-conferencing</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Microphone Permission</string>
+	<string>The permission to use the microphone is required for video-conferencing</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>voip</string>
