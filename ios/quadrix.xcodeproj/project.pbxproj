@@ -638,7 +638,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = quadrix/quadrix.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = W988UQ8696;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = quadrix/Info.plist;
@@ -666,7 +666,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = quadrix/quadrix.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = W988UQ8696;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = quadrix/Info.plist;
@@ -816,6 +816,7 @@
 				INFOPLIST_FILE = QuadrixShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 0.1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = "$(inherited)";
@@ -848,6 +849,7 @@
 				INFOPLIST_FILE = QuadrixShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 0.1.0;
 				MTL_FAST_MATH = YES;
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = chat.quadrix.ios.QuadrixShareExtension;
