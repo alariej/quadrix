@@ -354,7 +354,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
                 keyboardType={ UiStore.getPlatform() === 'android' ? 'email-address' : 'default' }
                 autoCorrect={ false }
                 tabIndex={ 1 }
-                autoFocus={ true }
+                autoFocus={ UiStore.getDevice() === 'desktop' ? true : false }
             />
         );
 
