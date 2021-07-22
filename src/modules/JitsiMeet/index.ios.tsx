@@ -102,7 +102,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                 'meeting-name.enabled': false,
                 'notifications.enabled': false,
                 'overflow-menu.enabled': false,
-                'call-integration.enabled': false,
+                'call-integration.enabled': true,
                 'pip.enabled': false,
                 'fullscreen.enabled': false,
             };
