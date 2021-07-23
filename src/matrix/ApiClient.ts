@@ -619,6 +619,21 @@ class ApiClient {
 
         return RX.Storage.setItem('syncToken', syncToken);
     }
+
+    public storeAppData = async () => {
+
+        const nextSyncToken = this.getNextSyncToken();
+
+        if (nextSyncToken) {
+
+            const storedSyncToken = await this.getStoredSyncToken();
+
+            if (storedSyncToken !== nextSyncToken) {
+                await this.storeDatastore();
+                await this.storeSyncToken();
+            }
+        }
+    }
 }
 
 export default new ApiClient();

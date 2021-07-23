@@ -185,22 +185,6 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
         ShareHandlerIncoming.addListener(this.shareContent);
 
-        if (UiStore.getIsElectron()) {
-
-            const { ipcRenderer } = window.require('electron');
-
-            const storeElectronData = () => {
-                this.storeData()
-                    .then(_response => {
-                        ipcRenderer.send('closeApp');
-                        ipcRenderer.removeListener('storeDataAndCloseApp', storeElectronData);
-                    })
-                    .catch(_error => null);
-            }
-
-            ipcRenderer.on('storeDataAndCloseApp', storeElectronData);
-        }
-
         if (!this.state.layout) {
             this.setState({ layout: UiStore.getAppLayout() });
         }
@@ -225,7 +209,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
         if (activationState !== Types.AppActivationState.Active) {
 
             ApiClient.stopSync();
-            this.storeData().catch(_error => null);
+            ApiClient.storeAppData().catch(_error => null);
 
         } else {
 
@@ -251,7 +235,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
             UiStore.setOffline(true);
             ApiClient.stopSync();
-            this.storeData().catch(_error => null);
+            ApiClient.storeAppData().catch(_error => null);
 
         } else {
 
@@ -264,22 +248,6 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
                 const nextSyncToken = ApiClient.getNextSyncToken();
                 ApiClient.startSync(nextSyncToken);
-            }
-        }
-    }
-
-    private storeData = async () => {
-
-        const nextSyncToken = ApiClient.getNextSyncToken();
-
-        if (nextSyncToken) {
-
-            const storedSyncToken = await ApiClient.getStoredSyncToken();
-
-            if (storedSyncToken !== nextSyncToken) {
-
-                await ApiClient.storeDatastore();
-                await ApiClient.storeSyncToken();
             }
         }
     }

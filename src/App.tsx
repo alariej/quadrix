@@ -79,6 +79,22 @@ export class App extends ComponentBase<AppProps, AppState> {
 
         const credentials = await ApiClient.getStoredCredentials();
         credentials ? this.showMain() : this.showLogin();
+
+        if (UiStore.getIsElectron()) {
+
+            const { ipcRenderer } = window.require('electron');
+
+            const storeElectronData = () => {
+                ApiClient.storeAppData()
+                    .then(_response => {
+                        ipcRenderer.removeListener('storeDataAndCloseApp', storeElectronData);
+                        ipcRenderer.send('closeApp');
+                    })
+                    .catch(_error => null);
+            }
+
+            ipcRenderer.on('storeDataAndCloseApp', storeElectronData);
+        }
     }
 
     public componentWillUnmount(): void {
