@@ -55,7 +55,7 @@
     "start:electron": "electron .",
     "build:snap": "electron-builder --linux snap",
     "build:deb": "electron-builder --linux deb",
-    "build:mas": "electron-packager . --app-bundle-id=chat.quadrix.mac --overwrite --platform=mas --arch=x64 --icon=macos/resources/icon.icns --out=dist-mac/ --entitlements=macos/entitlements.mas.plist --no-deref-symlinks --prune=true --ignore=^/ios --ignore=^/android --extend-info=macos/custom.plist",
+    "build:mas": "electron-packager . --app-bundle-id=chat.quadrix.mac --overwrite --platform=mas --arch=x64 --icon=macos/resources/icon.icns --out=dist-mac/ --entitlements=macos/entitlements.mas.plist --no-deref-symlinks --prune=true --ignore=^/ios --ignore=^/android --ignore=^/node_modules --ignore=^/src --ignore=^/web --extend-info=macos/custom.plist",
     "lint": "eslint --config .eslintrc --ext .ts,.tsx src"
   },
   "devDependencies": {
