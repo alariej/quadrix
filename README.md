@@ -34,7 +34,7 @@
     <a href="https://www.microsoft.com/store">
         <img alt="Get it from Microsoft" src="https://developer.microsoft.com/store/badges/images/English_get-it-from-MS.png" height=48>
     </a>
-    <a href="https://apps.apple.com/">
+    <a href="https://apps.apple.com/us/app/quadrix-chat-desktop/id1577585119">
         <img alt="Download on the Mac App Store" src="https://upload.wikimedia.org/wikipedia/commons/5/5d/Download_on_the_Mac_App_Store_Badge_US-UK_RGB_blk.svg" height=48>
     </a>
 </p>
