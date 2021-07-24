@@ -41,6 +41,19 @@ const createWindow = () => {
         },
     ];
 
+    if (process.platform === 'darwin') {
+        menuTemplate.unshift({
+            label: app.getName(),
+            submenu: [
+                // { role: 'hide' },
+                // { role: 'hideothers' },
+                // { role: 'unhide' },
+                // { type: 'separator' },
+                { role: 'quit' }
+            ]
+        });
+    }
+
     const menu = Menu.buildFromTemplate(menuTemplate);
 
     Menu.setApplicationMenu(menu);
