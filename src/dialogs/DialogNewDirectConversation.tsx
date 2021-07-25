@@ -225,7 +225,7 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
                 onChangeText={ userId => this.userId = userId }
                 disableFullscreenUI={ true }
                 autoCapitalize={ 'none' }
-                keyboardType={ UiStore.getPlatform() === 'web' ? 'default' : 'email-address' }
+                keyboardType={ UiStore.getPlatform() === 'android' ? 'email-address' : 'default' }
                 autoCorrect={ false }
                 autoFocus={ true }
                 value={ this.state.userId }
