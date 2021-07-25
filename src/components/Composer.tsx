@@ -346,7 +346,6 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
         const shouldUpload = await this.showFileDialog(file);
 
         if (!shouldUpload) {
-
             RX.Modal.dismiss('filesendingdialog');
             return;
         }
@@ -404,6 +403,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
     private showFileDialog = (file: FileObject): Promise<boolean> => {
 
         RX.Modal.dismissAll();
+        this.textInputComponent?.blur();
 
         return new Promise(resolve => {
 
