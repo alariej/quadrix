@@ -182,7 +182,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 
             if (!this.state.loginExpanded) {
 
-                const userIdInput = this.userId;
+                const userIdInput = this.userId.trim();
                 const a = userIdInput.indexOf('@');
                 const b = userIdInput.lastIndexOf(':');
 
@@ -191,8 +191,8 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 
             } else {
 
-                userId = this.userId;
-                server = this.server;
+                userId = this.userId.trim();
+                server = this.server.trim();
             }
 
             ApiClient.login(userId, this.password, server)
