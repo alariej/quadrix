@@ -191,6 +191,7 @@ export interface EmailTokenResponse_ {
 
 export interface ErrorResponse_ {
     statusCode: number,
+    statusText?: string,
     body: {
         errcode?: string,
         error?: string,
