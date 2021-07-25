@@ -40,13 +40,7 @@ class UiStore extends StoreBase {
     private language: Languages = 'en';
     private isElectron = false;
     private isJitsiActive = false;
-    private appLayout: Layout = {
-        type: 'narrow',
-        containerWidth: PAGE_WIDTH_DEFAULT * 2,
-        screenWidth: PAGE_WIDTH_DEFAULT,
-        screenHeight: 800,
-        pageWidth: PAGE_WIDTH_DEFAULT,    
-    };
+    private appLayout: Layout | undefined;
     private appColor = APP_BACKGROUND[0];
     private selectedRoom = '';
 
@@ -190,12 +184,12 @@ class UiStore extends StoreBase {
     @autoSubscribeWithKey(LayoutTrigger)
     public getAppLayout(): Layout {
 
-        return this.appLayout;
+        return this.appLayout!;
     }
 
     public getAppLayout_(): Layout {
 
-        return this.appLayout;
+        return this.appLayout!;
     }
 
     public setAppColor(color: string) {
