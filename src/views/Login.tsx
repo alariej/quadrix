@@ -214,6 +214,9 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
                             errorText = error.body.error;
                         }
 
+                    } else if (error.statusText) {
+                        errorText = error.statusText;
+
                     } else {
                         errorText = '[unknown error]';
                     }
