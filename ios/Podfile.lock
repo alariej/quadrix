@@ -241,6 +241,8 @@ PODS:
   - React-jsinspector (0.63.4)
   - react-native-document-picker (5.2.0):
     - React-Core
+  - react-native-image-picker (4.0.6):
+    - React-Core
   - react-native-image-resizer (1.4.5):
     - React-Core
   - react-native-jitsi-meet (2.1.1):
@@ -346,6 +348,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
+  - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-image-resizer (from `../node_modules/react-native-image-resizer`)
   - react-native-jitsi-meet (from `../node_modules/react-native-jitsi-meet`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
@@ -415,6 +418,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-document-picker:
     :path: "../node_modules/react-native-document-picker"
+  react-native-image-picker:
+    :path: "../node_modules/react-native-image-picker"
   react-native-image-resizer:
     :path: "../node_modules/react-native-image-resizer"
   react-native-jitsi-meet:
@@ -486,6 +491,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
   react-native-document-picker: aa3fd58d5fcc1fdbf6939510b9407d16377f5832
+  react-native-image-picker: 7bda3c7297c3ea16f4f504ad6174aa7e548192ef
   react-native-image-resizer: 506412a2bdd70dde64a61e13505ce10f61a04369
   react-native-jitsi-meet: bf15ed23a7ba724dc7bd93c3200a99b2a1e8e267
   react-native-netinfo: 332d617e448eddc12697c7818185861e6114aebf
