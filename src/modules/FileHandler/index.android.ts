@@ -122,6 +122,10 @@ class FileHandler {
         return Promise.resolve(file);
     }
 
+    public pickImage(): Promise<FileObject | null> {
+        return Promise.resolve(null);
+    }
+
     public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (progress: number) => void): Promise<string> {
 
         let resizedImage: ImageResizerResponse | null;

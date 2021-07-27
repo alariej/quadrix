@@ -191,6 +191,18 @@ export const profilePicture: Translation = {
     fr: 'Photo de profil',
 }
 
+export const photos: Translation = {
+    en: 'Photos',
+    de: 'Fotos',
+    fr: 'Photos',
+}
+
+export const files: Translation = {
+    en: 'Files',
+    de: 'Dateien',
+    fr: 'Fichiers',
+}
+
 export const userPassword: Translation = {
     en: 'Password',
     de: 'Passwort',

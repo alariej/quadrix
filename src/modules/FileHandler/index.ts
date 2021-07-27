@@ -191,6 +191,10 @@ class FileHandler {
         });
     }
 
+    public pickImage(): Promise<FileObject | null> {
+        return Promise.resolve(null);
+    }
+
     public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (progress: number) => void): Promise<string> {
 
         const axiosInstance = axios.create({

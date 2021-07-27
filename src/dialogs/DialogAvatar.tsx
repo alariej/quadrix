@@ -4,11 +4,13 @@ import ApiClient from '../matrix/ApiClient';
 import DataStore from '../stores/DataStore';
 import DialogContainer from '../modules/DialogContainer';
 import FileHandler from '../modules/FileHandler';
-import { save, cancel, Languages } from '../translations';
+import { save, cancel, Languages, photos, files } from '../translations';
 import UiStore from '../stores/UiStore';
 import { ComponentBase } from 'resub';
 import { LOGO_BACKGROUND, BUTTON_MODAL_TEXT, FONT_LARGE, BORDER_RADIUS, INPUT_BORDER, OBJECT_MARGIN, BUTTON_LONG_WIDTH, CONTAINER_PADDING,
-    BUTTON_HEIGHT, AVATAR_BACKGROUND, AVATAR_LARGE_WIDTH } from '../ui';
+    BUTTON_HEIGHT, AVATAR_BACKGROUND, AVATAR_LARGE_WIDTH, BUTTON_SHORT_WIDTH, BUTTON_MODAL_BACKGROUND, SPACING,
+    OPAQUE_BACKGROUND,
+    BUTTON_DISABLED_TEXT} from '../ui';
 import utils from '../utils/Utils';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { ErrorResponse_, RoomPhase, RoomType, StateEventContent_ } from '../models/MatrixApi';
@@ -54,6 +56,30 @@ const styles = {
         marginTop: OBJECT_MARGIN,
         alignSelf: 'center'
     }),
+    fileTypeDialog: RX.Styles.createViewStyle({
+        position: 'absolute',
+        top: AVATAR_LARGE_WIDTH / 2 - BUTTON_HEIGHT - SPACING,
+        left: OBJECT_MARGIN,
+    }),
+    buttonDialog: RX.Styles.createViewStyle({
+        borderRadius: BUTTON_HEIGHT / 2,
+        height: BUTTON_HEIGHT,
+        width: BUTTON_SHORT_WIDTH,
+        backgroundColor: BUTTON_MODAL_BACKGROUND,
+        margin: SPACING,
+        shadowOffset: { width: -1, height: 1 },
+        shadowColor: OPAQUE_BACKGROUND,
+        shadowRadius: 3,
+        elevation: 3,
+        shadowOpacity: 1,
+        overflow: 'visible',
+    }),
+    buttonText: RX.Styles.createTextStyle({
+        fontSize: FONT_LARGE,
+        margin: SPACING,
+        textAlign: 'center',
+        color: BUTTON_MODAL_TEXT,
+    }),
 };
 
 interface AvatarProps extends RX.CommonProps {
@@ -67,6 +93,7 @@ interface AvatarProps extends RX.CommonProps {
 interface AvatarState {
     confirmDisabled: boolean;
     showSpinner: boolean;
+    showFileTypePicker: boolean,
     offline: boolean;
 }
 
@@ -79,6 +106,7 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
     private roomName: string;
     private roomNameRemote: string;
     private canChange = false;
+    private platform: RX.Types.PlatformType;
 
     constructor(props: AvatarProps) {
         super(props);
@@ -86,6 +114,7 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
         this.avatarUrl = props.avatarUrl;
         this.powerLevel = DataStore.getPowerLevel(props.roomId, ApiClient.credentials.userIdFull);
         this.language = UiStore.getLanguage();
+        this.platform = UiStore.getPlatform();
         this.roomName = props.roomName;
         this.roomNameRemote = props.roomName;
 
@@ -98,6 +127,7 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
             return {
                 confirmDisabled: true,
                 showSpinner: false,
+                showFileTypePicker: false,
                 offline: UiStore.getOffline(),
             }
         }
@@ -113,9 +143,35 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
         this.setState({ confirmDisabled: confirmDisabled, });
     }
 
-    private pickAvatar = async () => {
+    private onPressAvatar = () => {
 
         if (!this.canChange) { return }
+
+        if (this.platform === 'ios') {
+            this.setState({ showFileTypePicker: !this.state.showFileTypePicker });
+        } else {
+            this.pickAvatarFile().catch(_error => null);
+        }
+    }
+
+    private pickAvatarPhoto = async () => {
+
+        if (this.platform === 'ios') { this.setState({ showFileTypePicker: false }) }
+
+        const file = await FileHandler.pickImage().catch(_error => null);
+
+        if (file) {
+
+            this.avatarFile = file;
+            this.avatarUrl = file.uri;
+
+            this.setConfirmDisabled();
+        }
+    }
+
+    private pickAvatarFile = async () => {
+
+        if (this.platform === 'ios') { this.setState({ showFileTypePicker: false }) }
 
         const file = await FileHandler.pickFile(true).catch(_error => null);
 
@@ -297,17 +353,53 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
             );
         }
 
+        let fileTypePicker: ReactElement | undefined;
+        if (this.state.showFileTypePicker) {
+            fileTypePicker = (
+                <RX.View
+                    style={ styles.fileTypeDialog }
+                    onPress={ (event: RX.Types.SyntheticEvent) => event.stopPropagation() }
+                >
+                    <RX.Button
+                        style={ styles.buttonDialog }
+                        onPress={ this.pickAvatarPhoto }
+                        disableTouchOpacityAnimation={ true }
+                        activeOpacity={ 1 }
+                        disabled={ this.state.offline }
+                        disabledOpacity={ 1 }
+                    >
+                        <RX.Text style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }>
+                            { photos[this.language] }
+                        </RX.Text>
+                    </RX.Button>
+                    <RX.Button
+                        style={ styles.buttonDialog }
+                        onPress={ this.pickAvatarFile }
+                        disableTouchOpacityAnimation={ true }
+                        activeOpacity={ 1 }
+                        disabled={ this.state.offline }
+                        disabledOpacity={ 1 }
+                    >
+                        <RX.Text style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }>
+                            { files[this.language] }
+                        </RX.Text>
+                    </RX.Button>
+                </RX.View>
+            )
+        }
+
         const content = (
             <RX.View>
                 { roomName }
                 <RX.View
                     style={ [styles.avatarContainer, { cursor: this.canChange ? 'pointer' : 'default' }] }
-                    onPress={ () => { this.pickAvatar().catch(_error => null) } }
+                    onPress={ this.onPressAvatar }
                     disableTouchOpacityAnimation={ true }
                     activeOpacity={ 1 }
                 >
                     { avatar! }
                     { spinner }
+                    { fileTypePicker }
                 </RX.View>
             </RX.View>
         );

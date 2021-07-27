@@ -8,6 +8,7 @@ import ApiClient from '../../matrix/ApiClient';
 import ImageResizer, { Response as ImageResizerResponse, ResizeFormat } from "react-native-image-resizer";
 import { FileObject } from '../../models/FileObject';
 import ImageSizeLocal from '../ImageSizeLocal';
+import * as ImagePicker from 'react-native-image-picker';
 
 class FileHandler {
 
@@ -86,6 +87,37 @@ class FileHandler {
         }
 
         return Promise.resolve(file);
+    }
+
+    public pickImage(): Promise<FileObject> {
+
+        return new Promise((resolve, reject) => {
+
+            const setFile: ImagePicker.Callback = (response) => {
+
+                if (response.didCancel) { return reject(); }
+
+                const file: FileObject = {
+                    size: response.assets![0].fileSize,
+                    name: response.assets![0].fileName || '',
+                    type: response.assets![0].type || 'unknown',
+                    uri: response.assets![0].uri || '',
+                    imageWidth: response.assets![0].width,
+                    imageHeight: response.assets![0].height,
+                }
+
+                return resolve(file);
+            }
+
+            const options: ImagePicker.ImageLibraryOptions = {
+                maxHeight: 800,
+                maxWidth: 800,
+                selectionLimit: 1,
+                mediaType: 'photo',
+            }
+
+            ImagePicker.launchImageLibrary(options, setFile);
+        });
     }
 
     public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (progress: number) => void): Promise<string> {

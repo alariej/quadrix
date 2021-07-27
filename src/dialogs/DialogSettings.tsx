@@ -3,7 +3,8 @@ import RX from 'reactxp';
 import { LOGO_BACKGROUND, INPUT_BORDER, MODAL_CONTENT_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, FONT_NORMAL, CONTAINER_PADDING,
     BUTTON_HEIGHT, TRANSPARENT_BACKGROUND, MODAL_CONTENT_BACKGROUND, BUTTON_ROUND_BACKGROUND,
     PLACEHOLDER_TEXT, AVATAR_BACKGROUND, BUTTON_MODAL_TEXT, AVATAR_MEDIUM_WIDTH, CHECKBOX_BACKGROUND, DIALOG_WIDTH,
-    APP_BACKGROUND, TILE_MESSAGE_TEXT, COMPOSER_BORDER} from '../ui';
+    APP_BACKGROUND, TILE_MESSAGE_TEXT, COMPOSER_BORDER, BUTTON_SHORT_WIDTH, BUTTON_DISABLED_TEXT, BUTTON_MODAL_BACKGROUND,
+    OPAQUE_BACKGROUND} from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
 import utils from '../utils/Utils';
@@ -11,7 +12,7 @@ import { ComponentBase } from 'resub';
 import UiStore from '../stores/UiStore';
 import FileHandler from '../modules/FileHandler';
 import { newPasswordNoMatch, passwordChanged, displayName, enterYourName, profilePicture, userPassword, currentPassword, newPassword,
-    repeatNewPassword, close, save, userId, emailAddress, emailNotifications, Languages } from '../translations';
+    repeatNewPassword, close, save, userId, emailAddress, emailNotifications, Languages, files, photos } from '../translations';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { AuthResponse_, ErrorResponse_ } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
@@ -141,6 +142,30 @@ const styles = {
         fontWeight: 'bold',
         fontSize: 20,
     }),
+    fileTypeDialog: RX.Styles.createViewStyle({
+        position: 'absolute',
+        top: AVATAR_MEDIUM_WIDTH / 2 - BUTTON_HEIGHT - SPACING,
+        left: - AVATAR_MEDIUM_WIDTH * 3 / 4,
+    }),
+    buttonDialog: RX.Styles.createViewStyle({
+        borderRadius: BUTTON_HEIGHT / 2,
+        height: BUTTON_HEIGHT,
+        width: BUTTON_SHORT_WIDTH,
+        backgroundColor: BUTTON_MODAL_BACKGROUND,
+        margin: SPACING,
+        shadowOffset: { width: -1, height: 1 },
+        shadowColor: OPAQUE_BACKGROUND,
+        shadowRadius: 3,
+        elevation: 3,
+        shadowOpacity: 1,
+        overflow: 'visible',
+    }),
+    buttonText: RX.Styles.createTextStyle({
+        fontSize: FONT_LARGE,
+        margin: SPACING,
+        textAlign: 'center',
+        color: BUTTON_MODAL_TEXT,
+    }),
 };
 
 interface DialogSettingsState {
@@ -148,6 +173,7 @@ interface DialogSettingsState {
     showSpinner: boolean;
     offline: boolean;
     appColor: string;
+    showFileTypePicker: boolean;
 }
 
 export default class DialogSettings extends ComponentBase<unknown, DialogSettingsState> {
@@ -166,12 +192,14 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
     private emailNotifications = false;
     private emailNotificationsRemote = false;
     private nClicks = 0;
+    private platform: RX.Types.PlatformType;
 
     constructor(props: unknown) {
         super(props);
 
         this.language = UiStore.getLanguage();
         this.webFrame = UiStore.getIsElectron() ? window.require('electron').webFrame : null;
+        this.platform = UiStore.getPlatform();
     }
 
     protected _buildState(_props: unknown, initState: boolean): Partial<DialogSettingsState> {
@@ -180,6 +208,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
             return {
                 confirmDisabled: true,
                 showSpinner: true,
+                showFileTypePicker: false,
                 offline: UiStore.getOffline(),
             }
         }
@@ -460,7 +489,33 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
             });
     }
 
-    private pickAvatar = async () => {
+    private onPressAvatar = () => {
+
+        if (this.platform === 'ios') {
+            this.setState({ showFileTypePicker: !this.state.showFileTypePicker });
+        } else {
+            this.pickAvatarFile().catch(_error => null);
+        }
+    }
+
+    private pickAvatarPhoto = async () => {
+
+        if (this.platform === 'ios') { this.setState({ showFileTypePicker: false }) }
+
+        const file = await FileHandler.pickImage().catch(_error => null);
+
+        if (file) {
+
+            this.avatarFile = file;
+            this.avatarUrl = file.uri;
+
+            this.setConfirmDisabled();
+        }
+    }
+
+    private pickAvatarFile = async () => {
+
+        if (this.platform === 'ios') { this.setState({ showFileTypePicker: false }) }
 
         const file = await FileHandler.pickFile(true).catch(_error => null);
 
@@ -706,6 +761,41 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
             );
         }
 
+        let fileTypePicker: ReactElement | undefined;
+        if (this.state.showFileTypePicker) {
+            fileTypePicker = (
+                <RX.View
+                    style={ styles.fileTypeDialog }
+                    onPress={ (event: RX.Types.SyntheticEvent) => event.stopPropagation() }
+                >
+                    <RX.Button
+                        style={ styles.buttonDialog }
+                        onPress={ this.pickAvatarPhoto }
+                        disableTouchOpacityAnimation={ true }
+                        activeOpacity={ 1 }
+                        disabled={ this.state.offline }
+                        disabledOpacity={ 1 }
+                    >
+                        <RX.Text style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }>
+                            { photos[this.language] }
+                        </RX.Text>
+                    </RX.Button>
+                    <RX.Button
+                        style={ styles.buttonDialog }
+                        onPress={ this.pickAvatarFile }
+                        disableTouchOpacityAnimation={ true }
+                        activeOpacity={ 1 }
+                        disabled={ this.state.offline }
+                        disabledOpacity={ 1 }
+                    >
+                        <RX.Text style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }>
+                            { files[this.language] }
+                        </RX.Text>
+                    </RX.Button>
+                </RX.View>
+            )
+        }
+
         const content = (
             <RX.View style={ styles.contentContainer }>
 
@@ -776,12 +866,13 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
 
                             <RX.View
                                 style={ styles.avatarContainer }
-                                onPress={ this.pickAvatar }
+                                onPress={ this.onPressAvatar }
                                 disableTouchOpacityAnimation={ true }
                                 activeOpacity={ 1 }
                             >
 
                                 { avatar }
+                                { fileTypePicker }
 
                             </RX.View>
 
@@ -857,7 +948,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
                 onCancel={ () => RX.Modal.dismissAll() }
                 confirmDisabled={ this.state.confirmDisabled || this.state.offline }
                 backgroundColorContent={ TRANSPARENT_BACKGROUND }
-                scrollEnabled={ ['android', 'ios'].includes(UiStore.getPlatform()) }
+                scrollEnabled={ ['android', 'ios'].includes(this.platform) }
             />
         );
 
