@@ -8,3 +8,4 @@
 
 "NSCameraUsageDescription" = "Die Erlaubnis zur Verwendung der Kamera ist für Videokonferenzen erforderlich";
 "NSMicrophoneUsageDescription" = "Die Erlaubnis zur Verwendung des Mikrofons ist für Videokonferenzen erforderlich";
+"NSPhotoLibraryUsageDescription" = "Die Erlaubnis zum Zugriff auf die Fotobibliothek ist erforderlich, um Bilder zu versenden oder zu verwenden";

@@ -8,3 +8,4 @@
 
 "NSCameraUsageDescription" = "The permission to use the camera is required for video-conferencing";
 "NSMicrophoneUsageDescription" = "The permission to use the microphone is required for video-conferencing";
+"NSPhotoLibraryUsageDescription" = "The permission to access the photo library is required to send or use images";
