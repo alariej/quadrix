@@ -55,7 +55,10 @@
     "start:electron": "electron .",
     "build:snap": "electron-builder --linux snap",
     "build:deb": "electron-builder --linux deb",
-    "build:mas": "electron-packager . --app-bundle-id=chat.quadrix.mac --overwrite --platform=mas --arch=x64 --icon=macos/resources/icon.icns --out=dist-mac/ --no-deref-symlinks --prune=true --ignore=^/ios --ignore=^/android --ignore=^/node_modules --ignore=^/src --ignore=^/web --extend-info=macos/custom.plist",
+    "build:mas": "node ./scripts/packager-mas.js",
+    "sign:mas:dev": "electron-osx-sign dist-mac/quadrix.chat-mas-x64/quadrix.chat.app --identity='Apple Development' --provisioning-profile=macos_alarie_dev.provisionprofile --entitlements=macos/entitlements.mas.plist --type=development",
+    "sign:mas:prod": "electron-osx-sign dist-mac/quadrix.chat-mas-x64/quadrix.chat.app --identity='Apple Distribution' --provisioning-profile=macos_alarie.provisionprofile --entitlements=macos/entitlements.mas.plist --type=distribution",
+    "build:pkg": "electron-osx-flat dist-mac/quadrix.chat-mas-x64/quadrix.chat.app --identity='3rd Party Mac Developer Installer' --verbose",
     "lint": "eslint --config .eslintrc --ext .ts,.tsx src"
   },
   "devDependencies": {
