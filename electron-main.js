@@ -23,26 +23,59 @@ const createWindow = () => {
         }
     });
 
-    const menuTemplate = [
-        {
-            label: 'Zoom In',
-            // role: 'zoomIn',
-            accelerator: 'CommandOrControl++',
-        },
-        {
-            label: 'Zoom Out',
-            // role: 'zoomOut',
-            accelerator: 'CommandOrControl+-',
-        },
-        {
-            label: 'Zoom Reset',
-            // role: 'resetZoom',
-            accelerator: 'CommandOrControl+0',
-        },
-    ];
+    const zoom = {
+        label: 'Zoom',
+        visible: false,
+        acceleratorWorksWhenHidden: true,
+        submenu: [
+            {
+                label: 'Zoom In',
+                // role: 'zoomIn',
+                accelerator: 'CommandOrControl++',
+            },
+            {
+                label: 'Zoom Out',
+                // role: 'zoomOut',
+                accelerator: 'CommandOrControl+-',
+            },
+            {
+                label: 'Zoom Reset',
+                // role: 'resetZoom',
+                accelerator: 'CommandOrControl+0',
+            },
+        ]
+    };
 
+    const edit = {
+        label: 'Edit',
+        visible: true,
+        submenu: [
+            {
+                label: 'Cut',
+                accelerator: 'CmdOrCtrl+X',
+                selector: 'cut:'
+            },
+            {
+                label: 'Copy',
+                accelerator: 'CmdOrCtrl+C',
+                selector: 'copy:'
+            },
+            {
+                label: 'Paste',
+                accelerator: 'CmdOrCtrl+V',
+                selector: 'paste:'
+            },
+            {
+                label: 'Select All',
+                accelerator: 'CmdOrCtrl+A',
+                selector: 'selectAll:'
+            }
+        ]
+    };
+
+    let topMenu = null;
     if (process.platform === 'darwin') {
-        menuTemplate.unshift({
+        topMenu = {
             label: app.getName(),
             submenu: [
                 // { role: 'hide' },
@@ -51,8 +84,14 @@ const createWindow = () => {
                 // { type: 'separator' },
                 { role: 'quit' }
             ]
-        });
+        }
     }
+
+    const menuTemplate = [
+        topMenu,
+        zoom,
+        edit
+    ];
 
     const menu = Menu.buildFromTemplate(menuTemplate);
 
@@ -77,7 +116,7 @@ app.whenReady()
     .then(_response => { createWindow() })
     .catch(_error => null);
 
-/* 
+/*
 app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) { createWindow() }
 });
