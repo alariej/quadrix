@@ -102,6 +102,7 @@ const styles = {
         width: AVATAR_MEDIUM_WIDTH,
         borderRadius: AVATAR_MEDIUM_WIDTH / 2,
         cursor: 'pointer',
+        overflow: 'visible',
     }),
     avatar: RX.Styles.createImageStyle({
         flex: 1,
@@ -124,6 +125,7 @@ const styles = {
     }),
     inputField: RX.Styles.createViewStyle({
         flex: 1,
+        overflow: 'visible',
     }),
     textDialog: RX.Styles.createTextStyle({
         textAlign: 'center',
@@ -145,14 +147,14 @@ const styles = {
     fileTypeDialog: RX.Styles.createViewStyle({
         position: 'absolute',
         top: AVATAR_MEDIUM_WIDTH / 2 - BUTTON_HEIGHT - SPACING,
-        left: - AVATAR_MEDIUM_WIDTH * 3 / 4,
+        left: - BUTTON_SHORT_WIDTH * 3 / 4,
     }),
     buttonDialog: RX.Styles.createViewStyle({
-        borderRadius: BUTTON_HEIGHT / 2,
+        borderRadius: BORDER_RADIUS,
         height: BUTTON_HEIGHT,
         width: BUTTON_SHORT_WIDTH,
         backgroundColor: BUTTON_MODAL_BACKGROUND,
-        margin: SPACING,
+        margin: SPACING / 2,
         shadowOffset: { width: -1, height: 1 },
         shadowColor: OPAQUE_BACKGROUND,
         shadowRadius: 3,

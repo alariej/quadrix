@@ -35,10 +35,11 @@ const styles = {
         right: -2 * SPACING,
     }),
     buttonDialog: RX.Styles.createViewStyle({
-        borderRadius: BUTTON_HEIGHT / 2,
+        borderRadius: BORDER_RADIUS,
+        width: BUTTON_SHORT_WIDTH,
         height: BUTTON_HEIGHT,
         backgroundColor: BUTTON_MODAL_BACKGROUND,
-        margin: SPACING,
+        margin: SPACING / 2,
         shadowOffset: { width: -1, height: 1 },
         shadowColor: OPAQUE_BACKGROUND,
         shadowRadius: 3,
@@ -487,7 +488,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                 n++;
                 openButton = (
                     <RX.Button
-                        style={ [styles.buttonDialog, { width: BUTTON_SHORT_WIDTH }] }
+                        style={ styles.buttonDialog }
                         onPress={ event => this.viewFile(event) }
                         disableTouchOpacityAnimation={ true }
                         activeOpacity={ 1 }
@@ -505,7 +506,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                 n++;
                 saveAsButton = (
                     <RX.Button
-                        style={ [styles.buttonDialog, { width: BUTTON_SHORT_WIDTH }] }
+                        style={ styles.buttonDialog }
                         onPress={ event => this.saveFile(event) }
                         disableTouchOpacityAnimation={ true }
                         activeOpacity={ 1 }
@@ -523,7 +524,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                 n++;
                 shareButton = (
                     <RX.Button
-                        style={ [styles.buttonDialog, { width: BUTTON_SHORT_WIDTH }] }
+                        style={ styles.buttonDialog }
                         onPress={ event => this.shareExternal(event) }
                         disableTouchOpacityAnimation={ true }
                         activeOpacity={ 1 }
@@ -541,7 +542,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                 n++;
                 replyButton = (
                     <RX.Button
-                        style={ [styles.buttonDialog, { width: BUTTON_SHORT_WIDTH }] }
+                        style={ styles.buttonDialog }
                         onPress={ this.setReplyMessage }
                         disableTouchOpacityAnimation={ true }
                         activeOpacity={ 1 }
@@ -557,7 +558,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 
             forwardButton = (
                 <RX.Button
-                    style={ [styles.buttonDialog, { width: BUTTON_SHORT_WIDTH }] }
+                    style={ styles.buttonDialog }
                     onPress={ event => this.showRoomList(event) }
                     disableTouchOpacityAnimation={ true }
                     activeOpacity={ 1 }
@@ -574,7 +575,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                 n++;
                 reportButton = (
                     <RX.Button
-                        style={ [styles.buttonDialog, { width: BUTTON_SHORT_WIDTH }] }
+                        style={ styles.buttonDialog }
                         onPress={ this.confirmReportMessage }
                         disableTouchOpacityAnimation={ true }
                         activeOpacity={ 1 }

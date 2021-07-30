@@ -59,14 +59,14 @@ const styles = {
     fileTypeDialog: RX.Styles.createViewStyle({
         position: 'absolute',
         top: AVATAR_LARGE_WIDTH / 2 - BUTTON_HEIGHT - SPACING,
-        left: OBJECT_MARGIN,
+        left: SPACING,
     }),
     buttonDialog: RX.Styles.createViewStyle({
-        borderRadius: BUTTON_HEIGHT / 2,
+        borderRadius: BORDER_RADIUS,
         height: BUTTON_HEIGHT,
         width: BUTTON_SHORT_WIDTH,
         backgroundColor: BUTTON_MODAL_BACKGROUND,
-        margin: SPACING,
+        margin: SPACING / 2,
         shadowOffset: { width: -1, height: 1 },
         shadowColor: OPAQUE_BACKGROUND,
         shadowRadius: 3,
