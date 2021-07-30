@@ -929,20 +929,20 @@ export const pressOKJitsi: Translation = {
 }
 
 export const jitsiStartedExternal: Translation = {
-    en: 'Videoconference launched / joined. Join on ' + APP_NAME + ' by pressing the video icon, or in an external browser by using this link:\n\n' + JITSI_SERVER_URL,
-    de: 'Videokonferenz lanciert / beigetreten. Nehmen Sie bei ' + APP_NAME + ' teil, indem Sie das Videosymbol drücken, oder in einem externen Browser über diesen Link:\n\n' + JITSI_SERVER_URL,
+    en: 'Videoconference started / joined. Join on ' + APP_NAME + ' by pressing the video icon, or in an external browser by using this link:\n\n' + JITSI_SERVER_URL,
+    de: 'Videokonferenz gestartet / beigetreten. Nehmen Sie bei ' + APP_NAME + ' teil, indem Sie das Videosymbol drücken, oder in einem externen Browser über diesen Link:\n\n' + JITSI_SERVER_URL,
     fr: 'Vidéoconférence lancée / jointe. Participez sur ' + APP_NAME + ' en appuyant sur l\'icône vidéo, ou dans un navigateur externe en utilisant ce lien:\n\n' + JITSI_SERVER_URL,
 }
 
 export const jitsiStartedInternal: Translation = {
-    en: 'Videoconference launched / joined.',
-    de: 'Videokonferenz lanciert / beigetreten.',
+    en: 'Videoconference started / joined.',
+    de: 'Videokonferenz gestartet / beigetreten.',
     fr: 'Vidéoconférence lancée / jointe.',
 }
 
 export const jitsiStartedShort: Translation = {
-    en: 'Videoconference launched...',
-    de: 'Videokonferenz lanciert...',
+    en: 'Videoconference started...',
+    de: 'Videokonferenz gestartet...',
     fr: 'Vidéoconférence lancée...',
 }
 
