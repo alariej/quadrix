@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { BUTTON_MODAL_TEXT, BUTTON_MODAL_BACKGROUND, MODAL_CONTENT_BACKGROUND, OPAQUE_BACKGROUND, MODAL_DISABLED_TEXT, BORDER_RADIUS,
-    BUTTON_HEIGHT, FONT_LARGE, DIALOG_WIDTH, SPACING, BUTTON_WIDTH, OBJECT_MARGIN, TRANSPARENT_BACKGROUND } from '../../ui';
+    BUTTON_HEIGHT, FONT_LARGE, DIALOG_WIDTH, SPACING, OBJECT_MARGIN, TRANSPARENT_BACKGROUND } from '../../ui';
 import UiStore from '../../stores/UiStore';
 import { cancel } from '../../translations';
 
@@ -29,10 +29,9 @@ const styles = {
     }),
     buttonContainer: RX.Styles.createViewStyle({
         flexDirection: 'row',
-        justifyContent: 'space-around',
     }),
     button: RX.Styles.createViewStyle({
-        width: BUTTON_WIDTH,
+        width: DIALOG_WIDTH / 2 - OBJECT_MARGIN / 2,
         height: BUTTON_HEIGHT,
         borderRadius: BUTTON_HEIGHT / 2,
         backgroundColor: BUTTON_MODAL_BACKGROUND,
@@ -190,7 +189,12 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
                         </RX.View>
                     </RX.ScrollView>
                     <RX.View style={ styles.bottomContainer }>
-                        <RX.View style={ styles.buttonContainer }>
+                        <RX.View
+                            style={[
+                                styles.buttonContainer,
+                                { justifyContent: this.props.cancelButton && this.props.confirmButton ? 'space-between' : 'center' }
+                            ]}
+                        >
                             { confirmButton }
                             { cancelButton}
                         </RX.View>
