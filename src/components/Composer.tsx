@@ -22,7 +22,7 @@ const styles = {
     container: RX.Styles.createViewStyle({
         flexDirection: 'row',
         marginBottom: SPACING + 1,
-        paddingBottom: SPACING - 1,
+        paddingBottom: SPACING,
         borderBottomWidth: 1,
         borderColor: COMPOSER_BORDER,
     }),
