@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
-import { TILE_MESSAGE_TEXT, LINK_TEXT, FONT_LARGE, BUTTON_ROUND_WIDTH, SPACING, PAGE_MARGIN, BORDER_RADIUS } from '../ui';
+import { TILE_MESSAGE_TEXT, LINK_TEXT, FONT_LARGE, BUTTON_ROUND_WIDTH, SPACING, PAGE_MARGIN, BORDER_RADIUS, FONT_EMOJI_LARGE } from '../ui';
 import { MessageEvent } from '../models/MessageEvent';
 import UiStore from '../stores/UiStore';
 import * as linkify from 'linkifyjs';
@@ -22,6 +22,11 @@ const styles = {
         fontSize: FONT_LARGE,
         color: TILE_MESSAGE_TEXT,
         lineHeight: FONT_LARGE + 4,
+    }),
+    allEmojis: RX.Styles.createTextStyle({
+        fontSize: FONT_EMOJI_LARGE,
+        color: TILE_MESSAGE_TEXT,
+        lineHeight: FONT_EMOJI_LARGE + 4,
     }),
     handle: RX.Styles.createTextStyle({
         fontSize: FONT_LARGE,
@@ -168,6 +173,17 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 
             renderContent = urlPreview;
 
+        } else if (this.props.message.content.body!.replace(new RegExp(/\p{Extended_Pictographic}/u, 'g'), '').length === 0) {
+
+            renderContent = (
+                <RX.Text
+                    style={ styles.allEmojis }
+                    selectable={ isSelectable }
+                >
+                    { this.props.message.content.body! }
+                </RX.Text>
+            );
+
         } else {
 
             let linkifyArray: LinkifyElement[] = [];
@@ -188,7 +204,6 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 
                 linkifyArray = linkify.find(bodyText); // eslint-disable-line
             }
-
 
             if (linkifyArray.length > 0) {
 
