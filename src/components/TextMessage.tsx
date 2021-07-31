@@ -173,7 +173,7 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 
             renderContent = urlPreview;
 
-        } else if (this.props.message.content.body!.replace(new RegExp(/\p{Extended_Pictographic}/u, 'g'), '').length === 0) {
+        } else if (utils.isAllEmojis(this.props.message.content.body!)) {
 
             renderContent = (
                 <RX.Text
