@@ -13,9 +13,9 @@ const createWindow = () => {
         frame: true,
         movable: true,
         backgroundColor: 'black',
-        // icon: path.join(__dirname, 'dist-web', 'resources', 'images', 'logo.png'), // linux
+        icon: path.join(__dirname, 'dist-web', 'resources', 'images', 'logo.png'), // linux
         // icon: path.join(__dirname, 'dist-web', 'resources', 'images', 'logo.ico'), // windows
-        icon: path.join(__dirname, 'dist-web', 'resources', 'images', 'logo.icns'), // mac
+        // icon: path.join(__dirname, 'dist-web', 'resources', 'images', 'logo.icns'), // mac
         webPreferences: {
             nodeIntegration: true, // not used in electron v12
             contextIsolation: false, // required in electron v12
@@ -73,8 +73,8 @@ const createWindow = () => {
         ]
     };
 
-    let topMenu = null;
-    if (process.platform === 'darwin') {
+    let topMenu = {};
+    if (process.platform !== 'win32') {
         topMenu = {
             label: app.getName(),
             submenu: [
