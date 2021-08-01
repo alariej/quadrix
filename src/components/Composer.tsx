@@ -667,7 +667,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     onChangeText={ textInput => this.textInput = textInput }
                     value={ this.state.textInput }
                     keyboardType={ 'default' }
-                    autoCorrect={ false }
+                    autoCorrect={ true }
                     editable={ this.props.roomActive || false }
                 />
                 <RX.Button
