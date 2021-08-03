@@ -73,18 +73,15 @@ const createWindow = () => {
         ]
     };
 
-    let topMenu = {};
-    if (process.platform !== 'win32') {
-        topMenu = {
-            label: app.getName(),
-            submenu: [
-                // { role: 'hide' },
-                // { role: 'hideothers' },
-                // { role: 'unhide' },
-                // { type: 'separator' },
-                { role: 'quit' }
-            ]
-        }
+    const topMenu = {
+        label: app.getName(),
+        submenu: [
+            // { role: 'hide' },
+            // { role: 'hideothers' },
+            // { role: 'unhide' },
+            // { type: 'separator' },
+            { role: 'quit' }
+        ]
     }
 
     const menuTemplate = [
