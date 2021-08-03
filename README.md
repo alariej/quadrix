@@ -19,23 +19,23 @@
 ## One code base, several platforms:
 
 <p>
-    <a href="https://play.google.com/store/apps/details?id=chat.quadrix.android">
-        <img alt="Get it on Google Play" src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" height=48>
-    </a>
     <a href="https://apps.apple.com/us/app/quadrix-chat/id1576110553">
         <img alt="Download on the App Store" src="https://linkmaker.itunes.apple.com/images/badges/en-us/badge_appstore-lrg.svg" height=48>
+    </a>
+    <a href="https://play.google.com/store/apps/details?id=chat.quadrix.android">
+        <img alt="Get it on Google Play" src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" height=48>
     </a>
 </p>
 
 <p>
-    <a href="https://snapcraft.io/quadrix">
-        <img alt="Get it from the Snap Store" src="https://snapcraft.io/static/images/badges/en/snap-store-black.svg" height=48>
-    </a>
-    <a href="https://www.microsoft.com/store">
-        <img alt="Get it from Microsoft" src="https://developer.microsoft.com/store/badges/images/English_get-it-from-MS.png" height=48>
-    </a>
     <a href="https://apps.apple.com/us/app/quadrix-chat-desktop/id1577585119">
         <img alt="Download on the Mac App Store" src="https://upload.wikimedia.org/wikipedia/commons/5/5d/Download_on_the_Mac_App_Store_Badge_US-UK_RGB_blk.svg" height=48>
+    </a>
+    <a href="https://www.microsoft.com/store/apps/9NPZ93X49V00">
+        <img alt="Get it from Microsoft" src="https://developer.microsoft.com/store/badges/images/English_get-it-from-MS.png" height=48>
+    </a>
+    <a href="https://snapcraft.io/quadrix">
+        <img alt="Get it from the Snap Store" src="https://snapcraft.io/static/images/badges/en/snap-store-black.svg" height=48>
     </a>
 </p>
 
