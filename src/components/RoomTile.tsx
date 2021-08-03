@@ -62,6 +62,7 @@ const styles = {
         marginBottom: SPACING,
         height: FONT_LARGE + 4,
         alignItems: 'center',
+        overflow: 'visible'
     }),
     roomName: RX.Styles.createTextStyle({
         fontSize: FONT_LARGE,
