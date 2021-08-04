@@ -12,6 +12,7 @@ import utils from '../utils/Utils';
 const styles = {
     containerMessage: RX.Styles.createViewStyle({
         flexDirection: 'column',
+        overflow: 'visible'
     }),
     containerText: RX.Styles.createTextStyle({
         flex: 1,
@@ -27,6 +28,7 @@ const styles = {
         fontSize: FONT_EMOJI_LARGE,
         color: TILE_MESSAGE_TEXT,
         lineHeight: FONT_EMOJI_LARGE + 4,
+        overflow: 'visible'
     }),
     handle: RX.Styles.createTextStyle({
         fontSize: FONT_LARGE,

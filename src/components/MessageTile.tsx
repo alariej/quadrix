@@ -24,6 +24,9 @@ const styles = {
         marginBottom: SPACING,
         padding: SPACING,
     }),
+    containerMessage: RX.Styles.createViewStyle({
+        overflow: 'visible',
+    }),
     containerFooter: RX.Styles.createViewStyle({
         flexDirection: 'row',
         marginTop: 8,
@@ -236,7 +239,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                     onLongPress={ this.showContextDialog }
                     onPan={ () => null }
                 >
-                    <RX.View>
+                    <RX.View style={ styles.containerMessage }>
                         { message }
                     </RX.View>
                     <RX.View style={ styles.containerFooter }>
@@ -256,7 +259,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                     onContextMenu={ this.showContextDialog }
                     activeOpacity={ 1 }
                 >
-                    <RX.View>
+                    <RX.View style={ styles.containerMessage }>
                         { message }
                     </RX.View>
                     <RX.View style={ styles.containerFooter }>
