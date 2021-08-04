@@ -32,7 +32,7 @@
       ]
     },
     "win": {
-      "icon": "src/resources/logos/logo256.ico",
+      "icon": "dist-assets/resources/logo256.ico",
       "target": [
         "nsis",
         "appx"
@@ -40,7 +40,7 @@
     },
     "nsis": {
       "createStartMenuShortcut": true,
-      "installerIcon": "src/resources/logos/logo.ico"
+      "installerIcon": "dist-assets/resources/logo256.ico"
     },
     "appx": {
       "applicationId": "quadrix.chat",
@@ -53,8 +53,19 @@
     },
     "files": [
       "dist-web/**/*",
-      "electron-main.js"
-    ]
+      "electron-main.js",
+      "dist-assets/appx/SmallTile.png",
+      "dist-assets/appx/LargeTile.png",
+      "dist-assets/appx/Square44x44Logo.png",
+      "dist-assets/appx/Square150x150Logo.png",
+      "dist-assets/appx/Wide310x150Logo.png",
+      "dist-assets/appx/StoreLogo.png",
+      "dist-assets/resources/logo256.ico"
+    ],
+    "directories": {
+      "buildResources": "dist-assets/",
+      "output": "dist/"
+    }
   },
   "scripts": {
     "rn-cli": "node scripts/react-native.js",
