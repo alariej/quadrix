@@ -313,6 +313,15 @@ export interface RoomTimeline_ {
     prev_batch: string,
 }
 
+export interface DirectorySearch_ {
+    limited: boolean,
+    results: {
+        user_id: string,
+        display_name: string,
+        avatar_url: string,
+    }[],
+}
+
 export interface EphemeralEvent_ {
     events: {
         type: EphemeralEventType,

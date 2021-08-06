@@ -1,7 +1,8 @@
 import { GenericRestClient, ApiCallOptions } from 'simplerestclients';
 import { PreviewUrl_, LoginParam_, LoginResponse_, PusherGetResponse_, EmailTokenResponse_, AuthParam_, PusherParam_, NewRoomOptions_,
     GetPublicRoomsResponse_, MessageEvent_, StateEventContent_, StateEventType, GetJoinedMembersResponse_, GetRoomMembersResponse_,
-    MessageEventContent_, MessageEventContentInfo_, SyncFilter_, SyncResponse_, PushRulesGetResponse_ } from '../models/MatrixApi';
+    MessageEventContent_, MessageEventContentInfo_, SyncFilter_, SyncResponse_, PushRulesGetResponse_,
+    DirectorySearch_ } from '../models/MatrixApi';
 
 export default class RestClient extends GenericRestClient {
     constructor(private accessToken: string, homeServer: string, prefix: string) {
@@ -321,5 +322,15 @@ export default class RestClient extends GenericRestClient {
         };
 
         return this.performApiPost<void>('rooms/' + roomId + '/report/' + eventId, data);
+    }
+
+    public searchUser(searchTerm: string): Promise<DirectorySearch_> {
+
+        const data = {
+            search_term: searchTerm,
+            limit: 10,
+        };
+
+        return this.performApiPost<DirectorySearch_>('user_directory/search', data);
     }
 }

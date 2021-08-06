@@ -9,7 +9,7 @@ import UiStore from '../stores/UiStore';
 import { PREFIX_MEDIA, PREFIX_REST } from '../appconfig';
 import { PreviewUrl_, LoginParam_, EmailTokenResponse_, LoginResponse_, AuthParam_, PusherGetResponse_, NewRoomOptions_,
     LoginParamType, RegisterStageType, RoomType, GetPublicRoomsResponse_, StateEventContent_,
-    StateEventType, MessageEventContent_, PusherParam_, PushRulesGetResponse_} from '../models/MatrixApi';
+    StateEventType, MessageEventContent_, PusherParam_, PushRulesGetResponse_, DirectorySearch_} from '../models/MatrixApi';
 import { RoomSummary } from '../models/RoomSummary';
 import utils from '../utils/Utils';
 import { MessageEvent } from '../models/MessageEvent';
@@ -497,6 +497,13 @@ class ApiClient {
         const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
 
         return restClient.reportMessage(roomId, eventId);
+    }
+
+    public searchUser(searchTerm: string): Promise<DirectorySearch_> {
+
+        const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
+
+        return restClient.searchUser(searchTerm);
     }
 
     // local storage
