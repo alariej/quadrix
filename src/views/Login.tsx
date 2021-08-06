@@ -14,6 +14,7 @@ import { haveAnAccount, noAccount, register, login, userPassword, repeatPassword
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { ErrorResponse_ } from '../models/MatrixApi';
 import { TERMS_URL } from '../appconfig';
+import Utils from '../utils/Utils';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -118,7 +119,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
         this.state = {
             repeatPassword: '',
             offline: false,
-            loginExpanded: false,
+            loginExpanded: true,
             register: false,
             server: '',
             userId: '',
@@ -133,8 +134,14 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
             .then(lastUserId => {
 
                 if (lastUserId) {
-                    this.userId = lastUserId;
-                    this.setState({ userId: this.userId });
+
+                    const userId = Utils.parseUserId(lastUserId);
+
+                    this.userId = userId.user;
+                    this.server = userId.server;
+
+                    this.setState({ userId: this.userId, server: this.server });
+
                     UiStore.getDevice() === 'desktop' ? this.passwordInput!.focus() : null;
                 }
             })
@@ -177,25 +184,22 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 
         if (!this.state.register) {
 
-            let userId: string;
+            let user: string;
             let server: string;
 
             if (!this.state.loginExpanded) {
 
-                const userIdInput = this.userId.trim();
-                const a = userIdInput.indexOf('@');
-                const b = userIdInput.lastIndexOf(':');
+                const userId = Utils.parseUserId(this.userId);
 
-                userId = userIdInput.substr(a + 1, b - a - 1);
-                server = userIdInput.substr(b - a + 1);
+                user = userId.user;
+                server = userId.server;
 
             } else {
-
-                userId = this.userId.trim();
+                user = this.userId.trim();
                 server = this.server.trim();
             }
 
-            ApiClient.login(userId, this.password, server)
+            ApiClient.login(user, this.password, server)
                 .then(_response => {
 
                     RX.Modal.dismiss('modalspinner');
@@ -290,17 +294,12 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 
         if (this.userId && !this.state.loginExpanded) {
 
-            const userIdInput = this.userId;
-            const a = userIdInput.indexOf('@');
-            const b = userIdInput.lastIndexOf(':');
+            const userId = Utils.parseUserId(this.userId);
 
-            if (a > -1 && b > 0) {
+            this.userId = userId.user;
+            this.server = userId.server;
 
-                this.userId = userIdInput.substr(a + 1, b - a - 1);
-                this.server = userIdInput.substr(b - a + 1);
-
-                this.setState({ userId: this.userId, server: this.server });
-            }
+            this.setState({ userId: this.userId, server: this.server });
 
         } else if (this.userId && this.server) {
             this.userId = '@' + this.userId + ':' + this.server;
