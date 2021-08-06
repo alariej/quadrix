@@ -340,22 +340,11 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
 
         RX.Modal.dismiss('memberlist');
 
-        const users: { [id: string]: User } = DataStore.getUsers();
+        const users = DataStore.getUsers();
 
-        const userListItems: User[] = [];
+        if (users.length > 0) {
 
-        for (const userId in users) {
-
-            if (this.props.members[userId] && this.props.members[userId].membership !== 'leave') { continue }
-            userListItems.push(users[userId]);
-        }
-
-        if (userListItems.length > 0) {
-
-            const userTiles = userListItems
-                .filter(user => (
-                    user.id !== ApiClient.credentials.userIdFull
-                ))
+            const userTiles = users
                 .sort((a, b) => (
                     a.id.localeCompare(b.id)
                 ))

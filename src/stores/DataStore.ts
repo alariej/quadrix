@@ -1078,7 +1078,7 @@ class DataStore extends StoreBase {
         return this.roomSummaryList[roomIndex].members;
     }
 
-    public getUsers():  { [id: string]: User } {
+    public getUsers():  User[] {
 
         let users: { [id: string]: User } = {};
 
@@ -1090,7 +1090,7 @@ class DataStore extends StoreBase {
                 users = { ...users, ...roomSummary.members }
             });
 
-        return users;
+        return Object.values(users).filter((user => (user.id !== ApiClient.credentials.userIdFull)));
     }
 
     public addMembers(roomId: string, members: { [id: string]: User }) {
