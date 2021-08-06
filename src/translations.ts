@@ -41,6 +41,36 @@ export const inviteUser: Translation = {
     fr: 'Inviter',
 }
 
+export const searchUser: Translation = {
+    en: 'Search User',
+    de: 'Suchen...',
+    fr: 'Chercher...',
+}
+
+export const searchInstruction: Translation = {
+    en: 'Enter the search terms (user name or ID) or a Matrix user ID (@user:server)',
+    de: 'Geben Sie die Suchbegriffe (Benutzer-Name oder ID) oder eine Matrix ID (@benutzer:server) ein',
+    fr: 'Saisissez les termes de recherche (nom ou ID d\'usager) ou une ID Matrix (@usager:serveur)',
+}
+
+export const tooManySearchResults: Translation = {
+    en: 'Too many results, please refine your search terms',
+    de: 'Zu viele Ergebnisse, bitte verfeinern Sie Ihre Suchbegriffe',
+    fr: 'Trop de résultats, veuillez affiner votre recherche',
+}
+
+export const noSearchResults: Translation = {
+    en: 'No result, please change your search terms',
+    de: 'Kein Ergebnis, bitte ändern Sie Ihre Suchbegriffe',
+    fr: 'Aucun résultat, veuillez modifier votre recherche',
+}
+
+export const enterSearch: Translation = {
+    en: 'Search terms or Matrix user ID',
+    de: 'Suchbegriffe oder Matrix Benutzer-ID',
+    fr: 'Termes de recherche ou ID d\'usager',
+}
+
 export const userServer: Translation = {
     en: '@user:server',
     de: '@benutzer:server',

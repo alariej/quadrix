@@ -5,12 +5,13 @@ import ModalSpinner from '../components/ModalSpinner';
 import DialogContainer from '../modules/DialogContainer';
 import DataStore from '../stores/DataStore';
 import { MODAL_CONTENT_TEXT, BORDER_RADIUS, FONT_LARGE, SPACING, TILE_HEIGHT, BUTTON_HEIGHT, INPUT_BACKGROUND, CONTAINER_PADDING,
-    PLACEHOLDER_TEXT, TRANSPARENT_BACKGROUND, DIALOG_WIDTH } from '../ui';
+    PLACEHOLDER_TEXT, TRANSPARENT_BACKGROUND, DIALOG_WIDTH, TILE_BACKGROUND } from '../ui';
 import UiStore from '../stores/UiStore';
 import { inviteUser, cancel, userServer, errorNoConfirm, theUserId, doesntSeemToExist, warningNoSelfDirect,
-    Languages } from '../translations';
+    Languages, searchUser, tooManySearchResults, noSearchResults, enterSearch, searchInstruction } from '../translations';
 import { User } from '../models/User';
 import UserTile from '../components/UserTile';
+import Utils from '../utils/Utils';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -27,7 +28,14 @@ const styles = {
     }),
     userListView: RX.Styles.createViewStyle({
         alignSelf: 'center',
+    }),
+    infoTile: RX.Styles.createViewStyle({
+        flex: 1,
+        alignSelf: 'center',
         marginBottom: SPACING,
+        borderRadius: BORDER_RADIUS,
+        backgroundColor: TILE_BACKGROUND,
+        minHeight: TILE_HEIGHT
     }),
     inputBox: RX.Styles.createTextInputStyle({
         fontSize: FONT_LARGE,
@@ -51,6 +59,10 @@ interface DialogNewDirectConversationProps {
 
 interface DialogNewDirectConversationState {
     userId: string | undefined;
+    userList: ReactElement | undefined;
+    infoTile: ReactElement | undefined;
+    isSearch: boolean;
+    isConfirmDisabled: boolean;
 }
 
 export default class DialogNewDirectConversation extends RX.Component<DialogNewDirectConversationProps, DialogNewDirectConversationState> {
@@ -63,16 +75,153 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
 
         this.language = UiStore.getLanguage();
 
-        this.state = { userId: undefined }
+        this.state = {
+            userId: undefined,
+            userList: undefined,
+            infoTile: undefined,
+            isSearch: true,
+            isConfirmDisabled: false,
+        }
+    }
+
+    public componentDidMount(): void {
+
+        const users = DataStore.getUsers();
+
+        if (users.length > 0) {
+
+            const userTiles = users
+                .sort((a, b) => (
+                    a.id.localeCompare(b.id)
+                ))
+                .map((user: User) => {
+                    return (
+                        <UserTile
+                            key={ user.id }
+                            user={ user }
+                            inviteUser={ this.setUserId }
+                            canPress={ true }
+                            hideMembership={ true }
+                        />
+                    );
+                });
+
+            const userList = (
+                <RX.View
+                    style={ [styles.userListView, { height: Math.min(5, userTiles.length) * (TILE_HEIGHT + SPACING) }] }
+                >
+                    <RX.ScrollView
+                        style={ { width: UiStore.getPlatform() === 'web' ? DIALOG_WIDTH + 30 : DIALOG_WIDTH} }
+                        keyboardShouldPersistTaps={ 'always' }
+                    >
+                        { userTiles }
+                    </RX.ScrollView>
+                </RX.View>
+            );
+
+            this.setState({ userList: userList, infoTile: undefined });
+
+        } else {
+
+            const infoTile = (
+                <RX.View
+                    style={ styles.infoTile }
+                >
+                    <RX.Text style={ styles.textDialog }>
+                        { searchInstruction[this.language] }
+                    </RX.Text>
+                </RX.View>
+            );
+
+            this.setState({ infoTile: infoTile, isSearch: true });
+        }
+    }
+
+    private searchOnServer = () => {
+
+        if (!this.userId) { return; }
+
+        this.setState({ isConfirmDisabled: true });
+
+        ApiClient.searchUser(this.userId)
+            .then(response => {
+
+                if (response.limited) {
+
+                    const infoTile = (
+                        <RX.View
+                            style={ styles.infoTile }
+                        >
+                            <RX.Text style={ styles.textDialog }>
+                                { tooManySearchResults[this.language] }
+                            </RX.Text>
+                        </RX.View>
+                    );
+
+                    this.setState({ infoTile: infoTile, isSearch: true, isConfirmDisabled: false });
+
+                } else if (response.results.length === 0) {
+
+                    const infoTile = (
+                        <RX.View
+                            style={ styles.infoTile }
+                        >
+                            <RX.Text style={ styles.textDialog }>
+                                { noSearchResults[this.language] }
+                            </RX.Text>
+                        </RX.View>
+                    );
+
+                    this.setState({ infoTile: infoTile, isSearch: true, isConfirmDisabled: false });
+
+                } else {
+
+                    const userTiles = response.results
+                        .sort((a, b) => (
+                            a.user_id.localeCompare(b.user_id)
+                        ))
+                        .map(user_ => {
+                            const user: User = {
+                                id: user_.user_id,
+                                avatarUrl: user_.avatar_url,
+                                name: user_.display_name
+                            }
+                            return (
+                                <UserTile
+                                    key={ user.id }
+                                    user={ user }
+                                    inviteUser={ this.setUserId }
+                                    canPress={ true }
+                                    hideMembership={ true }
+                                />
+                            );
+                        });
+
+                    const userList = (
+                        <RX.View
+                            style={ [styles.userListView, { height: Math.min(5, userTiles.length) * (TILE_HEIGHT + SPACING) }] }
+                        >
+                            <RX.ScrollView
+                                style={ { width: UiStore.getPlatform() === 'web' ? DIALOG_WIDTH + 30 : DIALOG_WIDTH} }
+                                keyboardShouldPersistTaps={ 'always' }
+                            >
+                                { userTiles }
+                            </RX.ScrollView>
+                        </RX.View>
+                    );
+
+                    this.setState({ userList: userList, infoTile: undefined, isSearch: true, isConfirmDisabled: false });
+                }
+            })
+            .catch(_error => {
+
+                this.setState({ isConfirmDisabled: false });
+            });
     }
 
     private createNewDirect = () => {
 
         if (!this.userId) { return; }
-
-        if (!this.userId.includes('@')) {
-            this.userId = '@' + this.userId + ':' + ApiClient.credentials.homeServer;
-        }
 
         if (this.userId === ApiClient.credentials.userIdFull) {
 
@@ -167,67 +316,29 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
     private setUserId = (userId: string) => {
 
         this.userId = userId;
-        this.setState({ userId: userId });
+        this.setState({ userId: userId, isSearch: false });
+    }
+
+    private onEditUserId = (text: string) => {
+
+        this.userId = text;
+        const userId = Utils.parseUserId(text);
+        this.setState({ isSearch: !(userId.user && userId.server) });
     }
 
     public render(): JSX.Element | null {
 
-        const users: { [id: string]: User } = DataStore.getUsers();
-
-        const userListItems: User[] = [];
-
-        let userList: ReactElement;
-
-        for (const userId in users) {
-            userListItems.push(users[userId]);
-        }
-
-        if (userListItems.length > 0) {
-
-            const userTiles = userListItems
-                .filter(user => (
-                    user.id !== ApiClient.credentials.userIdFull
-                ))
-                .sort((a, b) => (
-                    a.id.localeCompare(b.id)
-                ))
-                .map((user: User) => {
-                    return (
-                        <UserTile
-                            key={ user.id }
-                            user={ user }
-                            inviteUser={ this.setUserId }
-                            canPress={ true }
-                            hideMembership={ true }
-                        />
-                    );
-                });
-
-            userList = (
-                <RX.View
-                    style={ [styles.userListView, { height: Math.min(5, userTiles.length) * (TILE_HEIGHT + SPACING) }] }
-                >
-                    <RX.ScrollView
-                        style={ { width: UiStore.getPlatform() === 'web' ? DIALOG_WIDTH + 30 : DIALOG_WIDTH} }
-                        keyboardShouldPersistTaps={ 'always' }
-                    >
-                        { userTiles }
-                    </RX.ScrollView>
-                </RX.View>
-            );
-        }
-
         const textInput = (
             <RX.TextInput
                 style={ styles.inputBox }
-                placeholder={ userServer[this.language] }
+                placeholder={ this.state.isSearch ? enterSearch[this.language] : userServer[this.language] }
                 placeholderTextColor={ PLACEHOLDER_TEXT }
-                onChangeText={ userId => this.userId = userId }
+                onChangeText={ this.onEditUserId }
                 disableFullscreenUI={ true }
                 autoCapitalize={ 'none' }
                 keyboardType={ UiStore.getPlatform() === 'android' ? 'email-address' : 'default' }
                 autoCorrect={ false }
-                autoFocus={ true }
+                autoFocus={ false }
                 value={ this.state.userId }
                 onKeyPress={ () => this.setState({ userId: undefined })}
             />
@@ -235,7 +346,7 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
 
         const content = (
             <RX.View style={ styles.container }>
-                { userList! }
+                { this.state.infoTile || this.state.userList }
                 { textInput }
             </RX.View>
         );
@@ -244,10 +355,11 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
             <DialogContainer
                 content={ content }
                 confirmButton={ true }
-                confirmButtonText={ inviteUser[this.language] }
+                confirmDisabled={ this.state.isConfirmDisabled }
+                confirmButtonText={ this.state.isSearch ? searchUser[this.language] : inviteUser[this.language] }
                 cancelButton={ true }
                 cancelButtonText={ cancel[this.language] }
-                onConfirm={ this.createNewDirect }
+                onConfirm={ this.state.isSearch ? this.searchOnServer : this.createNewDirect }
                 onCancel={ () => RX.Modal.dismissAll() }
                 backgroundColorContent={ TRANSPARENT_BACKGROUND }
             />
