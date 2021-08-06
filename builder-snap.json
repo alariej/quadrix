@@ -1,0 +1,32 @@
+{
+	"appId": "chat.quadrix",
+	"productName": "quadrix",
+	"linux": {
+		"category": "Internet",
+		"target": [
+			"snap",
+			"deb"
+		],
+		"icon": "macos/resources/icon.icns"
+	},
+	"snap": {
+		"summary": "Minimal, simple, multi-platform chat app for the Matrix protocol",
+		"confinement": "strict",
+		"grade": "stable",
+		"plugs": [
+			"default",
+			"desktop",
+			"home",
+			"audio-playback",
+			"audio-record",
+			"camera"
+		]
+	},
+	"files": [
+		"dist-web/**/*",
+		"electron-main.js"
+	],
+	"directories": {
+		"output": "dist/"
+	}
+}

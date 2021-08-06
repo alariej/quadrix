@@ -1,0 +1,39 @@
+{
+    "appId": "chat.quadrix",
+    "productName": "quadrix",
+    "win": {
+        "icon": "dist-assets/resources/logo256.ico",
+        "target": [
+            "nsis",
+            "appx"
+        ]
+    },
+    "nsis": {
+        "createStartMenuShortcut": true,
+        "installerIcon": "dist-assets/resources/logo256.ico"
+    },
+    "appx": {
+        "applicationId": "quadrix.chat",
+        "backgroundColor": "#333333",
+        "displayName": "quadrix.chat",
+        "identityName": "33173Jean-FranoisAlarie.quadrix.chat",
+        "publisher": "CN=94B202A2-3313-4FB8-BAF4-74D869799490",
+        "publisherDisplayName": "Jean-François Alarie",
+        "languages": "EN-US"
+    },
+    "files": [
+        "dist-web/**/*",
+        "electron-main.js",
+        "dist-assets/appx/SmallTile.png",
+        "dist-assets/appx/LargeTile.png",
+        "dist-assets/appx/Square44x44Logo.png",
+        "dist-assets/appx/Square150x150Logo.png",
+        "dist-assets/appx/Wide310x150Logo.png",
+        "dist-assets/appx/StoreLogo.png",
+        "dist-assets/resources/logo256.ico"
+    ],
+    "directories": {
+        "buildResources": "dist-assets/",
+        "output": "dist/"
+    }
+}

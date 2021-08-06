@@ -7,66 +7,6 @@
   "description": "Minimal, simple, multi-platform chat app for the Matrix protocol",
   "author": "Jean-François Alarie <alariej@quadrix.chat>",
   "homepage": "https://quadrix.chat",
-  "build": {
-    "appId": "chat.quadrix",
-    "productName": "quadrix",
-    "linux": {
-      "category": "Internet",
-      "target": [
-        "snap",
-        "deb"
-      ],
-      "icon": "macos/resources/icon.icns"
-    },
-    "snap": {
-      "summary": "Minimal, simple, multi-platform chat app for the Matrix protocol",
-      "confinement": "strict",
-      "grade": "stable",
-      "plugs": [
-        "default",
-        "desktop",
-        "home",
-        "audio-playback",
-        "audio-record",
-        "camera"
-      ]
-    },
-    "win": {
-      "icon": "dist-assets/resources/logo256.ico",
-      "target": [
-        "nsis",
-        "appx"
-      ]
-    },
-    "nsis": {
-      "createStartMenuShortcut": true,
-      "installerIcon": "dist-assets/resources/logo256.ico"
-    },
-    "appx": {
-      "applicationId": "quadrix.chat",
-      "backgroundColor": "#333333",
-      "displayName": "quadrix.chat",
-      "identityName": "33173Jean-FranoisAlarie.quadrix.chat",
-      "publisher": "CN=94B202A2-3313-4FB8-BAF4-74D869799490",
-      "publisherDisplayName": "Jean-François Alarie",
-      "languages": "EN-US"
-    },
-    "files": [
-      "dist-web/**/*",
-      "electron-main.js",
-      "dist-assets/appx/SmallTile.png",
-      "dist-assets/appx/LargeTile.png",
-      "dist-assets/appx/Square44x44Logo.png",
-      "dist-assets/appx/Square150x150Logo.png",
-      "dist-assets/appx/Wide310x150Logo.png",
-      "dist-assets/appx/StoreLogo.png",
-      "dist-assets/resources/logo256.ico"
-    ],
-    "directories": {
-      "buildResources": "dist-assets/",
-      "output": "dist/"
-    }
-  },
   "scripts": {
     "rn-cli": "node scripts/react-native.js",
     "start:rn-dev": "npm run rn-cli -- start --reset-cache",
@@ -75,13 +15,13 @@
     "start:web": "cross-env platform=web webpack serve --config=web/webpack/dev.js --progress --mode=development --host 0.0.0.0",
     "build:web": "cross-env platform=web webpack --config=web/webpack/prod.js --progress --mode=production",
     "start:electron": "electron .",
-    "build:snap": "electron-builder --linux snap",
-    "build:deb": "electron-builder --linux deb",
+    "build:snap": "electron-builder --linux snap --config builder-snap.json",
+    "build:deb": "electron-builder --linux deb --config builder-snap.json",
     "build:mas": "node ./scripts/packager-mas.js",
     "sign:mas:dev": "electron-osx-sign dist-mac/quadrix.chat-mas-x64/quadrix.chat.app --identity='Apple Development' --provisioning-profile=macos_alarie_dev.provisionprofile --entitlements=macos/entitlements.mas.plist --type=development",
     "sign:mas:prod": "electron-osx-sign dist-mac/quadrix.chat-mas-x64/quadrix.chat.app --identity='Apple Distribution' --provisioning-profile=macos_alarie.provisionprofile --entitlements=macos/entitlements.mas.plist --type=distribution",
     "build:pkg": "electron-osx-flat dist-mac/quadrix.chat-mas-x64/quadrix.chat.app --identity='3rd Party Mac Developer Installer' --verbose",
-    "build:win": "electron-builder --win",
+    "build:win": "electron-builder --win --config builder-win.json",
     "lint": "eslint --config .eslintrc --ext .ts,.tsx src"
   },
   "devDependencies": {
