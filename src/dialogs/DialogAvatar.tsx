@@ -343,12 +343,15 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
                     style={ styles.inputBox }
                     onChangeText={ text => this.changeRoomName(text) }
                     value={ this.roomName }
-                    disableFullscreenUI={ true }
-                    autoCapitalize={ 'none' }
-                    keyboardType={ 'default' }
-                    autoCorrect={ false }
                     tabIndex={ 1 }
                     editable={ this.canChange }
+                    keyboardType={ 'default' }
+                    disableFullscreenUI={ true }
+                    allowFontScaling={ false }
+                    autoCapitalize={ 'none' }
+                    autoCorrect={ false }
+                    autoFocus={ false }
+                    spellCheck={ false }
                 />
             );
         }

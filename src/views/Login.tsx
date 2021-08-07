@@ -349,14 +349,16 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
                 placeholder={ this.state.loginExpanded || this.state.register ? userId[this.language] : userServer[this.language] }
                 placeholderTextColor={ PLACEHOLDER_TEXT }
                 onChangeText={ userId => this.userId = userId }
-                disableFullscreenUI={ true }
-                autoCapitalize={ 'none' }
                 onKeyPress={ () => this.setState({ userId: undefined })}
                 value={ this.state.userId }
-                keyboardType={ UiStore.getPlatform() === 'android' ? 'email-address' : 'default' }
-                autoCorrect={ false }
                 tabIndex={ 1 }
+                keyboardType={ UiStore.getPlatform() === 'android' ? 'email-address' : 'default' }
+                disableFullscreenUI={ true }
+                allowFontScaling={ false }
+                autoCapitalize={ 'none' }
+                autoCorrect={ false }
                 autoFocus={ UiStore.getDevice() === 'desktop' ? true : false }
+                spellCheck={ false }
             />
         );
 
@@ -384,13 +386,15 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
                     placeholder={ server[this.language] }
                     placeholderTextColor={ PLACEHOLDER_TEXT }
                     onChangeText={ server => this.server = server }
-                    disableFullscreenUI={ true }
-                    autoCapitalize={ 'none' }
                     onKeyPress={ () => this.setState({ server: undefined })}
                     value={ this.state.server }
-                    keyboardType={ 'default' }
-                    autoCorrect={ false }
                     tabIndex={ 2 }
+                    keyboardType={ 'default' }
+                    disableFullscreenUI={ true }
+                    allowFontScaling={ false }
+                    autoCapitalize={ 'none' }
+                    autoCorrect={ false }
+                    spellCheck={ false }
                 />
 
             </RX.View>
@@ -402,12 +406,14 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
                 placeholder={ repeatPassword[this.language] }
                 placeholderTextColor={ PLACEHOLDER_TEXT }
                 onChangeText={ password => this.repeatPassword = password }
-                disableFullscreenUI={ true }
                 secureTextEntry={ true }
-                autoCapitalize={ 'none' }
-                keyboardType={ 'default' }
-                autoCorrect={ false }
                 tabIndex={ 4 }
+                keyboardType={ 'default' }
+                disableFullscreenUI={ true }
+                allowFontScaling={ false }
+                autoCapitalize={ 'none' }
+                autoCorrect={ false }
+                spellCheck={ false }
             />
         );
 
@@ -436,12 +442,14 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
                     placeholder={ userPassword[this.language] }
                     placeholderTextColor={ PLACEHOLDER_TEXT }
                     onChangeText={ password => this.password = password }
-                    disableFullscreenUI={ true }
                     secureTextEntry={ true }
-                    autoCapitalize={ 'none' }
-                    keyboardType={ 'default' }
-                    autoCorrect={ false }
                     tabIndex={ 3 }
+                    keyboardType={ 'default' }
+                    disableFullscreenUI={ true }
+                    allowFontScaling={ false }
+                    autoCapitalize={ 'none' }
+                    autoCorrect={ false }
+                    spellCheck={ false }
                 />
 
                 { this.state.register ? repeatPasswordInput : null }

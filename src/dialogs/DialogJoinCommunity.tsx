@@ -278,21 +278,26 @@ export default class DialogJoinCommunity extends RX.Component<DialogJoinCommunit
                     placeholder={ communityName[this.language] }
                     placeholderTextColor={ PLACEHOLDER_TEXT }
                     onChangeText={ searchValue => this.searchValue = searchValue }
-                    disableFullscreenUI={ true }
-                    autoCapitalize={ 'none' }
                     keyboardType={ 'default' }
+                    disableFullscreenUI={ true }
+                    allowFontScaling={ false }
+                    autoCapitalize={ 'none' }
                     autoCorrect={ false }
                     autoFocus={ true }
+                    spellCheck={ false }
                 />
                 <RX.TextInput
                     style={ styles.inputBox }
                     placeholder={ serverName[this.language] }
                     placeholderTextColor={ PLACEHOLDER_TEXT }
                     onChangeText={ serverName => this.serverName = serverName }
-                    disableFullscreenUI={ true }
-                    autoCapitalize={ 'none' }
                     keyboardType={ 'default' }
+                    disableFullscreenUI={ true }
+                    allowFontScaling={ false }
+                    autoCapitalize={ 'none' }
                     autoCorrect={ false }
+                    autoFocus={ false }
+                    spellCheck={ false }
                 />
             </RX.View>
         );

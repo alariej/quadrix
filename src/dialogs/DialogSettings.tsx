@@ -847,11 +847,14 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
                                 placeholderTextColor={ PLACEHOLDER_TEXT }
                                 onChangeText={ this.changeDisplayName }
                                 value={ this.displayName }
-                                disableFullscreenUI={ true }
-                                autoCapitalize={ 'none' }
-                                keyboardType={ 'default' }
-                                autoCorrect={ false }
                                 tabIndex={ 1 }
+                                keyboardType={ 'default' }
+                                disableFullscreenUI={ true }
+                                allowFontScaling={ false }
+                                autoCapitalize={ 'none' }
+                                autoCorrect={ false }
+                                autoFocus={ false }
+                                spellCheck={ false }
                             />
 
                         </RX.View>
@@ -896,10 +899,14 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
                                 placeholderTextColor={ PLACEHOLDER_TEXT }
                                 onChangeText={ password => this.currentPassword = password }
                                 secureTextEntry={ true }
-                                disableFullscreenUI={ true }
-                                autoCapitalize={ 'none' }
-                                keyboardType={ 'default' }
                                 tabIndex={ 2 }
+                                keyboardType={ 'default' }
+                                disableFullscreenUI={ true }
+                                allowFontScaling={ false }
+                                autoCapitalize={ 'none' }
+                                autoCorrect={ false }
+                                autoFocus={ false }
+                                spellCheck={ false }
                             />
 
                             <RX.TextInput
@@ -908,10 +915,14 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
                                 placeholderTextColor={ PLACEHOLDER_TEXT }
                                 onChangeText={ password => this.newPassword = password }
                                 secureTextEntry={ true }
-                                disableFullscreenUI={ true }
-                                autoCapitalize={ 'none' }
-                                keyboardType={ 'default' }
                                 tabIndex={ 3 }
+                                keyboardType={ 'default' }
+                                disableFullscreenUI={ true }
+                                allowFontScaling={ false }
+                                autoCapitalize={ 'none' }
+                                autoCorrect={ false }
+                                autoFocus={ false }
+                                spellCheck={ false }
                             />
 
                             <RX.TextInput
@@ -920,10 +931,14 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
                                 placeholderTextColor={ PLACEHOLDER_TEXT }
                                 onChangeText={ this.changePassword }
                                 secureTextEntry={ true }
-                                disableFullscreenUI={ true }
-                                autoCapitalize={ 'none' }
-                                keyboardType={ 'default' }
                                 tabIndex={ 4 }
+                                keyboardType={ 'default' }
+                                disableFullscreenUI={ true }
+                                allowFontScaling={ false }
+                                autoCapitalize={ 'none' }
+                                autoCorrect={ false }
+                                autoFocus={ false }
+                                spellCheck={ false }
                             />
 
                         </RX.View>

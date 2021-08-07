@@ -79,11 +79,13 @@ export default class DialogNewGroup extends RX.Component<DialogNewGroupProps, RX
                 placeholder={ groupName[this.language] }
                 placeholderTextColor={ PLACEHOLDER_TEXT }
                 onChangeText={ groupName => this.groupName = groupName }
-                disableFullscreenUI={ true }
-                autoCapitalize={ 'none' }
                 keyboardType={ 'default' }
+                disableFullscreenUI={ true }
+                allowFontScaling={ false }
+                autoCapitalize={ 'sentences' }
                 autoCorrect={ false }
                 autoFocus={ true }
+                spellCheck={ false }
             />
         );
 

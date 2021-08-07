@@ -79,11 +79,13 @@ export default class DialogNewNotepad extends RX.Component<DialogNewNotepadProps
                 placeholder={ notepadName[this.language] }
                 placeholderTextColor={ PLACEHOLDER_TEXT }
                 onChangeText={ notepadName => this.notepadName = notepadName }
-                disableFullscreenUI={ true }
-                autoCapitalize={ 'none' }
                 keyboardType={ 'default' }
+                disableFullscreenUI={ true }
+                allowFontScaling={ false }
+                autoCapitalize={ 'sentences' }
                 autoCorrect={ false }
                 autoFocus={ true }
+                spellCheck={ false }
             />
         );
 

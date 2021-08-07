@@ -314,11 +314,13 @@ export default class DialogRegister extends RX.Component<DialogRegisterProps, Di
                         placeholder={ yourEmailAddress[this.language] }
                         placeholderTextColor={ PLACEHOLDER_TEXT }
                         onChangeText={ emailAddress => this.emailAddress = emailAddress }
-                        disableFullscreenUI={ true }
-                        autoCapitalize={ 'none' }
                         keyboardType={ UiStore.getPlatform() === 'web' ? 'default' : 'email-address' }
+                        disableFullscreenUI={ true }
+                        allowFontScaling={ false }
+                        autoCapitalize={ 'none' }
                         autoCorrect={ false }
                         autoFocus={ true }
+                        spellCheck={ false }
                     />
                 </RX.View>
             );

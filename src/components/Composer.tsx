@@ -658,17 +658,18 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                 <RX.TextInput
                     style={ [styles.textInput, this.fontFamilyStyle, this.textInputStyle] }
                     ref={ component => { this.textInputComponent = component! } }
-                    disableFullscreenUI={ true }
-                    multiline={ true }
-                    spellCheck={ true }
-                    allowFontScaling={ false }
-                    autoCapitalize={ 'none' }
                     onKeyPress={ this.onKeyPress }
                     onChangeText={ textInput => this.textInput = textInput }
                     value={ this.state.textInput }
-                    keyboardType={ 'default' }
-                    autoCorrect={ true }
                     editable={ this.props.roomActive || false }
+                    keyboardType={ 'default' }
+                    disableFullscreenUI={ true }
+                    allowFontScaling={ false }
+                    autoCapitalize={ 'sentences' }
+                    autoCorrect={ true }
+                    autoFocus={ false }
+                    spellCheck={ true }
+                    multiline={ true }
                 />
                 <RX.Button
                     style={ styles.buttonSend }
