@@ -14,7 +14,6 @@
     },
     "appx": {
         "applicationId": "quadrix.chat",
-        "backgroundColor": "#333333",
         "displayName": "quadrix.chat",
         "identityName": "33173Jean-FranoisAlarie.quadrix.chat",
         "publisher": "CN=94B202A2-3313-4FB8-BAF4-74D869799490",
