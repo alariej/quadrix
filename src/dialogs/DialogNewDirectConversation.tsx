@@ -12,6 +12,7 @@ import { inviteUser, cancel, userServer, errorNoConfirm, theUserId, doesntSeemTo
 import { User } from '../models/User';
 import UserTile from '../components/UserTile';
 import Utils from '../utils/Utils';
+import { PlatformType } from 'reactxp/dist/common/Types';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -22,9 +23,6 @@ const styles = {
         flex: 1,
         alignSelf: 'stretch',
         justifyContent: 'center',
-    }),
-    userListContainer: RX.Styles.createViewStyle({
-        flex: 1,
     }),
     userListView: RX.Styles.createViewStyle({
         alignSelf: 'center',
@@ -69,11 +67,13 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
 
     private userId = '';
     private language: Languages = 'en';
+    private platform: PlatformType;
 
     constructor(props: DialogNewDirectConversationProps) {
         super(props);
 
         this.language = UiStore.getLanguage();
+        this.platform = UiStore.getPlatform();
 
         this.state = {
             userId: undefined,
@@ -108,10 +108,13 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
 
             const userList = (
                 <RX.View
-                    style={ [styles.userListView, { height: Math.min(5, userTiles.length) * (TILE_HEIGHT + SPACING) }] }
+                    style={[
+                        styles.userListView,
+                        { height: Math.min(UiStore.getDevice() === 'mobile' ? 4 : 7, userTiles.length) * (TILE_HEIGHT + SPACING) }
+                    ]}
                 >
                     <RX.ScrollView
-                        style={ { width: UiStore.getPlatform() === 'web' ? DIALOG_WIDTH + 30 : DIALOG_WIDTH} }
+                        style={ { width: this.platform === 'web' ? DIALOG_WIDTH + 30 : DIALOG_WIDTH} }
                         keyboardShouldPersistTaps={ 'always' }
                     >
                         { userTiles }
@@ -199,10 +202,13 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
 
                     const userList = (
                         <RX.View
-                            style={ [styles.userListView, { height: Math.min(5, userTiles.length) * (TILE_HEIGHT + SPACING) }] }
+                            style={[
+                                styles.userListView,
+                                { height: Math.min(UiStore.getDevice() === 'mobile' ? 4 : 7, userTiles.length) * (TILE_HEIGHT + SPACING) }
+                            ]}
                         >
                             <RX.ScrollView
-                                style={ { width: UiStore.getPlatform() === 'web' ? DIALOG_WIDTH + 30 : DIALOG_WIDTH} }
+                                style={ { width: this.platform === 'web' ? DIALOG_WIDTH + 30 : DIALOG_WIDTH } }
                                 keyboardShouldPersistTaps={ 'always' }
                             >
                                 { userTiles }
@@ -334,13 +340,15 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
                 placeholder={ this.state.isSearch ? enterSearch[this.language] : userServer[this.language] }
                 placeholderTextColor={ PLACEHOLDER_TEXT }
                 onChangeText={ this.onEditUserId }
+                onKeyPress={ () => this.setState({ userId: undefined })}
+                value={ this.state.userId }
+                keyboardType={ this.platform === 'android' ? 'email-address' : 'default' }
                 disableFullscreenUI={ true }
+                allowFontScaling={ false }
                 autoCapitalize={ 'none' }
-                keyboardType={ UiStore.getPlatform() === 'android' ? 'email-address' : 'default' }
                 autoCorrect={ false }
                 autoFocus={ false }
-                value={ this.state.userId }
-                onKeyPress={ () => this.setState({ userId: undefined })}
+                spellCheck={ false }
             />
         );
 
