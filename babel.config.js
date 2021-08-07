@@ -9,6 +9,7 @@ module.exports = function(api) {
     const plugins = [
         ['@babel/proposal-decorators', { legacy: true }],
         ["@babel/plugin-proposal-private-methods", { "loose": true }],
+        ["@babel/plugin-proposal-private-property-in-object", { "loose": true }]
     ];
 
     if (process.env.platform === 'web') {
