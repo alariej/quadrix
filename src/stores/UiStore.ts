@@ -84,6 +84,8 @@ class UiStore extends StoreBase {
 
         if (this.platform === 'web') {
             this.device = navigator.userAgent.toLowerCase().includes('mobile') ? 'mobile' : 'desktop';
+        } else {
+            this.device = 'mobile';
         }
     }
 
