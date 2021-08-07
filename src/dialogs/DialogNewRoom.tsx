@@ -72,16 +72,7 @@ export default class DialogNewRoom extends RX.Component<DialogNewRoomProps, RX.S
 
         RX.Modal.show(<DialogNewGroup showRoom={ this.props.showRoom }/>, 'creategroupdialog');
     }
-    /*
-    private createNewCommunity = (event: RX.Types.SyntheticEvent) => {
 
-        event.stopPropagation();
-
-        RX.Modal.dismiss('buttonrender');
-
-        RX.Modal.show(<DialogNewCommunity showRoom={ this.props.showRoom }/>, 'createcommunitydialog');
-    }
-    */
     private joinCommunity = (event: RX.Types.SyntheticEvent) => {
 
         event.stopPropagation();
