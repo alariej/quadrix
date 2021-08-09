@@ -16,6 +16,7 @@ import JitsiMeet from '../modules/JitsiMeet';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { ComponentBase } from 'resub';
 import ModalSpinner from '../components/ModalSpinner';
+import Pushers from '../modules/Pushers';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -100,7 +101,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
         UiStore.setUnknownAccessToken(false);
 
-        ApiClient.setPusher();
+        Pushers.set(ApiClient.credentials).catch(_error => null);
 
         RXNetInfo.isConnected()
             .then(async isConnected => {
