@@ -318,7 +318,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 
         } else {
 
-            this.setState({ userId: this.userId, loginExpanded: false });
+            this.setState({ userId: this.userId, server: this.server, loginExpanded: true });
             UiStore.getDevice() === 'desktop' ? this.passwordInput!.focus() : null;
         }
 
