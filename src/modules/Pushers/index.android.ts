@@ -7,7 +7,16 @@ import UiStore from '../../stores/UiStore';
 
 class Pushers {
 
-    public remove(credentials: Credentials, appId: string, token: string): Promise<void> {
+    public async removeFromDevice(credentials: Credentials): Promise<void> {
+
+        const firebaseToken = await messaging().getToken().catch(_error => null);
+
+        messaging().deleteToken().catch(_error => null);
+
+        return this.remove(credentials, APP_ID_ANDROID, firebaseToken!);
+    }
+
+    private remove(credentials: Credentials, appId: string, token: string): Promise<void> {
 
         const restClient = new RestClient(credentials.accessToken, credentials.homeServer, PREFIX_REST);
 

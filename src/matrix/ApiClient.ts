@@ -2,7 +2,6 @@ import RX from 'reactxp';
 import RestClient from './RestClient';
 import Sync from './Sync';
 import { Credentials } from '../models/Credentials';
-import Pushers from '../modules/Pushers';
 import { User } from '../models/User';
 import DataStore from '../stores/DataStore';
 import UiStore from '../stores/UiStore';
@@ -180,21 +179,6 @@ class ApiClient {
         };
 
         return restClient.setPusher(pusher);
-    }
-
-    public setPusher() {
-
-        Pushers.set(this.credentials).catch(_error => null);
-    }
-
-    public removePusher(appId: string, token: string) {
-
-        Pushers.remove(this.credentials, appId, token).catch(_error => null);
-    }
-
-    public removeAllPushers() {
-
-        Pushers.removeAll(this.credentials).catch(_error => null);
     }
 
     public muteRoomNotifications(roomId: string, muted: boolean): void {

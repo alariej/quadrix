@@ -5,7 +5,12 @@ import { PusherParam_ } from '../../models/MatrixApi';
 
 class Pushers {
 
-    public remove(credentials: Credentials, appId: string, token: string): Promise<void> {
+    public async removeFromDevice(_credentials: Credentials): Promise<void> {
+
+        return Promise.resolve();
+    }
+
+    private remove(credentials: Credentials, appId: string, token: string): Promise<void> {
 
         const restClient = new RestClient(credentials.accessToken, credentials.homeServer, PREFIX_REST);
 

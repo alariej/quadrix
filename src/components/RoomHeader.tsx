@@ -17,6 +17,7 @@ import IconSvg, { SvgFile } from './IconSvg';
 import { differenceInDays, differenceInMilliseconds, format, isToday, isYesterday, Locale } from 'date-fns';
 import { StyleRuleSet, TextStyle } from 'reactxp/dist/common/Types';
 import { RoomPhase, RoomType } from '../models/MatrixApi';
+import Pushers from '../modules/Pushers';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -205,6 +206,8 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
     private doLogout = async () => {
 
         RX.Modal.dismissAll();
+
+        Pushers.removeFromDevice(ApiClient.credentials).catch(_error => null);
 
         ApiClient.stopSync();
         ApiClient.clearNextSyncToken();

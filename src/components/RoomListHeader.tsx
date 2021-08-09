@@ -12,6 +12,7 @@ import UiStore from '../stores/UiStore';
 import { pressOKToLogout, cancel, termsPrivacyLicense, Languages } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
 import { APP_VERSION, APP_WEBSITE, TERMS_URL, GIT_REPO_URL } from '../appconfig';
+import Pushers from '../modules/Pushers';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -118,6 +119,8 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
     private doLogout = async () => {
 
         RX.Modal.dismissAll();
+
+        Pushers.removeFromDevice(ApiClient.credentials).catch(_error => null);
 
         ApiClient.stopSync();
         ApiClient.clearNextSyncToken();
