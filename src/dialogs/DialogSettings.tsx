@@ -17,6 +17,7 @@ import IconSvg, { SvgFile } from '../components/IconSvg';
 import { AuthResponse_, ErrorResponse_ } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
 import DataStore from '../stores/DataStore';
+import Pushers from '../modules/Pushers';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -590,28 +591,25 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
 
     private onPressUserId = () => {
 
-        if (__DEV__) {
+        this.nClicks++;
 
-            this.nClicks++;
+        if (this.nClicks === 1) {
+            setTimeout(() => {
+                this.nClicks = 0;
+            }, 5000);
+        }
 
-            if (this.nClicks === 1) {
-                setTimeout(() => {
-                    this.nClicks = 0;
-                }, 5000);
-            }
+        if (this.nClicks === 5) {
 
-            if (this.nClicks === 5) {
+            Pushers.removeAll(ApiClient.credentials).catch(_error => null);
 
-                ApiClient.removeAllPushers();
+            const text = (
+                <RX.Text style={ styles.textDialog }>
+                    All pushers should have been removed
+                </RX.Text>
+            );
 
-                const text = (
-                    <RX.Text style={ styles.textDialog }>
-                        All pushers should have been removed
-                    </RX.Text>
-                );
-
-                RX.Modal.show(<DialogContainer content={ text }/>, 'pusherremovaldialog');
-            }
+            RX.Modal.show(<DialogContainer content={ text }/>, 'pusherremovaldialog');
         }
     }
 
