@@ -14,6 +14,7 @@
     },
     "appx": {
         "applicationId": "quadrix.chat",
+        "backgroundColor": "transparent",
         "displayName": "quadrix.chat",
         "identityName": "33173Jean-FranoisAlarie.quadrix.chat",
         "publisher": "CN=94B202A2-3313-4FB8-BAF4-74D869799490",
@@ -22,14 +23,7 @@
     },
     "files": [
         "dist-web/**/*",
-        "electron-main.js",
-        "dist-assets/appx/SmallTile.png",
-        "dist-assets/appx/LargeTile.png",
-        "dist-assets/appx/Square44x44Logo.png",
-        "dist-assets/appx/Square150x150Logo.png",
-        "dist-assets/appx/Wide310x150Logo.png",
-        "dist-assets/appx/StoreLogo.png",
-        "dist-assets/resources/logo256.ico"
+        "electron-main.js"
     ],
     "directories": {
         "buildResources": "dist-assets/",
