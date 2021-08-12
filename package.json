@@ -74,7 +74,7 @@
     "react-native-jitsi-meet": "github:alariej/react-native-jitsi-meet",
     "react-native-share": "7.0.0",
     "react-native-svg": "12.1.1",
-    "react-native-webview": "11.6.6",
+    "react-native-webview": "11.13.0",
     "reactxp": "github:alariej/reactxp",
     "reactxp-imagesvg": "github:alariej/reactxp-imagesvg",
     "reactxp-netinfo": "github:alariej/reactxp-netinfo",
