@@ -336,7 +336,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
     private showRoomList = () => {
 
-        if (this.state.layout.type !== 'wide' && this.room) {
+        if (this.state.layout?.type !== 'wide' && this.room) {
 
             this.animatedValue = RX.Animated.createValue(-this.state.layout.pageWidth);
             this.animatedStyle = RX.Styles.createAnimatedViewStyle({
@@ -386,7 +386,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
         let room: ReactElement | undefined;
 
-        if (this.state.layout.type === 'wide' && this.state.displayPage === 'roomList') {
+        if (this.state.layout.type === 'wide' && (this.state.displayPage === 'roomList' || !this.state.displayPage)) {
             room = (
                 <RX.View style={ styles.viewPlaceholder }>
                     <RX.Text style={ styles.textPlaceholder }>
