@@ -336,7 +336,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
     private showRoomList = () => {
 
-        if (this.state.layout.type !== 'wide') {
+        if (this.state.layout.type !== 'wide' && this.room) {
 
             this.animatedValue = RX.Animated.createValue(-this.state.layout.pageWidth);
             this.animatedStyle = RX.Styles.createAnimatedViewStyle({
@@ -348,7 +348,9 @@ export default class Main extends ComponentBase<MainProps, MainState> {
                 toValue: 0,
                 easing: RX.Animated.Easing.InOut(),
                 useNativeDriver: true,
-            }).start();
+            }).start(() => {
+                this.room = undefined;
+            });
         }
 
         this.setState({ displayPage: 'roomList' });
@@ -383,35 +385,34 @@ export default class Main extends ComponentBase<MainProps, MainState> {
         );
 
         let room: ReactElement | undefined;
-        if (['room', 'tempMessage'].includes(this.state.displayPage)) {
-            room = this.room;
-        } else {
-            if (this.state.layout.type === 'wide') {
-                room = (
-                    <RX.View style={ styles.viewPlaceholder }>
-                        <RX.Text style={ styles.textPlaceholder }>
-                            <RX.Text>
-                                CHAT. ON.
-                            </RX.Text>
-                            <RX.Text style={{ fontSize: 20, fontWeight: 'normal', marginLeft: 4 }}>
-                                [
-                            </RX.Text>
-                            <RX.Text style={{ fontSize: 18, fontWeight: 'bold' }}>
-                                matrix
-                            </RX.Text>
-                            <RX.Text style={{ fontSize: 20, fontWeight: 'normal' }}>
-                                ]
-                            </RX.Text>
+
+        if (this.state.layout.type === 'wide' && this.state.displayPage === 'roomList') {
+            room = (
+                <RX.View style={ styles.viewPlaceholder }>
+                    <RX.Text style={ styles.textPlaceholder }>
+                        <RX.Text>
+                            CHAT. ON.
                         </RX.Text>
-                        <IconSvg
-                            source= { require('../resources/svg/appname.json') as SvgFile }
-                            height={ 36 }
-                            width={ 36 * 347.48401 / 89.798973 }
-                            fillColor={ LOGO_BACKGROUND }
-                        />
-                    </RX.View>
-                );
-            }
+                        <RX.Text style={{ fontSize: 20, fontWeight: 'normal', marginLeft: 4 }}>
+                            [
+                        </RX.Text>
+                        <RX.Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+                            matrix
+                        </RX.Text>
+                        <RX.Text style={{ fontSize: 20, fontWeight: 'normal' }}>
+                            ]
+                        </RX.Text>
+                    </RX.Text>
+                    <IconSvg
+                        source= { require('../resources/svg/appname.json') as SvgFile }
+                        height={ 36 }
+                        width={ 36 * 347.48401 / 89.798973 }
+                        fillColor={ LOGO_BACKGROUND }
+                    />
+                </RX.View>
+            );
+        } else {
+            room = this.room;
         }
 
         const roomPage = (
