@@ -95,6 +95,14 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                 displayName: ApiClient.credentials.userId,
             };
 
+            /*
+            Note: 'call-integration.enabled' flag can lead to failed connection
+            on devices with no SIM card. Samsung S7 returns "Not registered on network"
+            error message. Should it really be set to 'true'?
+
+            https://github.com/jitsi/jitsi-meet/pull/4919
+            */
+
             const featureFlags = {
                 'chat.enabled': false,
                 'conference-timer.enabled': false,
