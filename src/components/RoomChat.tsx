@@ -369,7 +369,19 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
                 ApiClient.sendReadReceipt(this.props.roomId, newRoomEvents[0].eventId).catch(_error => null);
             }
 
-            this.setState({ eventListItems: this.eventListItems });
+            /*
+            According to the ReactXP doc, the VLV should not move when items get added to the top of the list
+            while being outside the viewport. This prevents the VLV to jerk or jump as users have
+            scrolled down to view older items. From the doc:
+            "When items are added before or after the visible region,
+            it attempts to maintain the current position of the visible items,
+            adjusting the scroll position and list height as necessary."
+            Unfortunately it doesn't work. To remedy that problem, the state change is only triggered
+            if user is close to the top of the list, and actualised when user either scrolls back up,
+            or presses the Up button.
+            */
+
+            if (!this.state.showArrowButton) { this.setState({ eventListItems: this.eventListItems }); }
         }
     }
 
@@ -504,6 +516,10 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
             this.setState({ showArrowButton: false, showNewMessageButton: false });
         }
 
+        if (scrollHeight < 3) {
+            this.setState({ eventListItems: this.eventListItems });
+        }
+
         // @ts-ignore
         const distanceToBottom = this.virtualListView!._containerHeight - scrollHeight - this.virtualListView!._layoutHeight;
 
@@ -520,6 +536,10 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
     }
 
     private onPressArrowButton = () => {
+
+        if (this.state.showNewMessageButton) {
+            this.setState({ eventListItems: this.eventListItems });
+        }
 
         this.virtualListView!.scrollToTop(true, 0);
     }
