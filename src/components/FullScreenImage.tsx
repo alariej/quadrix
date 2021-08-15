@@ -86,6 +86,7 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
     private currentIndex: number;
     private platform: string;
     private nextButton: RX.Button | undefined;
+    private isLoaded: boolean | undefined;
 
     constructor(props: FullScreenImageProps) {
         super(props);
@@ -102,7 +103,7 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
             url: props.url,
             gestureImage: undefined,
             rotatedImage: undefined,
-            showSpinner: true,
+            showSpinner: false,
             isWebFullscreen: false,
         }
 
@@ -142,6 +143,10 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
     }
 
     public componentDidMount(): void {
+
+        setTimeout(() => {
+            this.setState({ showSpinner: !this.isLoaded })            
+        }, 500);
 
         ScreenOrientation.addListener(this.onChangedOrientation);
     }
@@ -379,6 +384,7 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
 
     private onLoad = () => {
 
+        this.isLoaded = true;
         this.setState({ showSpinner: false })
     }
 

@@ -46,7 +46,7 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
     constructor(props: ImageMessageProps) {
         super(props);
 
-        this.state = { showSpinner: true }
+        this.state = { showSpinner: false }
 
         const width = (UiStore.getAppLayout_().pageWidth - 2 * PAGE_MARGIN) - (BUTTON_ROUND_WIDTH + SPACING) - 2 * SPACING;
 
@@ -79,6 +79,13 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 
             this.urlFull = this.url;
         }
+    }
+
+    public componentDidMount(): void {
+
+        setTimeout(() => {
+            this.setState({ showSpinner: this.imageRatio === 0 })            
+        }, 500);
     }
 
     private showFullScreenImage = () => {
