@@ -274,8 +274,13 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
         const showError = () => {
 
+            this.props.showTempSentMessage({ body: '', tempId: tempId });
+
             this.textInput = textInput;
-            this.setState({ textInput: textInput });
+            this.setState({
+                textInput: textInput,
+                sendDisabled: false,
+            });
 
             const text = (
                 <RX.Text style={ styles.textDialog }>
