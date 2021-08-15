@@ -1,6 +1,7 @@
 import React from 'react';
 import RX from 'reactxp';
-import { LOGO_BACKGROUND, OPAQUE_BACKGROUND } from '../ui';
+import Loading from '../modules/Loading';
+import { OPAQUE_BACKGROUND } from '../ui';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -24,7 +25,7 @@ export default class ModalSpinner extends RX.Component<SpinnerProps, RX.Stateles
         return (
             <RX.View style={[styles.modalScreen, { backgroundColor: this.props.backgroundColor || OPAQUE_BACKGROUND }]}>
                 <RX.View style={ styles.modalView }>
-                    <RX.ActivityIndicator color={ LOGO_BACKGROUND } size={ 'large' } />
+                    <Loading isVisible={ true } />
                 </RX.View>
             </RX.View>
         );

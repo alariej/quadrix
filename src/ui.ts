@@ -1,3 +1,7 @@
+// spinner
+
+export const MIN_MS = 1250;
+
 // dimensions
 
 export const PAGE_WIDTH_DEFAULT = 360;
