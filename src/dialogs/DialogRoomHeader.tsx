@@ -128,13 +128,16 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
 
         if (initState) {
 
-            partialState.showSpinner = false;
             partialState.userListItems = this.getUserListItems(nextProps.members);
 
             if (nextProps.roomType === 'community') {
 
                 partialState.showSpinner = true;
                 this.getRoomMembersFromServer(nextProps.roomId);
+
+            } else {
+
+                partialState.showSpinner = false;
             }
         }
 
