@@ -196,6 +196,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
     private emailNotificationsRemote = false;
     private nClicks = 0;
     private platform: RX.Types.PlatformType;
+    private isMounted_: boolean | undefined;
 
     constructor(props: unknown) {
         super(props);
@@ -222,34 +223,27 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
     public componentDidMount(): void {
         super.componentDidMount();
 
+        this.isMounted_ = true;
+
         Promise.all([this.getUserProfile(), this.get3Pid(), this.getEmailPusher()])
             .then(_response => {
 
-                this.setState({ showSpinner: false });
-
-            }, (error: ErrorResponse_) => {
-
-                this.setState({ showSpinner: false });
-
-                const text = (
-                    <RX.Text style={ styles.textDialog }>
-                        { error.body && error.body.error ? error.body.error : '[Unknown error]' }
-                    </RX.Text>
-                );
-
-                RX.Modal.show(<DialogContainer content={ text } modalId={ 'errordialog' }/>, 'errordialog');
+                if (this.isMounted_) { this.setState({ showSpinner: false }); }
             })
             .catch((error: ErrorResponse_) => {
 
-                this.setState({ showSpinner: false });
+                if (this.isMounted_) {
 
-                const text = (
-                    <RX.Text style={ styles.textDialog }>
-                        { error.body && error.body.error ? error.body.error : '[Unknown error]' }
-                    </RX.Text>
-                );
+                    RX.Modal.dismissAll();
 
-                RX.Modal.show(<DialogContainer content={ text } modalId={ 'errordialog' }/>, 'errordialog');
+                    const text = (
+                        <RX.Text style={ styles.textDialog }>
+                            { error.body && error.body.error ? error.body.error : '[Unknown error]' }
+                        </RX.Text>
+                    );
+
+                    RX.Modal.show(<DialogContainer content={ text } modalId={ 'errordialog' }/>, 'errordialog');
+                }
             });
 
         this.setState({ appColor: UiStore.getAppColor() });
@@ -287,6 +281,11 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
                 })
                 .catch(_error => null);
         }
+    }
+
+    public componentWillUnmount(): void {
+
+        this.isMounted_ = false;
     }
 
     private getUserProfile = async (): Promise<void> => {
@@ -455,40 +454,38 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
         Promise.all([this.saveDisplayName(), this.saveAvatar(), this.saveNewPassword(), this.saveEmailNotifications()])
             .then(response => {
 
-                this.setState({ showSpinner: false });
+                if (this.isMounted_) {
 
-                this.setConfirmDisabled();
+                    this.setState({ showSpinner: false });
 
-                if (response[2] === 'PASSWORD_CHANGED') {
+                    this.setConfirmDisabled();
 
-                    const text = (
-                        <RX.Text style={ styles.textDialog }>
-                            { passwordChanged[this.language] }
-                        </RX.Text>
-                    );
+                    if (response[2] === 'PASSWORD_CHANGED') {
 
-                    RX.Modal.show(<DialogContainer content={ text } modalId={ 'passwordchangedialog' }/>, 'passwordchangedialog');
+                        const text = (
+                            <RX.Text style={ styles.textDialog }>
+                                { passwordChanged[this.language] }
+                            </RX.Text>
+                        );
+
+                        RX.Modal.show(<DialogContainer content={ text } modalId={ 'passwordchangedialog' }/>, 'passwordchangedialog');
+                    }
                 }
-
-            }, (error: ErrorResponse_) => {
-
-                const text = (
-                    <RX.Text style={ styles.textDialog }>
-                        { error.body && error.body.error ? error.body.error : '[Unknown error]' }
-                    </RX.Text>
-                );
-
-                RX.Modal.show(<DialogContainer content={ text } modalId={ 'errordialog' }/>, 'errordialog');
             })
             .catch((error: ErrorResponse_) => {
 
-                const text = (
-                    <RX.Text style={ styles.textDialog }>
-                        { error.body && error.body.error ? error.body.error : '[Unknown error]' }
-                    </RX.Text>
-                );
+                if (this.isMounted_) {
 
-                RX.Modal.show(<DialogContainer content={ text } modalId={ 'errordialog' }/>, 'errordialog');
+                    this.setState({ showSpinner: false });
+
+                    const text = (
+                        <RX.Text style={ styles.textDialog }>
+                            { error.body && error.body.error ? error.body.error : '[Unknown error]' }
+                        </RX.Text>
+                    );
+
+                    RX.Modal.show(<DialogContainer content={ text } modalId={ 'errordialog' }/>, 'errordialog');
+                }
             });
     }
 

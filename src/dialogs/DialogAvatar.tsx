@@ -107,6 +107,7 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
     private roomNameRemote: string;
     private canChange = false;
     private platform: RX.Types.PlatformType;
+    private isMounted_: boolean | undefined;
 
     constructor(props: AvatarProps) {
         super(props);
@@ -133,6 +134,17 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
         }
 
         return { offline: UiStore.getOffline() };
+    }
+
+    public componentDidMount(): void {
+        super.componentDidMount();
+
+        this.isMounted_ = true;
+    }
+
+    public componentWillUnmount(): void {
+
+        this.isMounted_ = false;
     }
 
     private setConfirmDisabled = () => {
@@ -196,32 +208,20 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
         Promise.all([this.saveName(), this.saveAvatar()])
             .then(_response => {
 
-                this.setState({
-                    showSpinner: false,
-                });
-
-                RX.Modal.dismissAll();
-
-            }, (error: ErrorResponse_) => {
-
-                // TODO: translation?
-                const text = (
-                    <RX.Text style={ styles.textDialog }>
-                        { error.body && error.body.error ? error.body.error : '[Unknown error]' }
-                    </RX.Text>
-                );
-
-                RX.Modal.show(<DialogContainer content={ text } modalId={ 'errordialog' }/>, 'errordialog');
+                if (this.isMounted_) { RX.Modal.dismissAll(); }
             })
             .catch((error: ErrorResponse_) => {
 
-                const text = (
-                    <RX.Text style={ styles.textDialog }>
-                        { error.body && error.body.error ? error.body.error : '[Unknown error]' }
-                    </RX.Text>
-                );
-
-                RX.Modal.show(<DialogContainer content={ text } modalId={ 'errordialog' }/>, 'errordialog');
+                if (this.isMounted_) {
+                
+                    const text = (
+                        <RX.Text style={ styles.textDialog }>
+                            { error.body && error.body.error ? error.body.error : '[Unknown error]' }
+                        </RX.Text>
+                    );
+    
+                    RX.Modal.show(<DialogContainer content={ text } modalId={ 'errordialog' }/>, 'errordialog');    
+                }
             });
     }
 
