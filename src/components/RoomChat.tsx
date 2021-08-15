@@ -68,7 +68,7 @@ const styles = {
         width: BUTTON_LONG_WIDTH,
         height: BUTTON_HEIGHT,
         borderRadius: BUTTON_HEIGHT / 2,
-        backgroundColor: BUTTON_LONG_BACKGROUND,
+        backgroundColor: DARK_BACKGROUND,
         justifyContent: 'center',
         alignItems: 'center',
     }),
