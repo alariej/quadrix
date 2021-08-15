@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
-import { BUTTON_ROUND_BACKGROUND, HEADER_TEXT, MODAL_CONTENT_TEXT, LINK_TEXT, HEADER_HEIGHT, FONT_NORMAL,
+import { HEADER_TEXT, MODAL_CONTENT_TEXT, LINK_TEXT, HEADER_HEIGHT, FONT_NORMAL,
     BUTTON_ROUND_WIDTH, FONT_LARGE, BORDER_RADIUS, SPACING, ICON_REDUCTION_FACTOR, LOGO_BACKGROUND, TRANSPARENT_BACKGROUND } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogNewRoom from '../dialogs/DialogNewRoom';
@@ -37,11 +37,9 @@ const styles = {
     }),
     roundButton: RX.Styles.createViewStyle({
         borderRadius: BUTTON_ROUND_WIDTH / 2,
-        borderWidth: 1,
-        borderColor: LOGO_BACKGROUND,
         width: BUTTON_ROUND_WIDTH,
         height: BUTTON_ROUND_WIDTH,
-        backgroundColor: BUTTON_ROUND_BACKGROUND,
+        backgroundColor: TRANSPARENT_BACKGROUND,
         marginLeft: SPACING,
     }),
     containerIcon: RX.Styles.createViewStyle({

@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
-import { BUTTON_ROUND_BACKGROUND, HEADER_TEXT, BUTTON_ROUND_WIDTH, BORDER_RADIUS, CONTAINER_PADDING, HEADER_HEIGHT,
+import { HEADER_TEXT, BUTTON_ROUND_WIDTH, BORDER_RADIUS, CONTAINER_PADDING, HEADER_HEIGHT,
     SPACING, FONT_NORMAL, FONT_LARGE, AVATAR_SMALL_WIDTH, ICON_REDUCTION_FACTOR, BUTTON_UNREAD_TEXT, BUTTON_UNREAD_BACKGROUND, FONT_SMALL,
     AVATAR_MARGIN, LOGO_BACKGROUND, AVATAR_BACKGROUND, BUTTON_MODAL_TEXT, TRANSPARENT_BACKGROUND } from '../ui';
 import { ComponentBase } from 'resub';
@@ -78,11 +78,9 @@ const styles = {
     }),
     roundButton: RX.Styles.createViewStyle({
         borderRadius: BUTTON_ROUND_WIDTH / 2,
-        borderWidth: 1,
-        borderColor: LOGO_BACKGROUND,
         width: BUTTON_ROUND_WIDTH,
         height: BUTTON_ROUND_WIDTH,
-        backgroundColor: BUTTON_ROUND_BACKGROUND,
+        backgroundColor: TRANSPARENT_BACKGROUND,
     }),
     containerIcon: RX.Styles.createViewStyle({
         flex: 1,
