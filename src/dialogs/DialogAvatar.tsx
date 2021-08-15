@@ -7,7 +7,7 @@ import FileHandler from '../modules/FileHandler';
 import { save, cancel, Languages, photos, files } from '../translations';
 import UiStore from '../stores/UiStore';
 import { ComponentBase } from 'resub';
-import { LOGO_BACKGROUND, BUTTON_MODAL_TEXT, FONT_LARGE, BORDER_RADIUS, INPUT_BORDER, OBJECT_MARGIN, BUTTON_LONG_WIDTH, CONTAINER_PADDING,
+import { BUTTON_MODAL_TEXT, FONT_LARGE, BORDER_RADIUS, INPUT_BORDER, OBJECT_MARGIN, BUTTON_LONG_WIDTH, CONTAINER_PADDING,
     BUTTON_HEIGHT, AVATAR_BACKGROUND, AVATAR_LARGE_WIDTH, BUTTON_SHORT_WIDTH, BUTTON_MODAL_BACKGROUND, SPACING,
     OPAQUE_BACKGROUND,
     BUTTON_DISABLED_TEXT} from '../ui';
@@ -15,6 +15,7 @@ import utils from '../utils/Utils';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { ErrorResponse_, RoomPhase, RoomType, StateEventContent_ } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
+import Loading from '../modules/Loading';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -277,14 +278,14 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
 
     public render(): JSX.Element | null {
 
-        let spinner;
-        if (this.state.showSpinner) {
-            spinner = (
-                <RX.View style={ styles.spinnerContainer }>
-                    <RX.ActivityIndicator color={ LOGO_BACKGROUND } size={ 'large' } />
-                </RX.View>
-            );
-        }
+        const spinner = (
+            <RX.View
+                style={ styles.spinnerContainer }
+                blockPointerEvents={ !this.state.showSpinner }
+            >
+                <Loading isVisible={ this.state.showSpinner ? true : false } />
+            </RX.View>
+        );
 
         let avatar: ReactElement;
         if (!this.avatarUrl) {

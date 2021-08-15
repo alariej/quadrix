@@ -18,6 +18,7 @@ import { forward, reply, forwardTo, messageCouldNotBeSent, noApplicationWasFound
 import FileHandler from '../modules/FileHandler';
 import ShareHandlerOutgoing from '../modules/ShareHandlerOutgoing';
 import { ErrorResponse_, RoomType } from '../models/MatrixApi';
+import Loading from '../modules/Loading';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -608,14 +609,14 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
             )
         }
 
-        let spinner: ReactElement | undefined;
-        if (this.state.showSpinner) {
-            spinner = (
-                <RX.View style={ styles.spinnerContainer }>
-                    <RX.ActivityIndicator color={ LOGO_BACKGROUND } size={ 'large' } />
-                </RX.View>
-            );
-        }
+        const spinner = (
+            <RX.View
+                style={ styles.spinnerContainer }
+                blockPointerEvents={ !this.state.showSpinner }
+            >
+                <Loading isVisible={ this.state.showSpinner ? true : false } />
+            </RX.View>
+        );
 
         return(
             <RX.View

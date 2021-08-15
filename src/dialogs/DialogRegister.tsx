@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import ApiClient from '../matrix/ApiClient';
-import { LOGO_BACKGROUND, OPAQUE_BACKGROUND, BUTTON_WIDTH, BUTTON_HEIGHT, BUTTON_MODAL_BACKGROUND, FONT_LARGE, SPACING, BUTTON_MODAL_TEXT,
+import { OPAQUE_BACKGROUND, BUTTON_WIDTH, BUTTON_HEIGHT, BUTTON_MODAL_BACKGROUND, FONT_LARGE, SPACING, BUTTON_MODAL_TEXT,
     OBJECT_MARGIN, INPUT_TEXT, TRANSPARENT_BACKGROUND, BORDER_RADIUS, MODAL_CONTENT_BACKGROUND, PLACEHOLDER_TEXT } from '../ui';
 import { Credentials } from '../models/Credentials';
 import ReCaptcha from '../modules/ReCaptcha';
@@ -11,6 +11,7 @@ import { userIdInUse, cancel, errorRegistration, registrationNotSupported, confi
 import DialogContainer from '../modules/DialogContainer';
 import utils from '../utils/Utils';
 import { EmailTokenResponse_, ErrorRegisterResponse_, LoginResponse_, RegisterStageType } from '../models/MatrixApi';
+import Loading from '../modules/Loading';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -440,14 +441,14 @@ export default class DialogRegister extends RX.Component<DialogRegisterProps, Di
             );
         }
 
-        let spinner: ReactElement | null = null;
-        if (this.state.showSpinner) {
-            spinner = (
-                <RX.View style={ styles.spinnerContainer }>
-                    <RX.ActivityIndicator color={ LOGO_BACKGROUND } size={ 'large' } />
-                </RX.View>
-            );
-        }
+        const spinner = (
+            <RX.View
+                style={ styles.spinnerContainer }
+                blockPointerEvents={ !this.state.showSpinner }
+            >
+                <Loading isVisible={ this.state.showSpinner ? true : false } />
+            </RX.View>
+        );
 
         let cancelButton: ReactElement | null = null;
         if (this.state.showRecaptcha && !this.state.showSpinner) {

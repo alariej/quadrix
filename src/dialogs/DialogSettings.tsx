@@ -1,10 +1,10 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
-import { LOGO_BACKGROUND, INPUT_BORDER, MODAL_CONTENT_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, FONT_NORMAL, CONTAINER_PADDING,
+import { INPUT_BORDER, MODAL_CONTENT_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, FONT_NORMAL, CONTAINER_PADDING,
     BUTTON_HEIGHT, TRANSPARENT_BACKGROUND, MODAL_CONTENT_BACKGROUND, BUTTON_ROUND_BACKGROUND,
     PLACEHOLDER_TEXT, AVATAR_BACKGROUND, BUTTON_MODAL_TEXT, AVATAR_MEDIUM_WIDTH, CHECKBOX_BACKGROUND, DIALOG_WIDTH,
     APP_BACKGROUND, TILE_MESSAGE_TEXT, COMPOSER_BORDER, BUTTON_SHORT_WIDTH, BUTTON_DISABLED_TEXT, BUTTON_MODAL_BACKGROUND,
-    OPAQUE_BACKGROUND} from '../ui';
+    OPAQUE_BACKGROUND } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
 import utils from '../utils/Utils';
@@ -18,6 +18,7 @@ import { AuthResponse_, ErrorResponse_ } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
 import DataStore from '../stores/DataStore';
 import Pushers from '../modules/Pushers';
+import Loading from '../modules/Loading';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -612,14 +613,14 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
 
     public render(): JSX.Element | null {
 
-        let spinner: ReactElement | undefined;
-        if (this.state.showSpinner) {
-            spinner = (
-                <RX.View style={ styles.spinnerContainer }>
-                    <RX.ActivityIndicator color={ LOGO_BACKGROUND } size={ 'large' } />
-                </RX.View>
-            );
-        }
+        const spinner = (
+            <RX.View
+                style={ styles.spinnerContainer }
+                blockPointerEvents={ !this.state.showSpinner }
+            >
+                <Loading isVisible={ this.state.showSpinner ? true : false } />
+            </RX.View>
+        );
 
         let avatar: ReactElement;
         if (!this.avatarUrl) {

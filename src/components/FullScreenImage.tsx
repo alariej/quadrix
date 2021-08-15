@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
-import { OPAQUE_DARK_BACKGROUND, TRANSPARENT_BACKGROUND, LOGO_BACKGROUND, SPACING, BUTTON_ROUND_WIDTH, ICON_FULLSCREEN_FILL } from '../ui';
+import { OPAQUE_DARK_BACKGROUND, TRANSPARENT_BACKGROUND, SPACING, BUTTON_ROUND_WIDTH, ICON_FULLSCREEN_FILL } from '../ui';
 import UiStore from '../stores/UiStore';
 import ScreenOrientation from '../modules/ScreenOrientation';
 import DataStore from '../stores/DataStore';
@@ -8,6 +8,7 @@ import utils from '../utils/Utils';
 import ApiClient from '../matrix/ApiClient';
 import { MessageEvent_ } from '../models/MatrixApi';
 import IconSvg, { SvgFile } from './IconSvg';
+import Loading from '../modules/Loading';
 
 const styles = {
     modalView: RX.Styles.createViewStyle({
@@ -145,7 +146,7 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
     public componentDidMount(): void {
 
         setTimeout(() => {
-            this.setState({ showSpinner: !this.isLoaded })            
+            this.setState({ showSpinner: !this.isLoaded })
         }, 500);
 
         ScreenOrientation.addListener(this.onChangedOrientation);
@@ -404,14 +405,14 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
 
     public render(): JSX.Element | null {
 
-        let spinner;
-        if (this.state.showSpinner) {
-            spinner = (
-                <RX.View style={ styles.spinnerContainer }>
-                    <RX.ActivityIndicator color={ LOGO_BACKGROUND } size={ 'large' } />
-                </RX.View>
-            );
-        }
+        const spinner = (
+            <RX.View
+                style={ styles.spinnerContainer }
+                blockPointerEvents={ !this.state.showSpinner }
+            >
+                <Loading isVisible={ this.state.showSpinner ? true : false } />
+            </RX.View>
+        );
 
         let buttonNext: ReactElement | undefined;
         let buttonPrevious: ReactElement | undefined;
@@ -455,7 +456,7 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
                             />
                         </RX.View>
                     </RX.Button>
-                )    
+                )
             }
         }
 

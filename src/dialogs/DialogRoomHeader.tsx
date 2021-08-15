@@ -15,6 +15,7 @@ import { BUTTON_MODAL_BACKGROUND, BUTTON_MODAL_TEXT, MODAL_CONTENT_BACKGROUND, O
 import { theInvitationWasSent, theInvitationNotSent, cancel, pressOKToInvite, toThisGroup, pressOKToLeaveRoom, inviteAdditionalUser,
     leaveRoom, youDoNotHavePrivateContacts, youHaveLeftRoom1, youHaveLeftRoom2, Languages } from '../translations';
 import { ErrorResponse_, RoomPhase, RoomType } from '../models/MatrixApi';
+import Loading from '../modules/Loading';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -482,14 +483,14 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
             );
         }
 
-        let spinner: ReactElement | undefined;
-        if (this.state.showSpinner) {
-            spinner = (
-                <RX.View style={ styles.spinnerContainer }>
-                    <RX.ActivityIndicator color={ LOGO_BACKGROUND } size={ 'large' } />
-                </RX.View>
-            );
-        }
+        const spinner = (
+            <RX.View
+                style={ styles.spinnerContainer }
+                blockPointerEvents={ !this.state.showSpinner }
+            >
+                <Loading isVisible={ this.state.showSpinner ? true : false } />
+            </RX.View>
+        );
 
         return (
             <RX.View

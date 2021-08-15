@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
-import { TILE_BACKGROUND, FOOTER_TEXT, LOGO_BACKGROUND, BORDER_RADIUS, SPACING, FONT_NORMAL, TILE_SYSTEM_TEXT, BUTTON_ROUND_WIDTH,
+import { TILE_BACKGROUND, FOOTER_TEXT, BORDER_RADIUS, SPACING, FONT_NORMAL, TILE_SYSTEM_TEXT, BUTTON_ROUND_WIDTH,
     TRANSPARENT_BACKGROUND, MARKER_READ_FILL, MARKER_SENT_FILL } from '../ui';
 import ImageMessage from './ImageMessage';
 import FileMessage from './FileMessage';
@@ -13,6 +13,7 @@ import UiStore from '../stores/UiStore';
 import IconSvg, { SvgFile } from './IconSvg';
 import { format } from 'date-fns';
 import { RoomType } from '../models/MatrixApi';
+import Loading from '../modules/Loading';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -53,6 +54,7 @@ const styles = {
     spinner: RX.Styles.createViewStyle({
         flex: 1,
         alignSelf: 'flex-end',
+        marginRight: SPACING
     }),
     containerText: RX.Styles.createTextStyle({
         flex: 1,
@@ -219,10 +221,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                 readMarker = (
                     <RX.View style={ styles.containerMarker }>
                         <RX.View style={ styles.spinner }>
-                            <RX.ActivityIndicator
-                                color={ LOGO_BACKGROUND }
-                                size={"tiny"}
-                            />
+                            <Loading size={ 'small' } color={ MARKER_SENT_FILL } isVisible={ true } />
                         </RX.View>
                     </RX.View>
                 );

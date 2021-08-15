@@ -1,8 +1,8 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
-import { BUTTON_ROUND_BACKGROUND, BUTTON_UNREAD_BACKGROUND, OPAQUE_DUMMY_BACKGROUND, TILE_BACKGROUND, BUTTON_LONG_BACKGROUND,
+import { BUTTON_ROUND_BACKGROUND, BUTTON_UNREAD_BACKGROUND, OPAQUE_DUMMY_BACKGROUND, TILE_BACKGROUND,
     MODAL_CONTENT_TEXT, BUTTON_LONG_TEXT, BORDER_RADIUS, BUTTON_LONG_WIDTH, BUTTON_HEIGHT, BUTTON_ROUND_WIDTH, FONT_NORMAL, SPACING,
-    FONT_LARGE, LOGO_BACKGROUND, MESSAGE_HEIGHT_DEFAULT } from '../ui';
+    FONT_LARGE, LOGO_BACKGROUND, MESSAGE_HEIGHT_DEFAULT, DARK_BACKGROUND, OBJECT_MARGIN } from '../ui';
 import { MESSAGE_COUNT_ADD } from  '../appconfig';
 import { ComponentBase } from 'resub';
 import DataStore from '../stores/DataStore';
@@ -18,6 +18,7 @@ import UiStore from '../stores/UiStore';
 import { yesterdayWord, fetchingMessages, noMoreMessages, Languages, errorLoadingMessages } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
 import { differenceInDays, format, isSameYear, isToday, isYesterday, Locale } from 'date-fns';
+import Loading from '../modules/Loading';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -78,10 +79,7 @@ const styles = {
     }),
     spinner: RX.Styles.createViewStyle({
         position: 'absolute',
-        height: 16,
-        top: (BUTTON_HEIGHT - 16) / 2,
-        right: 12,
-        justifyContent: 'center',
+        right: OBJECT_MARGIN,
     }),
     containerWrapper: RX.Styles.createViewStyle({
         backgroundColor: OPAQUE_DUMMY_BACKGROUND,
@@ -692,10 +690,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
                             { fetchingMessages[this.language] }
                         </RX.Text>
                         <RX.View style={ styles.spinner }>
-                            <RX.ActivityIndicator
-                                color={ BUTTON_LONG_TEXT }
-                                size={ 'tiny' }
-                            />
+                            <Loading size={ 'small' } color={ BUTTON_LONG_TEXT } isVisible={ true } />
                         </RX.View>
                     </RX.View>
                 </RX.View>

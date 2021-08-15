@@ -4,9 +4,10 @@ import utils from '../utils/Utils';
 import ApiClient from '../matrix/ApiClient';
 import { MessageEvent } from '../models/MessageEvent';
 import FullScreenImage from './FullScreenImage';
-import { LOGO_BACKGROUND, SPACING, BUTTON_ROUND_WIDTH, PAGE_MARGIN, BORDER_RADIUS } from '../ui';
+import { SPACING, BUTTON_ROUND_WIDTH, PAGE_MARGIN, BORDER_RADIUS } from '../ui';
 import UiStore from '../stores/UiStore';
 import { Headers } from 'reactxp/dist/common/Types';
+import Loading from '../modules/Loading';
 
 const styles = {
     containerMessage: RX.Styles.createViewStyle({
@@ -21,6 +22,8 @@ const styles = {
         position: 'absolute',
         left: 0,
         right: 0,
+        top:0,
+        bottom:0,
         justifyContent: 'center',
         alignItems: 'center',
     }),
@@ -84,7 +87,7 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
     public componentDidMount(): void {
 
         setTimeout(() => {
-            this.setState({ showSpinner: this.imageRatio === 0 })            
+            this.setState({ showSpinner: this.imageRatio === 0 })
         }, 500);
     }
 
@@ -113,14 +116,14 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 
     public render(): JSX.Element | null {
 
-        let spinner;
-        if (this.state.showSpinner) {
-            spinner = (
-                <RX.View style={ [styles.spinnerContainer, this.heightStyle] }>
-                    <RX.ActivityIndicator color={ LOGO_BACKGROUND } size={"medium"} />
-                </RX.View>
-            );
-        }
+        const spinner = (
+            <RX.View
+                style={ styles.spinnerContainer }
+                blockPointerEvents={ !this.state.showSpinner }
+            >
+                <Loading isVisible={ this.state.showSpinner ? true : false } />
+            </RX.View>
+        );
 
         let headers: Headers = {};
         if (UiStore.getPlatform() === 'ios') {
