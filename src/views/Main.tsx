@@ -15,8 +15,8 @@ import { deviceOffline } from '../translations';
 import JitsiMeet from '../modules/JitsiMeet';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { ComponentBase } from 'resub';
-import ModalSpinner from '../components/ModalSpinner';
 import Pushers from '../modules/Pushers';
+import SpinnerUtils from '../utils/SpinnerUtils';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -218,8 +218,8 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
                 DataStore.setSyncComplete(false);
 
-                if (!RX.Modal.isDisplayed('DialogRoomPicker')) {
-                    RX.Modal.show(<ModalSpinner backgroundColor={ TRANSPARENT_BACKGROUND }/>, 'syncspinner');
+                if (!RX.Modal.isDisplayed()) {
+                    SpinnerUtils.showModalSpinner('syncspinner', TRANSPARENT_BACKGROUND);
                 }
 
                 const nextSyncToken = ApiClient.getNextSyncToken();
@@ -245,7 +245,10 @@ export default class Main extends ComponentBase<MainProps, MainState> {
             if (ApiClient.isSyncStopped()) {
 
                 DataStore.setSyncComplete(false);
-                RX.Modal.show(<ModalSpinner backgroundColor={ TRANSPARENT_BACKGROUND }/>, 'syncspinner');
+
+                if (!RX.Modal.isDisplayed()) {
+                    SpinnerUtils.showModalSpinner('syncspinner', TRANSPARENT_BACKGROUND);
+                }
 
                 const nextSyncToken = ApiClient.getNextSyncToken();
                 ApiClient.startSync(nextSyncToken);
@@ -268,7 +271,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
     private showTempForwardedMessage = (roomId: string, message: MessageEvent, tempId: string) => {
 
-        RX.Modal.dismiss('modalspinner_forwardmessage');
+        SpinnerUtils.dismissModalSpinner('forwardmessagespinner');
 
         this.message = message;
         this.tempId = tempId;

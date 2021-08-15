@@ -2,7 +2,6 @@ import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import DialogContainer from '../modules/DialogContainer';
 import ApiClient from '../matrix/ApiClient';
-import ModalSpinner from '../components/ModalSpinner';
 import { MessageEvent } from '../models/MessageEvent';
 import FileHandler from '../modules/FileHandler';
 import { DIALOG_WIDTH, SPACING, BUTTON_MODAL_TEXT, FONT_LARGE, BORDER_RADIUS, TRANSPARENT_BACKGROUND,
@@ -16,6 +15,7 @@ import DataStore from '../stores/DataStore';
 import { MessageEventContent_ } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
 import ImageSizeLocal from '../modules/ImageSizeLocal';
+import SpinnerUtils from '../utils/SpinnerUtils';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -98,7 +98,7 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
 
         RX.Modal.dismiss('dialogIncomingContentShare');
 
-        RX.Modal.show(<ModalSpinner/>, 'modalspinner_forwardmessage');
+        SpinnerUtils.showModalSpinner('forwardmessagespinner');
 
         const showError = (tempId: string, errorMessage: string) => {
 

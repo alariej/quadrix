@@ -1,7 +1,6 @@
 import React from 'react';
 import RX from 'reactxp';
 import ApiClient from '../matrix/ApiClient';
-import ModalSpinner from '../components/ModalSpinner';
 import DialogContainer from '../modules/DialogContainer';
 import CommunityTile from '../components/CommunityTile';
 import { MODAL_CONTENT_TEXT, OPAQUE_BACKGROUND, BORDER_RADIUS, TILE_WIDTH, SPACING, FONT_LARGE, TILE_HEIGHT_COMMUNITY, CONTAINER_PADDING,
@@ -10,6 +9,7 @@ import { theSearchDidNotReturn, theSearchTakesTooLong, cancel, theSearchReturned
     serverName, waitSearch, Languages } from '../translations';
 import UiStore from '../stores/UiStore';
 import { ErrorResponse_, PublicRoom_ } from '../models/MatrixApi';
+import SpinnerUtils from '../utils/SpinnerUtils';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -82,7 +82,7 @@ export default class DialogJoinCommunity extends RX.Component<DialogJoinCommunit
 
             if (getPublicRoomsCallReturned) { return; }
 
-            RX.Modal.dismiss('modalspinner_searchcommunities');
+            SpinnerUtils.dismissModalSpinner('searchcommunityspinner')
 
             const text = (
                 <RX.Text style={ styles.textDialog }>
@@ -106,7 +106,7 @@ export default class DialogJoinCommunity extends RX.Component<DialogJoinCommunit
 
         const waitForResult = () => {
 
-            RX.Modal.show(<ModalSpinner/>, 'modalspinner_searchcommunities');
+            SpinnerUtils.showModalSpinner('searchcommunityspinner');
 
             setTimeout(showCancelSearch, 15000);
         };
@@ -213,7 +213,7 @@ export default class DialogJoinCommunity extends RX.Component<DialogJoinCommunit
             </RX.View>
         );
 
-        RX.Modal.dismiss('modalspinner_searchcommunities');
+        SpinnerUtils.dismissModalSpinner('searchcommunityspinner')
 
         RX.Modal.show(roomList, 'roomlist');
     }
@@ -253,7 +253,7 @@ export default class DialogJoinCommunity extends RX.Component<DialogJoinCommunit
 
     private joinCommunity = (roomId: string) => {
 
-        RX.Modal.show(<ModalSpinner/>, 'modalspinner_joincommunity');
+        SpinnerUtils.showModalSpinner('joincommunityspinner');
 
         ApiClient.joinRoom(roomId)
             .then(_response => {

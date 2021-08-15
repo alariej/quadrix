@@ -1,11 +1,11 @@
 import React from 'react';
 import RX from 'reactxp';
 import ApiClient from '../matrix/ApiClient';
-import ModalSpinner from '../components/ModalSpinner';
 import DialogContainer from '../modules/DialogContainer';
 import { BORDER_RADIUS, FONT_LARGE, BUTTON_MODAL_TEXT, CONTAINER_PADDING, BUTTON_HEIGHT, PLACEHOLDER_TEXT } from '../ui';
 import { createNotepad, cancel, notepadName, errorNoConfirm, Languages } from '../translations';
 import UiStore from '../stores/UiStore';
+import SpinnerUtils from '../utils/SpinnerUtils';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -48,18 +48,18 @@ export default class DialogNewNotepad extends RX.Component<DialogNewNotepadProps
 
         RX.Modal.dismissAll();
 
-        RX.Modal.show(<ModalSpinner/>, 'modalspinner');
+        SpinnerUtils.showModalSpinner('newnotepadspinner');
 
         ApiClient.createNewRoom('group', this.notepadName, undefined, undefined, undefined, true)
             .then(response => {
 
-                this.props.showRoom(response.room_id);
+                SpinnerUtils.dismissModalSpinner('newnotepadspinner');
 
-                RX.Modal.dismissAll();
+                this.props.showRoom(response.room_id);
             })
             .catch(_error => {
 
-                RX.Modal.dismissAll();
+                RX.Modal.dismiss('newnotepadspinner');
 
                 const text = (
                     <RX.Text style={ styles.textDialog }>

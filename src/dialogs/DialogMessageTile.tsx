@@ -6,11 +6,10 @@ import UiStore from '../stores/UiStore';
 import MessageTile from '../components/MessageTile';
 import DialogRoomPicker from './DialogRoomPicker';
 import { OPAQUE_BACKGROUND, BUTTON_MODAL_BACKGROUND, BUTTON_MODAL_TEXT, BUTTON_DISABLED_TEXT, BORDER_RADIUS, BUTTON_HEIGHT, FONT_LARGE,
-    SPACING, BUTTON_SHORT_WIDTH, TRANSPARENT_BACKGROUND, LOGO_BACKGROUND, OPAQUE_LIGHT_BACKGROUND } from '../ui';
+    SPACING, BUTTON_SHORT_WIDTH, TRANSPARENT_BACKGROUND, OPAQUE_LIGHT_BACKGROUND } from '../ui';
 import { LayoutInfo } from 'reactxp/dist/common/Types';
 import DataStore from '../stores/DataStore';
 import ApiClient from '../matrix/ApiClient';
-import ModalSpinner from '../components/ModalSpinner';
 import DialogContainer from '../modules/DialogContainer';
 import { forward, reply, forwardTo, messageCouldNotBeSent, noApplicationWasFound, open, save, share, fileCouldNotAccess, fileHasBeenSaved,
     fileHasBeenSavedAndroid, fileCouldNotBeSaved, Languages, report, messageHasBeenReported, cancel,
@@ -18,6 +17,7 @@ import { forward, reply, forwardTo, messageCouldNotBeSent, noApplicationWasFound
 import FileHandler from '../modules/FileHandler';
 import ShareHandlerOutgoing from '../modules/ShareHandlerOutgoing';
 import { ErrorResponse_, RoomType } from '../models/MatrixApi';
+import SpinnerUtils from '../utils/SpinnerUtils';
 import Loading from '../modules/Loading';
 
 const styles = {
@@ -211,6 +211,8 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 
         RX.Modal.dismiss('dialogMessageTile');
 
+        SpinnerUtils.showModalSpinner('forwardmessagespinner');
+
         const showError = () => {
 
             const text = (
@@ -269,13 +271,11 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 
             if (success) {
 
-                setTimeout(() => {
-                    RX.Modal.dismiss('modalSpinnerViewFile');
-                }, 1000);
+                SpinnerUtils.dismissModalSpinner('viewfilespinner');
 
             } else {
 
-                RX.Modal.dismiss('modalSpinnerViewFile');
+                RX.Modal.dismiss('viewfilespinner');
 
                 const text = (
                     <RX.Text style={styles.textDialog}>
@@ -291,7 +291,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 
         const onNoAppFound = () => {
 
-            RX.Modal.dismiss('modalSpinnerViewFile');
+            RX.Modal.dismiss('viewfilespinner');
 
             const text = (
                 <RX.Text style={ styles.textDialog }>
@@ -306,7 +306,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 
         RX.Modal.dismiss('dialogMessageTile');
 
-        RX.Modal.show(<ModalSpinner/>, 'modalSpinnerViewFile');
+        SpinnerUtils.showModalSpinner('viewfilespinner');
 
         FileHandler.viewFile(this.props.event, fetchProgress, onSuccess, onNoAppFound);
     }
@@ -323,7 +323,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 
         const onSuccess = (success: boolean) => {
 
-            RX.Modal.dismiss('modalSpinnerSaveFile');
+            RX.Modal.dismiss('savefilespinner');
 
             if (success) {
 
@@ -354,12 +354,12 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
         }
 
         const onAbort = () => {
-            RX.Modal.dismiss('modalSpinnerSaveFile');
+            SpinnerUtils.dismissModalSpinner('savefilespinner');
         }
 
         RX.Modal.dismiss('dialogMessageTile');
 
-        RX.Modal.show(<ModalSpinner/>, 'modalSpinnerSaveFile');
+        SpinnerUtils.showModalSpinner('savefilespinner');
 
         // on electron, without timeout, the dialog does not dismiss and spinner doesn't show
         if (UiStore.getIsElectron()) {
@@ -382,13 +382,11 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 
             if (success) {
 
-                setTimeout(() => {
-                    RX.Modal.dismiss('modalSpinnerShare');
-                }, 1000);
+                SpinnerUtils.dismissModalSpinner('sharecontentspinner');
 
             } else {
 
-                RX.Modal.dismiss('modalSpinnerShare');
+                RX.Modal.dismiss('sharecontentspinner');
 
                 const text = (
                     <RX.Text style={styles.textDialog}>
@@ -404,7 +402,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 
         RX.Modal.dismiss('dialogMessageTile');
 
-        RX.Modal.show(<ModalSpinner/>, 'modalSpinnerShare');
+        SpinnerUtils.showModalSpinner('sharecontentspinner');
 
         ShareHandlerOutgoing.shareContent(this.props.event, onSuccess);
     }

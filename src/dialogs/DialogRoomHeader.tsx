@@ -2,7 +2,6 @@ import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { User } from '../models/User';
 import ApiClient from '../matrix/ApiClient';
-import ModalSpinner from '../components/ModalSpinner';
 import UserTile from '../components/UserTile';
 import { VirtualListView, VirtualListViewItemInfo, VirtualListViewCellRenderDetails } from 'reactxp-virtuallistview';
 import DataStore from '../stores/DataStore';
@@ -10,11 +9,12 @@ import DialogContainer from '../modules/DialogContainer';
 import { ComponentBase } from 'resub';
 import UiStore from '../stores/UiStore';
 import { BUTTON_MODAL_BACKGROUND, BUTTON_MODAL_TEXT, MODAL_CONTENT_BACKGROUND, OPAQUE_BACKGROUND, BUTTON_DISABLED_TEXT, BORDER_RADIUS,
-    TILE_WIDTH, BUTTON_LONG_WIDTH, BUTTON_HEIGHT, SPACING, FONT_LARGE, FONT_NORMAL, TILE_HEIGHT, OBJECT_MARGIN, LOGO_BACKGROUND,
+    TILE_WIDTH, BUTTON_LONG_WIDTH, BUTTON_HEIGHT, SPACING, FONT_LARGE, FONT_NORMAL, TILE_HEIGHT, OBJECT_MARGIN,
     OPAQUE_DUMMY_BACKGROUND } from '../ui';
 import { theInvitationWasSent, theInvitationNotSent, cancel, pressOKToInvite, toThisGroup, pressOKToLeaveRoom, inviteAdditionalUser,
     leaveRoom, youDoNotHavePrivateContacts, youHaveLeftRoom1, youHaveLeftRoom2, Languages } from '../translations';
 import { ErrorResponse_, RoomPhase, RoomType } from '../models/MatrixApi';
+import SpinnerUtils from '../utils/SpinnerUtils';
 import Loading from '../modules/Loading';
 
 const styles = {
@@ -188,7 +188,7 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
                     showSpinner: false,
                 });
             })
-            .catch(_error => {                
+            .catch(_error => {
                 this.setState({ showSpinner: false });
             });
     }
@@ -196,12 +196,13 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
     private sendInvitation = () => {
 
         RX.Modal.dismiss('inviteconfirmation');
-        RX.Modal.show(<ModalSpinner/>, 'modalspinner_sendinvitation');
+
+        SpinnerUtils.showModalSpinner('sendinvitespinner');
 
         ApiClient.inviteToRoom(this.props.roomId, this.inviteUserId)
             .then(_response => {
 
-                RX.Modal.dismissAll();
+                RX.Modal.dismiss('sendinvitespinner');
 
                 const text = (
                     <RX.Text style={ styles.textDialog }>
@@ -213,7 +214,7 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
             })
             .catch(_error => {
 
-                RX.Modal.dismissAll();
+                RX.Modal.dismiss('sendinvitespinner');
 
                 const text = (
                     <RX.Text style={ styles.textDialog }>
@@ -300,12 +301,12 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
 
         this.props.showRoomList();
 
-        RX.Modal.show(<ModalSpinner/>, 'modalspinner');
+        SpinnerUtils.showModalSpinner('leaveroomspinner');
 
         ApiClient.leaveRoom(this.props.roomId)
             .then(_response => {
 
-                RX.Modal.dismiss('modalspinner');
+                RX.Modal.dismiss('leaveroomspinner');
 
                 const text = (
 
@@ -326,7 +327,7 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
             })
             .catch((error: ErrorResponse_) => {
 
-                RX.Modal.dismiss('modalspinner');
+                RX.Modal.dismiss('leaveroomspinner');
 
                 const text = (
                     <RX.Text style={ styles.textDialog }>

@@ -4,7 +4,6 @@ import { BUTTON_LONG_BACKGROUND, BUTTON_MODAL_BACKGROUND, BUTTON_LONG_TEXT, INPU
     MODAL_CONTENT_TEXT, BORDER_RADIUS, CONTAINER_PADDING, BUTTON_LONG_WIDTH, FONT_LARGE, SPACING, BUTTON_HEIGHT, LOGO_BACKGROUND,
     OBJECT_MARGIN, PLACEHOLDER_TEXT, TRANSPARENT_BACKGROUND, FONT_NORMAL } from '../ui';
 import ApiClient from '../matrix/ApiClient';
-import ModalSpinner from '../components/ModalSpinner';
 import DialogContainer from '../modules/DialogContainer';
 import DialogRegister from '../dialogs/DialogRegister';
 import RXNetInfo from 'reactxp-netinfo';
@@ -15,6 +14,7 @@ import IconSvg, { SvgFile } from '../components/IconSvg';
 import { ErrorResponse_ } from '../models/MatrixApi';
 import { TERMS_URL } from '../appconfig';
 import Utils from '../utils/Utils';
+import SpinnerUtils from '../utils/SpinnerUtils';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -180,7 +180,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
             return;
         }
 
-        RX.Modal.show(<ModalSpinner/>, 'modalspinner');
+        SpinnerUtils.showModalSpinner('loginspinner');
 
         if (!this.state.register) {
 
@@ -202,12 +202,13 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
             ApiClient.login(user, this.password, server)
                 .then(_response => {
 
-                    RX.Modal.dismiss('modalspinner');
+                    SpinnerUtils.dismissModalSpinner('loginspinner');
+
                     this.props.showMainPage();
                 })
                 .catch((error: ErrorResponse_) => {
 
-                    RX.Modal.dismiss('modalspinner');
+                    RX.Modal.dismiss('loginspinner');
 
                     let errorText: string;
                     if (error && error.body && error.body.error) {
@@ -238,7 +239,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 
             if (this.password === this.repeatPassword) {
 
-                RX.Modal.dismiss('modalspinner');
+                RX.Modal.dismiss('loginspinner');
 
                 if (!this.server && this.state.server) {
                     this.server = this.state.server;

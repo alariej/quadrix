@@ -6,9 +6,9 @@ import RoomTile from '../components/RoomTile';
 import { OPAQUE_DUMMY_BACKGROUND, SPACING, TILE_HEIGHT } from '../ui';
 import RoomListHeader from '../components/RoomListHeader';
 import { VirtualListView, VirtualListViewItemInfo, VirtualListViewCellRenderDetails } from 'reactxp-virtuallistview';
-import ModalSpinner from '../components/ModalSpinner';
 import UiStore from '../stores/UiStore';
 import { MessageEvent } from '../models/MessageEvent';
+import SpinnerUtils from '../utils/SpinnerUtils';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -43,8 +43,8 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
 
         partialState.syncComplete = DataStore.getSyncComplete();
 
-        if (partialState.syncComplete && RX.Modal.isDisplayed('syncspinner')) {
-            RX.Modal.dismiss('syncspinner');
+        if (partialState.syncComplete && SpinnerUtils.isDisplayed('syncspinner')) {
+            SpinnerUtils.dismissModalSpinner('syncspinner');
         }
 
         const sortedRoomList =  DataStore.getSortedRoomList();
@@ -72,7 +72,7 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
         super.componentDidMount();
 
         if (!this.state.syncComplete) {
-            RX.Modal.show(<ModalSpinner/>, 'syncspinner');
+            SpinnerUtils.showModalSpinner('syncspinner');
         }
     }
 

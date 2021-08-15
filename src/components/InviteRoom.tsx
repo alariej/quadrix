@@ -5,12 +5,12 @@ import { BUTTON_LONG_TEXT, BUTTON_LONG_BACKGROUND, BUTTON_LONG_WIDTH, FONT_LARGE
     BUTTON_MODAL_TEXT } from '../ui';
 import { User } from '../models/User';
 import ApiClient from '../matrix/ApiClient';
-import ModalSpinner from '../components/ModalSpinner';
 import { ComponentBase } from 'resub';
 import UiStore from '../stores/UiStore';
 import DialogContainer from '../modules/DialogContainer';
 import { acceptInvitation, rejectInvitation, hasInvitedYou } from '../translations';
 import { ErrorResponse_, RoomType } from '../models/MatrixApi';
+import SpinnerUtils from '../utils/SpinnerUtils';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -82,12 +82,12 @@ export default class InviteRoom extends ComponentBase<InviteRoomProps, InviteRoo
 
     private onPressAccept = () => {
 
-        RX.Modal.show(<ModalSpinner/>, 'invitemodalspinner');
+        SpinnerUtils.showModalSpinner('invitespinner');
 
         ApiClient.joinRoom(this.props.roomId)
             .catch((error: ErrorResponse_) => {
 
-                RX.Modal.dismiss('invitemodalspinner');
+                SpinnerUtils.dismissModalSpinner('invitespinner');
 
                 const text = (
                     <RX.Text style={ styles.textDialog }>
@@ -101,12 +101,12 @@ export default class InviteRoom extends ComponentBase<InviteRoomProps, InviteRoo
 
     private onPressReject = () => {
 
-        RX.Modal.show(<ModalSpinner/>, 'invitemodalspinner');
+        SpinnerUtils.showModalSpinner('invitespinner');
 
         ApiClient.leaveRoom(this.props.roomId)
             .then(_response => {
 
-                RX.Modal.dismiss('invitemodalspinner');
+                SpinnerUtils.dismissModalSpinner('invitespinner');
 
                 DataStore.removeRoom(this.props.roomId);
 
@@ -114,7 +114,7 @@ export default class InviteRoom extends ComponentBase<InviteRoomProps, InviteRoo
             })
             .catch((error: ErrorResponse_) => {
 
-                RX.Modal.dismiss('invitemodalspinner');
+                SpinnerUtils.dismissModalSpinner('invitespinner');
 
                 const text = (
                     <RX.Text style={ styles.textDialog }>

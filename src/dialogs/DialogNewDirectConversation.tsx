@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import ApiClient from '../matrix/ApiClient';
-import ModalSpinner from '../components/ModalSpinner';
 import DialogContainer from '../modules/DialogContainer';
 import DataStore from '../stores/DataStore';
 import { MODAL_CONTENT_TEXT, BORDER_RADIUS, FONT_LARGE, SPACING, TILE_HEIGHT, BUTTON_HEIGHT, INPUT_BACKGROUND, CONTAINER_PADDING,
@@ -13,6 +12,7 @@ import { User } from '../models/User';
 import UserTile from '../components/UserTile';
 import Utils from '../utils/Utils';
 import { PlatformType } from 'reactxp/dist/common/Types';
+import SpinnerUtils from '../utils/SpinnerUtils';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -244,7 +244,7 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
 
         RX.Modal.dismissAll();
 
-        RX.Modal.show(<ModalSpinner/>, 'modalspinner_createnewdirect');
+        SpinnerUtils.showModalSpinner('newdirectspinner');
 
         const existingDirectRooms = DataStore.getSortedRoomList()
             .filter(room => (
@@ -257,7 +257,7 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
 
         if (existingDirectRooms.length > 0) {
 
-            RX.Modal.dismiss('modalspinner_createnewdirect');
+            SpinnerUtils.dismissModalSpinner('newdirectspinner');
 
             this.props.showRoom(existingDirectRooms[0].id);
 
@@ -288,7 +288,7 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
                 })
                 .catch(_error => {
 
-                    RX.Modal.dismiss('modalspinner_createnewdirect');
+                    RX.Modal.dismiss('newdirectspinner');
 
                     const text = (
                         <RX.Text style={ styles.textDialog }>

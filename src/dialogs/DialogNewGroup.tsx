@@ -1,11 +1,11 @@
 import React from 'react';
 import RX from 'reactxp';
 import ApiClient from '../matrix/ApiClient';
-import ModalSpinner from '../components/ModalSpinner';
 import DialogContainer from '../modules/DialogContainer';
 import { BORDER_RADIUS, FONT_LARGE, BUTTON_MODAL_TEXT, CONTAINER_PADDING, BUTTON_HEIGHT, PLACEHOLDER_TEXT } from '../ui';
 import { createGroup, cancel, groupName, errorNoConfirm, Languages } from '../translations';
 import UiStore from '../stores/UiStore';
+import SpinnerUtils from '../utils/SpinnerUtils';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -48,18 +48,18 @@ export default class DialogNewGroup extends RX.Component<DialogNewGroupProps, RX
 
         RX.Modal.dismissAll();
 
-        RX.Modal.show(<ModalSpinner/>, 'modalspinner');
+        SpinnerUtils.showModalSpinner('newgroupspinner');
 
         ApiClient.createNewRoom('group', this.groupName)
             .then(response => {
 
-                this.props.showRoom(response.room_id);
+                SpinnerUtils.dismissModalSpinner('newgroupspinner');
 
-                RX.Modal.dismissAll();
+                this.props.showRoom(response.room_id);
             })
             .catch(_error => {
 
-                RX.Modal.dismissAll();
+                RX.Modal.dismiss('newgroupspinner');
 
                 const text = (
                     <RX.Text style={ styles.textDialog }>

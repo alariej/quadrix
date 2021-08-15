@@ -6,9 +6,9 @@ import RoomChat from '../components/RoomChat';
 import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
 import InviteRoom from '../components/InviteRoom';
-import ModalSpinner from '../components/ModalSpinner';
 import { MessageEvent, TemporaryMessage } from '../models/MessageEvent';
 import { RoomPhase, RoomType } from '../models/MatrixApi';
+import SpinnerUtils from '../utils/SpinnerUtils';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -40,18 +40,18 @@ export default class Room extends ComponentBase<RoomProps, RoomState> {
         const roomPhase = DataStore.getRoomPhase(nextProps.roomId);
         const roomType = DataStore.getRoomType(nextProps.roomId);
 
-        if ((!roomPhase || !roomType) && !RX.Modal.isDisplayed('modalspinner')) {
+        if ((!roomPhase || !roomType) && !SpinnerUtils.isDisplayed('roomspinner')) {
 
-            RX.Modal.show(<ModalSpinner />, 'modalspinner');
+            SpinnerUtils.showModalSpinner('roomspinner');
 
-        } else if (roomType && roomPhase && RX.Modal.isDisplayed('modalspinner')) {
+        } else if (roomType && roomPhase && SpinnerUtils.isDisplayed('roomspinner')) {
 
-            RX.Modal.dismiss('modalspinner');
+            SpinnerUtils.dismissModalSpinner('roomspinner');
         }
 
-        if (roomPhase === 'join' && RX.Modal.isDisplayed('invitemodalspinner')) {
+        if (roomPhase === 'join' && SpinnerUtils.isDisplayed('invitespinner')) {
 
-            RX.Modal.dismiss('invitemodalspinner');
+            SpinnerUtils.dismissModalSpinner('invitespinner');
         }
 
         return {
