@@ -126,6 +126,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
     private language: Languages = 'en';
     private locale: Locale;
     private unreadTextStyle: StyleRuleSet<TextStyle> = undefined;
+    private dummyTextInputComponent: RX.TextInput | undefined;
 
     constructor(props: RoomHeaderProps) {
         super(props);
@@ -258,6 +259,10 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
     }
 
     private onPressHomeButton = () => {
+
+        this.dummyTextInputComponent!.focus();
+        this.dummyTextInputComponent!.blur();
+        RX.UserInterface.dismissKeyboard();
 
         this.props.showRoomList();
     }
@@ -516,7 +521,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
                 <RX.View style={ styles.containerHomeButton }>
                     <RX.Button
                         style={ styles.roundButton }
-                        onPress={ () => this.onPressHomeButton() }
+                        onPress={ this.onPressHomeButton }
                         disableTouchOpacityAnimation={ false }
                         underlayColor={ LOGO_BACKGROUND }
                         activeOpacity={ 0.8 }
@@ -534,6 +539,10 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
                     { unread }
 
                 </RX.View>
+                <RX.TextInput
+                    style={{ height:0, width:0, backgroundColor: TRANSPARENT_BACKGROUND }}
+                    ref={ component => this.dummyTextInputComponent = component! }
+                />
             </RX.View>
         );
     }
