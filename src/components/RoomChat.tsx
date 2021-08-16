@@ -511,11 +511,15 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
         if (!this.state.showArrowButton && scrollHeight > 100) {
             this.setState({ showArrowButton: true });
         } else if (this.state.showArrowButton && scrollHeight <= 100) {
-            this.setState({ showArrowButton: false, showNewMessageButton: false });
-        }
-
-        if (scrollHeight < 3) {
-            this.setState({ eventListItems: this.eventListItems });
+            if (this.state.showNewMessageButton) {
+                this.setState({
+                    eventListItems: this.eventListItems,
+                    showArrowButton: false,
+                    showNewMessageButton: false
+                });
+            } else {
+                this.setState({ showArrowButton: false });
+            }
         }
 
         // @ts-ignore
