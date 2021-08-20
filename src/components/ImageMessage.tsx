@@ -45,6 +45,7 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
     private urlFull = '';
     private heightStyle: RX.Types.ViewStyleRuleSet;
     private imageRatio = 0;
+    private isMounted_: boolean | undefined;
 
     constructor(props: ImageMessageProps) {
         super(props);
@@ -86,9 +87,16 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 
     public componentDidMount(): void {
 
+        this.isMounted_ = true;
+
         setTimeout(() => {
-            this.setState({ showSpinner: this.imageRatio === 0 })
+            if (this.isMounted_) { this.setState({ showSpinner: this.imageRatio === 0 }); }
         }, 500);
+    }
+
+    public componentWillUnmount(): void {
+
+        this.isMounted_ = false;
     }
 
     private showFullScreenImage = () => {
@@ -109,7 +117,7 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 
     private onLoad = (size: { width: number, height: number }) => {
 
-        this.setState({ showSpinner: false });
+        if (this.isMounted_) { this.setState({ showSpinner: false }); }
 
         this.imageRatio = size.width / size.height;
     }

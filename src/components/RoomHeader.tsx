@@ -126,7 +126,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
     private language: Languages = 'en';
     private locale: Locale;
     private unreadTextStyle: StyleRuleSet<TextStyle> = undefined;
-    private dummyTextInputComponent: RX.TextInput | undefined;
+    private isMounted_: boolean | undefined;
 
     constructor(props: RoomHeaderProps) {
         super(props);
@@ -202,6 +202,17 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
         return partialState;
     }
 
+    public componentDidMount(): void {
+        super.componentDidMount();
+
+        this.isMounted_ = true;
+    }
+
+    public componentWillUnmount(): void {
+
+        this.isMounted_ = false;
+    }
+
     private doLogout = async () => {
 
         RX.Modal.dismissAll();
@@ -228,7 +239,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
                         members_[member.id] = { ...member, ...members[member.id] }
                     });
 
-                this.setState({ members: { ...members, ...members_ } });
+                if (this.isMounted_) { this.setState({ members: { ...members, ...members_ } }); }
 
                 DataStore.addMembers(this.props.roomId, members_);
 
@@ -253,7 +264,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
                     lastSeenTime = DataStore.getLastSeenTime(this.roomSummary.contactId!);
                 }
 
-                this.setState({ lastSeen: this.getLastSeen(lastSeenTime) });
+                if (this.isMounted_) { this.setState({ lastSeen: this.getLastSeen(lastSeenTime) }); }
             })
             .catch(_error => null);
     }
@@ -311,7 +322,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 
             const resetLastSeen = () => {
                 const lastSeenTime = DataStore.getLastSeenTime(this.roomSummary.contactId!);
-                this.setState({ lastSeen: this.getLastSeen(lastSeenTime) });
+                if (this.isMounted_) { this.setState({ lastSeen: this.getLastSeen(lastSeenTime) }); }
             }
 
             setTimeout(resetLastSeen, 31000);

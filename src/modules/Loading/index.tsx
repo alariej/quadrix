@@ -24,6 +24,7 @@ interface LoadingState {
 export default class Loading extends RX.Component<LoadingProps, LoadingState> {
 
     private d0: Date;
+    private isMounted_: boolean | undefined;
 
     constructor(props: LoadingProps) {
         super(props);
@@ -31,6 +32,16 @@ export default class Loading extends RX.Component<LoadingProps, LoadingState> {
         this.d0 = new Date();
 
         this.state = { isVisible: props.isVisible };
+    }
+
+    public componentDidMount(): void {
+
+        this.isMounted_ = true;
+    }
+
+    public componentWillUnmount(): void {
+
+        this.isMounted_ = false;
     }
 
     public componentDidUpdate(prevProps: LoadingProps): boolean {
@@ -49,7 +60,7 @@ export default class Loading extends RX.Component<LoadingProps, LoadingState> {
                 this.setState({ isVisible: false });
             } else {
                 setTimeout(() => {
-                    this.setState({ isVisible: false });
+                    if (this.isMounted_) { this.setState({ isVisible: false }); }
                 }, MIN_MS - t);
             }
         }
