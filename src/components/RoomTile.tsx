@@ -49,20 +49,16 @@ const styles = {
     }),
     containerNewestMessage: RX.Styles.createViewStyle({
         flexDirection: 'row',
-        height: FONT_LARGE + 4,
+        minHeight: FONT_LARGE + 4,
         alignItems: 'center',
     }),
     newestMessageText:  RX.Styles.createTextStyle({
         flex: 1,
         fontSize: FONT_LARGE,
-        lineHeight: FONT_LARGE + 4,
         color: TILE_SYSTEM_TEXT,
     }),
-    containerRoomName: RX.Styles.createTextStyle({
-        marginBottom: SPACING,
-        height: FONT_LARGE + 4,
-        alignItems: 'center',
-        overflow: 'visible'
+    containerRoomName: RX.Styles.createViewStyle({
+        minHeight: FONT_LARGE + 8,
     }),
     roomName: RX.Styles.createTextStyle({
         fontSize: FONT_LARGE,
