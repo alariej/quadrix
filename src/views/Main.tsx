@@ -63,15 +63,13 @@ const styles = {
     }),
 };
 
-type DisplayPage = 'roomList' | 'room' | 'tempMessage';
-
 interface MainProps {
     showLogin: () => void;
     sharedContent: string;
 }
 
 interface MainState {
-    displayPage: DisplayPage;
+    showRoom: boolean;
     showJitsiMeet: boolean;
     layout: Layout;
 }
@@ -302,8 +300,8 @@ export default class Main extends ComponentBase<MainProps, MainState> {
             }).start();
         }
 
-        this.setState({ displayPage: 'tempMessage' });
         UiStore.setSelectedRoom(roomId);
+        this.setState({ showRoom: true });
     }
 
     private showRoom = (roomId: string) => {
@@ -333,8 +331,8 @@ export default class Main extends ComponentBase<MainProps, MainState> {
             }).start();
         }
 
-        this.setState({ displayPage: 'room' });
         UiStore.setSelectedRoom(roomId);
+        this.setState({ showRoom: true });
     }
 
     private showRoomList = () => {
@@ -353,10 +351,16 @@ export default class Main extends ComponentBase<MainProps, MainState> {
                 useNativeDriver: true,
             }).start(() => {
                 this.room = undefined;
+                this.setState({ showRoom: false });
             });
+
+            this.forceUpdate();
+
+        } else {
+            this.room = undefined;
+            this.setState({ showRoom: false });
         }
 
-        this.setState({ displayPage: 'roomList' });
         UiStore.setSelectedRoom('');
     }
 
@@ -389,7 +393,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
         let room: ReactElement | undefined;
 
-        if (this.state.layout.type === 'wide' && (this.state.displayPage === 'roomList' || !this.state.displayPage)) {
+        if (!this.state.showRoom) {
             room = (
                 <RX.View style={ styles.viewPlaceholder }>
                     <RX.Text style={ styles.textPlaceholder }>
