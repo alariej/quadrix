@@ -362,11 +362,6 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
             if (this.state.showArrowButton) { this.setState({ showNewMessageButton: true }); }
 
-            if (newRoomEvents[0].senderId !== ApiClient.credentials.userIdFull) {
-
-                ApiClient.sendReadReceipt(this.props.roomId, newRoomEvents[0].eventId).catch(_error => null);
-            }
-
             /*
             According to the ReactXP doc, the VLV should not move when items get added to the top of the list
             while being outside the viewport. This prevents the VLV to jerk or jump as users have
@@ -379,7 +374,10 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
             or presses the Up button.
             */
 
-            if (!this.state.showArrowButton) { this.setState({ eventListItems: this.eventListItems }); }
+            if (!this.state.showArrowButton) {
+                ApiClient.sendReadReceipt(this.props.roomId, newRoomEvents[0].eventId).catch(_error => null);
+                this.setState({ eventListItems: this.eventListItems });                    
+            }
         }
     }
 
@@ -512,6 +510,8 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
             this.setState({ showArrowButton: true });
         } else if (this.state.showArrowButton && scrollHeight <= 100) {
             if (this.state.showNewMessageButton) {
+
+                ApiClient.sendReadReceipt(this.props.roomId, this.eventListItems[0].event.eventId).catch(_error => null);
                 this.setState({
                     eventListItems: this.eventListItems,
                     showArrowButton: false,
@@ -540,6 +540,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
     private onPressArrowButton = () => {
 
         if (this.state.showNewMessageButton) {
+            ApiClient.sendReadReceipt(this.props.roomId, this.eventListItems[0].event.eventId).catch(_error => null);
             this.setState({ eventListItems: this.eventListItems });
         }
 
