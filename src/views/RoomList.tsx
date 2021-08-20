@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { ComponentBase } from 'resub';
 import DataStore from '../stores/DataStore';
 import RoomTile from '../components/RoomTile';
-import { OPAQUE_DUMMY_BACKGROUND, SPACING, TILE_HEIGHT } from '../ui';
+import { BUTTON_ROUND_BACKGROUND, BUTTON_ROUND_WIDTH, BUTTON_UNREAD_BACKGROUND, HEADER_HEIGHT, LOGO_BACKGROUND, OPAQUE_DUMMY_BACKGROUND,
+    SPACING, TILE_HEIGHT } from '../ui';
 import RoomListHeader from '../components/RoomListHeader';
 import { VirtualListView, VirtualListViewItemInfo, VirtualListViewCellRenderDetails } from 'reactxp-virtuallistview';
 import UiStore from '../stores/UiStore';
 import { MessageEvent } from '../models/MessageEvent';
 import SpinnerUtils from '../utils/SpinnerUtils';
+import IconSvg, { SvgFile } from '../components/IconSvg';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -17,6 +19,24 @@ const styles = {
     roomWrapper: RX.Styles.createViewStyle({
         backgroundColor: OPAQUE_DUMMY_BACKGROUND,
     }),
+    containerArrowButton: RX.Styles.createViewStyle({
+        position: 'absolute',
+        top: HEADER_HEIGHT + SPACING + 12,
+        right: 12,
+        width: BUTTON_ROUND_WIDTH,
+        height: BUTTON_ROUND_WIDTH,
+    }),
+    roundButton: RX.Styles.createViewStyle({
+        width: BUTTON_ROUND_WIDTH,
+        height: BUTTON_ROUND_WIDTH,
+        borderRadius: BUTTON_ROUND_WIDTH / 2,
+        backgroundColor: BUTTON_ROUND_BACKGROUND,
+        borderWidth: 1,
+        borderColor: LOGO_BACKGROUND,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }),
+
 };
 
 interface RoomListProps extends RX.CommonProps {
@@ -31,15 +51,24 @@ interface RoomListItemInfo extends VirtualListViewItemInfo {
 
 interface RoomListState {
     roomListItems: RoomListItemInfo[];
+    showArrowButton: boolean;
+    totalUnreadCount: number;
     syncComplete: boolean;
     offline: boolean;
 }
 
 export default class RoomList extends ComponentBase<RoomListProps, RoomListState> {
 
-    protected _buildState(_nextProps: RoomListProps, _initState: boolean, _prevState: RoomListState): Partial<RoomListState> {
+    private prevSelectedRoom = '';
+    private virtualListView: VirtualListView<VirtualListViewItemInfo> | undefined;
+
+    protected _buildState(_nextProps: RoomListProps, initState: boolean, _prevState: RoomListState): Partial<RoomListState> {
 
         const partialState: Partial<RoomListState> = {};
+
+        if (initState) {
+            partialState.showArrowButton = false;
+        }
 
         partialState.syncComplete = DataStore.getSyncComplete();
 
@@ -49,7 +78,16 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
 
         const sortedRoomList =  DataStore.getSortedRoomList();
 
+        const selectedRoom = UiStore.getSelectedRoom();
+        if (selectedRoom === '' && this.prevSelectedRoom !== '') {
+            this.virtualListView?.scrollToTop();
+        }
+        this.prevSelectedRoom = selectedRoom;
+
+        let unreadCount = 0;
         partialState.roomListItems = sortedRoomList.map((room) => {
+
+            unreadCount += room.unreadCount;
 
             const roomInfo: RoomListItemInfo = {
                 key: room.id,
@@ -63,6 +101,7 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
             return roomInfo;
         });
 
+        partialState.totalUnreadCount = unreadCount;
         partialState.offline = UiStore.getOffline();
 
         return partialState;
@@ -74,6 +113,20 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
         if (!this.state.syncComplete) {
             SpinnerUtils.showModalSpinner('syncspinner');
         }
+    }
+
+    private onScroll = (scrollHeight: number) => {
+
+        if (!this.state.showArrowButton && scrollHeight > 100) {
+            this.setState({ showArrowButton: true });
+        } else if (this.state.showArrowButton && scrollHeight <= 100) {
+            this.setState({ showArrowButton: false });
+        }
+    }
+
+    private onPressArrowButton = () => {
+
+        this.virtualListView!.scrollToTop(true, 0);
     }
 
     private renderItem = (cellRender: VirtualListViewCellRenderDetails<RoomListItemInfo>) => {
@@ -99,6 +152,31 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
 
     public render(): JSX.Element | null {
 
+        let arrowButton: ReactElement | undefined;
+
+        if (this.state.showArrowButton) {
+
+            const iconColor = this.state.totalUnreadCount ? BUTTON_UNREAD_BACKGROUND : LOGO_BACKGROUND;
+
+            arrowButton = (
+                <RX.View style={ styles.containerArrowButton }>
+                    <RX.Button
+                        style={ [styles.roundButton, { borderColor: iconColor }] }
+                        onPress={ this.onPressArrowButton }
+                        disableTouchOpacityAnimation={ true }
+                        activeOpacity={ 1 }
+                    >
+                        <IconSvg
+                            source= { require('../resources/svg/arrow_up.json') as SvgFile }
+                            fillColor={ iconColor }
+                            height={ 16 }
+                            width={ 16 }
+                        />
+                    </RX.Button>
+                </RX.View>
+            );
+        }
+
         return (
             <RX.View style={ styles.container }>
 
@@ -108,11 +186,15 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
                 />
 
                 <VirtualListView
+                    onScroll={ this.onScroll }
+                    ref={ component => this.virtualListView = component! }
                     itemList={ this.state.roomListItems }
                     renderItem={ this.renderItem }
                     skipRenderIfItemUnchanged={ true }
                     animateChanges={ true }
                 />
+
+                { arrowButton }
 
             </RX.View>
         );
