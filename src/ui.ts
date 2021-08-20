@@ -58,6 +58,7 @@ export const TRANSPARENT_BACKGROUND = 'transparent';
 export const TILE_BACKGROUND = 'white';
 export const TILE_MESSAGE_TEXT = '#333333';
 export const TILE_SYSTEM_TEXT = 'dimgrey';
+export const LIGHT_BACKGROUND = 'grey';
 export const DARK_BACKGROUND = '#1a1a1a';
 export const BUTTON_ROUND_BACKGROUND = 'white';
 export const BUTTON_LONG_BACKGROUND = 'rgba(0, 0, 0, 0.5)';

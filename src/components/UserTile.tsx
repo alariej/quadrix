@@ -4,8 +4,8 @@ import { User } from '../models/User';
 import DataStore from '../stores/DataStore';
 import utils from '../utils/Utils';
 import ApiClient from '../matrix/ApiClient';
-import { TILE_BACKGROUND, BUTTON_LONG_BACKGROUND, BUTTON_LONG_TEXT, TILE_SYSTEM_TEXT, BORDER_RADIUS, SPACING, FONT_NORMAL, FONT_LARGE,
-    FONT_SMALL, TILE_HEIGHT, AVATAR_SMALL_WIDTH, AVATAR_MARGIN, BUTTON_MODAL_TEXT } from '../ui';
+import { TILE_BACKGROUND, BUTTON_LONG_TEXT, TILE_SYSTEM_TEXT, BORDER_RADIUS, SPACING, FONT_NORMAL, FONT_LARGE,
+    FONT_SMALL, TILE_HEIGHT, AVATAR_SMALL_WIDTH, AVATAR_MARGIN, BUTTON_MODAL_TEXT, LIGHT_BACKGROUND } from '../ui';
 import UiStore from '../stores/UiStore';
 import { invited, left, admin } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
@@ -47,7 +47,7 @@ const styles = {
     }),
     containerStatus: RX.Styles.createViewStyle({
         position: 'absolute',
-        backgroundColor: BUTTON_LONG_BACKGROUND,
+        backgroundColor: LIGHT_BACKGROUND,
         bottom: 0,
         width: 36,
         borderRadius: 3,
