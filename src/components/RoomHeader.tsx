@@ -271,8 +271,6 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 
     private onPressHomeButton = () => {
 
-        this.dummyTextInputComponent!.focus();
-        this.dummyTextInputComponent!.blur();
         RX.UserInterface.dismissKeyboard();
 
         this.props.showRoomList();
@@ -281,6 +279,8 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
     private onPressAvatar = (event: RX.Types.SyntheticEvent) => {
 
         event.stopPropagation();
+
+        RX.UserInterface.dismissKeyboard();
 
         RX.Modal.show(
             <DialogAvatar
@@ -295,6 +295,8 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
     }
 
     private onPressHeader = () => {
+
+        RX.UserInterface.dismissKeyboard();
 
         RX.Modal.show(
             <DialogRoomHeader
@@ -550,10 +552,6 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
                     { unread }
 
                 </RX.View>
-                <RX.TextInput
-                    style={{ height:0, width:0, backgroundColor: TRANSPARENT_BACKGROUND }}
-                    ref={ component => this.dummyTextInputComponent = component! }
-                />
             </RX.View>
         );
     }

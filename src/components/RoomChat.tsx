@@ -703,7 +703,10 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
         return (
 
-            <RX.View style={ styles.container }>
+            <RX.View
+                style={ styles.container }
+                onPress={ () => RX.UserInterface.dismissKeyboard() }
+            >
 
                 <VirtualListView
                     onScroll={ this.onScroll }
@@ -713,6 +716,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
                     skipRenderIfItemUnchanged={ true }
                     animateChanges={ true }
                     onLayout={ this.onLayout }
+                    keyboardShouldPersistTaps={ true }
                 />
 
                 { arrowButton }

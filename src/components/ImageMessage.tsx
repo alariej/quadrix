@@ -103,6 +103,8 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 
         if (this.state.showSpinner) { return; }
 
+        RX.UserInterface.dismissKeyboard();
+
         const fullScreenImage = (
             <FullScreenImage
                 roomId={ this.props.roomId }

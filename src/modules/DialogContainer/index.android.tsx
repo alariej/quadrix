@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { BUTTON_MODAL_TEXT, BUTTON_MODAL_BACKGROUND, MODAL_CONTENT_BACKGROUND, OPAQUE_BACKGROUND, MODAL_DISABLED_TEXT, BORDER_RADIUS,
-    BUTTON_HEIGHT, FONT_LARGE, DIALOG_WIDTH, SPACING, OBJECT_MARGIN, TRANSPARENT_BACKGROUND } from '../../ui';
+    BUTTON_HEIGHT, FONT_LARGE, DIALOG_WIDTH, SPACING, OBJECT_MARGIN } from '../../ui';
 import UiStore from '../../stores/UiStore';
 import { cancel } from '../../translations';
 
@@ -70,7 +70,6 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
 
     private animatedValue: RX.Animated.Value;
     private animatedStyle: RX.Types.AnimatedViewStyleRuleSet;
-    private dummyTextInputComponent: RX.TextInput | undefined;
 
     constructor(props: DialogContainerProps) {
         super(props);
@@ -102,8 +101,6 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
 
     private onPressOutside = () => {
 
-        this.dummyTextInputComponent!.focus();
-        this.dummyTextInputComponent!.blur();
         RX.UserInterface.dismissKeyboard();
 
         if (!this.props.cancelButton) {
@@ -203,10 +200,6 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
                         </RX.View>
                     </RX.View>
                 </RX.Animated.View>
-                <RX.TextInput
-                    style={{ height:0, width:0, backgroundColor: TRANSPARENT_BACKGROUND }}
-                    ref={ component => this.dummyTextInputComponent = component! }
-                />
             </RX.View>
         );
     }

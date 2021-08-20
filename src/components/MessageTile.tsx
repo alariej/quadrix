@@ -88,6 +88,8 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 
     private showContextDialog = () => {
 
+        RX.UserInterface.dismissKeyboard();
+
         RX.UserInterface.measureLayoutRelativeToWindow(this.mainTile!)
             .then(layout => {
 
@@ -253,6 +255,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
             messageWrapper = (
                 <RX.View
                     style={ [styles.containerTile, this.marginStyle] }
+                    onPress={ () => RX.UserInterface.dismissKeyboard() }
                     onLongPress={ this.showContextDialog }
                     disableTouchOpacityAnimation={ true }
                     onContextMenu={ this.showContextDialog }
@@ -272,6 +275,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
         return (
             <RX.View
                 style={ styles.container }
+                onPress={ () => RX.UserInterface.dismissKeyboard() }
                 ref={ component => this.mainTile = component! }
             >
                 { messageWrapper }
