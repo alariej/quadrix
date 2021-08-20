@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const path = require('path');
-const { buildConfig, APP_PATH, WEB_PATH } = require('./common');
+const { buildConfig, WEB_PATH } = require('./common');
 
 module.exports = (env, argv) => (
     merge(buildConfig(env, argv), {
@@ -13,10 +13,6 @@ module.exports = (env, argv) => (
         ],
 
         devServer: {
-            contentBase: APP_PATH,
-            openPage: '',
-            inline: true,
-            stats: 'minimal',
             port: 9999,
             hot: true,
         },
