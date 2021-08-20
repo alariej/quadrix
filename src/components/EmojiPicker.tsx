@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
-import { SPACING, TILE_BACKGROUND } from '../ui';
+import { FONT_EMOJI_LARGE, SPACING, TILE_BACKGROUND } from '../ui';
 import { VirtualListView, VirtualListViewItemInfo, VirtualListViewCellRenderDetails } from 'reactxp-virtuallistview';
 
 const styles = {
@@ -34,7 +34,7 @@ export default class EmojiPicker extends RX.Component<EmojiPickerProps, RX.State
 
             const emojiRow_: EmojiRowItemInfo = {
                 key: String(i),
-                height: 28 + 2 * SPACING,
+                height: FONT_EMOJI_LARGE + 2 * SPACING,
                 template: 'emojiRow',
                 emojiRow: props.emojiArray.slice(i, i + 5),
                 measureHeight: false,
@@ -73,6 +73,7 @@ export default class EmojiPicker extends RX.Component<EmojiPickerProps, RX.State
                 <VirtualListView
                     itemList={ this.emojiArray }
                     renderItem={ this.renderItem }
+                    keyboardShouldPersistTaps={ true }
                 />
             </RX.View>
         );

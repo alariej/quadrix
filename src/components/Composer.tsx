@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { APP_ID } from '../appconfig';
 import { EMOJI_TEXT, TILE_BACKGROUND, FONT_FAMILY, INPUT_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, BUTTON_ROUND_WIDTH, LOGO_BACKGROUND,
-    BUTTON_COMPOSER_WIDTH, OPAQUE_BACKGROUND, COMPOSER_BORDER, DIALOG_WIDTH, MODAL_CONTENT_BACKGROUND } from '../ui';
+    BUTTON_COMPOSER_WIDTH, OPAQUE_BACKGROUND, COMPOSER_BORDER, DIALOG_WIDTH, MODAL_CONTENT_BACKGROUND, FONT_EMOJI_LARGE } from '../ui';
 import FileHandler from '../modules/FileHandler';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
@@ -71,14 +71,14 @@ const styles = {
         elevation: 3,
         shadowOpacity: 1,
         overflow: 'visible',
-        marginTop: SPACING * 3,
-        height: 260,
+        marginTop: SPACING,
+        height: 7 * (FONT_EMOJI_LARGE + 2 * SPACING) + 2 * SPACING,
         width: 260,
         padding: SPACING,
     }),
     emoji: RX.Styles.createTextStyle({
         color: EMOJI_TEXT,
-        fontSize: 28,
+        fontSize: FONT_EMOJI_LARGE,
     }),
     emojiButton: RX.Styles.createButtonStyle({
         flex: 1,
@@ -135,7 +135,6 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
     private fontFamilyStyle: StyleRuleSet<TextStyle>;
     private language: Languages = 'en';
     private emojiArray: ReactElement[] | undefined;
-    private isMobile: boolean;
     private isAndroid: boolean;
     private isWeb: boolean;
 
@@ -143,18 +142,17 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
         super(props);
 
         this.language = UiStore.getLanguage();
-        this.getEmojiArray().catch(_error => null);
 
         const platform = UiStore.getPlatform();
         this.isWeb = platform === 'web';
         this.isAndroid = platform === 'android';
-        this.isMobile = UiStore.getDevice() === 'mobile';
-
         if (this.isWeb) {
             this.fontFamilyStyle = RX.Styles.createTextStyle({
                 fontFamily: FONT_FAMILY,
             }, false);
         }
+
+        this.getEmojiArray().catch(_error => null);
 
         const numLines = 10;
         const paddingVertical = this.isAndroid ? 2 : (BUTTON_COMPOSER_WIDTH - (FONT_LARGE + 4)) / 2;
@@ -238,10 +236,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
         RX.Storage.getItem('composer' + roomId)
             .then((textInput) => {
 
-                if (textInput) {
-                    this.textInput = textInput;
-                    this.setState({ textInput: textInput });
-                }
+                this.textInput = textInput || '';
+                this.setState({ textInput: this.textInput });
             })
             .catch(_error => null);
     }
@@ -259,7 +255,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
         if (!this.textInput) { return }
 
-        RX.Popup.dismiss('emojiPicker');
+        if (this.isWeb) { RX.Popup.dismiss('emojiPicker'); }
 
         const textInput = this.textInput;
         this.textInput = '';
@@ -505,6 +501,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
     private startJitsiMeet = async () => {
 
+        this.textInputComponent?.blur();
+
         const shouldJoin = await this.showJitsiMeetDialog();
 
         if (!shouldJoin) {
@@ -548,19 +546,22 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
         event.stopPropagation();
 
-        this.textInput = this.textInput + emoji;
-        this.setState({ textInput: this.textInput });
+        const cursorPosition = this.textInputComponent?.getSelectionRange();
 
-        if (this.isWeb && !this.isMobile) {
-            this.textInputComponent!.focus();
-        }
+        this.textInput = this.textInput.substr(0, cursorPosition?.start) + emoji + this.textInput.substr(cursorPosition?.end || 0);
+
+        const newCursorPosition = (cursorPosition?.start || 0) + emoji.length;
+
+        this.setState({ textInput: this.textInput }, () => {
+            this.textInputComponent?.selectRange(newCursorPosition, newCursorPosition);
+            if (this.isWeb) { this.textInputComponent!.focus(); }
+        });
+
     }
 
     private toggleEmojiPicker = () => {
 
-        if (!RX.Popup.isDisplayed('emojiPicker') && (!this.isWeb || (this.isWeb && this.isMobile))) {
-            this.textInputComponent!.blur();
-        }
+        this.textInputComponent?.focus();
 
         const emojiPicker = (
             <RX.View style={ styles.emojiPicker }>
@@ -575,15 +576,16 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
             renderPopup: (_anchorPosition: RX.Types.PopupPosition, _anchorOffset: number, _popupWidth: number, _popupHeight: number) => {
                 return emojiPicker;
             },
-            preventDismissOnPress: this.isWeb && !this.isMobile,
+            preventDismissOnPress: false,
             dismissIfShown: true,
-            onAnchorPressed: () => {
-                if (this.isWeb && this.isMobile) {
-                    RX.Popup.dismiss('emojiPicker');
-                }
-            },
             onDismiss: () => {
-                this.textInputComponent!.focus();
+                // HACK for android:
+                // Without this, the cursor stays fixed following selectRange call
+                // ReactXP bug?
+                if (this.isAndroid) {
+                    this.textInputComponent?.blur();
+                    this.textInputComponent?.focus();
+                }
             },
         };
 
@@ -593,27 +595,6 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
     public render(): JSX.Element | null {
 
         const disabledOpacity = 0.4;
-
-        const emojiButton = (
-            <RX.Button
-                style={ styles.button }
-                onPress={ this.toggleEmojiPicker }
-                disableTouchOpacityAnimation={ true }
-                disabled={ !this.props.roomActive }
-                disabledOpacity={ disabledOpacity }
-                activeOpacity={ 1 }
-            >
-                <RX.View style={ styles.containerIcon }>
-                    <IconSvg
-                        source= { require('../resources/svg/smiley.json') as SvgFile }
-                        fillColor={ LOGO_BACKGROUND }
-                        height={ 16 }
-                        width={ 16 }
-                        style={ { marginRight: 3 }}
-                    />
-                </RX.View>
-            </RX.Button>
-        );
 
         return(
             <RX.View style={ styles.container }>
@@ -657,9 +638,24 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                         />
                     </RX.View>
                 </RX.Button>
-
-                { emojiButton }
-
+                <RX.Button
+                    style={ styles.button }
+                    onPress={ this.toggleEmojiPicker }
+                    disableTouchOpacityAnimation={ true }
+                    disabled={ !this.props.roomActive }
+                    disabledOpacity={ disabledOpacity }
+                    activeOpacity={ 1 }
+                >
+                    <RX.View style={ styles.containerIcon }>
+                        <IconSvg
+                            source= { require('../resources/svg/smiley.json') as SvgFile }
+                            fillColor={ LOGO_BACKGROUND }
+                            height={ 16 }
+                            width={ 16 }
+                            style={ { marginRight: 3 }}
+                        />
+                    </RX.View>
+                </RX.Button>
                 <RX.TextInput
                     style={ [styles.textInput, this.fontFamilyStyle, this.textInputStyle] }
                     ref={ component => { this.textInputComponent = component! } }
