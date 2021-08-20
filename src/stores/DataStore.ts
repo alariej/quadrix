@@ -972,7 +972,7 @@ class DataStore extends StoreBase {
         return sender!;
     }
 
-    // used in unreaddot
+    // used in roomheader
     @autoSubscribeWithKey(UnreadTotalTrigger)
     public getUnreadTotal(roomId: string) {
 
