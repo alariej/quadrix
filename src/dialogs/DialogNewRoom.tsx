@@ -3,11 +3,11 @@ import RX from 'reactxp';
 import DialogNewGroup from './DialogNewGroup';
 import DialogNewNotepad from './DialogNewNotepad';
 import DialogNewDirectConversation from './DialogNewDirectConversation';
-import DialogJoinCommunity from './DialogJoinCommunity';
+// import DialogJoinCommunity from './DialogJoinCommunity';
 import { BUTTON_MODAL_BACKGROUND, BUTTON_MODAL_TEXT, OPAQUE_BACKGROUND, BORDER_RADIUS, DIALOG_WIDTH, SPACING,
     AVATAR_SMALL_WIDTH, TILE_HEIGHT, FONT_LARGE, AVATAR_MARGIN } from '../ui';
 import UiStore from '../stores/UiStore';
-import { createNewConv, createNewGroup, joinPublicComm, createNewNote } from '../translations';
+import { createNewConv, createNewGroup, /* joinPublicComm, */ createNewNote } from '../translations';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 
 const styles = {
@@ -72,7 +72,7 @@ export default class DialogNewRoom extends RX.Component<DialogNewRoomProps, RX.S
 
         RX.Modal.show(<DialogNewGroup showRoom={ this.props.showRoom }/>, 'creategroupdialog');
     }
-
+    /*
     private joinCommunity = (event: RX.Types.SyntheticEvent) => {
 
         event.stopPropagation();
@@ -81,7 +81,7 @@ export default class DialogNewRoom extends RX.Component<DialogNewRoomProps, RX.S
 
         RX.Modal.show(<DialogJoinCommunity showRoom={ this.props.showRoom }/>, 'modaldialog_searchcommunity');
     }
-
+    */
     private createNewNotepad = (event: RX.Types.SyntheticEvent) => {
 
         event.stopPropagation();
@@ -143,6 +143,7 @@ export default class DialogNewRoom extends RX.Component<DialogNewRoomProps, RX.S
                             { createNewGroup[language] }
                         </RX.Text>
                     </RX.View>
+                    {/*
                     <RX.View
                         style={ styles.containerButton }
                         onPress={ event => this.joinCommunity(event) }
@@ -161,6 +162,7 @@ export default class DialogNewRoom extends RX.Component<DialogNewRoomProps, RX.S
                             { joinPublicComm[language] }
                         </RX.Text>
                     </RX.View>
+                    */}
                     <RX.View
                         style={ styles.containerButton }
                         onPress={ event => this.createNewNotepad(event) }
