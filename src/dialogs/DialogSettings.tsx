@@ -3,8 +3,9 @@ import RX from 'reactxp';
 import { INPUT_BORDER, MODAL_CONTENT_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, FONT_NORMAL, CONTAINER_PADDING,
     BUTTON_HEIGHT, TRANSPARENT_BACKGROUND, MODAL_CONTENT_BACKGROUND, BUTTON_ROUND_BACKGROUND,
     PLACEHOLDER_TEXT, AVATAR_BACKGROUND, BUTTON_MODAL_TEXT, AVATAR_MEDIUM_WIDTH, CHECKBOX_BACKGROUND, DIALOG_WIDTH,
-    APP_BACKGROUND, TILE_MESSAGE_TEXT, COMPOSER_BORDER, BUTTON_SHORT_WIDTH, BUTTON_DISABLED_TEXT, BUTTON_MODAL_BACKGROUND,
-    OPAQUE_BACKGROUND } from '../ui';
+    APP_BACKGROUND, TILE_MESSAGE_TEXT, BUTTON_SHORT_WIDTH, BUTTON_DISABLED_TEXT, BUTTON_MODAL_BACKGROUND,
+    OPAQUE_BACKGROUND, 
+    JITSI_BORDER} from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
 import utils from '../utils/Utils';
@@ -49,7 +50,7 @@ const styles = {
         height: BUTTON_HEIGHT,
         borderRadius: BORDER_RADIUS,
         borderWidth: 1,
-        borderColor: COMPOSER_BORDER,
+        borderColor: JITSI_BORDER,
     }),
     containerIcon: RX.Styles.createViewStyle({
         flex: 1,
