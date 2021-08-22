@@ -250,7 +250,7 @@ PODS:
     - React
   - react-native-netinfo (5.0.0):
     - React
-  - react-native-webview (11.6.6):
+  - react-native-webview (11.13.0):
     - React-Core
   - React-RCTActionSheet (0.63.4):
     - React-Core/RCTActionSheetHeaders (= 0.63.4)
@@ -495,7 +495,7 @@ SPEC CHECKSUMS:
   react-native-image-resizer: 506412a2bdd70dde64a61e13505ce10f61a04369
   react-native-jitsi-meet: bf15ed23a7ba724dc7bd93c3200a99b2a1e8e267
   react-native-netinfo: 332d617e448eddc12697c7818185861e6114aebf
-  react-native-webview: d5c9d6c72ed1afc66511d9109a8740458b18aaf0
+  react-native-webview: b176c6404ad40d10cfc818be41c053f85a72d751
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
   React-RCTAnimation: 1bde3ecc0c104c55df246eda516e0deb03c4e49b
   React-RCTBlob: a97d378b527740cc667e03ebfa183a75231ab0f0
