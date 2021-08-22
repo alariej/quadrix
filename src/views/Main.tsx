@@ -81,6 +81,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
     private jitsiMeetId = '';
     private animatedValue!: RX.Animated.Value;
     private animatedStyle: RX.Types.AnimatedViewStyleRuleSet;
+    private roomList: ReactElement | undefined;
     private room: ReactElement | undefined;
     private appLayoutSubscription: number;
 
@@ -88,6 +89,13 @@ export default class Main extends ComponentBase<MainProps, MainState> {
         super(props);
 
         this.appLayoutSubscription = UiStore.subscribe(this.changeAppLayout, UiStore.LayoutTrigger);
+
+        this.roomList = (
+            <RoomList
+                showRoom={ this.showRoom }
+                showLogin={ this.props.showLogin }
+            />
+        );
     }
 
     private changeAppLayout = () => {
@@ -375,7 +383,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
         UiStore.setJitsiActive(false);
         this.setState({ showJitsiMeet: false }, () => {
-        RX.StatusBar.setBarStyle('light-content', true);
+            RX.StatusBar.setBarStyle('light-content', true);
         });
     }
 
@@ -385,16 +393,13 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
         const roomListPage = (
             <RX.View style={[styles.containerRoomList, { width: this.state.layout.pageWidth - PAGE_MARGIN * 2 }]}>
-                <RoomList
-                    showRoom={ this.showRoom }
-                    showLogin={ this.props.showLogin }
-                />
+                { this.roomList }
             </RX.View>
         );
 
         let room: ReactElement | undefined;
 
-        if (!this.state.showRoom) {
+        if (!this.state.showRoom || !this.room) {
             room = (
                 <RX.View style={ styles.viewPlaceholder }>
                     <RX.Text style={ styles.textPlaceholder }>
@@ -431,7 +436,6 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
         let jitsiMeet: ReactElement | undefined;
         if (this.state.showJitsiMeet) {
-
             jitsiMeet = (
                 <JitsiMeet
                     jitsiMeetId={ this.jitsiMeetId }
