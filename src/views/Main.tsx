@@ -99,7 +99,10 @@ export default class Main extends ComponentBase<MainProps, MainState> {
     }
 
     private changeAppLayout = () => {
-        this.setState({ layout: UiStore.getAppLayout() });
+
+        if (RX.App.getActivationState() === Types.AppActivationState.Active) {
+            this.setState({ layout: UiStore.getAppLayout() });
+        }
     }
 
     public componentDidMount(): void {
