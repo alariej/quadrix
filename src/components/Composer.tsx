@@ -1,8 +1,9 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { APP_ID } from '../appconfig';
-import { EMOJI_TEXT, TILE_BACKGROUND, FONT_FAMILY, INPUT_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, BUTTON_ROUND_WIDTH, LOGO_BACKGROUND,
-    BUTTON_COMPOSER_WIDTH, OPAQUE_BACKGROUND, COMPOSER_BORDER, DIALOG_WIDTH, MODAL_CONTENT_BACKGROUND, FONT_EMOJI_LARGE } from '../ui';
+import { EMOJI_TEXT, FONT_FAMILY, INPUT_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, BUTTON_ROUND_WIDTH, LOGO_BACKGROUND,
+    BUTTON_COMPOSER_WIDTH, OPAQUE_BACKGROUND, COMPOSER_BORDER, DIALOG_WIDTH, MODAL_CONTENT_BACKGROUND, FONT_EMOJI_LARGE,
+    INPUT_BACKGROUND } from '../ui';
 import FileHandler from '../modules/FileHandler';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
@@ -32,7 +33,7 @@ const styles = {
         borderRadius: BORDER_RADIUS,
         marginLeft: SPACING / 2,
         marginRight: SPACING / 2,
-        backgroundColor: TILE_BACKGROUND,
+        backgroundColor: INPUT_BACKGROUND,
         lineHeight: FONT_LARGE + 4,
         paddingHorizontal: SPACING,
         textAlignVertical: 'center',
@@ -64,7 +65,7 @@ const styles = {
     }),
     emojiPicker: RX.Styles.createViewStyle({
         borderRadius: BORDER_RADIUS,
-        backgroundColor: TILE_BACKGROUND,
+        backgroundColor: INPUT_BACKGROUND,
         shadowOffset: { width: -2, height: 2 },
         shadowColor: OPAQUE_BACKGROUND,
         shadowRadius: BORDER_RADIUS,
