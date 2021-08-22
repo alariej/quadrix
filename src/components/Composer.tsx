@@ -137,6 +137,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
     private emojiArray: ReactElement[] | undefined;
     private isAndroid: boolean;
     private isWeb: boolean;
+    private emojiPicker: ReactElement | undefined;
 
     constructor(props: ComposerProps) {
         super(props);
@@ -198,8 +199,17 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
         return partialState;
     }
 
-    public componentWillUnmount(): void {
+    public componentDidMount(): void {
+        super.componentDidMount();
 
+        this.emojiPicker = (
+            <RX.View style={ styles.emojiPicker }>
+                <EmojiPicker emojiArray={ this.emojiArray! } />
+            </RX.View>
+        );
+    }
+
+    public componentWillUnmount(): void {
         super.componentWillUnmount();
 
         this.setTextInputToStorage(this.props.roomId);
@@ -563,18 +573,12 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
         this.textInputComponent?.focus();
 
-        const emojiPicker = (
-            <RX.View style={ styles.emojiPicker }>
-                <EmojiPicker emojiArray={ this.emojiArray! } />
-            </RX.View>
-        );
-
         const popupOptions: RX.Types.PopupOptions = {
             getAnchor: () => {
                 return this.textInputComponent!;
             },
             renderPopup: (_anchorPosition: RX.Types.PopupPosition, _anchorOffset: number, _popupWidth: number, _popupHeight: number) => {
-                return emojiPicker;
+                return this.emojiPicker;
             },
             preventDismissOnPress: false,
             dismissIfShown: true,
