@@ -138,6 +138,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
     private emojiArray: ReactElement[] | undefined;
     private isAndroid: boolean;
     private isWeb: boolean;
+    private selection: { start: number, end: number } | undefined;
     private emojiPicker: ReactElement | undefined;
 
     constructor(props: ComposerProps) {
@@ -554,21 +555,26 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
         this.props.showJitsiMeet(jitsiMeetId);
     }
 
-    private addEmoji = (event: RX.Types.SyntheticEvent, emoji: string) => {
+    private onSelectionChange = (start: number, end: number) => {
 
-        event.stopPropagation();
+        this.selection = { start: start, end: end };
+    }
 
-        const cursorPosition = this.textInputComponent?.getSelectionRange();
+    private addEmoji = (_event: RX.Types.SyntheticEvent, emoji: string) => {
 
-        this.textInput = this.textInput.substr(0, cursorPosition?.start) + emoji + this.textInput.substr(cursorPosition?.end || 0);
+        if (!this.selection) {
+            this.selection = { start: this.textInput.length, end: this.textInput.length };
+        }
 
-        const newCursorPosition = (cursorPosition?.start || 0) + emoji.length;
+        this.textInput = this.textInput.substr(0, this.selection?.start) + emoji + this.textInput.substr(this.selection?.end || 0);
+        this.selection = { start: this.selection.start + emoji.length, end: this.selection.start + emoji.length };
 
         this.setState({ textInput: this.textInput }, () => {
-            this.textInputComponent?.selectRange(newCursorPosition, newCursorPosition);
-            if (this.isWeb) { this.textInputComponent!.focus(); }
+            if (this.isWeb) {
+                this.textInputComponent!.focus();
+                this.textInputComponent?.selectRange( this.selection!.start, this.selection!.end);
+            }
         });
-
     }
 
     private toggleEmojiPicker = () => {
@@ -584,15 +590,6 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
             },
             preventDismissOnPress: false,
             dismissIfShown: true,
-            onDismiss: () => {
-                // HACK for android:
-                // Without this, the cursor stays fixed following selectRange call
-                // ReactXP bug?
-                if (this.isAndroid) {
-                    this.textInputComponent?.blur();
-                    this.textInputComponent?.focus();
-                }
-            },
         };
 
         RX.Popup.show(popupOptions, 'emojiPicker', 0);
@@ -646,7 +643,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                 </RX.Button>
                 <RX.Button
                     style={ styles.button }
-                    onPress={ this.toggleEmojiPicker }
+                    onPressIn={ this.toggleEmojiPicker }
                     disableTouchOpacityAnimation={ true }
                     disabled={ !this.props.roomActive }
                     disabledOpacity={ disabledOpacity }
@@ -677,6 +674,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     autoFocus={ false }
                     spellCheck={ true }
                     multiline={ true }
+                    onSelectionChange={ this.onSelectionChange }
                 />
                 <RX.Button
                     style={ styles.buttonSend }
