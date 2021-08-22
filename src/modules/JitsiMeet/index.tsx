@@ -18,8 +18,8 @@ const styles = {
     }),
     containerMinimized: RX.Styles.createViewStyle({
         position: 'absolute',
-        bottom: PAGE_MARGIN,
-        right: PAGE_MARGIN,
+        bottom: PAGE_MARGIN + SPACING,
+        right: PAGE_MARGIN + SPACING,
         width: 80,
         height: 100,
         backgroundColor: TRANSPARENT_BACKGROUND,
