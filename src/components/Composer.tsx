@@ -570,9 +570,9 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
         this.selection = { start: this.selection.start + emoji.length, end: this.selection.start + emoji.length };
 
         this.setState({ textInput: this.textInput }, () => {
-            if (this.isWeb) {
+            if (this.isWeb || this.isAndroid) {
                 this.textInputComponent!.focus();
-                this.textInputComponent?.selectRange( this.selection!.start, this.selection!.end);
+                this.textInputComponent?.selectRange(this.selection!.start, this.selection!.end);
             }
         });
     }
@@ -590,6 +590,12 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
             },
             preventDismissOnPress: false,
             dismissIfShown: true,
+            onDismiss: () => {
+                if (this.isAndroid) {
+                    this.textInputComponent?.blur();
+                    this.textInputComponent?.focus();
+                }
+            },
         };
 
         RX.Popup.show(popupOptions, 'emojiPicker', 0);
