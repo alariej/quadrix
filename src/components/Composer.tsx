@@ -160,7 +160,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
         const paddingVertical = this.isAndroid ? 2 : (BUTTON_COMPOSER_WIDTH - (FONT_LARGE + 4)) / 2;
         const maxHeightPadding = this.isAndroid ? -1 * (numLines + 1) : paddingVertical * 2;
         this.textInputStyle = RX.Styles.createTextStyle({
-            paddingVertical: paddingVertical,
+            paddingTop: paddingVertical,
+            paddingBottom: paddingVertical,
             maxHeight: (numLines * (FONT_LARGE + 4)) + maxHeightPadding,
         }, false);
     }
