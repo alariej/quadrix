@@ -509,17 +509,12 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
         if (!this.state.showArrowButton && scrollHeight > 100) {
             this.setState({ showArrowButton: true });
         } else if (this.state.showArrowButton && scrollHeight <= 100) {
-            if (this.state.showNewMessageButton) {
-
                 ApiClient.sendReadReceipt(this.props.roomId, this.eventListItems[0].event.eventId).catch(_error => null);
                 this.setState({
                     eventListItems: this.eventListItems,
                     showArrowButton: false,
                     showNewMessageButton: false
                 });
-            } else {
-                this.setState({ showArrowButton: false });
-            }
         }
 
         // @ts-ignore
@@ -539,12 +534,9 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
     private onPressArrowButton = () => {
 
-        if (this.state.showNewMessageButton) {
+        this.virtualListView!.scrollToTop(true, 0);
             ApiClient.sendReadReceipt(this.props.roomId, this.eventListItems[0].event.eventId).catch(_error => null);
             this.setState({ eventListItems: this.eventListItems });
-        }
-
-        this.virtualListView!.scrollToTop(true, 0);
     }
 
     private onPressMoreButton = () => {
