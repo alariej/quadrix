@@ -167,6 +167,8 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 
     private onPressMainButton = () => {
 
+        RX.UserInterface.dismissKeyboard();
+
         if (!this.userId || !this.password) {
 
             const text = (
