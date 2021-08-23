@@ -607,14 +607,17 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
             )
         }
 
-        const spinner = (
-            <RX.View
-                style={ styles.spinnerContainer }
-                blockPointerEvents={ !this.state.showSpinner }
-            >
-                <Loading isVisible={ this.state.showSpinner ? true : false } />
-            </RX.View>
-        );
+        let spinner: ReactElement | undefined;
+        if (this.state.showSpinner) {
+            spinner = (
+                <RX.View
+                    style={ styles.spinnerContainer }
+                    blockPointerEvents={ !this.state.showSpinner }
+                >
+                    <Loading isVisible={ true } />
+                </RX.View>
+            );
+        }
 
         return(
             <RX.View
