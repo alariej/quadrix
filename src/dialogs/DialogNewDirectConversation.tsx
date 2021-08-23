@@ -29,7 +29,7 @@ const styles = {
     }),
     infoTile: RX.Styles.createViewStyle({
         flex: 1,
-        alignSelf: 'center',
+        alignSelf: 'stretch',
         marginBottom: SPACING,
         borderRadius: BORDER_RADIUS,
         backgroundColor: TILE_BACKGROUND,
