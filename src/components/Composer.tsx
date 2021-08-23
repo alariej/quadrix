@@ -135,7 +135,6 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
     private textInputStyle: StyleRuleSet<TextStyle>;
     private fontFamilyStyle: StyleRuleSet<TextStyle>;
     private language: Languages = 'en';
-    private emojiArray: ReactElement[] | undefined;
     private isAndroid: boolean;
     private isWeb: boolean;
     private selection: { start: number, end: number } | undefined;
@@ -154,8 +153,6 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                 fontFamily: FONT_FAMILY,
             }, false);
         }
-
-        this.getEmojiArray().catch(_error => null);
 
         const numLines = 10;
         const paddingVertical = this.isAndroid ? 2 : (BUTTON_COMPOSER_WIDTH - (FONT_LARGE + 4)) / 2;
@@ -207,7 +204,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
         this.emojiPicker = (
             <RX.View style={ styles.emojiPicker }>
-                <EmojiPicker emojiArray={ this.emojiArray! } />
+                <EmojiPicker emojiArray={ this.getEmojiArray() } />
             </RX.View>
         );
     }
@@ -220,13 +217,12 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
         RX.Popup.dismissAll();
     }
 
-    private getEmojiArray = (): Promise<void> => {
+    private getEmojiArray = (): ReactElement[] => {
 
         const emojiJson = require('../resources/emoji/emoji.json') as EmojiFile;
 
-        this.emojiArray = Object.values(emojiJson)
+        return Object.values(emojiJson)
             .map((emoji, i: number) => {
-
                 return (
                     <RX.Button
                         key={ i }
@@ -240,8 +236,6 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     </RX.Button>
                 );
             });
-
-        return Promise.resolve();
     }
 
     private getTextInputFromStorage = (roomId: string) => {
@@ -578,6 +572,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
     }
 
     private toggleEmojiPicker = () => {
+
+        if (!this.emojiPicker) { return; }
 
         this.textInputComponent?.focus();
 
