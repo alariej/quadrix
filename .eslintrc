@@ -38,7 +38,7 @@
     "indent": "off"
   },
   "globals": {
-    "__DEV__": false
+    "__DEV__": "off"
   },
   "settings": {
     "react": { "version": "latest" }
