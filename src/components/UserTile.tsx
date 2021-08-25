@@ -42,8 +42,7 @@ const styles = {
     userName: RX.Styles.createTextStyle({
         fontSize: FONT_LARGE,
         fontWeight: 'bold',
-        color: TILE_SYSTEM_TEXT,
-        marginBottom: 2,
+        color: TILE_MESSAGE_TEXT,
     }),
     userId: RX.Styles.createTextStyle({
         fontSize: FONT_NORMAL,
