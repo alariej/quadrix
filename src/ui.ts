@@ -37,7 +37,7 @@ export const FONT_LARGE = 14;
 export const FONT_NORMAL = 12;
 export const FONT_SMALL = 10;
 export const FONT_EMOJI_LARGE = 26;
-export const FONT_FAMILY = 'system-ui, Arial, Roboto, "Noto Color Emoji", sans-serif';
+export const FONT_FAMILY = '"Helvetica Neue", Roboto, sans-serif, Arial, "Noto Color Emoji", system-ui';
 
 // colours
 
