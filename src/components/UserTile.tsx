@@ -5,7 +5,7 @@ import DataStore from '../stores/DataStore';
 import utils from '../utils/Utils';
 import ApiClient from '../matrix/ApiClient';
 import { TILE_BACKGROUND, BUTTON_LONG_TEXT, TILE_SYSTEM_TEXT, BORDER_RADIUS, SPACING, FONT_NORMAL, FONT_LARGE,
-    FONT_SMALL, TILE_HEIGHT, AVATAR_SMALL_WIDTH, AVATAR_MARGIN, BUTTON_MODAL_TEXT, LIGHT_BACKGROUND } from '../ui';
+    FONT_SMALL, TILE_HEIGHT, AVATAR_SMALL_WIDTH, AVATAR_MARGIN, BUTTON_MODAL_TEXT, LIGHT_BACKGROUND, TILE_MESSAGE_TEXT } from '../ui';
 import UiStore from '../stores/UiStore';
 import { invited, left, admin } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
@@ -23,13 +23,15 @@ const styles = {
     containerAvatar: RX.Styles.createViewStyle({
         justifyContent: 'center',
         alignItems: 'center',
-        height: AVATAR_SMALL_WIDTH,
         width: AVATAR_SMALL_WIDTH,
+        height: AVATAR_SMALL_WIDTH,
         marginRight: AVATAR_MARGIN,
+        marginLeft: SPACING
     }),
     avatar: RX.Styles.createImageStyle({
         flex: 1,
         width: AVATAR_SMALL_WIDTH,
+        height: AVATAR_SMALL_WIDTH,
         borderRadius: AVATAR_SMALL_WIDTH / 2,
     }),
     containerUserInfo: RX.Styles.createViewStyle({
@@ -151,8 +153,8 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
                 </RX.View>
                 <RX.View style={ styles.containerUserInfo }>
                     <RX.Text numberOfLines={ 1 } style={ styles.containerRoomName }>
-                    <RX.Text numberOfLines={ 1 } style={ styles.userName }>
-                        { this.props.user.name || this.props.user.id }
+                        <RX.Text numberOfLines={ 1 } style={ styles.userName }>
+                            { this.props.user.name || this.props.user.id }
                         </RX.Text>
                     </RX.Text>
                     <RX.Text numberOfLines={ 1 } style={ styles.userId }>

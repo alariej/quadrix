@@ -35,12 +35,13 @@ const styles = {
         alignItems: 'center',
         width: AVATAR_SMALL_WIDTH,
         height: AVATAR_SMALL_WIDTH,
-        borderRadius: AVATAR_SMALL_WIDTH / 2,
         marginRight: AVATAR_MARGIN,
+        marginLeft: SPACING
     }),
     avatar: RX.Styles.createImageStyle({
         flex: 1,
         width: AVATAR_SMALL_WIDTH,
+        height: AVATAR_SMALL_WIDTH,
         borderRadius: AVATAR_SMALL_WIDTH / 2,
     }),
     containerText: RX.Styles.createViewStyle({

@@ -4,6 +4,8 @@ export const MIN_MS = 1250;
 
 // dimensions
 
+export const SPACING = 3;
+export const OBJECT_MARGIN = 16;
 export const PAGE_WIDTH_DEFAULT = 360;
 export const PAGE_MARGIN = 6;
 export const PAGE_WIDE_PADDING = 50; // must be 24 for wide layout on nexus tablet
@@ -19,13 +21,11 @@ export const BUTTON_LONG_WIDTH = 200;
 export const BUTTON_SHORT_WIDTH = 100;
 export const BUTTON_COMPOSER_WIDTH = 32;
 export const AVATAR_WIDTH = 48;
-export const AVATAR_SMALL_WIDTH = 42;
+export const AVATAR_SMALL_WIDTH = TILE_HEIGHT - 4 * SPACING;
 export const AVATAR_MEDIUM_WIDTH = 96;
 export const AVATAR_LARGE_WIDTH = 144;
 export const AVATAR_MARGIN = 8;
 export const BORDER_RADIUS = 5;
-export const SPACING = 3;
-export const OBJECT_MARGIN = 16;
 export const CONTAINER_PADDING = 6;
 export const HEADER_HEIGHT = 54;
 export const ICON_REDUCTION_FACTOR = 1.8;
