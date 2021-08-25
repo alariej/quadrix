@@ -34,6 +34,10 @@ const styles = {
     }),
     containerUserInfo: RX.Styles.createViewStyle({
         flex: 1,
+        flexDirection: 'column',
+    }),
+    containerRoomName: RX.Styles.createViewStyle({
+        minHeight: FONT_LARGE + 8,
     }),
     userName: RX.Styles.createTextStyle({
         fontSize: FONT_LARGE,
@@ -147,8 +151,10 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
                     { status! }
                 </RX.View>
                 <RX.View style={ styles.containerUserInfo }>
+                    <RX.Text numberOfLines={ 1 } style={ styles.containerRoomName }>
                     <RX.Text numberOfLines={ 1 } style={ styles.userName }>
                         { this.props.user.name || this.props.user.id }
+                        </RX.Text>
                     </RX.Text>
                     <RX.Text numberOfLines={ 1 } style={ styles.userId }>
                         { this.props.user.id }
