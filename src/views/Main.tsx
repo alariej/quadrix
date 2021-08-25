@@ -405,20 +405,6 @@ export default class Main extends ComponentBase<MainProps, MainState> {
         if (!this.state.showRoom || !this.room) {
             room = (
                 <RX.View style={ styles.viewPlaceholder }>
-                    <RX.Text style={ styles.textPlaceholder }>
-                        <RX.Text>
-                            CHAT. ON.
-                        </RX.Text>
-                        <RX.Text style={{ fontSize: 20, fontWeight: 'normal', marginLeft: 4 }}>
-                            [
-                        </RX.Text>
-                        <RX.Text style={{ fontSize: 18, fontWeight: 'bold' }}>
-                            matrix
-                        </RX.Text>
-                        <RX.Text style={{ fontSize: 20, fontWeight: 'normal' }}>
-                            ]
-                        </RX.Text>
-                    </RX.Text>
                     <IconSvg
                         source= { require('../resources/svg/appname.json') as SvgFile }
                         height={ 36 }
