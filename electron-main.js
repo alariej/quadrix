@@ -12,7 +12,7 @@ const createWindow = () => {
         resizable: false,
         frame: true,
         movable: true,
-        backgroundColor: 'black',
+        backgroundColor: '#fff',
         icon: path.join(__dirname, 'dist-web', 'resources', 'images', 'logo.png'), // linux
         // icon: path.join(__dirname, 'dist-web', 'resources', 'images', 'logo.ico'), // windows
         // icon: path.join(__dirname, 'dist-web', 'resources', 'images', 'logo.icns'), // mac
