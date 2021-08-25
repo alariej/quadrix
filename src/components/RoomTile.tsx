@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { TILE_BACKGROUND, BUTTON_UNREAD_TEXT, BUTTON_UNREAD_BACKGROUND, TILE_SYSTEM_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, FONT_NORMAL,
-    AVATAR_SMALL_WIDTH, TILE_HEIGHT, AVATAR_MARGIN, TRANSPARENT_BACKGROUND, ICON_INFO_FILL, BUTTON_MODAL_TEXT }
+    AVATAR_SMALL_WIDTH, TILE_HEIGHT, AVATAR_MARGIN, TRANSPARENT_BACKGROUND, ICON_INFO_FILL, BUTTON_MODAL_TEXT, TILE_MESSAGE_TEXT }
     from '../ui';
 import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
@@ -64,9 +64,11 @@ const styles = {
     roomName: RX.Styles.createTextStyle({
         fontSize: FONT_LARGE,
         fontWeight: 'bold',
+        color: TILE_MESSAGE_TEXT
     }),
     alias: RX.Styles.createTextStyle({
         fontSize: FONT_NORMAL,
+        color: TILE_MESSAGE_TEXT
     }),
     unreadNumber: RX.Styles.createTextStyle({
         height: 24,
