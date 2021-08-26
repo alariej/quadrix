@@ -32,10 +32,10 @@ export const ICON_REDUCTION_FACTOR = 1.8;
 
 // fonts
 
-export const FONT_XLARGE = 16;
-export const FONT_LARGE = 14;
-export const FONT_NORMAL = 12;
-export const FONT_SMALL = 10;
+export const FONT_XLARGE = 17;
+export const FONT_LARGE = 15;
+export const FONT_NORMAL = 13;
+export const FONT_SMALL = 11;
 export const FONT_EMOJI_LARGE = 26;
 export const FONT_FAMILY = '"Helvetica Neue", Roboto, sans-serif, Arial, "Noto Color Emoji", system-ui';
 
