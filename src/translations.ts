@@ -965,9 +965,9 @@ export const jitsiStartedExternal: Translation = {
 }
 
 export const jitsiStartedInternal: Translation = {
-    en: 'Videoconference started / joined.',
-    de: 'Videokonferenz gestartet / beigetreten.',
-    fr: 'Vidéoconférence lancée / jointe.',
+    en: 'Videoconference started / joined. Press the video icon next to the message input field to also join.',
+    de: 'Videokonferenz gestartet / beigetreten. Drücken Sie auf das Videosymbol neben dem Texteingabefeld, um ebenfalls teilzunehmen.',
+    fr: 'Vidéoconférence lancée / jointe. Appuyez sur l\'icône vidéo à côté du champ de saisie du message pour vous joindre également.',
 }
 
 export const jitsiStartedShort: Translation = {
