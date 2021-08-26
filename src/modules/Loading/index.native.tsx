@@ -69,7 +69,7 @@ export default class Loading extends RX.Component<LoadingProps, LoadingState> {
 
     public render(): JSX.Element | null {
 
-        const size = !this.props.size || this.props.size === 'large' ? 40 : 12;
+        const size = !this.props.size || this.props.size === 'large' ? 40 : 14;
 
         let loading: ReactElement | null;
         if (this.state.isVisible) {

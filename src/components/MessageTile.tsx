@@ -201,8 +201,8 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                         <IconSvg
                             source= { require('../resources/svg/marker.json') as SvgFile }
                             fillColor={ MARKER_READ_FILL }
-                            height={ 11 }
-                            width={ 11 }
+                            height={ 14 }
+                            width={ 14 }
                             style={ { alignSelf: 'flex-end' }}
                         />
                     </RX.View>
@@ -213,8 +213,8 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                         <IconSvg
                             source= { require('../resources/svg/marker.json') as SvgFile }
                             fillColor={ MARKER_SENT_FILL }
-                            height={ 11 }
-                            width={ 11 }
+                            height={ 14 }
+                            width={ 14 }
                             style={ { alignSelf: 'flex-end' }}
                         />
                     </RX.View>
