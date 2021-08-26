@@ -271,6 +271,10 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
             sendDisabled: true,
         });
 
+        setTimeout(() => {
+            if (this.state.sendDisabled) { this.setState({ sendDisabled: false }); }
+        }, 5000);
+
         const tempId = 'text' + Date.now();
 
         this.props.showTempSentMessage({ body: textInput, tempId: tempId });
