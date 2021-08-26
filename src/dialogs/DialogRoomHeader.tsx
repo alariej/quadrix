@@ -16,6 +16,7 @@ import { theInvitationWasSent, theInvitationNotSent, cancel, pressOKToInvite, to
 import { ErrorResponse_, RoomPhase, RoomType } from '../models/MatrixApi';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import Loading from '../modules/Loading';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -49,6 +50,7 @@ const styles = {
         alignSelf: 'center',
     }),
     aliasText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         fontWeight: 'bold',
     }),
@@ -56,10 +58,12 @@ const styles = {
         flex: 1,
     }),
     topicText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         flex: 1,
         fontSize: FONT_NORMAL,
     }),
     buttonText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         marginVertical: SPACING,
         textAlign: 'center',
@@ -69,6 +73,7 @@ const styles = {
         alignItems: 'center', // puts button in horizontal center
     }),
     textDialog: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         textAlign: 'center',
         color: BUTTON_MODAL_TEXT,
         fontSize: FONT_LARGE,

@@ -19,6 +19,7 @@ import { yesterdayWord, fetchingMessages, noMoreMessages, Languages, errorLoadin
 import IconSvg, { SvgFile } from './IconSvg';
 import { differenceInDays, format, isSameYear, isToday, isYesterday, Locale } from 'date-fns';
 import Loading from '../modules/Loading';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -55,6 +56,7 @@ const styles = {
         alignItems: 'center',
     }),
     moreButtonText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: 24,
         fontWeight: 'bold',
         color: LOGO_BACKGROUND,
@@ -74,6 +76,7 @@ const styles = {
         alignItems: 'center',
     }),
     loadingButtonText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         color: BUTTON_LONG_TEXT,
     }),
@@ -91,12 +94,14 @@ const styles = {
         marginBottom: SPACING,
     }),
     date: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         padding: 3,
         borderRadius: 4,
         backgroundColor: TILE_BACKGROUND,
     }),
     textDialog: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         textAlign: 'center',
         color: MODAL_CONTENT_TEXT,
         fontSize: FONT_LARGE,

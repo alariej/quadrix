@@ -14,6 +14,7 @@ import IconSvg, { SvgFile } from './IconSvg';
 import { format } from 'date-fns';
 import { RoomType } from '../models/MatrixApi';
 import Loading from '../modules/Loading';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -39,11 +40,13 @@ const styles = {
         alignItems: 'center',
     }),
     footerSenderId: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         flexShrink: 1,
         fontSize: FONT_NORMAL,
         color: FOOTER_TEXT,
     }),
     footerTimestamp: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         flexShrink: 0,
         fontSize: FONT_NORMAL,
         color: FOOTER_TEXT,
@@ -57,6 +60,7 @@ const styles = {
         marginRight: SPACING
     }),
     containerText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         flex: 1,
         fontSize: FONT_NORMAL,
         minHeight: FONT_NORMAL + 7,

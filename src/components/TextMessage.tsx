@@ -8,6 +8,7 @@ import { jitsiStartedInternal } from '../translations';
 import { Headers } from 'reactxp/dist/common/Types';
 import { LinkifyElement } from '../models/LinkifyElement';
 import utils from '../utils/Utils';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     containerMessage: RX.Styles.createViewStyle({
@@ -15,28 +16,33 @@ const styles = {
         overflow: 'visible'
     }),
     containerText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         flex: 1,
         overflow: 'visible',
         wordBreak: 'break-word',
     }),
     text: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         color: TILE_MESSAGE_TEXT,
         lineHeight: FONT_LARGE + 4,
     }),
     allEmojis: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_EMOJI_LARGE,
         color: TILE_MESSAGE_TEXT,
         lineHeight: FONT_EMOJI_LARGE + 4,
         overflow: 'visible'
     }),
     handle: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         color: TILE_MESSAGE_TEXT,
         fontStyle: 'italic',
         wordBreak: 'break-all',
     }),
     link: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         color: LINK_TEXT,
         textDecorationLine: 'underline',

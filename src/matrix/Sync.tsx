@@ -9,9 +9,11 @@ import DialogContainer from '../modules/DialogContainer';
 import { syncError } from '../translations';
 import { PREFIX_REST } from '../appconfig';
 import { ErrorResponse_, EventsFilter_, RoomFilter_, SyncFilter_, SyncResponse_ } from '../models/MatrixApi';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     textDialog: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         textAlign: 'center',
         color: INPUT_TEXT,
         fontSize: FONT_LARGE,

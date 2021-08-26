@@ -13,6 +13,7 @@ import { pressOKToLogout, cancel, termsPrivacyLicense, Languages } from '../tran
 import IconSvg, { SvgFile } from './IconSvg';
 import { APP_VERSION, APP_WEBSITE, TERMS_URL, GIT_REPO_URL } from '../appconfig';
 import Pushers from '../modules/Pushers';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -27,11 +28,12 @@ const styles = {
         cursor: 'pointer',
         backgroundColor: TRANSPARENT_BACKGROUND
     }),
-    userName: RX.Styles.createViewStyle({
+    userNameContainer: RX.Styles.createViewStyle({
         flexDirection: 'row',
         justifyContent: 'center',
     }),
-    text: RX.Styles.createTextStyle({
+    userName: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         color: HEADER_TEXT,
     }),
@@ -55,6 +57,7 @@ const styles = {
         right: SPACING,
     }),
     logoutTextDialog: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         textAlign: 'center',
         color: MODAL_CONTENT_TEXT,
@@ -66,6 +69,7 @@ const styles = {
         alignItems: 'center',
     }),
     link: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         color: LINK_TEXT,
         textDecorationLine: 'underline',
@@ -77,6 +81,7 @@ const styles = {
         marginVertical: 12,
     }),
     textVersion: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         textAlign: 'center',
         color: MODAL_CONTENT_TEXT,
@@ -245,8 +250,8 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 
                     { disconnected! }
 
-                    <RX.View style={ styles.userName }>
-                        <RX.Text style={ styles.text }>
+                    <RX.View style={ styles.userNameContainer }>
+                        <RX.Text style={ styles.userName }>
                             { ApiClient.credentials.userIdFull }
                         </RX.Text>
                     </RX.View>

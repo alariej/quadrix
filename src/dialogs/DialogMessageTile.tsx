@@ -19,6 +19,7 @@ import ShareHandlerOutgoing from '../modules/ShareHandlerOutgoing';
 import { ErrorResponse_, RoomType } from '../models/MatrixApi';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import Loading from '../modules/Loading';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -49,15 +50,18 @@ const styles = {
         overflow: 'visible',
     }),
     buttonText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         margin: SPACING,
         textAlign: 'center',
         color: BUTTON_MODAL_TEXT,
     }),
     boldText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontWeight: 'bold',
     }),
     textDialog: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         textAlign: 'center',
         color: BUTTON_MODAL_TEXT,
         fontSize: FONT_LARGE,

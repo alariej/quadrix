@@ -17,6 +17,7 @@ import IconSvg, { SvgFile } from '../components/IconSvg';
 import { ComponentBase } from 'resub';
 import Pushers from '../modules/Pushers';
 import SpinnerUtils from '../utils/SpinnerUtils';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -35,6 +36,7 @@ const styles = {
         marginLeft: PAGE_MARGIN,
     }),
     textDialog: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         textAlign: 'center',
         color: MODAL_CONTENT_TEXT,
         fontSize: FONT_LARGE,
@@ -50,6 +52,7 @@ const styles = {
         borderColor: COMPOSER_BORDER,
     }),
     textPlaceholder: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         flexDirection: 'row',
         fontSize: FONT_LARGE,
         textAlign: 'center',

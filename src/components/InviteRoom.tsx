@@ -11,6 +11,7 @@ import DialogContainer from '../modules/DialogContainer';
 import { acceptInvitation, rejectInvitation, hasInvitedYou } from '../translations';
 import { ErrorResponse_, RoomType } from '../models/MatrixApi';
 import SpinnerUtils from '../utils/SpinnerUtils';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -33,18 +34,21 @@ const styles = {
         marginBottom: 36,
     }),
     buttonText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         marginVertical: SPACING,
         textAlign: 'center',
         color: BUTTON_LONG_TEXT,
     }),
     text: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         marginVertical: SPACING,
         textAlign: 'center',
         color: BUTTON_LONG_TEXT,
     }),
     textDialog: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         textAlign: 'center',
         color: BUTTON_MODAL_TEXT,
         fontSize: FONT_LARGE,

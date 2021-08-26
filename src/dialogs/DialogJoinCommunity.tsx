@@ -10,6 +10,7 @@ import { theSearchDidNotReturn, theSearchTakesTooLong, cancel, theSearchReturned
 import UiStore from '../stores/UiStore';
 import { ErrorResponse_, PublicRoom_ } from '../models/MatrixApi';
 import SpinnerUtils from '../utils/SpinnerUtils';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -21,6 +22,7 @@ const styles = {
         margin: SPACING,
     }),
     inputBox: RX.Styles.createTextInputStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         paddingHorizontal: CONTAINER_PADDING,
         height: BUTTON_HEIGHT,
@@ -40,6 +42,7 @@ const styles = {
         maxHeight: 360,
     }),
     textDialog: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         textAlign: 'center',
         color: MODAL_CONTENT_TEXT,
         fontSize: FONT_LARGE,

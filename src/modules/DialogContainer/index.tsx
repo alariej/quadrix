@@ -4,6 +4,7 @@ import { BUTTON_MODAL_TEXT, BUTTON_MODAL_BACKGROUND, MODAL_CONTENT_BACKGROUND, O
     BUTTON_HEIGHT, FONT_LARGE, DIALOG_WIDTH, SPACING, OBJECT_MARGIN } from '../../ui';
 import UiStore from '../../stores/UiStore';
 import { cancel } from '../../translations';
+import AppFont from '../../modules/AppFont';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -33,6 +34,7 @@ const styles = {
         backgroundColor: BUTTON_MODAL_BACKGROUND,
     }),
     buttonText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         marginVertical: SPACING,
         textAlign: 'center',

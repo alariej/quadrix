@@ -9,6 +9,7 @@ import { BUTTON_MODAL_BACKGROUND, BUTTON_MODAL_TEXT, OPAQUE_BACKGROUND, BORDER_R
 import UiStore from '../stores/UiStore';
 import { createNewConv, createNewGroup, /* joinPublicComm, */ createNewNote } from '../translations';
 import IconSvg, { SvgFile } from '../components/IconSvg';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     containerButtons: RX.Styles.createViewStyle({
@@ -28,6 +29,7 @@ const styles = {
         cursor: 'pointer',
     }),
     buttonText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         flex: 1,
         fontSize: FONT_LARGE,
         color: BUTTON_MODAL_TEXT,

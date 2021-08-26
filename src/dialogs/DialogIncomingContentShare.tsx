@@ -16,6 +16,7 @@ import { MessageEventContent_ } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
 import ImageSizeLocal from '../modules/ImageSizeLocal';
 import SpinnerUtils from '../utils/SpinnerUtils';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -36,11 +37,13 @@ const styles = {
         borderRadius: BORDER_RADIUS - 2,
     }),
     text: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         textAlign: 'center',
         fontSize: FONT_LARGE,
         margin: SPACING,
     }),
     textDialog: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         textAlign: 'center',
         color: BUTTON_MODAL_TEXT,
         fontSize: FONT_LARGE,

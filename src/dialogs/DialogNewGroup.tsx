@@ -6,6 +6,7 @@ import { BORDER_RADIUS, FONT_LARGE, BUTTON_MODAL_TEXT, CONTAINER_PADDING, BUTTON
 import { createGroup, cancel, groupName, errorNoConfirm, Languages } from '../translations';
 import UiStore from '../stores/UiStore';
 import SpinnerUtils from '../utils/SpinnerUtils';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -13,6 +14,7 @@ const styles = {
         alignSelf: 'stretch',
     }),
     inputBox: RX.Styles.createTextInputStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         paddingHorizontal: CONTAINER_PADDING,
         height: BUTTON_HEIGHT,
@@ -20,6 +22,7 @@ const styles = {
         alignSelf: 'stretch',
     }),
     textDialog: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         textAlign: 'center',
         color: BUTTON_MODAL_TEXT,
         fontSize: FONT_LARGE,
