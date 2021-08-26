@@ -75,6 +75,7 @@ export const COMPOSER_BORDER = 'rgba(255, 255, 255, 0.2)';
 export const ICON_INFO_FILL = 'grey';
 export const ICON_FULLSCREEN_FILL = 'silver';
 export const HEADER_TEXT = 'whitesmoke';
+export const HEADER_STATUS = 'darkgrey';
 export const MODAL_CONTENT_BACKGROUND = 'white';
 export const MODAL_CONTENT_TEXT = 'black';
 export const MODAL_DISABLED_TEXT = 'lightgrey';

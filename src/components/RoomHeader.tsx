@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { HEADER_TEXT, BUTTON_ROUND_WIDTH, BORDER_RADIUS, CONTAINER_PADDING, HEADER_HEIGHT,
     SPACING, FONT_NORMAL, FONT_LARGE, AVATAR_SMALL_WIDTH, ICON_REDUCTION_FACTOR, BUTTON_UNREAD_TEXT, BUTTON_UNREAD_BACKGROUND, FONT_SMALL,
-    AVATAR_MARGIN, LOGO_BACKGROUND, AVATAR_BACKGROUND, BUTTON_MODAL_TEXT, TRANSPARENT_BACKGROUND } from '../ui';
+    AVATAR_MARGIN, LOGO_BACKGROUND, AVATAR_BACKGROUND, BUTTON_MODAL_TEXT, TRANSPARENT_BACKGROUND, HEADER_STATUS } from '../ui';
 import { ComponentBase } from 'resub';
 import DataStore from '../stores/DataStore';
 import utils from '../utils/Utils';
@@ -68,7 +68,7 @@ const styles = {
     }),
     subtitle: RX.Styles.createTextStyle({
         fontSize: FONT_NORMAL,
-        color: HEADER_TEXT,
+        color: HEADER_STATUS,
     }),
     containerHomeButton: RX.Styles.createViewStyle({
         width: BUTTON_ROUND_WIDTH,
