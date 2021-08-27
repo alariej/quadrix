@@ -1102,7 +1102,7 @@ class DataStore extends StoreBase {
     public getPowerLevel(roomId: string, userId: string): number {
 
         const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
-        return this.roomSummaryList[roomIndex].members[userId].powerLevel || 0;
+        return this.roomSummaryList[roomIndex].members[userId]?.powerLevel || 0;
     }
 
     public setSyncComplete(isComplete: boolean) {
