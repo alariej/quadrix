@@ -13,6 +13,7 @@ import UserTile from '../components/UserTile';
 import Utils from '../utils/Utils';
 import { PlatformType } from 'reactxp/dist/common/Types';
 import SpinnerUtils from '../utils/SpinnerUtils';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -36,6 +37,7 @@ const styles = {
         minHeight: TILE_HEIGHT
     }),
     inputBox: RX.Styles.createTextInputStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         paddingHorizontal: CONTAINER_PADDING,
         height: BUTTON_HEIGHT,
@@ -44,6 +46,7 @@ const styles = {
         backgroundColor: INPUT_BACKGROUND,
     }),
     textDialog: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         textAlign: 'center',
         color: MODAL_CONTENT_TEXT,
         fontSize: FONT_LARGE,

@@ -13,6 +13,7 @@ import IconSvg, { SvgFile } from './IconSvg';
 import { StyleRuleSet, TextStyle } from 'reactxp/dist/common/Types';
 import { RoomPhase, RoomType } from '../models/MatrixApi';
 import { MessageEvent } from '../models/MessageEvent';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -54,6 +55,7 @@ const styles = {
         alignItems: 'center',
     }),
     newestMessageText:  RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         flex: 1,
         fontSize: FONT_LARGE,
         color: TILE_SYSTEM_TEXT,
@@ -62,15 +64,18 @@ const styles = {
         minHeight: FONT_LARGE + 8,
     }),
     roomName: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         fontWeight: 'bold',
         color: TILE_MESSAGE_TEXT
     }),
     alias: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         color: TILE_MESSAGE_TEXT
     }),
     unreadNumber: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         height: 24,
         width: 24,
         marginLeft: 8,

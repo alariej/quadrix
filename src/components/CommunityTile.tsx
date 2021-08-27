@@ -8,6 +8,7 @@ import UiStore from '../stores/UiStore';
 import { alias, topic, members } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
 import { PublicRoom_ } from '../models/MatrixApi';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -42,12 +43,14 @@ const styles = {
         flexDirection: 'row',
     }),
     label: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         flex: 1,
         fontSize: FONT_NORMAL,
         color: TILE_SYSTEM_TEXT,
         marginRight: 3,
     }),
     roomName: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         flex: 1,
         fontSize: FONT_LARGE,
         fontWeight: 'bold',

@@ -4,8 +4,7 @@ import { INPUT_BORDER, MODAL_CONTENT_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, F
     BUTTON_HEIGHT, TRANSPARENT_BACKGROUND, MODAL_CONTENT_BACKGROUND, BUTTON_ROUND_BACKGROUND,
     PLACEHOLDER_TEXT, AVATAR_BACKGROUND, BUTTON_MODAL_TEXT, AVATAR_MEDIUM_WIDTH, CHECKBOX_BACKGROUND, DIALOG_WIDTH,
     APP_BACKGROUND, TILE_MESSAGE_TEXT, BUTTON_SHORT_WIDTH, BUTTON_DISABLED_TEXT, BUTTON_MODAL_BACKGROUND,
-    OPAQUE_BACKGROUND, 
-    JITSI_BORDER} from '../ui';
+    OPAQUE_BACKGROUND, JITSI_BORDER} from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
 import utils from '../utils/Utils';
@@ -20,6 +19,7 @@ import { FileObject } from '../models/FileObject';
 import DataStore from '../stores/DataStore';
 import Pushers from '../modules/Pushers';
 import Loading from '../modules/Loading';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -58,6 +58,7 @@ const styles = {
         alignItems: 'center',
     }),
     zoomButtonText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: 24,
         color: TILE_MESSAGE_TEXT,
     }),
@@ -83,10 +84,12 @@ const styles = {
         marginBottom: SPACING,
     }),
     label: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         width: 96,
     }),
     inputBox: RX.Styles.createTextInputStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         paddingHorizontal: CONTAINER_PADDING,
         height: BUTTON_HEIGHT,
@@ -95,6 +98,7 @@ const styles = {
         borderColor: INPUT_BORDER,
     }),
     userId: RX.Styles.createTextInputStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
     }),
     avatarContainer: RX.Styles.createViewStyle({
@@ -131,6 +135,7 @@ const styles = {
         overflow: 'visible',
     }),
     textDialog: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         textAlign: 'center',
         color: MODAL_CONTENT_TEXT,
         fontSize: FONT_LARGE,
@@ -143,6 +148,7 @@ const styles = {
         borderRadius: BORDER_RADIUS
     }),
     checkboxText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         alignSelf: 'center',
         fontWeight: 'bold',
         fontSize: 20,
@@ -166,6 +172,7 @@ const styles = {
         overflow: 'visible',
     }),
     buttonText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         margin: SPACING,
         textAlign: 'center',

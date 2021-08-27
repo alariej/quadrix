@@ -16,6 +16,7 @@ import IconSvg, { SvgFile } from '../components/IconSvg';
 import { ErrorResponse_, RoomPhase, RoomType, StateEventContent_ } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
 import Loading from '../modules/Loading';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -41,12 +42,14 @@ const styles = {
         alignItems: 'center',
     }),
     textDialog: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         textAlign: 'center',
         color: BUTTON_MODAL_TEXT,
         fontSize: FONT_LARGE,
         margin: 12,
     }),
     inputBox: RX.Styles.createTextInputStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         paddingHorizontal: CONTAINER_PADDING,
         height: BUTTON_HEIGHT,
@@ -76,6 +79,7 @@ const styles = {
         overflow: 'visible',
     }),
     buttonText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         margin: SPACING,
         textAlign: 'center',
@@ -214,14 +218,14 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
             .catch((error: ErrorResponse_) => {
 
                 if (this.isMounted_) {
-                
+
                     const text = (
                         <RX.Text style={ styles.textDialog }>
                             { error.body && error.body.error ? error.body.error : '[Unknown error]' }
                         </RX.Text>
                     );
-    
-                    RX.Modal.show(<DialogContainer content={ text } modalId={ 'errordialog' }/>, 'errordialog');    
+
+                    RX.Modal.show(<DialogContainer content={ text } modalId={ 'errordialog' }/>, 'errordialog');
                 }
             });
     }

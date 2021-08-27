@@ -8,6 +8,7 @@ import UiStore from '../stores/UiStore';
 import { noApplicationWasFound, fileCouldNotAccess } from '../translations';
 import { ProgressIndicator } from './ProgressIndicator';
 import IconSvg, { SvgFile } from './IconSvg';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     containerMessage: RX.Styles.createViewStyle({
@@ -18,17 +19,20 @@ const styles = {
         flex: 1,
     }),
     link: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         padding: 4,
         alignSelf: 'flex-start',
         cursor: 'pointer',
     }),
     fileName: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         color: LINK_TEXT,
         textDecorationLine: 'underline',
         wordBreak: 'break-all',
     }),
     fileSize: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         color: TILE_SYSTEM_TEXT,
     }),
@@ -37,6 +41,7 @@ const styles = {
         width: 20,
     }),
     textDialog: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         textAlign: 'center',
         color: MODAL_CONTENT_TEXT,
         fontSize: FONT_LARGE,

@@ -4,6 +4,7 @@ import DataStore from '../stores/DataStore';
 import RoomTile from '../components/RoomTile';
 import { HEADER_TEXT, OPAQUE_BACKGROUND, BORDER_RADIUS, TILE_WIDTH, SPACING, TILE_HEIGHT, FONT_LARGE } from '../ui';
 import UiStore from '../stores/UiStore';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -25,6 +26,7 @@ const styles = {
         padding: SPACING,
     }),
     labelText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         color: HEADER_TEXT,
         textAlign: 'center',

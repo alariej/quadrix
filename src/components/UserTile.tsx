@@ -9,6 +9,7 @@ import { TILE_BACKGROUND, BUTTON_LONG_TEXT, TILE_SYSTEM_TEXT, BORDER_RADIUS, SPA
 import UiStore from '../stores/UiStore';
 import { invited, left, admin } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -42,11 +43,13 @@ const styles = {
         minHeight: FONT_LARGE + 8,
     }),
     userName: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         fontWeight: 'bold',
         color: TILE_MESSAGE_TEXT,
     }),
     userId: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         color: TILE_SYSTEM_TEXT,
     }),
@@ -58,6 +61,7 @@ const styles = {
         borderRadius: 3,
     }),
     status: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_SMALL,
         color: BUTTON_LONG_TEXT,
         textAlign: 'center',

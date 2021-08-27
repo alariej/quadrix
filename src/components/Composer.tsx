@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { APP_ID } from '../appconfig';
-import { EMOJI_TEXT, FONT_FAMILY, INPUT_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, BUTTON_ROUND_WIDTH, LOGO_BACKGROUND,
+import { EMOJI_TEXT, INPUT_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, BUTTON_ROUND_WIDTH, LOGO_BACKGROUND,
     BUTTON_COMPOSER_WIDTH, OPAQUE_BACKGROUND, COMPOSER_BORDER, DIALOG_WIDTH, MODAL_CONTENT_BACKGROUND, FONT_EMOJI_LARGE,
     INPUT_BACKGROUND } from '../ui';
 import FileHandler from '../modules/FileHandler';
@@ -18,6 +18,7 @@ import utils from '../utils/Utils';
 import { MessageEventContent_, RoomType } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
 import { TemporaryMessage } from '../models/MessageEvent';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -28,6 +29,7 @@ const styles = {
         borderColor: COMPOSER_BORDER,
     }),
     textInput: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         flex: 1,
         fontSize: FONT_LARGE,
         borderRadius: BORDER_RADIUS,
@@ -53,12 +55,14 @@ const styles = {
         alignItems: 'center',
     }),
     textDialog: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         textAlign: 'center',
         color: INPUT_TEXT,
         fontSize: FONT_LARGE,
         margin: 12,
     }),
     fileName: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontWeight: 'bold',
         fontSize: FONT_LARGE,
         wordBreak: 'break-all',
@@ -78,6 +82,7 @@ const styles = {
         padding: SPACING,
     }),
     emoji: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         color: EMOJI_TEXT,
         fontSize: FONT_EMOJI_LARGE,
     }),
@@ -133,7 +138,6 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
     private textInputComponent: RX.TextInput | undefined;
     private textInput = '';
     private textInputStyle: StyleRuleSet<TextStyle>;
-    private fontFamilyStyle: StyleRuleSet<TextStyle>;
     private language: Languages = 'en';
     private isAndroid: boolean;
     private isWeb: boolean;
@@ -148,11 +152,6 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
         const platform = UiStore.getPlatform();
         this.isWeb = platform === 'web';
         this.isAndroid = platform === 'android';
-        if (this.isWeb) {
-            this.fontFamilyStyle = RX.Styles.createTextStyle({
-                fontFamily: FONT_FAMILY,
-            }, false);
-        }
 
         const numLines = 10;
         const paddingVertical = this.isAndroid ? 2 : (BUTTON_COMPOSER_WIDTH - (FONT_LARGE + 4)) / 2;
@@ -230,7 +229,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                         onPress={ event => this.addEmoji(event, emoji.text) }
                         disableTouchOpacityAnimation={ true }
                     >
-                        <RX.Text style={ [styles.emoji, this.fontFamilyStyle] }>
+                        <RX.Text style={ styles.emoji }>
                             { emoji.text }
                         </RX.Text>
                     </RX.Button>
@@ -666,7 +665,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     </RX.View>
                 </RX.Button>
                 <RX.TextInput
-                    style={ [styles.textInput, this.fontFamilyStyle, this.textInputStyle] }
+                    style={ [styles.textInput, this.textInputStyle] }
                     ref={ component => { this.textInputComponent = component! } }
                     onKeyPress={ this.onKeyPress }
                     onChangeText={ textInput => this.textInput = textInput }

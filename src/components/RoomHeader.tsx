@@ -18,6 +18,7 @@ import { differenceInDays, differenceInMilliseconds, format, isToday, isYesterda
 import { StyleRuleSet, TextStyle } from 'reactxp/dist/common/Types';
 import { RoomPhase, RoomType } from '../models/MatrixApi';
 import Pushers from '../modules/Pushers';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -54,19 +55,23 @@ const styles = {
         flex: 1,
     }),
     containerRoomName: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         marginBottom: 2,
         color: HEADER_TEXT,
     }),
     roomName: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         flex: 1,
         fontSize: FONT_LARGE,
         fontWeight: 'bold',
     }),
     alias: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         flex: 1,
         fontSize: FONT_NORMAL,
     }),
     subtitle: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         color: HEADER_STATUS,
     }),
@@ -88,6 +93,7 @@ const styles = {
         alignItems: 'center',
     }),
     unreadNumber: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         position: 'absolute',
         bottom: -8,
         right: 0,

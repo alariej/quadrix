@@ -15,6 +15,7 @@ import { ErrorResponse_ } from '../models/MatrixApi';
 import { TERMS_URL } from '../appconfig';
 import Utils from '../utils/Utils';
 import SpinnerUtils from '../utils/SpinnerUtils';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -37,6 +38,7 @@ const styles = {
         overflow: 'visible',
     }),
     inputBox: RX.Styles.createTextInputStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         paddingHorizontal: CONTAINER_PADDING,
         width: BUTTON_LONG_WIDTH,
@@ -52,11 +54,13 @@ const styles = {
         backgroundColor: BUTTON_LONG_BACKGROUND,
     }),
     mainButtonText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         textAlign: 'center',
         color: BUTTON_LONG_TEXT,
     }),
     registerText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         textAlign: 'center',
         fontSize: FONT_LARGE,
         color: HEADER_TEXT,
@@ -73,12 +77,14 @@ const styles = {
         alignItems: 'center',
     }),
     errorDialog: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         textAlign: 'center',
         color: MODAL_CONTENT_TEXT,
         fontSize: FONT_LARGE,
         margin: 12,
     }),
     link: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         color: 'white',
         textDecorationLine: 'underline',

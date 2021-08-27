@@ -12,6 +12,7 @@ import DialogContainer from '../modules/DialogContainer';
 import utils from '../utils/Utils';
 import { EmailTokenResponse_, ErrorRegisterResponse_, LoginResponse_, RegisterStageType } from '../models/MatrixApi';
 import Loading from '../modules/Loading';
+import AppFont from '../modules/AppFont';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -35,18 +36,21 @@ const styles = {
         backgroundColor: BUTTON_MODAL_BACKGROUND,
     }),
     buttonText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         marginVertical: SPACING,
         textAlign: 'center',
         color: BUTTON_MODAL_TEXT,
     }),
     textDialog: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
         textAlign: 'center',
         color: INPUT_TEXT,
         fontSize: FONT_LARGE,
         margin: SPACING * 2,
     }),
     inputBox: RX.Styles.createTextInputStyle({
+        fontFamily: AppFont.fontFamily,
         alignSelf: 'stretch',
         fontSize: FONT_LARGE,
         paddingHorizontal: SPACING * 2,
