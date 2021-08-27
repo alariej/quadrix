@@ -1,6 +1,6 @@
 class AppFont {
 
-    public fontFamily = '"Helvetica Neue", sans-serif, Arial, "Noto Color Emoji", system-ui';
+    public fontFamily = '"Helvetica Neue", Roboto, Arial, sans-serif, system-ui, "Noto Color Emoji"';
 }
 
 export default new AppFont();
