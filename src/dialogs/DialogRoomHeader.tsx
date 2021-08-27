@@ -20,12 +20,12 @@ import Loading from '../modules/Loading';
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
         flex: 1,
-        alignSelf: 'stretch', // expands modal full horizontal
-        backgroundColor: OPAQUE_BACKGROUND, // trick to apply opacity only on the color
-        justifyContent: 'center', // puts list in vertical center
+        alignSelf: 'stretch',
+        backgroundColor: OPAQUE_BACKGROUND,
+        justifyContent: 'center',
     }),
     modalView: RX.Styles.createViewStyle({
-        alignSelf: 'center', // puts list in horizontal center
+        alignSelf: 'center',
         justifyContent: 'center',
         width: TILE_WIDTH,
         minHeight: TILE_HEIGHT + SPACING,
@@ -66,7 +66,7 @@ const styles = {
         color: BUTTON_MODAL_TEXT,
     }),
     containerButtons: RX.Styles.createViewStyle({
-        alignItems: 'center', // puts button in horizontal center
+        alignItems: 'center',
     }),
     textDialog: RX.Styles.createTextStyle({
         textAlign: 'center',
@@ -78,11 +78,11 @@ const styles = {
         position: 'absolute',
         height: TILE_WIDTH,
         width: TILE_WIDTH,
-        justifyContent: 'center', // puts spinner in vertical center
+        justifyContent: 'center',
         alignItems: 'center',
     }),
     containerWrapper: RX.Styles.createViewStyle({
-        backgroundColor: OPAQUE_DUMMY_BACKGROUND, // needed to prevent onpress event outside of message tile
+        backgroundColor: OPAQUE_DUMMY_BACKGROUND,
     }),
 }
 
@@ -253,7 +253,7 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
                 confirmButtonText={ 'OK' }
                 cancelButton={ true }
                 cancelButtonText={ cancel[this.language] }
-                onConfirm={ () => this.sendInvitation() }
+                onConfirm={ this.sendInvitation }
                 onCancel={ () => RX.Modal.dismissAll() }
             />
         );
@@ -278,7 +278,7 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
                 confirmButtonText={ 'OK' }
                 cancelButton={ true }
                 cancelButtonText={ cancel[this.language] }
-                onConfirm={ () => this.leaveRoom() }
+                onConfirm={ this.leaveRoom }
                 onCancel={ () => RX.Modal.dismissAll() }
             />
         );
@@ -301,12 +301,10 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
 
         this.props.showRoomList();
 
-        SpinnerUtils.showModalSpinner('leaveroomspinner');
-
         ApiClient.leaveRoom(this.props.roomId)
             .then(_response => {
 
-                RX.Modal.dismiss('leaveroomspinner');
+                RX.Modal.dismissAll();
 
                 const text = (
 
@@ -327,7 +325,7 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
             })
             .catch((error: ErrorResponse_) => {
 
-                RX.Modal.dismiss('leaveroomspinner');
+                RX.Modal.dismissAll();
 
                 const text = (
                     <RX.Text style={ styles.textDialog }>
