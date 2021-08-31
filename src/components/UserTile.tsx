@@ -39,19 +39,26 @@ const styles = {
         flex: 1,
         flexDirection: 'column',
     }),
-    containerRoomName: RX.Styles.createViewStyle({
-        minHeight: FONT_LARGE + 8,
+    containerRoomName: RX.Styles.createTextStyle({
+        alignItems: 'center',
+        paddingTop: SPACING
     }),
     userName: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         fontWeight: 'bold',
         color: TILE_MESSAGE_TEXT,
+        lineHeight: (TILE_HEIGHT - 4 * SPACING) / 2,
+    }),
+    containerUserId: RX.Styles.createViewStyle({
+        flex: 1,
+        paddingBottom: SPACING
     }),
     userId: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         color: TILE_SYSTEM_TEXT,
+        lineHeight: (TILE_HEIGHT - 4 * SPACING) / 2,
     }),
     containerStatus: RX.Styles.createViewStyle({
         position: 'absolute',
@@ -161,9 +168,11 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
                             { this.props.user.name || this.props.user.id }
                         </RX.Text>
                     </RX.Text>
-                    <RX.Text numberOfLines={ 1 } style={ styles.userId }>
-                        { this.props.user.id }
-                    </RX.Text>
+                    <RX.View style={ styles.containerUserId }>
+                        <RX.Text numberOfLines={ 1 } style={ styles.userId }>
+                            { this.props.user.id }
+                        </RX.Text>
+                    </RX.View>
                 </RX.View>
             </RX.View>
         )

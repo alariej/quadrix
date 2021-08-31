@@ -49,30 +49,36 @@ const styles = {
         flex: 1,
         flexDirection: 'column',
     }),
-    containerNewestMessage: RX.Styles.createViewStyle({
+    containerRoomName: RX.Styles.createTextStyle({
         flexDirection: 'row',
-        minHeight: FONT_LARGE + 4,
         alignItems: 'center',
-    }),
-    newestMessageText:  RX.Styles.createTextStyle({
-        fontFamily: AppFont.fontFamily,
-        flex: 1,
-        fontSize: FONT_LARGE,
-        color: TILE_SYSTEM_TEXT,
-    }),
-    containerRoomName: RX.Styles.createViewStyle({
-        minHeight: FONT_LARGE + 8,
+        paddingTop: SPACING
     }),
     roomName: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         fontWeight: 'bold',
-        color: TILE_MESSAGE_TEXT
+        color: TILE_MESSAGE_TEXT,
+        lineHeight: (TILE_HEIGHT - 4 * SPACING) / 2,
     }),
     alias: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
-        color: TILE_MESSAGE_TEXT
+        color: TILE_MESSAGE_TEXT,
+        lineHeight: (TILE_HEIGHT - 4 * SPACING) / 2,
+    }),
+    containerNewestMessage: RX.Styles.createViewStyle({
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingBottom: SPACING
+    }),
+    newestMessageText:  RX.Styles.createTextStyle({
+        flex: 1,
+        fontFamily: AppFont.fontFamily,
+        fontSize: FONT_LARGE,
+        color: TILE_SYSTEM_TEXT,
+        lineHeight: (TILE_HEIGHT - 4 * SPACING) / 2,
     }),
     unreadNumber: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,

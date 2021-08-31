@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
-import { HEADER_TEXT, BUTTON_ROUND_WIDTH, BORDER_RADIUS, CONTAINER_PADDING, HEADER_HEIGHT,
+import { HEADER_TEXT, BUTTON_ROUND_WIDTH, BORDER_RADIUS, HEADER_HEIGHT,
     SPACING, FONT_NORMAL, FONT_LARGE, AVATAR_SMALL_WIDTH, ICON_REDUCTION_FACTOR, BUTTON_UNREAD_TEXT, BUTTON_UNREAD_BACKGROUND, FONT_SMALL,
     AVATAR_MARGIN, LOGO_BACKGROUND, AVATAR_BACKGROUND, BUTTON_MODAL_TEXT, TRANSPARENT_BACKGROUND, HEADER_STATUS } from '../ui';
 import { ComponentBase } from 'resub';
@@ -30,7 +30,7 @@ const styles = {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        padding: CONTAINER_PADDING,
+        padding: SPACING,
         borderRadius: BORDER_RADIUS,
         cursor: 'pointer',
         backgroundColor: TRANSPARENT_BACKGROUND
@@ -55,25 +55,33 @@ const styles = {
         flex: 1,
     }),
     containerRoomName: RX.Styles.createTextStyle({
-        fontFamily: AppFont.fontFamily,
-        marginBottom: 2,
-        color: HEADER_TEXT,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingTop: SPACING
     }),
     roomName: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
-        flex: 1,
         fontSize: FONT_LARGE,
         fontWeight: 'bold',
+        color: HEADER_TEXT,
+        lineHeight: (HEADER_HEIGHT - 4 * SPACING) / 2,
     }),
     alias: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
-        flex: 1,
         fontSize: FONT_NORMAL,
+        color: HEADER_TEXT,
+        lineHeight: (HEADER_HEIGHT - 4 * SPACING) / 2,
+    }),
+    containerSubtitle: RX.Styles.createViewStyle({
+        flex: 1,
+        paddingBottom: SPACING
     }),
     subtitle: RX.Styles.createTextStyle({
+        flex: 1,
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         color: HEADER_STATUS,
+        lineHeight: (HEADER_HEIGHT - 4 * SPACING) / 2,
     }),
     containerHomeButton: RX.Styles.createViewStyle({
         width: BUTTON_ROUND_WIDTH,
@@ -532,9 +540,11 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
                             </RX.Text>
                             { alias }
                         </RX.Text>
-                        <RX.Text numberOfLines={ 1 } style={ styles.subtitle }>
-                            { subtitle }
-                        </RX.Text>
+                        <RX.View style={ styles.containerSubtitle }>
+                            <RX.Text numberOfLines={ 1 } style={ styles.subtitle }>
+                                { subtitle }
+                            </RX.Text>
+                        </RX.View>
                     </RX.View>
                 </RX.View>
                 <RX.View style={ styles.containerHomeButton }>
