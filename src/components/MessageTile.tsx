@@ -197,9 +197,9 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
         }
 
         let readMarker: ReactElement | null = null;
-        if (this.props.roomType !== 'notepad' && ApiClient.credentials.userIdFull === this.props.event.senderId) {
+        if (ApiClient.credentials.userIdFull === this.props.event.senderId) {
 
-            if (this.props.readMarkerType === 'read') {
+            if (this.props.readMarkerType === 'read' && this.props.roomType !== 'notepad') {
                 readMarker = (
                     <RX.View style={ styles.containerMarker }>
                         <IconSvg
@@ -211,7 +211,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                         />
                     </RX.View>
                 );
-            } else if (this.props.readMarkerType === 'sent') {
+            } else if (this.props.readMarkerType === 'sent' && this.props.roomType !== 'notepad') {
                 readMarker = (
                     <RX.View style={ styles.containerMarker }>
                         <IconSvg
