@@ -15,6 +15,9 @@ module.exports = (env, argv) => (
         devServer: {
             port: 9999,
             hot: true,
+            client: {
+                overlay: false,
+            },
         },
     })
 );
