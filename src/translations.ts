@@ -48,9 +48,9 @@ export const searchUser: Translation = {
 }
 
 export const searchInstruction: Translation = {
-    en: 'Enter the search terms (user name or ID) or a Matrix user ID (@user:server)',
-    de: 'Geben Sie die Suchbegriffe (Benutzer-Name oder ID) oder eine Matrix ID (@benutzer:server) ein',
-    fr: 'Saisissez les termes de recherche (nom ou ID d\'usager) ou une ID Matrix (@usager:serveur)',
+    en: 'Search for a user or directly enter a Matrix user ID (@user:server)',
+    de: 'Suchen Sie nach einem Benutzer oder geben Sie direkt eine Matrix ID (@benutzer:server) ein',
+    fr: 'Recherchez un usager ou saisissez directement une ID Matrix (@usager:serveur)',
 }
 
 export const tooManySearchResults: Translation = {
@@ -66,9 +66,9 @@ export const noSearchResults: Translation = {
 }
 
 export const enterSearch: Translation = {
-    en: 'Search terms or Matrix user ID',
-    de: 'Suchbegriffe oder Matrix Benutzer-ID',
-    fr: 'Termes de recherche ou ID d\'usager',
+    en: 'Search terms / Matrix user ID',
+    de: 'Suchbegriffe / Matrix Benutzer-ID',
+    fr: 'Termes de recherche / ID d\'usager',
 }
 
 export const userServer: Translation = {
