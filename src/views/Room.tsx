@@ -63,8 +63,10 @@ export default class Room extends ComponentBase<RoomProps, RoomState> {
 
     private showTempSentMessage = (message: TemporaryMessage) => {
 
-        this.setState({ tempSentMessage: { body: message.body, tempId: message.tempId } });
-        this.setState({ replyMessage: undefined });
+        this.setState({
+            tempSentMessage: { body: message.body, tempId: message.tempId },
+            replyMessage: undefined
+        });
     }
 
     private setReplyMessage = (message: TemporaryMessage) => {
