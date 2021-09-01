@@ -26,7 +26,7 @@
         "electron-main.js"
     ],
     "directories": {
-        "buildResources": "dist-assets/",
+        "buildResources": "dist-assets/appx/",
         "output": "dist/"
     }
 }
