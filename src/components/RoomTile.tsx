@@ -50,22 +50,19 @@ const styles = {
         flexDirection: 'column',
     }),
     containerRoomName: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
+        color: TILE_MESSAGE_TEXT,
+        lineHeight: (TILE_HEIGHT - 4 * SPACING) / 2,
         flexDirection: 'row',
         alignItems: 'center',
         paddingTop: SPACING
     }),
     roomName: RX.Styles.createTextStyle({
-        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         fontWeight: 'bold',
-        color: TILE_MESSAGE_TEXT,
-        lineHeight: (TILE_HEIGHT - 4 * SPACING) / 2,
     }),
     alias: RX.Styles.createTextStyle({
-        fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
-        color: TILE_MESSAGE_TEXT,
-        lineHeight: (TILE_HEIGHT - 4 * SPACING) / 2,
     }),
     containerNewestMessage: RX.Styles.createViewStyle({
         flex: 1,

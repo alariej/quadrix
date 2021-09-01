@@ -55,22 +55,19 @@ const styles = {
         flex: 1,
     }),
     containerRoomName: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
+        color: HEADER_TEXT,
+        lineHeight: (HEADER_HEIGHT - 4 * SPACING) / 2,
         flexDirection: 'row',
         alignItems: 'center',
         paddingTop: SPACING
     }),
     roomName: RX.Styles.createTextStyle({
-        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         fontWeight: 'bold',
-        color: HEADER_TEXT,
-        lineHeight: (HEADER_HEIGHT - 4 * SPACING) / 2,
     }),
     alias: RX.Styles.createTextStyle({
-        fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
-        color: HEADER_TEXT,
-        lineHeight: (HEADER_HEIGHT - 4 * SPACING) / 2,
     }),
     containerSubtitle: RX.Styles.createViewStyle({
         flex: 1,
