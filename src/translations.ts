@@ -18,9 +18,9 @@ export const createNewGroup: Translation = {
 }
 
 export const joinPublicComm: Translation = {
-    en: 'Join public community',
-    de: 'Öffentliche Community beitreten',
-    fr: 'Joindre une communauté publique',
+    en: 'Join public Group',
+    de: 'Öffentliche Gruppe beitreten',
+    fr: 'Joindre un groupe public',
 }
 
 export const createNewNote: Translation = {
@@ -157,12 +157,12 @@ export const theSearchReturnedError: Translation = {
 
 export const pressOKToJoin: Translation = {
     en: 'Press OK to join the',
-    de: 'Drücken Sie OK, um der Community',
-    fr: 'Appuyez sur OK pour joindre la communauté',
+    de: 'Drücken Sie OK, um der öffentlichen Gruppe',
+    fr: 'Appuyez sur OK pour joindre le groupe public',
 }
 
 export const theCommunity: Translation = {
-    en: ' community',
+    en: ' public group',
     de: ' beizutreten',
     fr: '',
 }
@@ -174,9 +174,9 @@ export const search: Translation = {
 }
 
 export const communityName: Translation = {
-    en: 'Community name or alias (optional)',
-    de: 'Name / Alias der Community (optional)',
-    fr: 'Nom / alias de la communauté (facult.)',
+    en: 'Public group name or alias (optional)',
+    de: 'Name / Alias der Gruppe (optional)',
+    fr: 'Nom / alias du groupe (facultatif)',
 }
 
 export const serverName: Translation = {
@@ -350,40 +350,40 @@ export const messageCouldNotBeSent: Translation = {
 export const hasCreatedTheRoom: Translation = {
     en_di: ' has started the conversation',
     en_gr: ' has created the group',
-    en_co: ' has created the community',
+    en_co: ' has created the public group',
     en_no: ' has created the notepad',
     de_di: ' hat den Chat gestartet',
     de_gr: ' hat die Gruppe erstellt',
-    de_co: ' hat die Community erstellt',
+    de_co: ' hat die öffentliche Gruppe erstellt',
     de_no: ' hat den Notizblock erstellt',
     fr_di: ' a lancé la conversation',
     fr_gr: ' a créé le groupe',
-    fr_co: ' a créé la communauté',
+    fr_co: ' a créé le groupe public',
     fr_no: ' a crée le bloc-notes',
 }
 
 export const hasJoinedTheRoom: Translation = {
     en_di: ' has joined the conversation',
     en_gr: ' has joined the group',
-    en_co: ' has joined the community',
+    en_co: ' has joined the public group',
     de_di: ' hat sich dem Chat angeschlossen',
     de_gr: ' ist der Gruppe beigetreten',
-    de_co: ' ist der Community beigetreten',
+    de_co: ' ist der öffentlichen Gruppe beigetreten',
     fr_di: ' a joint la conversation',
     fr_gr: ' a joint le groupe',
-    fr_co: ' a joint la communauté',
+    fr_co: ' a joint le groupe public',
 }
 
 export const hasLeftTheRoom: Translation = {
     en_di: ' has left the conversation',
     en_gr: ' has left the group',
-    en_co: ' has left the community',
+    en_co: ' has left the public group',
     de_di: ' hat den Chat verlassen',
     de_gr: ' hat die Gruppe verlassen',
-    de_co: ' hat die Community verlassen',
+    de_co: ' hat die öffentliche Gruppe verlassen',
     fr_di: ' a quitté la conversation',
     fr_gr: ' a quitté le groupe',
-    fr_co: ' a quitté la communauté',
+    fr_co: ' a quitté le groupe public',
 }
 
 export const hasDeclinedTheInvitation: Translation = {
@@ -402,7 +402,7 @@ export const hasInvitedToRoom = (member: string, key: string): string => {
             return ` has invited ${ member } to the group`;
 
         case 'en_co':
-            return ` has invited ${ member } to the community`;
+            return ` has invited ${ member } to the public group`;
 
         case 'de_di':
             return ` hat ${ member } zu dem Chat eingeladen`;
@@ -411,7 +411,7 @@ export const hasInvitedToRoom = (member: string, key: string): string => {
             return ` hat ${ member } in die Gruppe eingeladen`;
 
         case 'de_co':
-            return ` hat ${ member } in die Community eingeladen`;
+            return ` hat ${ member } in die öffentliche Gruppe eingeladen`;
 
         case 'fr_di':
             return ` a invité ${ member } à la conversation`;
@@ -420,7 +420,7 @@ export const hasInvitedToRoom = (member: string, key: string): string => {
             return ` a invité ${ member } au groupe`;
 
         case 'fr_co':
-            return ` a invité ${ member } à la communauté`;
+            return ` a invité ${ member } au groupe public`;
 
         default:
             return '';
@@ -431,27 +431,27 @@ export const hasInvitedToRoom = (member: string, key: string): string => {
 export const hasRenamedTheRoom: Translation = {
     en_di: ' has renamed the conversation',
     en_gr: ' has renamed the group',
-    en_co: ' has renamed the community',
+    en_co: ' has renamed the public group',
     de_di: ' hat den Chat umbenannt',
     de_gr: ' hat die Gruppe umbenannt',
-    de_co: ' hat die Community umbenannt',
+    de_co: ' hat die öffentliche Gruppe umbenannt',
     fr_di: ' a renommé la conversation',
     fr_gr: ' a renommé le groupe',
-    fr_co: ' a renommé la communauté',
+    fr_co: ' a renommé le groupe public',
 }
 
 export const hasChangedAvatar: Translation = {
     en_di: ' has changed her/his profile picture',
     en_gr: ' has changed the group\'s profile picture',
-    en_co: ' has changed the community\'s profile picture',
+    en_co: ' has changed the public group\'s profile picture',
     en_no: ' has changed the notepad\'s profile picture',
     de_di: ' hat ihr/sein Profilbild geändert',
     de_gr: ' hat das Profilbild der Gruppe geändert',
-    de_co: ' hat das Profilbild der Community geändert',
+    de_co: ' hat das Profilbild der öffentlichen Gruppe geändert',
     de_no: ' hat das Profilbild des Notizblocks geändert',
     fr_di: ' a changé sa photo de profil',
     fr_gr: ' a changé la photo de profil du groupe',
-    fr_co: ' a changé la photo de profil de la communauté',
+    fr_co: ' a changé la photo de profil du groupe public',
     fr_no: ' a changé la photo de profil du bloc-notes',
 }
 
@@ -578,15 +578,15 @@ export const toThisGroup: Translation = {
 export const pressOKToLeaveRoom: Translation = {
     en_di: 'Press OK to leave this conversation. You will lose access to all included messages and files.',
     en_gr: 'Press OK to leave this group. You will lose access to all included messages and files.',
-    en_co: 'Press OK to leave this community.',
+    en_co: 'Press OK to leave this public group.',
     en_no: 'Press OK to delete this notepad. You will lose access to all included content.',
     de_di: 'Drücken Sie OK, um diesen Chat zu verlassen. Sie werden den Zugang zu allen enthaltenen Nachrichten und Dateien verlieren.',
     de_gr: 'Drücken Sie OK, um diese Gruppe zu verlassen. Sie werden den Zugang zu allen enthaltenen Nachrichten und Dateien verlieren.',
-    de_co: 'Drücken Sie OK, um diese Community zu verlassen.',
+    de_co: 'Drücken Sie OK, um diese öffentliche Gruppe zu verlassen.',
     de_no: 'Drücken Sie OK, um diesen Notizblock zu löschen. Sie werden den Zugang zu allen enthaltenen Inhalten.',
     fr_di: 'Appuyez sur OK pour quitter cette conversation. Vous perdrez accès à tous les messages et fichiers qui s\'y trouvent.',
     fr_gr: 'Appuyez sur OK pour quitter ce groupe. Vous perdrez accès à tous les messages et fichiers qui s\'y trouvent.',
-    fr_co: 'Appuyez sur OK pour quitter cette communauté.',
+    fr_co: 'Appuyez sur OK pour quitter ce groupe public.',
     fr_no: 'Appuyez sur OK pour supprimer ce bloc-notes. Vous perdrez accès à tout le contenu qui s\'y trouve.',
 }
 
@@ -599,15 +599,15 @@ export const inviteAdditionalUser: Translation = {
 export const leaveRoom: Translation = {
     en_di: 'Leave conversation',
     en_gr: 'Leave group',
-    en_co: 'Leave community',
+    en_co: 'Leave public group',
     en_no: 'Delete notepad',
     de_di: 'Chat verlassen',
     de_gr: 'Gruppe verlassen',
-    de_co: 'Community verlassen',
+    de_co: 'Gruppe verlassen',
     de_no: 'Notizblock löschen',
     fr_di: 'Quitter la conversation',
     fr_gr: 'Quitter le groupe',
-    fr_co: 'Quitter la communauté',
+    fr_co: 'Quitter le groupe',
     fr_no: 'Supprimer le bloc-notes',
 }
 
@@ -736,13 +736,13 @@ export const communityMembers = (membersCount: number, language: string): string
 
     switch (language) {
         case 'en':
-            return `Community [${ membersCount } members]`;
+            return `Public group [${ membersCount } members]`;
 
         case 'de':
-            return `Community [${ membersCount } Mitglieder]`;
+            return `Öffentliche Gruppe [${ membersCount } Mitglieder]`;
 
         case 'fr':
-            return `Communauté [${ membersCount } membres]`;
+            return `Groupe public [${ membersCount } membres]`;
 
         default:
             return '';
@@ -782,13 +782,13 @@ export const rejectInvitation: Translation = {
 export const hasInvitedYou: Translation = {
     en_di: 'has invited you to join a private conversation.',
     en_gr: 'has invited you to join a group conversation.',
-    en_co: 'has invited you to join a public community.',
+    en_co: 'has invited you to join a public group.',
     de_di: 'hat Sie zu einem privaten Chat eingeladen.',
     de_gr: 'hat Sie zu einem Gruppenchat eingeladen.',
-    de_co: 'hat Sie eingeladen, einer öffentlichen Community beizutreten.',
+    de_co: 'hat Sie eingeladen, einer öffentlichen Gruppe beizutreten.',
     fr_di: 'vous a invité à joindre une conversation privée.',
     fr_gr: 'vous a invité à joindre une conversation de groupe.',
-    fr_co: 'vous a invité à joindre une communauté publique.'
+    fr_co: 'vous a invité à joindre un groupe public.'
 }
 
 export const haveAnAccount: Translation = {
@@ -979,15 +979,15 @@ export const jitsiStartedShort: Translation = {
 export const youHaveLeftRoom1: Translation = {
     en_di: 'You have now left the private conversation with ',
     en_gr: 'You have now left the group ',
-    en_co: 'You have now left the public community ',
+    en_co: 'You have now left the public group ',
     en_no: 'The notepad ',
     de_di: 'Sie haben nun den privaten Chat mit ',
     de_gr: 'Sie haben nun den Gruppenchat ',
-    de_co: 'Sie haben nun die öffentliche Community ',
+    de_co: 'Sie haben nun die öffentliche Gruppe ',
     de_no: 'Der Notizblock ',
     fr_di: 'Vous avez quitté la conversation privée avec ',
     fr_gr: 'Vous avez quitté le groupe ',
-    fr_co: 'Vous avez quitté la communauté publique ',
+    fr_co: 'Vous avez quitté le groupe public ',
     fr_no: 'Le bloc-notes ',
 }
 
