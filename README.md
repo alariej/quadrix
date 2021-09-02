@@ -1,6 +1,7 @@
 # ![quadrix](https://quadrix.chat/quadrix_name.png)
 
 - Minimal, simple, multi-platform chat app for the [Matrix](https://github.com/matrix-org/) protocol
+- No data collection whatsoever
 - Does not support [E2EE](https://en.wikipedia.org/wiki/End-to-end_encryption)
 - No customization (almost), no widgets, no bots, no phone calls
 - Integrated video-conferencing with [Jitsi Meet](https://github.com/jitsi/jitsi-meet/)
