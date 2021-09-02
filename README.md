@@ -65,7 +65,7 @@ quadrix is provided without warranty of any kind. In no event shall the copyrigh
 
 When using quadrix, you are required to abide by any applicable laws. You can not use quadrix for unlawful, illegal, defamatory, harmful, abusive, hateful, or ethnically offensive purposes.
 
-The quadrix apps do not collect any information whatsover: No user ID's, no IP addresses, no messaging statistics, no usage data, no crash analytics, no nothing. However, the homeserver provider chosen by the user, the push notification service for mobile devices ([Firebase Cloud Messaging](https://firebase.google.com/support/privacy)) and the videoconferencing service ([Jitsi Meet](https://jitsi.org/meet-jit-si-privacy/)) might collect usage data and other information for their own purposes. Please refer to their respective privacy policies for additional information.
+The quadrix apps do not collect any information whatsover: No user ID's, no IP addresses, no messaging statistics, no usage data, no crash analytics, no nothing. However, the homeserver provider chosen by the user, the push notification service for mobile devices ([Firebase Cloud Messaging](https://firebase.google.com/support/privacy)) and the video-conferencing service ([Jitsi Meet](https://jitsi.org/meet-jit-si-privacy/)) might collect usage data and other information for their own purposes. Please refer to their respective privacy policies for additional information.
 
 quadrix is released under the [GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.html), requiring everyone to share their modifications when they also share the software in public. That aspect is commonly referred to as Copyleft.
 
