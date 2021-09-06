@@ -9,8 +9,7 @@ import UiStore from '../stores/UiStore';
 import { ComponentBase } from 'resub';
 import { BUTTON_MODAL_TEXT, FONT_LARGE, BORDER_RADIUS, INPUT_BORDER, OBJECT_MARGIN, BUTTON_LONG_WIDTH, CONTAINER_PADDING,
     BUTTON_HEIGHT, AVATAR_BACKGROUND, AVATAR_LARGE_WIDTH, BUTTON_SHORT_WIDTH, BUTTON_MODAL_BACKGROUND, SPACING,
-    OPAQUE_BACKGROUND,
-    BUTTON_DISABLED_TEXT} from '../ui';
+    OPAQUE_BACKGROUND, BUTTON_DISABLED_TEXT, DIALOG_WIDTH} from '../ui';
 import utils from '../utils/Utils';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { ErrorResponse_, RoomPhase, RoomType, StateEventContent_ } from '../models/MatrixApi';
@@ -26,18 +25,18 @@ const styles = {
     avatarContainer: RX.Styles.createViewStyle({
         justifyContent: 'center',
         alignItems: 'center',
-        height: AVATAR_LARGE_WIDTH,
+        height: DIALOG_WIDTH - 2 * OBJECT_MARGIN,
         marginVertical: OBJECT_MARGIN,
     }),
     avatar: RX.Styles.createImageStyle({
         flex: 1,
-        width: AVATAR_LARGE_WIDTH,
-        borderRadius: AVATAR_LARGE_WIDTH / 2,
+        width: DIALOG_WIDTH - 2 * OBJECT_MARGIN,
+        borderRadius: (DIALOG_WIDTH - 2 * OBJECT_MARGIN) / 2,
         overlayColor: AVATAR_BACKGROUND,
     }),
     spinnerContainer: RX.Styles.createViewStyle({
         position: 'absolute',
-        height: AVATAR_LARGE_WIDTH,
+        height: DIALOG_WIDTH - 2 * OBJECT_MARGIN,
         justifyContent: 'center',
         alignItems: 'center',
     }),
@@ -62,7 +61,7 @@ const styles = {
     }),
     fileTypeDialog: RX.Styles.createViewStyle({
         position: 'absolute',
-        top: AVATAR_LARGE_WIDTH / 2 - BUTTON_HEIGHT - SPACING,
+        top: (DIALOG_WIDTH - 2 * OBJECT_MARGIN) / 2 - BUTTON_HEIGHT - SPACING,
         left: SPACING,
     }),
     buttonDialog: RX.Styles.createViewStyle({
