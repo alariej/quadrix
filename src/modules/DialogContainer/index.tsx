@@ -83,8 +83,9 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
     public componentDidMount(): void {
 
         RX.Animated.timing(this.animatedValue, {
-            duration: 50,
+            duration: 150,
             toValue: 1,
+            easing: RX.Animated.Easing.InOut(),
             useNativeDriver: true,
         }).start();
     }
