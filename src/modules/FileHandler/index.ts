@@ -195,7 +195,8 @@ class FileHandler {
         return Promise.resolve(null);
     }
 
-    public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (progress: number) => void): Promise<string> {
+    public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (progress: number) => void,
+        _isIntent = false): Promise<string> {
 
         const axiosInstance = axios.create({
             baseURL: 'https://' + credentials.homeServer,

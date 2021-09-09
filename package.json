@@ -58,6 +58,7 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
+    "@notech/react-native-exif": "0.6.2",
     "@react-native-async-storage/async-storage": "1.15.5",
     "@react-native-community/netinfo": "5.0.0",
     "@react-native-firebase/app": "12.4.0",

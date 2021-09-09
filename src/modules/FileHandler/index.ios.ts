@@ -120,7 +120,8 @@ class FileHandler {
         });
     }
 
-    public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (progress: number) => void): Promise<string> {
+    public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (progress: number) => void,
+        _isIntent = false): Promise<string> {
 
         let resizedImage: ImageResizerResponse | null;
         if (file.type.includes('image')) {

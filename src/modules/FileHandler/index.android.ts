@@ -10,6 +10,7 @@ import ImageResizer, { Response as ImageResizerResponse, ResizeFormat } from "re
 import { FileObject } from '../../models/FileObject';
 import { PermissionsAndroid, PermissionStatus } from 'react-native';
 import ImageSizeLocal from '../ImageSizeLocal';
+import Exif from '@notech/react-native-exif';
 
 class FileHandler {
 
@@ -126,30 +127,65 @@ class FileHandler {
         return Promise.resolve(null);
     }
 
-    public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (progress: number) => void): Promise<string> {
+    public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (progress: number) => void,
+        isIntent = false): Promise<string> {
 
-        let resizedImage: ImageResizerResponse | null;
+        let resizedImage: ImageResizerResponse | void;
         if (file.type.includes('image')) {
 
-            let imageType: ResizeFormat | undefined;
-            if (file.type.toLowerCase().includes('jpg')) {
-                imageType = 'JPEG';
-            } else if (file.type.toLowerCase().includes('jpeg')) {
-                imageType = 'JPEG';
-            } else if (file.type.toLowerCase().includes('png')) {
-                imageType = 'PNG';
+            let rotation = 0;
+
+            if (!isIntent) {
+                const exif = await Exif.getExif(file.uri).catch(_error => null);
+                if (exif && exif.orientation) {
+                    switch (exif.orientation) {
+                        case 1:
+                            rotation = 0;
+                            break;
+
+                        case 3:
+                            rotation = 180;
+                            break;
+
+                        case 6:
+                            rotation = 90;
+                            break;
+
+                        case 8:
+                            rotation = 270;
+                            break;
+
+                        default:
+                            rotation = 0;
+                            break;
+                    }
+                }
             }
 
-            if (imageType) {
+            let compressFormat: ResizeFormat | undefined;
+            if (file.type.toLowerCase().includes('png') || file.name.toLowerCase().includes('png')) {
+                compressFormat = 'PNG';
+            } else {
+                compressFormat = 'JPEG';
+            }
 
-                resizedImage = await ImageResizer.createResizedImage(
-                    file.uri,
-                    1280,
-                    1280,
-                    imageType,
-                    98,
-                    0,
-                ).catch(_error => null);
+            resizedImage = await ImageResizer.createResizedImage(
+                file.uri,
+                1280,
+                1280,
+                compressFormat,
+                99,
+                rotation,
+                undefined,
+                false,
+                { mode: 'contain', onlyScaleDown: true }
+            ).catch(_error => console.log(_error));
+
+            if (resizedImage) {
+                file.imageHeight = resizedImage.height;
+                file.imageWidth = resizedImage.width;
+                file.size = resizedImage.size;
+                file.uri = resizedImage.uri;
             }
         }
 
@@ -160,15 +196,16 @@ class FileHandler {
             Authorization: 'Bearer ' + credentials.accessToken,
             'Content-Type': 'application/octet-stream',
 
-        }, RNFetchBlob.wrap(resizedImage! ? resizedImage.uri : file.uri))
+        }, RNFetchBlob.wrap(file.uri))
             .uploadProgress({ interval : 100 }, (written, total) => {
                 fetchProgress(written / total);
             })
-            .catch(error => { return Promise.reject(error) });
-
-        setTimeout(() => {
-            RNFetchBlob.fs.unlink(resizedImage ? resizedImage.uri : '').catch(_error => null);
-        }, 5000);
+            .catch(error => { return Promise.reject(error) })
+            .finally(() => {
+                if (resizedImage && resizedImage.uri) {
+                    RNFetchBlob.fs.unlink(resizedImage.uri).catch(_error => null);
+                }
+            });
 
         if (response.respInfo.status === 200) {
             const data = JSON.parse(response.data) as { content_uri: string };

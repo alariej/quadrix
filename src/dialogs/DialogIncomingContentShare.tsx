@@ -204,7 +204,7 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
                 type: this.props.sharedContent.mimeType!,
             }
 
-            FileHandler.uploadFile(ApiClient.credentials, file, fetchProgress)
+            FileHandler.uploadFile(ApiClient.credentials, file, fetchProgress, true)
                 .then(fileUri => {
 
                     if (fileUri) {
