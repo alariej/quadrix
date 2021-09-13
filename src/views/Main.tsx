@@ -389,7 +389,9 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
         UiStore.setJitsiActive(false);
         this.setState({ showJitsiMeet: false }, () => {
-            RX.StatusBar.setBarStyle('light-content', true);
+            setTimeout(() => {
+                RX.StatusBar.setBarStyle('light-content', true);
+            }, 2000);
         });
     }
 
