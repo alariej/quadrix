@@ -10,7 +10,6 @@ import ImageResizer, { Response as ImageResizerResponse, ResizeFormat } from "re
 import { FileObject } from '../../models/FileObject';
 import { PermissionsAndroid, PermissionStatus } from 'react-native';
 import ImageSizeLocal from '../ImageSizeLocal';
-import Exif from '@notech/react-native-exif';
 
 class FileHandler {
 
@@ -128,39 +127,12 @@ class FileHandler {
     }
 
     public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (progress: number) => void,
-        isIntent = false): Promise<string> {
+        _isIntent = false): Promise<string> {
 
         let resizedImage: ImageResizerResponse | void;
         if (file.type.includes('image')) {
 
-            let rotation = 0;
-
-            if (!isIntent) {
-                const exif = await Exif.getExif(file.uri).catch(_error => null);
-                if (exif && exif.orientation) {
-                    switch (exif.orientation) {
-                        case 1:
-                            rotation = 0;
-                            break;
-
-                        case 3:
-                            rotation = 180;
-                            break;
-
-                        case 6:
-                            rotation = 90;
-                            break;
-
-                        case 8:
-                            rotation = 270;
-                            break;
-
-                        default:
-                            rotation = 0;
-                            break;
-                    }
-                }
-            }
+            const rotation = 0;
 
             let compressFormat: ResizeFormat | undefined;
             if (file.type.toLowerCase().includes('png') || file.name.toLowerCase().includes('png')) {
