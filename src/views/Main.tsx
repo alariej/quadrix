@@ -130,7 +130,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
                         ApiClient.setNextSyncToken(storedSyncToken);
 
-                        ApiClient.restoreDataStore()
+                        await ApiClient.restoreDataStore()
                             .then(_response => {
 
                                 ApiClient.startSync(storedSyncToken);
@@ -154,13 +154,13 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
                     UiStore.setOffline(true);
 
-                    ApiClient.getStoredSyncToken()
+                    await ApiClient.getStoredSyncToken()
                         .then(token => {
                             ApiClient.setNextSyncToken(token!);
                         })
                         .catch(_error => null);
 
-                    ApiClient.restoreDataStore()
+                    await ApiClient.restoreDataStore()
                         .then(_response => {
 
                             ApiClient.stopSync();
