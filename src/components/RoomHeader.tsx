@@ -53,10 +53,13 @@ const styles = {
     }),
     containerRoomInfo: RX.Styles.createViewStyle({
         flex: 1,
+        height: HEADER_HEIGHT - 2 * SPACING,
+        flexDirection: 'column',
     }),
     containerRoomName: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
         color: HEADER_TEXT,
+        height: (HEADER_HEIGHT - 2 * SPACING) / 2,
         lineHeight: (HEADER_HEIGHT - 4 * SPACING) / 2,
         flexDirection: 'row',
         alignItems: 'center',
@@ -71,6 +74,7 @@ const styles = {
     }),
     containerSubtitle: RX.Styles.createViewStyle({
         flex: 1,
+        height: (HEADER_HEIGHT - 2 * SPACING) / 2,
         paddingBottom: SPACING
     }),
     subtitle: RX.Styles.createTextStyle({

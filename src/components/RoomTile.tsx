@@ -45,13 +45,15 @@ const styles = {
         height: AVATAR_SMALL_WIDTH,
         borderRadius: AVATAR_SMALL_WIDTH / 2,
     }),
-    containerText: RX.Styles.createViewStyle({
+    containerRoomInfo: RX.Styles.createViewStyle({
         flex: 1,
+        height: TILE_HEIGHT - 2 * SPACING,
         flexDirection: 'column',
     }),
     containerRoomName: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
         color: TILE_MESSAGE_TEXT,
+        height: (TILE_HEIGHT - 2 * SPACING) / 2,
         lineHeight: (TILE_HEIGHT - 4 * SPACING) / 2,
         flexDirection: 'row',
         alignItems: 'center',
@@ -68,6 +70,7 @@ const styles = {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
+        height: (TILE_HEIGHT - 2 * SPACING) / 2,
         paddingBottom: SPACING
     }),
     newestMessageText:  RX.Styles.createTextStyle({
@@ -392,7 +395,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
                     <RX.View style={ styles.containerAvatar }>
                         { avatar! }
                     </RX.View>
-                    <RX.View style={ styles.containerText }>
+                    <RX.View style={ styles.containerRoomInfo }>
                         <RX.Text numberOfLines={ 1 } style={ styles.containerRoomName }>
                             <RX.Text numberOfLines={ 1 } style={ styles.roomName }>
                                 { this.state.name }
