@@ -66,10 +66,10 @@ export default class ReCaptcha extends Component<ReCaptchaProps, RX.Stateless> {
                 justifyContent: 'center',
             } }>
                 <WebView
-                    style= { {
+                    style= {{
                         width: UiStore.getAppLayout_().pageWidth - PAGE_MARGIN,
                         backgroundColor: TRANSPARENT_BACKGROUND,
-                    } }
+                    }}
                     originWhitelist={['*']}
                     source={{
                         html: html,
