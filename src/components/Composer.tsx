@@ -3,7 +3,7 @@ import RX from 'reactxp';
 import { APP_ID } from '../appconfig';
 import { EMOJI_TEXT, INPUT_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, BUTTON_ROUND_WIDTH, LOGO_BACKGROUND,
     BUTTON_COMPOSER_WIDTH, OPAQUE_BACKGROUND, COMPOSER_BORDER, DIALOG_WIDTH, MODAL_CONTENT_BACKGROUND, FONT_EMOJI_LARGE,
-    INPUT_BACKGROUND } from '../ui';
+    INPUT_BACKGROUND, BUTTON_HEIGHT, OBJECT_MARGIN} from '../ui';
 import FileHandler from '../modules/FileHandler';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
@@ -424,7 +424,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
                 const heightStyle = RX.Styles.createViewStyle({
                     height: (DIALOG_WIDTH - 2 * SPACING) * file.imageHeight! / file.imageWidth!,
-                    maxHeight: 480,
+                    maxHeight: UiStore.getAppLayout_().screenHeight - BUTTON_HEIGHT - 2 * OBJECT_MARGIN,
                 }, false);
 
                 content = (
