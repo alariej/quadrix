@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { TILE_BACKGROUND, FOOTER_TEXT, BORDER_RADIUS, SPACING, FONT_NORMAL, TILE_SYSTEM_TEXT, BUTTON_ROUND_WIDTH,
-    TRANSPARENT_BACKGROUND, MARKER_READ_FILL, MARKER_SENT_FILL } from '../ui';
+    TRANSPARENT_BACKGROUND, MARKER_READ_FILL, MARKER_SENT_FILL, FONT_LARGE, TILE_BACKGROUND_OWN } from '../ui';
 import ImageMessage from './ImageMessage';
 import FileMessage from './FileMessage';
 import TextMessage from './TextMessage';
@@ -21,7 +21,6 @@ const styles = {
         backgroundColor: TRANSPARENT_BACKGROUND,
     }),
     containerTile: RX.Styles.createViewStyle({
-        backgroundColor: TILE_BACKGROUND,
         borderRadius: BORDER_RADIUS,
         marginBottom: SPACING,
         padding: SPACING,
@@ -117,22 +116,12 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 
     public render(): JSX.Element | null {
 
-        let marginFactor;
-
-        if (this.props.roomType === 'notepad') {
-            marginFactor = 0.5;
-        } else {
-            marginFactor = this.props.event.senderId === ApiClient.credentials.userIdFull ? 1 : 0;
-        }
-
-        this.marginStyle = RX.Styles.createViewStyle({
-            marginLeft: (BUTTON_ROUND_WIDTH + SPACING) * marginFactor,
-            marginRight: (BUTTON_ROUND_WIDTH + SPACING) * (1 - marginFactor),
-        }, false);
-
         let message;
+        let messageType: string;
 
         if (this.props.isRedacted) {
+
+            messageType = 'system';
 
             message = (
                 <RX.Text style={ styles.containerText}>
@@ -141,12 +130,16 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
             );
         } else if (this.props.event.type === 'm.room.encrypted') {
 
+            messageType = 'system';
+
             message = (
                 <RX.Text style={ styles.containerText}>
                     { encryptedMessage[UiStore.getLanguage()] }
                 </RX.Text>
             );
         } else if (this.props.event.content.msgtype === 'm.image') {
+
+            messageType = 'media';
 
             message = (
                 <ImageMessage
@@ -157,6 +150,8 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
             );
         } else if (this.props.event.content.msgtype === 'm.file') {
 
+            messageType = 'media';
+
             message = (
                 <FileMessage
                     message={ this.props.event }
@@ -164,6 +159,8 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                 />
             );
         } else {
+
+            messageType = 'text';
 
             message = (
                 <TextMessage
@@ -173,6 +170,30 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                 />
             );
         }
+
+        const isOwnMessage = this.props.event.senderId === ApiClient.credentials.userIdFull;
+        let marginFactor;
+
+        if (this.props.roomType === 'notepad') {
+            marginFactor = 0.5;
+        } else {
+            marginFactor = this.props.event.senderId === ApiClient.credentials.userIdFull ? 1 : 0;
+        }
+
+        const marginMin = (BUTTON_ROUND_WIDTH + SPACING);
+        let marginText = 0;
+
+        if (messageType === 'text' && this.props.roomType !== 'notepad' && !this.props.event.content.url_preview) {
+            const marginMax = 192;
+            const margin = Math.min(marginMax, (48 - this.props.event.content.body!.length) * FONT_LARGE / 2);
+            marginText = Math.max(marginMin, margin);
+        }
+
+        this.marginStyle = RX.Styles.createViewStyle({
+            marginLeft: (marginText || marginMin) * marginFactor,
+            marginRight: (marginText || marginMin) * (1 - marginFactor),
+            backgroundColor: (isOwnMessage && this.props.roomType !== 'notepad') ? TILE_BACKGROUND_OWN : TILE_BACKGROUND,
+        }, false);
 
         const timestamp = format(this.props.event.time, 'HH:mm');
 

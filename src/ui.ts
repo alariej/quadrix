@@ -55,6 +55,7 @@ export const OPAQUE_DARK_BACKGROUND = 'rgba(0, 0, 0, 0.85)';
 export const OPAQUE_DUMMY_BACKGROUND = 'rgba(0, 0, 0, 0.0)';
 export const TRANSPARENT_BACKGROUND = 'transparent';
 export const TILE_BACKGROUND = 'white';
+export const TILE_BACKGROUND_OWN = '#d6f5d6';
 export const TILE_MESSAGE_TEXT = '#1a1a1a';
 export const TILE_SYSTEM_TEXT = '#4d4d4d';
 export const LIGHT_BACKGROUND = 'grey';
