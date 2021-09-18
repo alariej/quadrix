@@ -126,25 +126,30 @@ class FileHandler {
         let resizedImage: ImageResizerResponse | null;
         if (file.type.includes('image')) {
 
-            let imageType: ResizeFormat | undefined;
-            if (file.type.toLowerCase().includes('jpg')) {
-                imageType = 'JPEG';
-            } else if (file.type.toLowerCase().includes('jpeg')) {
-                imageType = 'JPEG';
-            } else if (file.type.toLowerCase().includes('png')) {
-                imageType = 'PNG';
+            let compressFormat: ResizeFormat | undefined;
+            if (file.type.toLowerCase().includes('png') || file.name.toLowerCase().includes('.png')) {
+                compressFormat = 'PNG';
+            } else {
+                compressFormat = 'JPEG';
             }
 
-            if (imageType) {
+            resizedImage = await ImageResizer.createResizedImage(
+                file.uri,
+                1280,
+                1280,
+                compressFormat,
+                95,
+                0,
+                undefined,
+                false,
+                { mode: 'contain', onlyScaleDown: true }
+            ).catch(_error => null);
 
-                resizedImage = await ImageResizer.createResizedImage(
-                    file.uri,
-                    1280,
-                    1280,
-                    imageType,
-                    98,
-                    0,
-                ).catch(_error => null);
+            if (resizedImage) {
+                file.imageHeight = resizedImage.height;
+                file.imageWidth = resizedImage.width;
+                file.size = resizedImage.size;
+                file.uri = resizedImage.path;
             }
         }
 
@@ -155,15 +160,16 @@ class FileHandler {
             Authorization: 'Bearer ' + credentials.accessToken,
             'Content-Type': 'application/octet-stream',
 
-        }, RNFetchBlob.wrap(resizedImage! ? resizedImage.path : file.uri.replace('file://', '')))
-            .uploadProgress({ interval : 100 }, (written, total) => {
+        }, RNFetchBlob.wrap(file.uri.replace('file://', '')))
+            .uploadProgress({ interval: 100 }, (written, total) => {
                 fetchProgress(written / total);
             })
-            .catch(error => { return Promise.reject(error) });
-
-        setTimeout(() => {
-            RNFetchBlob.fs.unlink(resizedImage ? resizedImage.uri : '').catch(_error => null);
-        }, 5000);
+            .catch(error => { return Promise.reject(error) })
+            .finally(() => {
+                if (resizedImage && resizedImage.uri) {
+                    RNFetchBlob.fs.unlink(resizedImage.uri).catch(_error => null);
+                }
+            });
 
         if (response.respInfo.status === 200) {
             const data = JSON.parse(response.data) as { content_uri: string };

@@ -218,37 +218,30 @@ class FileHandler {
         let resizedImage;
         if (file.type.includes('image')) {
 
-            let imageType: string | undefined;
-            if (file.type.toLowerCase().includes('jpg')) {
-                imageType = 'JPEG';
-            } else if (file.type.toLowerCase().includes('jpeg')) {
-                imageType = 'JPEG';
-            } else if (file.type.toLowerCase().includes('png')) {
-                imageType = 'PNG';
-            } else if (file.type.toLowerCase().includes('webp')) {
-                imageType = 'JPEG';
+            let compressFormat: string | undefined;
+            if (file.type.toLowerCase().includes('png') || file.name.toLowerCase().includes('.png')) {
+                compressFormat = 'PNG';
+            } else {
+                compressFormat = 'JPEG';
             }
 
-            if (imageType) {
+            const resizeImage = (blob: Blob): Promise<string | File | Blob | ProgressEvent<FileReader>> => {
 
-                const resizeImage = (blob: Blob): Promise<string | File | Blob | ProgressEvent<FileReader>> => {
-
-                    return new Promise(resolve => {
-                        Resizer.imageFileResizer(
-                            blob,
-                            1280,
-                            1280,
-                            imageType!,
-                            98,
-                            0,
-                            uri => resolve(uri),
-                            'blob'
-                        );
-                    });
-                }
-
-                resizedImage = await resizeImage(blob).catch(_error => null);
+                return new Promise(resolve => {
+                    Resizer.imageFileResizer(
+                        blob,
+                        1280,
+                        1280,
+                        compressFormat!,
+                        95,
+                        0,
+                        uri => resolve(uri),
+                        'blob'
+                    );
+                });
             }
+
+            resizedImage = await resizeImage(blob).catch(_error => null);
         }
 
         const response: { status: number, data: { content_uri: string }} = await axiosInstance
