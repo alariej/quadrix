@@ -6,14 +6,15 @@ import { Credentials } from '../../models/Credentials';
 import { MessageEvent } from '../../models/MessageEvent';
 import utils from '../../utils/Utils';
 import ApiClient from '../../matrix/ApiClient';
-import ImageResizer, { Response as ImageResizerResponse, ResizeFormat } from "react-native-image-resizer";
+import ImageResizer, { Response as ImageResizerResponse, ResizeFormat } from 'react-native-image-resizer';
 import { FileObject } from '../../models/FileObject';
 import { PermissionsAndroid, PermissionStatus } from 'react-native';
 import ImageSizeLocal from '../ImageSizeLocal';
+import Exif from 'react-native-exif';
 
 class FileHandler {
 
-    private async requestStoragePermission(): Promise<boolean> {
+    private async requestWriteStoragePermission(): Promise<boolean> {
 
         const granted: PermissionStatus =
             await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE)
@@ -22,10 +23,19 @@ class FileHandler {
         return granted === PermissionsAndroid.RESULTS.GRANTED;
     }
 
+    private async requestReadStoragePermission(): Promise<boolean> {
+
+        const granted: PermissionStatus =
+            await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE)
+                .catch(_error => { return 'denied' })
+
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+    }
+
     public async saveFile(message: MessageEvent, fetchProgress: (progress: number) => void,
         onSuccess: (success: boolean) => void, _onAbort: () => void): Promise<void> {
 
-        const isGranted = await this.requestStoragePermission();
+        const isGranted = await this.requestWriteStoragePermission();
 
         if(!isGranted) { onSuccess(false); return; }
 
@@ -127,15 +137,47 @@ class FileHandler {
     }
 
     public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (progress: number) => void,
-        _isIntent = false): Promise<string> {
+        isIntent = false): Promise<string> {
 
-        let resizedImage: ImageResizerResponse | void;
+        let resizedImage: ImageResizerResponse | null;
         if (file.type.includes('image')) {
 
-            const rotation = 0;
+            let rotation = 0;
+
+            if (!isIntent) {
+
+                const isGranted = await this.requestReadStoragePermission();
+                if(!isGranted) { return Promise.reject(); }
+
+                const exif = await Exif.getExif(file.uri).catch(_error => null);
+
+                if (exif && exif.Orientation) {
+                    switch (exif.Orientation) {
+                        case 1:
+                            rotation = 0;
+                            break;
+
+                        case 3:
+                            rotation = 180;
+                            break;
+
+                        case 6:
+                            rotation = 90;
+                            break;
+
+                        case 8:
+                            rotation = 270;
+                            break;
+
+                        default:
+                            rotation = 0;
+                            break;
+                    }
+                }
+            }
 
             let compressFormat: ResizeFormat | undefined;
-            if (file.type.toLowerCase().includes('png') || file.name.toLowerCase().includes('png')) {
+            if (file.type.toLowerCase().includes('png') || file.name.toLowerCase().includes('.png')) {
                 compressFormat = 'PNG';
             } else {
                 compressFormat = 'JPEG';
@@ -146,12 +188,12 @@ class FileHandler {
                 1280,
                 1280,
                 compressFormat,
-                99,
+                95,
                 rotation,
                 undefined,
                 false,
                 { mode: 'contain', onlyScaleDown: true }
-            ).catch(_error => console.log(_error));
+            ).catch(_error => null);
 
             if (resizedImage) {
                 file.imageHeight = resizedImage.height;
@@ -169,7 +211,7 @@ class FileHandler {
             'Content-Type': 'application/octet-stream',
 
         }, RNFetchBlob.wrap(file.uri))
-            .uploadProgress({ interval : 100 }, (written, total) => {
+            .uploadProgress({ interval: 100 }, (written, total) => {
                 fetchProgress(written / total);
             })
             .catch(error => { return Promise.reject(error) })
