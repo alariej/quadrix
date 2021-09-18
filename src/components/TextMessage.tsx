@@ -127,7 +127,7 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 
             let headers: Headers = {};
             if (UiStore.getPlatform() === 'ios') {
-                headers = {'Cache-Control':'max-stale'};
+                headers = {'Cache-Control':'force-cache'};
             }
 
             const linkifyElement: LinkifyElement = {

@@ -137,7 +137,7 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 
         let headers: Headers = {};
         if (UiStore.getPlatform() === 'ios') {
-            headers = {'Cache-Control':'max-stale'};
+            headers = {'Cache-Control':'force-cache'};
         }
 
         return (
