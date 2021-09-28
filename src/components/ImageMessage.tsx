@@ -7,7 +7,7 @@ import FullScreenImage from './FullScreenImage';
 import { SPACING, BUTTON_ROUND_WIDTH, PAGE_MARGIN, BORDER_RADIUS } from '../ui';
 import UiStore from '../stores/UiStore';
 import { Headers } from 'reactxp/dist/common/Types';
-import Loading from '../modules/Loading';
+import Spinner from './Spinner';
 
 const styles = {
     containerMessage: RX.Styles.createViewStyle({
@@ -131,7 +131,7 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
                 style={ styles.spinnerContainer }
                 blockPointerEvents={ !this.state.showSpinner }
             >
-                <Loading isVisible={ this.state.showSpinner ? true : false } />
+                <Spinner isVisible={ this.state.showSpinner ? true : false } />
             </RX.View>
         );
 

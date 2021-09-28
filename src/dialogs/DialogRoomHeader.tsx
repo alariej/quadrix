@@ -15,7 +15,7 @@ import { theInvitationWasSent, theInvitationNotSent, cancel, pressOKToInvite, to
     leaveRoom, youDoNotHavePrivateContacts, youHaveLeftRoom1, youHaveLeftRoom2, Languages } from '../translations';
 import { ErrorResponse_, RoomPhase, RoomType } from '../models/MatrixApi';
 import SpinnerUtils from '../utils/SpinnerUtils';
-import Loading from '../modules/Loading';
+import Spinner from '../components/Spinner';
 import AppFont from '../modules/AppFont';
 
 const styles = {
@@ -495,7 +495,7 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
                 style={ styles.spinnerContainer }
                 blockPointerEvents={ !this.state.showSpinner }
             >
-                <Loading isVisible={ this.state.showSpinner ? true : false } />
+                <Spinner isVisible={ this.state.showSpinner ? true : false } />
             </RX.View>
         );
 

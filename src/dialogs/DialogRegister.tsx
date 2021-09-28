@@ -11,7 +11,7 @@ import { userIdInUse, cancel, errorRegistration, registrationNotSupported, confi
 import DialogContainer from '../modules/DialogContainer';
 import utils from '../utils/Utils';
 import { EmailTokenResponse_, ErrorRegisterResponse_, LoginResponse_, RegisterStageType } from '../models/MatrixApi';
-import Loading from '../modules/Loading';
+import Spinner from '../components/Spinner';
 import AppFont from '../modules/AppFont';
 
 const styles = {
@@ -450,7 +450,7 @@ export default class DialogRegister extends RX.Component<DialogRegisterProps, Di
                 style={ styles.spinnerContainer }
                 blockPointerEvents={ !this.state.showSpinner }
             >
-                <Loading isVisible={ this.state.showSpinner ? true : false } />
+                <Spinner isVisible={ this.state.showSpinner ? true : false } />
             </RX.View>
         );
 

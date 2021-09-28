@@ -14,7 +14,7 @@ import utils from '../utils/Utils';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { ErrorResponse_, RoomPhase, RoomType, StateEventContent_ } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
-import Loading from '../modules/Loading';
+import Spinner from '../components/Spinner';
 import AppFont from '../modules/AppFont';
 
 const styles = {
@@ -286,7 +286,7 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
                 style={ styles.spinnerContainer }
                 blockPointerEvents={ !this.state.showSpinner }
             >
-                <Loading isVisible={ this.state.showSpinner ? true : false } />
+                <Spinner isVisible={ this.state.showSpinner ? true : false } />
             </RX.View>
         );
 

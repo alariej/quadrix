@@ -18,7 +18,7 @@ import FileHandler from '../modules/FileHandler';
 import ShareHandlerOutgoing from '../modules/ShareHandlerOutgoing';
 import { ErrorResponse_, RoomType } from '../models/MatrixApi';
 import SpinnerUtils from '../utils/SpinnerUtils';
-import Loading from '../modules/Loading';
+import Spinner from '../components/Spinner';
 import AppFont from '../modules/AppFont';
 
 const styles = {
@@ -618,7 +618,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                     style={ styles.spinnerContainer }
                     blockPointerEvents={ !this.state.showSpinner }
                 >
-                    <Loading isVisible={ true } />
+                    <Spinner isVisible={ true } />
                 </RX.View>
             );
         }

@@ -1,32 +1,25 @@
 import React from 'react';
 import RX from 'reactxp';
-import { LOGO_BACKGROUND, MIN_MS } from '../../ui';
+import { LOGO_BACKGROUND, MIN_MS } from '../ui';
 import { ReactElement } from 'react';
-// @ts-ignore
-import { Wave } from 'better-react-spinkit';
+import SvgSpinner from '../components/SvgSpinner';
 
-const styles = {
-    container: RX.Styles.createViewStyle({
-        transform: [{ rotate: '180deg' }],
-    }),
-}
-
-interface LoadingProps {
+interface SpinnerProps {
     color?: string;
     size?: 'large' | 'small';
     isVisible: boolean;
 }
 
-interface LoadingState {
+interface SpinnerState {
     isVisible: boolean;
 }
 
-export default class Loading extends RX.Component<LoadingProps, LoadingState> {
+export default class Spinner extends RX.Component<SpinnerProps, SpinnerState> {
 
     private d0: Date;
     private isMounted_: boolean | undefined;
 
-    constructor(props: LoadingProps) {
+    constructor(props: SpinnerProps) {
         super(props);
 
         this.d0 = new Date();
@@ -44,7 +37,7 @@ export default class Loading extends RX.Component<LoadingProps, LoadingState> {
         this.isMounted_ = false;
     }
 
-    public componentDidUpdate(prevProps: LoadingProps): boolean {
+    public componentDidUpdate(prevProps: SpinnerProps): boolean {
 
         if (!prevProps.isVisible && this.props.isVisible) {
 
@@ -70,12 +63,12 @@ export default class Loading extends RX.Component<LoadingProps, LoadingState> {
 
     public render(): JSX.Element | null {
 
-        const size = !this.props.size || this.props.size === 'large' ? 40 : 15;
+        const size = !this.props.size || this.props.size === 'large' ? 45 : 15;
 
-        let loading: ReactElement | null;
+        let spinner: ReactElement | null;
         if (this.state.isVisible) {
-            loading = (
-                <Wave
+            spinner = (
+                <SvgSpinner
                     color={ this.props.color || LOGO_BACKGROUND }
                     size={ size }
                 />
@@ -83,8 +76,8 @@ export default class Loading extends RX.Component<LoadingProps, LoadingState> {
         }
 
         return (
-            <RX.View style={ styles.container }>
-                { loading! }
+            <RX.View>
+                { spinner! }
             </RX.View>
         )
     }

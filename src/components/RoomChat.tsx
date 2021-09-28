@@ -18,7 +18,7 @@ import UiStore from '../stores/UiStore';
 import { yesterdayWord, fetchingMessages, noMoreMessages, Languages, errorLoadingMessages } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
 import { differenceInDays, format, isSameYear, isToday, isYesterday, Locale } from 'date-fns';
-import Loading from '../modules/Loading';
+import Spinner from './Spinner';
 import AppFont from '../modules/AppFont';
 
 const styles = {
@@ -694,7 +694,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
                             { fetchingMessages[this.language] }
                         </RX.Text>
                         <RX.View style={ styles.spinner }>
-                            <Loading size={ 'small' } color={ BUTTON_LONG_TEXT } isVisible={ true } />
+                            <Spinner size={ 'small' } color={ BUTTON_LONG_TEXT } isVisible={ true } />
                         </RX.View>
                     </RX.View>
                 </RX.View>

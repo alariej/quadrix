@@ -1,6 +1,6 @@
 import React from 'react';
 import RX from 'reactxp';
-import Loading from '../modules/Loading';
+import Spinner from './Spinner';
 import { OPAQUE_BACKGROUND } from '../ui';
 
 const styles = {
@@ -25,7 +25,7 @@ export default class ModalSpinner extends RX.Component<SpinnerProps, RX.Stateles
         return (
             <RX.View style={[styles.modalScreen, { backgroundColor: this.props.backgroundColor || OPAQUE_BACKGROUND }]}>
                 <RX.View style={ styles.modalView }>
-                    <Loading isVisible={ true } />
+                    <Spinner isVisible={ true } />
                 </RX.View>
             </RX.View>
         );

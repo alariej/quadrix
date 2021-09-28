@@ -13,7 +13,7 @@ import UiStore from '../stores/UiStore';
 import IconSvg, { SvgFile } from './IconSvg';
 import { format } from 'date-fns';
 import { RoomType } from '../models/MatrixApi';
-import Loading from '../modules/Loading';
+import Spinner from './Spinner';
 import AppFont from '../modules/AppFont';
 
 const styles = {
@@ -248,7 +248,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                 readMarker = (
                     <RX.View style={ styles.containerMarker }>
                         <RX.View style={ styles.spinner }>
-                            <Loading size={ 'small' } color={ MARKER_SENT_FILL } isVisible={ true } />
+                            <Spinner size={ 'small' } color={ MARKER_SENT_FILL } isVisible={ true } />
                         </RX.View>
                     </RX.View>
                 );

@@ -8,7 +8,7 @@ import utils from '../utils/Utils';
 import ApiClient from '../matrix/ApiClient';
 import { MessageEvent_ } from '../models/MatrixApi';
 import IconSvg, { SvgFile } from './IconSvg';
-import Loading from '../modules/Loading';
+import Spinner from './Spinner';
 
 const styles = {
     modalView: RX.Styles.createViewStyle({
@@ -410,7 +410,7 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
                 style={ styles.spinnerContainer }
                 blockPointerEvents={ !this.state.showSpinner }
             >
-                <Loading isVisible={ this.state.showSpinner ? true : false } />
+                <Spinner isVisible={ this.state.showSpinner ? true : false } />
             </RX.View>
         );
 

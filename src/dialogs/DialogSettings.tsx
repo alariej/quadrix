@@ -18,7 +18,7 @@ import { AuthResponse_, ErrorResponse_ } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
 import DataStore from '../stores/DataStore';
 import Pushers from '../modules/Pushers';
-import Loading from '../modules/Loading';
+import Spinner from '../components/Spinner';
 import AppFont from '../modules/AppFont';
 
 const styles = {
@@ -626,7 +626,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
                 style={ styles.spinnerContainer }
                 blockPointerEvents={ !this.state.showSpinner }
             >
-                <Loading isVisible={ this.state.showSpinner ? true : false } />
+                <Spinner isVisible={ this.state.showSpinner ? true : false } />
             </RX.View>
         );
 
