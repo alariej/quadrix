@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import DialogNewGroup from './DialogNewGroup';
 import DialogNewNotepad from './DialogNewNotepad';
 import DialogNewDirectConversation from './DialogNewDirectConversation';
-// import DialogJoinCommunity from './DialogJoinCommunity';
+import DialogJoinCommunity from './DialogJoinCommunity';
 import { BUTTON_MODAL_BACKGROUND, BUTTON_MODAL_TEXT, OPAQUE_BACKGROUND, BORDER_RADIUS, DIALOG_WIDTH, SPACING,
     AVATAR_SMALL_WIDTH, TILE_HEIGHT, FONT_LARGE, AVATAR_MARGIN } from '../ui';
 import UiStore from '../stores/UiStore';
-import { createNewConv, createNewGroup, /* joinPublicComm, */ createNewNote } from '../translations';
+import { createNewConv, createNewGroup, joinPublicComm, createNewNote } from '../translations';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import AppFont from '../modules/AppFont';
 
@@ -74,7 +74,6 @@ export default class DialogNewRoom extends RX.Component<DialogNewRoomProps, RX.S
 
         RX.Modal.show(<DialogNewGroup showRoom={ this.props.showRoom }/>, 'creategroupdialog');
     }
-    /*
     private joinCommunity = (event: RX.Types.SyntheticEvent) => {
 
         event.stopPropagation();
@@ -83,7 +82,7 @@ export default class DialogNewRoom extends RX.Component<DialogNewRoomProps, RX.S
 
         RX.Modal.show(<DialogJoinCommunity showRoom={ this.props.showRoom }/>, 'modaldialog_searchcommunity');
     }
-    */
+
     private createNewNotepad = (event: RX.Types.SyntheticEvent) => {
 
         event.stopPropagation();
@@ -96,6 +95,33 @@ export default class DialogNewRoom extends RX.Component<DialogNewRoomProps, RX.S
     public render(): JSX.Element | null {
 
         const language = UiStore.getLanguage();
+
+        let joinCommunityButton: ReactElement | null;
+
+        if ((!UiStore.getIsElectron() && UiStore.getPlatform() === 'web' && UiStore.getDevice() === 'desktop') ||
+            (UiStore.getIsElectron() && UiStore.getDesktopOS() === 'Linux')
+        ) {
+            joinCommunityButton = (
+                <RX.View
+                    style={ styles.containerButton }
+                    onPress={ event => this.joinCommunity(event) }
+                    disableTouchOpacityAnimation={ false }
+                    activeOpacity={ 0.8 }
+                >
+                    <RX.View style={ styles.containerAvatar }>
+                        <IconSvg
+                            source= { require('../resources/svg/community.json') as SvgFile }
+                            fillColor={ BUTTON_MODAL_TEXT }
+                            height={ AVATAR_SMALL_WIDTH * 0.6 }
+                            width={ AVATAR_SMALL_WIDTH * 0.6 }
+                        />
+                    </RX.View>
+                    <RX.Text style={ styles.buttonText }>
+                        { joinPublicComm[language] }
+                    </RX.Text>
+                </RX.View>
+            )
+        }
 
         return (
             <RX.View
@@ -145,26 +171,9 @@ export default class DialogNewRoom extends RX.Component<DialogNewRoomProps, RX.S
                             { createNewGroup[language] }
                         </RX.Text>
                     </RX.View>
-                    {/*
-                    <RX.View
-                        style={ styles.containerButton }
-                        onPress={ event => this.joinCommunity(event) }
-                        disableTouchOpacityAnimation={ false }
-                        activeOpacity={ 0.8 }
-                    >
-                        <RX.View style={ styles.containerAvatar }>
-                            <IconSvg
-                                source= { require('../resources/svg/community.json') as SvgFile }
-                                fillColor={ BUTTON_MODAL_TEXT }
-                                height={ AVATAR_SMALL_WIDTH * 0.6 }
-                                width={ AVATAR_SMALL_WIDTH * 0.6 }
-                            />
-                        </RX.View>
-                        <RX.Text style={ styles.buttonText }>
-                            { joinPublicComm[language] }
-                        </RX.Text>
-                    </RX.View>
-                    */}
+
+                    { joinCommunityButton! }
+
                     <RX.View
                         style={ styles.containerButton }
                         onPress={ event => this.createNewNotepad(event) }
