@@ -108,7 +108,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                 <head>
                     <meta charset="utf-8">
                     <meta http-equiv="content-type" content="text/html;charset=utf-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <meta name="viewport" content="width=device-width, initial-scale=0.6, maximum-scale=0.6">
                 </head>
                 <body style="height: 100%; width: 100%; display: flex; justify-content: center; align-items: center">
 
@@ -119,7 +119,6 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                         const onHangup = () => {
                             window.ReactNativeWebView.postMessage("HANGUP");
                             api.removeEventListener("readyToClose", onHangup);
-                            // hangupListener.remove();
                             api.dispose();
                         };
 
@@ -130,7 +129,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                             width: '100%',
                             parentNode: undefined,
                             interfaceConfigOverwrite: {
-                                OPTIMAL_BROWSERS: ['chromium'],
+                                OPTIMAL_BROWSERS: [],
                                 MOBILE_APP_PROMO: false,
                                 TOOLBAR_ALWAYS_VISIBLE: true,
                                 SHOW_JITSI_WATERMARK: false,
@@ -140,11 +139,13 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                                 RECENT_LIST_ENABLED: false,
                                 DEFAULT_REMOTE_DISPLAY_NAME: '',
                                 DEFAULT_LOCAL_DISPLAY_NAME: '',
-                                TILE_VIEW_MAX_COLUMNS: 3,
+                                TILE_VIEW_MAX_COLUMNS: 2,
+                                VERTICAL_FILMSTRIP: true,
+                                FILM_STRIP_MAX_HEIGHT: 150,
                                 LOCAL_THUMBNAIL_RATIO: 1,
                                 REMOTE_THUMBNAIL_RATIO: 1,
-                                VIDEO_LAYOUT_FIT: 'height', // 'both'
-                                MAXIMUM_ZOOMING_COEFFICIENT: 1.3,
+                                VIDEO_LAYOUT_FIT: 'height',
+                                MAXIMUM_ZOOMING_COEFFICIENT: 1,
                                 VIDEO_QUALITY_LABEL_DISABLED: true,
                                 SHOW_CHROME_EXTENSION_BANNER: false,
                                 SHOW_PROMOTIONAL_CLOSE_PAGE: false,
@@ -187,6 +188,10 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                                 enableWelcomePage: false,
                                 hideConferenceSubject: true,
                                 hideConferenceTimer: true,
+                                disable1On1Mode: true,
+                                disableFilmstripAutohiding: true,
+                                maxFullResolutionParticipants: 1,
+                                disableResponsiveTiles: true,
                                 toolbarButtons: [
                                     'microphone',
                                     'camera',
