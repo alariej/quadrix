@@ -128,12 +128,10 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
+    ndkVersion rootProject.ext.ndkVersion
+
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
     defaultConfig {
         applicationId "chat.quadrix.android"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -195,8 +193,7 @@ android {
             def abi = output.getFilter(OutputFile.ABI)
             if (abi != null) {  // null for the universal-debug, universal-release variants
                 output.versionCodeOverride =
-                        versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
-            }
+                        defaultConfig.versionCode * 1000 + versionCodes.get(abi)            }
         }
     }
 }
