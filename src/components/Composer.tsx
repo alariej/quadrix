@@ -401,6 +401,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
             })
             .catch(_error => {
 
+                this.props.showTempSentMessage({ body: '', tempId: tempId });
+
                 const text = (
                     <RX.Text style={ styles.textDialog }>
                         { fileCouldNotUpload[this.language] }
