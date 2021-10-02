@@ -86,10 +86,9 @@
     "simplerestclients": "1.0.0"
   },
   "notes": {
-    "@react-native-async-storage/async-storage": "version must match dependency in reactxp",
-    "@react-native-community/netinfo_1": "versions higher than 5.0.0 crash react-native-jitsi-meet",
-    "@react-native-community/netinfo_2": "version must match dependency in reactxp-netinfo",
-    "react-native-svg": "version must match dependency in reactxp-imagesvg",
+    "@react-native-async-storage/async-storage": "must be in project root and match version in reactxp",
+    "@react-native-community/netinfo": "must be in project root and match version in reactxp-netinfo",
+    "react-native-svg": "must be in project root and match version in reactxp-imagesvg",
     "react-native-document-picker": "breaking change in 6.0.3, TODO",
     "electron": "breaking change in v14"
   }
