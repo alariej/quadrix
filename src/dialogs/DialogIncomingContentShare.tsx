@@ -202,6 +202,8 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
                 name: this.props.sharedContent.fileName!,
                 size: this.props.sharedContent.fileSize,
                 type: this.props.sharedContent.mimeType!,
+                imageHeight: this.imageHeight,
+                imageWidth: this.imageWidth,
             }
 
             FileHandler.uploadFile(ApiClient.credentials, file, fetchProgress, true)
