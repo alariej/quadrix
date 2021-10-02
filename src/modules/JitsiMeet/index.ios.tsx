@@ -1,12 +1,12 @@
 import React from 'react';
 import RX from 'reactxp';
-import { JITSI_SERVER_URL } from '../../appconfig';
+// import { JITSI_SERVER_URL } from '../../appconfig';
 import { JITSI_BORDER, BUTTON_JITSI_BACKGROUND, PAGE_MARGIN, TRANSPARENT_BACKGROUND, OPAQUE_BACKGROUND, BUTTON_ROUND_WIDTH,
     SPACING, LOGO_BACKGROUND, BORDER_RADIUS, APP_BACKGROUND, TILE_HEIGHT } from '../../ui';
-import ApiClient from '../../matrix/ApiClient';
+// import ApiClient from '../../matrix/ApiClient';
 import IconSvg, { SvgFile } from '../../components/IconSvg';
 // @ts-ignore
-import RNJitsiMeet, { JitsiMeetView } from 'react-native-jitsi-meet';
+// import RNJitsiMeet, { JitsiMeetView } from 'react-native-jitsi-meet';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -88,7 +88,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
     public componentDidMount(): void {
 
         setTimeout(() => {
-
+            /* 
             const url = JITSI_SERVER_URL + '/' + this.props.jitsiMeetId;
 
             const userInfo = {
@@ -109,7 +109,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
             };
 
             RNJitsiMeet.call(url, userInfo, featureFlags); // eslint-disable-line
-
+            */
         }, 250);
     }
 
@@ -117,7 +117,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
 
         this.setState({ isMinimized: isMinimized });
     }
-
+    /* 
     private onConferenceTerminated = () => {
 
         this.props.closeJitsiMeet();
@@ -126,7 +126,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
     private onConferenceJoined = () => {
         // not used yet
     }
-
+    */
     public render(): JSX.Element | null {
 
         let buttonMinimize;
@@ -173,13 +173,13 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
             <RX.View style={ this.state.isMinimized ? styles.containerMinimized : styles.container }>
 
                 <RX.View style={ this.state.isMinimized ? styles.jitsiContainerMinimized : styles.jitsiContainer }>
-
+                    {/* 
                     <JitsiMeetView
                         style={{ flex: 1, margin: -1 }}
                         onConferenceTerminated={ this.onConferenceTerminated }
                         onConferenceJoined={ this.onConferenceJoined }
                     />
-
+                    */}
                     { buttonMinimize }
 
                 </RX.View>
