@@ -196,12 +196,43 @@ class FileHandler {
             ).catch(_error => null);
 
             if (resizedImage) {
-                file.imageHeight = resizedImage.height;
-                file.imageWidth = resizedImage.width;
-                file.size = resizedImage.size;
+
                 file.uri = resizedImage.uri;
+
+                const ratio1 = file.imageHeight! / file.imageWidth!;
+                const ratio2 = resizedImage.height / resizedImage.width;
+                // console.log(file);
+                // console.log(resizedImage);
+                // console.log(ratio1);
+                // console.log(ratio2);
+                // console.log(Math.abs(ratio1 - ratio2));
+
+                if (Math.abs(ratio1 - ratio2) > 0.1 && ratio1 !== 1) {
+
+                    // some android phones still get here (Samsung S20)
+                    // desperately rotate by an additional 90 degrees
+                    // console.log('WRONG IMAGE ROTATION');
+
+                    resizedImage = await ImageResizer.createResizedImage(
+                        file.uri,
+                        1280,
+                        1280,
+                        compressFormat,
+                        95,
+                        rotation + 90,
+                        undefined,
+                        false,
+                        { mode: 'contain', onlyScaleDown: true }
+                    ).catch(_error => null);
+
+                    if (resizedImage) {
+                        file.uri = resizedImage.uri;
+                    }
+                }
             }
         }
+
+        // return Promise.resolve('');
 
         const url = 'https://' + credentials.homeServer + PREFIX_UPLOAD;
 
