@@ -5,6 +5,7 @@ import IconSvg, { SvgFile } from '../../components/IconSvg';
 import { WebView, WebViewMessageEvent } from 'react-native-webview';
 import { JITSI_BORDER, PAGE_MARGIN, TRANSPARENT_BACKGROUND, OPAQUE_BACKGROUND, BUTTON_ROUND_WIDTH, SPACING, LOGO_BACKGROUND,
     BORDER_RADIUS, BUTTON_JITSI_BACKGROUND, APP_BACKGROUND, TILE_HEIGHT } from '../../ui';
+import UiStore from '../../stores/UiStore';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -77,8 +78,12 @@ interface JitsiMeetState {
 
 export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetState> {
 
+    private scale = 1;
+
     constructor(props: JitsiMeetProps) {
         super(props);
+
+        this.scale = Math.min(1, Math.round(100 * (UiStore.getAppLayout_().screenWidth - 2 * PAGE_MARGIN) / 530) / 100);
 
         this.state = { isMinimized: false }
     }
@@ -86,9 +91,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
     private onMessage = (message: WebViewMessageEvent) => {
 
         if (message.nativeEvent.data === 'HANGUP') {
-            setTimeout(() => {
-                this.props.closeJitsiMeet();
-            }, 500);
+            this.props.closeJitsiMeet();
         }
     }
 
@@ -108,7 +111,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                 <head>
                     <meta charset="utf-8">
                     <meta http-equiv="content-type" content="text/html;charset=utf-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=0.6, maximum-scale=0.6">
+                    <meta name="viewport" content="width=device-width, initial-scale=${ this.scale }, maximum-scale=${ this.scale }">
                 </head>
                 <body style="height: 100%; width: 100%; display: flex; justify-content: center; align-items: center">
 
@@ -191,7 +194,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                                 disable1On1Mode: true,
                                 disableFilmstripAutohiding: true,
                                 maxFullResolutionParticipants: 1,
-                                disableResponsiveTiles: true,
+                                disableResponsiveTiles: false,
                                 toolbarButtons: [
                                     'microphone',
                                     'camera',
