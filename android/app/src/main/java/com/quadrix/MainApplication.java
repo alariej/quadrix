@@ -4,13 +4,6 @@ import android.app.Application;
 
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
-import com.reactnativecommunity.webview.RNCWebViewPackage;
-import cl.json.RNSharePackage;
-import io.github.elyx0.reactnativedocumentpicker.DocumentPickerPackage;
-import io.invertase.firebase.messaging.ReactNativeFirebaseMessagingPackage;
-import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
-import com.reactnativecommunity.netinfo.NetInfoPackage;
-import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
