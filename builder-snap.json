@@ -13,8 +13,17 @@
 		"summary": "Minimal, simple, multi-platform chat app for the Matrix protocol",
 		"confinement": "strict",
 		"grade": "stable",
-		"plugs": [
-			"default",
+		"plugs": [			
+			"desktop",
+			"desktop-legacy",
+			"home",
+			"x11",
+			"unity7",
+			"browser-support",
+			"network",
+			"gsettings",
+			"pulseaudio",
+			"opengl",
 			"audio-playback",
 			"audio-record",
 			"camera"
