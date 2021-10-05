@@ -7,7 +7,7 @@
 - Integrated video-conferencing with [Jitsi Meet](https://github.com/jitsi/jitsi-meet/)
 - Programmed with [ReactXP](https://github.com/Microsoft/reactxp)
 - React Native apps for Android and iOS
-- Electron apps for Windows, MacOS, and Linux
+- Electron apps for Windows, MacOS, and Linux (amd64, arm64, armhf)
 - Web app (unstable, glitchy UI, for testing only) at [app.quadrix.chat](https://app.quadrix.chat)
 - Push notifications on mobile devices with Firebase Cloud Messaging
 - Unique top-down messaging feed
