@@ -263,6 +263,8 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                             baseUrl: `${url}`,
                         }}
                         onMessage={ this.onMessage }
+                        mediaPlaybackRequiresUserAction={ false }
+                        allowsInlineMediaPlayback={ true }
                     />
 
                     { buttonMinimize }

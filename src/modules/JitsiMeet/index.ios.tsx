@@ -1,12 +1,11 @@
 import React from 'react';
 import RX from 'reactxp';
-// import { JITSI_SERVER_URL } from '../../appconfig';
-import { JITSI_BORDER, BUTTON_JITSI_BACKGROUND, PAGE_MARGIN, TRANSPARENT_BACKGROUND, OPAQUE_BACKGROUND, BUTTON_ROUND_WIDTH,
-    SPACING, LOGO_BACKGROUND, BORDER_RADIUS, APP_BACKGROUND, TILE_HEIGHT } from '../../ui';
-// import ApiClient from '../../matrix/ApiClient';
+import { APP_WEBSITE_URL, JITSI_SERVER_URL } from '../../appconfig';
 import IconSvg, { SvgFile } from '../../components/IconSvg';
-// @ts-ignore
-// import RNJitsiMeet, { JitsiMeetView } from 'react-native-jitsi-meet';
+import { WebView, WebViewMessageEvent } from 'react-native-webview';
+import { JITSI_BORDER, PAGE_MARGIN, TRANSPARENT_BACKGROUND, OPAQUE_BACKGROUND, BUTTON_ROUND_WIDTH, SPACING, LOGO_BACKGROUND,
+    BORDER_RADIUS, BUTTON_JITSI_BACKGROUND, APP_BACKGROUND, TILE_HEIGHT } from '../../ui';
+import UiStore from '../../stores/UiStore';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -79,55 +78,137 @@ interface JitsiMeetState {
 
 export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetState> {
 
+    private scale = 1;
+
     constructor(props: JitsiMeetProps) {
         super(props);
+
+        this.scale = Math.min(1, Math.round(100 * (UiStore.getAppLayout_().screenWidth - 2 * PAGE_MARGIN) / 530) / 100);
 
         this.state = { isMinimized: false }
     }
 
-    public componentDidMount(): void {
+    private onMessage = (message: WebViewMessageEvent) => {
 
-        setTimeout(() => {
-            /* 
-            const url = JITSI_SERVER_URL + '/' + this.props.jitsiMeetId;
-
-            const userInfo = {
-                displayName: ApiClient.credentials.userId,
-            };
-
-            const featureFlags = {
-                'chat.enabled': false,
-                'conference-timer.enabled': false,
-                'invite.enabled': false,
-                'meeting-name.enabled': false,
-                'notifications.enabled': false,
-                'overflow-menu.enabled': false,
-                'call-integration.enabled': true,
-                'pip.enabled': false,
-                'calendar.enabled': false,
-                'fullscreen.enabled': false,
-            };
-
-            RNJitsiMeet.call(url, userInfo, featureFlags); // eslint-disable-line
-            */
-        }, 250);
+        if (message.nativeEvent.data === 'HANGUP') {
+            this.props.closeJitsiMeet();
+        }
     }
 
     private setMinimized = (isMinimized: boolean) => {
 
         this.setState({ isMinimized: isMinimized });
     }
-    /* 
-    private onConferenceTerminated = () => {
 
-        this.props.closeJitsiMeet();
-    }
-
-    private onConferenceJoined = () => {
-        // not used yet
-    }
-    */
     public render(): JSX.Element | null {
+
+        const url = APP_WEBSITE_URL;
+
+        const html =
+            `
+            <!DOCTYPE html>
+            <html style="height: 100%; width: 100%; margin: -8px">
+                <head>
+                    <meta charset="utf-8">
+                    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=${ this.scale }, maximum-scale=${ this.scale }">
+                </head>
+                <body style="height: 100%; width: 100%; display: flex; justify-content: center; align-items: center">
+
+                    <script src="https://meet.jit.si/external_api.js"></script>
+                    <script type="text/javascript">
+
+                        var hangupListener;
+                        const onHangup = () => {
+                            window.ReactNativeWebView.postMessage("HANGUP");
+                            api.removeEventListener("readyToClose", onHangup);
+                            api.dispose();
+                        };
+
+                        const domain = "${ JITSI_SERVER_URL.replace('https://', '') }";
+                        const options = {
+                            roomName: "${ this.props.jitsiMeetId }",
+                            height: '100%',
+                            width: '100%',
+                            parentNode: undefined,
+                            interfaceConfigOverwrite: {
+                                OPTIMAL_BROWSERS: [],
+                                MOBILE_APP_PROMO: false,
+                                TOOLBAR_ALWAYS_VISIBLE: true,
+                                SHOW_JITSI_WATERMARK: false,
+                                DISABLE_VIDEO_BACKGROUND: true,
+                                DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
+                                ENFORCE_NOTIFICATION_AUTO_DISMISS_TIMEOUT: 1,
+                                RECENT_LIST_ENABLED: false,
+                                DEFAULT_REMOTE_DISPLAY_NAME: '',
+                                DEFAULT_LOCAL_DISPLAY_NAME: '',
+                                TILE_VIEW_MAX_COLUMNS: 2,
+                                VERTICAL_FILMSTRIP: true,
+                                FILM_STRIP_MAX_HEIGHT: 150,
+                                LOCAL_THUMBNAIL_RATIO: 1,
+                                REMOTE_THUMBNAIL_RATIO: 1,
+                                VIDEO_LAYOUT_FIT: 'height',
+                                MAXIMUM_ZOOMING_COEFFICIENT: 1,
+                                VIDEO_QUALITY_LABEL_DISABLED: true,
+                                SHOW_CHROME_EXTENSION_BANNER: false,
+                                SHOW_PROMOTIONAL_CLOSE_PAGE: false,
+                            },
+                            configOverwrite: {
+                                startAudioOnly: false,
+                                constraints: {
+                                    video: {
+                                        height: {
+                                            ideal: 540,
+                                            max: 720,
+                                            min: 240,
+                                        },
+                                        width: {
+                                            ideal: 540,
+                                            max: 720,
+                                            min: 240,
+                                        },
+                                        frameRate: {
+                                            ideal: 10,
+                                            max: 15,
+                                            min: 5,
+                                        },
+                                        aspectRatio: 1,
+                                        facingMode: { exact: 'user' },
+                                    },
+                                },
+                                disableSimulcast: true,
+                                localRecording: { enabled: false },
+                                p2p: { enabled: false }, // 'true' crashes chromium + electron
+                                disableH264: true,
+                                enableLayerSuspension: true,
+                                prejoinPageEnabled: false,
+                                defaultLanguage: 'en',
+                                disableThirdPartyRequests: true,
+                                disableDeepLinking: true,
+                                enableNoAudioDetection: false,
+                                enableNoisyMicDetection: false,
+                                requireDisplayName: false,
+                                enableWelcomePage: false,
+                                hideConferenceSubject: true,
+                                hideConferenceTimer: true,
+                                disable1On1Mode: true,
+                                disableFilmstripAutohiding: true,
+                                maxFullResolutionParticipants: 1,
+                                disableResponsiveTiles: false,
+                                toolbarButtons: [
+                                    'microphone',
+                                    'camera',
+                                    'hangup',
+                                    'tileview',
+                                ]
+                            },
+                        };
+                        var api = new JitsiMeetExternalAPI(domain, options);
+                        hangupListener = api.addEventListeners({ 'readyToClose': onHangup });
+                    </script>
+                </body>
+            </html>
+            `;
 
         let buttonMinimize;
         let buttonMaximize;
@@ -173,13 +254,19 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
             <RX.View style={ this.state.isMinimized ? styles.containerMinimized : styles.container }>
 
                 <RX.View style={ this.state.isMinimized ? styles.jitsiContainerMinimized : styles.jitsiContainer }>
-                    {/* 
-                    <JitsiMeetView
-                        style={{ flex: 1, margin: -1 }}
-                        onConferenceTerminated={ this.onConferenceTerminated }
-                        onConferenceJoined={ this.onConferenceJoined }
+
+                    <WebView
+                        scrollEnabled={ false }
+                        originWhitelist={['*']}
+                        source={{
+                            html: html,
+                            baseUrl: `${url}`,
+                        }}
+                        onMessage={ this.onMessage }
+                        mediaPlaybackRequiresUserAction={ false }
+                        allowsInlineMediaPlayback={ true }
                     />
-                    */}
+
                     { buttonMinimize }
 
                 </RX.View>
