@@ -15,8 +15,6 @@
 		"grade": "stable",
 		"plugs": [
 			"default",
-			"desktop",
-			"home",
 			"audio-playback",
 			"audio-record",
 			"camera"
