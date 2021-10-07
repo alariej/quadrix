@@ -70,6 +70,7 @@
     "react-dom": "17.0.2",
     "react-image-file-resizer": "0.4.7",
     "react-native": "0.65.1",
+    "react-native-callkeep": "4.2.0",
     "react-native-document-picker": "5.2.0",
     "react-native-exif": "0.5.0",
     "react-native-image-picker": "4.1.1",

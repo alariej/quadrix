@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { APP_WEBSITE_URL, JITSI_SERVER_URL } from '../../appconfig';
 import IconSvg, { SvgFile } from '../../components/IconSvg';
@@ -6,6 +6,7 @@ import { WebView, WebViewMessageEvent } from 'react-native-webview';
 import { JITSI_BORDER, PAGE_MARGIN, TRANSPARENT_BACKGROUND, OPAQUE_BACKGROUND, BUTTON_ROUND_WIDTH, SPACING, LOGO_BACKGROUND,
     BORDER_RADIUS, BUTTON_JITSI_BACKGROUND, APP_BACKGROUND, TILE_HEIGHT } from '../../ui';
 import UiStore from '../../stores/UiStore';
+import RNCallKeep from 'react-native-callkeep';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -78,32 +79,14 @@ interface JitsiMeetState {
 
 export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetState> {
 
-    private scale = 1;
+    private webview: ReactElement | undefined;
+    private uuid: string;
 
     constructor(props: JitsiMeetProps) {
         super(props);
 
-        this.scale = Math.min(1, Math.round(100 * (UiStore.getAppLayout_().screenWidth - 2 * PAGE_MARGIN) / 530) / 100);
-
-        this.state = { isMinimized: false }
-    }
-
-    private onMessage = (message: WebViewMessageEvent) => {
-
-        if (message.nativeEvent.data === 'HANGUP') {
-            this.props.closeJitsiMeet();
-        }
-    }
-
-    private setMinimized = (isMinimized: boolean) => {
-
-        this.setState({ isMinimized: isMinimized });
-    }
-
-    public render(): JSX.Element | null {
-
+        const scale = Math.min(1, Math.round(100 * (UiStore.getAppLayout_().screenWidth - 2 * PAGE_MARGIN) / 530) / 100);
         const url = APP_WEBSITE_URL;
-
         const html =
             `
             <!DOCTYPE html>
@@ -111,7 +94,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                 <head>
                     <meta charset="utf-8">
                     <meta http-equiv="content-type" content="text/html;charset=utf-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=${ this.scale }, maximum-scale=${ this.scale }">
+                    <meta name="viewport" content="width=device-width, initial-scale=${ scale }, maximum-scale=${ scale }">
                 </head>
                 <body style="height: 100%; width: 100%; display: flex; justify-content: center; align-items: center">
 
@@ -127,14 +110,13 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
 
                         const domain = "${ JITSI_SERVER_URL.replace('https://', '') }";
                         const options = {
-                            roomName: "${ this.props.jitsiMeetId }",
+                            roomName: "${ props.jitsiMeetId }",
                             height: '100%',
                             width: '100%',
                             parentNode: undefined,
                             interfaceConfigOverwrite: {
                                 OPTIMAL_BROWSERS: [],
                                 MOBILE_APP_PROMO: false,
-                                TOOLBAR_ALWAYS_VISIBLE: true,
                                 SHOW_JITSI_WATERMARK: false,
                                 DISABLE_VIDEO_BACKGROUND: true,
                                 DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
@@ -172,13 +154,13 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                                             max: 15,
                                             min: 5,
                                         },
-                                        aspectRatio: 1,
+                                        aspectRatio: { ideal: 1 },
                                         facingMode: { exact: 'user' },
                                     },
                                 },
                                 disableSimulcast: true,
                                 localRecording: { enabled: false },
-                                p2p: { enabled: false }, // 'true' crashes chromium + electron
+                                p2p: { enabled: false },
                                 disableH264: true,
                                 enableLayerSuspension: true,
                                 prejoinPageEnabled: false,
@@ -195,6 +177,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                                 disableFilmstripAutohiding: true,
                                 maxFullResolutionParticipants: 1,
                                 disableResponsiveTiles: false,
+                                toolbarConfig: { alwaysVisible: true },
                                 toolbarButtons: [
                                     'microphone',
                                     'camera',
@@ -209,6 +192,76 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                 </body>
             </html>
             `;
+
+        this.webview = (
+            <WebView
+                scrollEnabled={ false }
+                originWhitelist={['*']}
+                source={{
+                    html: html,
+                    baseUrl: `${url}`,
+                }}
+                onMessage={ this.onMessage }
+                mediaPlaybackRequiresUserAction={ false }
+                allowsInlineMediaPlayback={ true }
+            />
+        );
+
+        const uuidv4 = () => {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        this.uuid = uuidv4();
+
+        this.state = { isMinimized: false }
+    }
+
+    public componentDidMount(): void {
+
+        const handle = '1234567890';
+        const contactIdentifier = 'contact';
+        const handleType = 'generic';
+        const hasVideo = true;
+
+        const options = {
+            ios: {
+                appName: 'quadrix',
+            },
+            android: {
+                alertTitle: 'Permissions Required',
+                alertDescription: 'This application needs to access your phone calling accounts to make calls',
+                cancelButton: 'Cancel',
+                okButton: 'ok',
+                additionalPermissions: []
+            }
+        };
+
+        RNCallKeep.setup(options)
+            .then(_response => {
+                RNCallKeep.startCall(this.uuid, handle, contactIdentifier, handleType, hasVideo);
+            })
+            .catch(_error => null);
+    }
+
+    private onMessage = (message: WebViewMessageEvent) => {
+
+        if (message.nativeEvent.data === 'HANGUP') {
+
+            RNCallKeep.endCall(this.uuid);
+
+            this.props.closeJitsiMeet();
+        }
+    }
+
+    private setMinimized = (isMinimized: boolean) => {
+
+        this.setState({ isMinimized: isMinimized });
+    }
+
+    public render(): JSX.Element | null {
 
         let buttonMinimize;
         let buttonMaximize;
@@ -255,17 +308,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
 
                 <RX.View style={ this.state.isMinimized ? styles.jitsiContainerMinimized : styles.jitsiContainer }>
 
-                    <WebView
-                        scrollEnabled={ false }
-                        originWhitelist={['*']}
-                        source={{
-                            html: html,
-                            baseUrl: `${url}`,
-                        }}
-                        onMessage={ this.onMessage }
-                        mediaPlaybackRequiresUserAction={ false }
-                        allowsInlineMediaPlayback={ true }
-                    />
+                    { this.webview }
 
                     { buttonMinimize }
 
