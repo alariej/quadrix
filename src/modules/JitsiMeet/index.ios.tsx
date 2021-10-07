@@ -6,7 +6,6 @@ import { WebView, WebViewMessageEvent } from 'react-native-webview';
 import { JITSI_BORDER, PAGE_MARGIN, TRANSPARENT_BACKGROUND, OPAQUE_BACKGROUND, BUTTON_ROUND_WIDTH, SPACING, LOGO_BACKGROUND,
     BORDER_RADIUS, BUTTON_JITSI_BACKGROUND, APP_BACKGROUND, TILE_HEIGHT } from '../../ui';
 import UiStore from '../../stores/UiStore';
-import RNCallKeep from 'react-native-callkeep';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -80,7 +79,6 @@ interface JitsiMeetState {
 export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetState> {
 
     private webview: ReactElement | undefined;
-    private uuid: string;
 
     constructor(props: JitsiMeetProps) {
         super(props);
@@ -207,50 +205,12 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
             />
         );
 
-        const uuidv4 = () => {
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-                return v.toString(16);
-            });
-        }
-
-        this.uuid = uuidv4();
-
         this.state = { isMinimized: false }
-    }
-
-    public componentDidMount(): void {
-
-        const handle = '1234567890';
-        const contactIdentifier = 'contact';
-        const handleType = 'generic';
-        const hasVideo = true;
-
-        const options = {
-            ios: {
-                appName: 'quadrix',
-            },
-            android: {
-                alertTitle: 'Permissions Required',
-                alertDescription: 'This application needs to access your phone calling accounts to make calls',
-                cancelButton: 'Cancel',
-                okButton: 'ok',
-                additionalPermissions: []
-            }
-        };
-
-        RNCallKeep.setup(options)
-            .then(_response => {
-                RNCallKeep.startCall(this.uuid, handle, contactIdentifier, handleType, hasVideo);
-            })
-            .catch(_error => null);
     }
 
     private onMessage = (message: WebViewMessageEvent) => {
 
         if (message.nativeEvent.data === 'HANGUP') {
-
-            RNCallKeep.endCall(this.uuid);
 
             this.props.closeJitsiMeet();
         }

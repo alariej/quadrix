@@ -339,8 +339,6 @@ PODS:
     - React-perflogger (= 0.65.1)
   - rn-fetch-blob (0.12.0):
     - React-Core
-  - RNCallKeep (4.2.0):
-    - React
   - RNCAsyncStorage (1.15.7):
     - React-Core
   - RNFBApp (12.8.0):
@@ -393,7 +391,6 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
-  - RNCallKeep (from `../node_modules/react-native-callkeep`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
@@ -484,8 +481,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   rn-fetch-blob:
     :path: "../node_modules/rn-fetch-blob"
-  RNCallKeep:
-    :path: "../node_modules/react-native-callkeep"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNFBApp:
@@ -545,7 +540,6 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 85187f19dd9c47a7c102f9994f9d14e4dc2110de
   ReactCommon: eafed38eec7b591c31751bfa7494801618460459
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
-  RNCallKeep: 8cbaafb72c4a1738f4a6e70fdaf041a14083ce5b
   RNCAsyncStorage: 7102fe8985f889579a3ae148d957bbb3f308122b
   RNFBApp: b97d6654509a5852d49f0abf93be76b300fd2e2c
   RNFBMessaging: c1de144b096aaeec85e9fa3f0def62cc7a39b271
