@@ -10,6 +10,8 @@ target 'quadrix' do
 
   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
 
+  pod 'JitsiMeetSDK'
+
   target 'quadrixTests' do
     inherit! :complete
     # Pods for testing

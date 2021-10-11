@@ -17,6 +17,10 @@
 		A93995CF25FBB9E6006AF4C9 /* ding.wav in Resources */ = {isa = PBXBuildFile; fileRef = A93995CD25FBB9E5006AF4C9 /* ding.wav */; };
 		A93A19B925F6C6FB009A1CF9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A93A19B825F6C6FB009A1CF9 /* GoogleService-Info.plist */; };
 		A93A19BA25F6C6FB009A1CF9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A93A19B825F6C6FB009A1CF9 /* GoogleService-Info.plist */; };
+		A9586B0C270F5CBC00A1665A /* RNJitsiMeetView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9586B0B270F5CBC00A1665A /* RNJitsiMeetView.m */; };
+		A9586B0D270F5CBC00A1665A /* RNJitsiMeetView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9586B0B270F5CBC00A1665A /* RNJitsiMeetView.m */; };
+		A9586B10270F5CF200A1665A /* RNJitsiMeetViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A9586B0F270F5CF200A1665A /* RNJitsiMeetViewManager.m */; };
+		A9586B11270F5CF200A1665A /* RNJitsiMeetViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A9586B0F270F5CF200A1665A /* RNJitsiMeetViewManager.m */; };
 		A958EAAE260B7FDF007DC8CA /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A958EAAD260B7FDF007DC8CA /* ShareViewController.swift */; };
 		A958EAB1260B7FDF007DC8CA /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A958EAAF260B7FDF007DC8CA /* MainInterface.storyboard */; };
 		A958EAB5260B7FDF007DC8CA /* QuadrixShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A958EAAB260B7FDF007DC8CA /* QuadrixShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -80,6 +84,10 @@
 		A93995CD25FBB9E5006AF4C9 /* ding.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ding.wav; sourceTree = "<group>"; };
 		A93A19B825F6C6FB009A1CF9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A951835825F7E77E00C3EFC0 /* quadrix.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = quadrix.entitlements; path = quadrix/quadrix.entitlements; sourceTree = "<group>"; };
+		A9586B0A270F5CA400A1665A /* RNJitsiMeetView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNJitsiMeetView.h; sourceTree = "<group>"; };
+		A9586B0B270F5CBC00A1665A /* RNJitsiMeetView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNJitsiMeetView.m; sourceTree = "<group>"; };
+		A9586B0E270F5CD700A1665A /* RNJitsiMeetViewManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNJitsiMeetViewManager.h; sourceTree = "<group>"; };
+		A9586B0F270F5CF200A1665A /* RNJitsiMeetViewManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNJitsiMeetViewManager.m; sourceTree = "<group>"; };
 		A958EAAB260B7FDF007DC8CA /* QuadrixShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuadrixShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A958EAAD260B7FDF007DC8CA /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		A958EAB0260B7FDF007DC8CA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
@@ -141,6 +149,7 @@
 		13B07FAE1A68108700A75B9A /* quadrix */ = {
 			isa = PBXGroup;
 			children = (
+				A9586B09270F5C5C00A1665A /* JitsiMeet */,
 				A98F903F262345630074E4B9 /* RCTOrientation */,
 				A951835825F7E77E00C3EFC0 /* quadrix.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -204,6 +213,17 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		A9586B09270F5C5C00A1665A /* JitsiMeet */ = {
+			isa = PBXGroup;
+			children = (
+				A9586B0A270F5CA400A1665A /* RNJitsiMeetView.h */,
+				A9586B0B270F5CBC00A1665A /* RNJitsiMeetView.m */,
+				A9586B0E270F5CD700A1665A /* RNJitsiMeetViewManager.h */,
+				A9586B0F270F5CF200A1665A /* RNJitsiMeetViewManager.m */,
+			);
+			path = JitsiMeet;
+			sourceTree = "<group>";
+		};
 		A958EAAC260B7FDF007DC8CA /* QuadrixShareExtension */ = {
 			isa = PBXGroup;
 			children = (
@@ -237,6 +257,7 @@
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
 				CF4106BA598CA37A79C87EFF /* [CP] Copy Pods Resources */,
+				73944FAC6601E80A7DD4F0C9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -260,6 +281,7 @@
 				A7842F82F0B68173F9E61790 /* [CP] Copy Pods Resources */,
 				2BE8F2090F7F804B838AC89F /* [CP-User] [RNFB] Core Configuration */,
 				A958EAB6260B7FDF007DC8CA /* Embed App Extensions */,
+				878A5498ED4FC3C6A7EE35E4 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -420,6 +442,46 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		73944FAC6601E80A7DD4F0C9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-quadrix-quadrixTests/Pods-quadrix-quadrixTests-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/JitsiMeetSDK/JitsiMeetSDK.framework/JitsiMeetSDK",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/JitsiMeetSDK/WebRTC.framework/WebRTC",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JitsiMeetSDK.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-quadrix-quadrixTests/Pods-quadrix-quadrixTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		878A5498ED4FC3C6A7EE35E4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-quadrix/Pods-quadrix-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/JitsiMeetSDK/JitsiMeetSDK.framework/JitsiMeetSDK",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/JitsiMeetSDK/WebRTC.framework/WebRTC",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JitsiMeetSDK.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-quadrix/Pods-quadrix-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		A7842F82F0B68173F9E61790 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -486,6 +548,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				00E356F31AD99517003FC87E /* quadrixTests.m in Sources */,
+				A9586B11270F5CF200A1665A /* RNJitsiMeetViewManager.m in Sources */,
+				A9586B0D270F5CBC00A1665A /* RNJitsiMeetView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -494,6 +558,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				A9586B10270F5CF200A1665A /* RNJitsiMeetViewManager.m in Sources */,
+				A9586B0C270F5CBC00A1665A /* RNJitsiMeetView.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				A98F90422623459F0074E4B9 /* Orientation.m in Sources */,
 			);

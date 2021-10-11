@@ -60,6 +60,7 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.5.2):
     - GoogleUtilities/Logger
+  - JitsiMeetSDK (3.10.2)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -359,6 +360,7 @@ DEPENDENCIES:
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - JitsiMeetSDK
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -409,6 +411,7 @@ SPEC REPOS:
     - fmt
     - GoogleDataTransport
     - GoogleUtilities
+    - JitsiMeetSDK
     - nanopb
     - PromisesObjC
 
@@ -508,6 +511,7 @@ SPEC CHECKSUMS:
   glog: 5337263514dd6f09803962437687240c5dc39aa4
   GoogleDataTransport: 85fd18ff3019bb85d3f2c551d04c481dedf71fc9
   GoogleUtilities: 8de2a97a17e15b6b98e38e8770e2d129a57c0040
+  JitsiMeetSDK: 2f118fa770f23e518f3560fc224fae3ac7062223
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   RCT-Folly: 0dd9e1eb86348ecab5ba76f910b56f4b5fef3c46
@@ -547,6 +551,6 @@ SPEC CHECKSUMS:
   RNSVG: 4ecc2e8f38b6ebe7889909570c26f3abe8059767
   Yoga: aa0cb45287ebe1004c02a13f279c55a95f1572f4
 
-PODFILE CHECKSUM: 1d732e645d8a8544e432ca4c8c269121bd437648
+PODFILE CHECKSUM: 0e821d6a4f0f21d655d845b132acaf9543664c5d
 
 COCOAPODS: 1.11.2

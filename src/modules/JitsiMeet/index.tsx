@@ -2,6 +2,7 @@ import React from 'react';
 import RX from 'reactxp';
 import { JITSI_SERVER_URL } from '../../appconfig';
 import IconSvg, { SvgFile } from '../../components/IconSvg';
+import ApiClient from '../../matrix/ApiClient';
 import { JITSI_BORDER, PAGE_MARGIN, TRANSPARENT_BACKGROUND, OPAQUE_BACKGROUND, BUTTON_ROUND_WIDTH, SPACING, LOGO_BACKGROUND,
     BORDER_RADIUS, BUTTON_JITSI_BACKGROUND, APP_BACKGROUND, TILE_HEIGHT } from '../../ui';
 
@@ -110,6 +111,9 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
             height: '100%',
             width: '100%',
             parentNode: document.getElementById('jitsicomponent'),
+            userInfo: {
+                displayName: ApiClient.credentials.userId,
+            },
             interfaceConfigOverwrite: {
                 OPTIMAL_BROWSERS: ['chromium'],
                 MOBILE_APP_PROMO: false,
