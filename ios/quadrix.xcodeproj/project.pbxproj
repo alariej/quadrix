@@ -25,6 +25,8 @@
 		A977923C26565A9B009D2FE1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A977923A26565A9B009D2FE1 /* LaunchScreen.storyboard */; };
 		A977923E26565BFD009D2FE1 /* Launch.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A977923D26565BFD009D2FE1 /* Launch.xcassets */; };
 		A977923F26565BFD009D2FE1 /* Launch.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A977923D26565BFD009D2FE1 /* Launch.xcassets */; };
+		A98E06402715DAB200136077 /* JitsiMeetViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98E063F2715DAB200136077 /* JitsiMeetViewManager.swift */; };
+		A98E06422715DDA300136077 /* JitsiMeetViewModule.m in Sources */ = {isa = PBXBuildFile; fileRef = A98E06412715DDA300136077 /* JitsiMeetViewModule.m */; };
 		A98F90422623459F0074E4B9 /* Orientation.m in Sources */ = {isa = PBXBuildFile; fileRef = A98F90412623459F0074E4B9 /* Orientation.m */; };
 /* End PBXBuildFile section */
 
@@ -89,6 +91,9 @@
 		A959E1C026A464AB00460759 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A977923A26565A9B009D2FE1 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A977923D26565BFD009D2FE1 /* Launch.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Launch.xcassets; sourceTree = "<group>"; };
+		A98E063E2715DAB100136077 /* quadrix-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "quadrix-Bridging-Header.h"; sourceTree = "<group>"; };
+		A98E063F2715DAB200136077 /* JitsiMeetViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JitsiMeetViewManager.swift; sourceTree = "<group>"; };
+		A98E06412715DDA300136077 /* JitsiMeetViewModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JitsiMeetViewModule.m; sourceTree = "<group>"; };
 		A98F90402623457E0074E4B9 /* Orientation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Orientation.h; sourceTree = "<group>"; };
 		A98F90412623459F0074E4B9 /* Orientation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Orientation.m; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -141,6 +146,7 @@
 		13B07FAE1A68108700A75B9A /* quadrix */ = {
 			isa = PBXGroup;
 			children = (
+				A98E063D2715D9BE00136077 /* RCTJitsiMeet */,
 				A98F903F262345630074E4B9 /* RCTOrientation */,
 				A951835825F7E77E00C3EFC0 /* quadrix.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -213,6 +219,16 @@
 				A958EAB2260B7FDF007DC8CA /* Info.plist */,
 			);
 			path = QuadrixShareExtension;
+			sourceTree = "<group>";
+		};
+		A98E063D2715D9BE00136077 /* RCTJitsiMeet */ = {
+			isa = PBXGroup;
+			children = (
+				A98E063F2715DAB200136077 /* JitsiMeetViewManager.swift */,
+				A98E063E2715DAB100136077 /* quadrix-Bridging-Header.h */,
+				A98E06412715DDA300136077 /* JitsiMeetViewModule.m */,
+			);
+			path = RCTJitsiMeet;
 			sourceTree = "<group>";
 		};
 		A98F903F262345630074E4B9 /* RCTOrientation */ = {
@@ -306,7 +322,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = W988UQ8696;
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1300;
 					};
 					A958EAAA260B7FDF007DC8CA = {
 						CreatedOnToolsVersion = 12.4;
@@ -535,7 +551,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A98E06422715DDA300136077 /* JitsiMeetViewModule.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				A98E06402715DAB200136077 /* JitsiMeetViewManager.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				A98F90422623459F0074E4B9 /* Orientation.m in Sources */,
 			);
@@ -590,6 +608,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 839FF70F8674CF088D1B97E4 /* Pods-quadrix-quadrixTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = W988UQ8696;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -614,6 +633,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7C6B3D4ECE75949693113338 /* Pods-quadrix-quadrixTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = W988UQ8696;
@@ -637,6 +657,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = quadrix/quadrix.entitlements;
 				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = W988UQ8696;
@@ -651,6 +672,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = chat.quadrix.ios;
 				PRODUCT_NAME = quadrix;
+				SWIFT_OBJC_BRIDGING_HEADER = "RCTJitsiMeet/quadrix-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -679,6 +701,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = chat.quadrix.ios;
 				PRODUCT_NAME = quadrix;
+				SWIFT_OBJC_BRIDGING_HEADER = "RCTJitsiMeet/quadrix-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
