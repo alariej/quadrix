@@ -111,7 +111,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                 'resolution': 240,
             };
 
-            RNJitsiMeet.call(url, userInfo, featureFlags); // eslint-disable-line
+            RNJitsiMeet.call(url, userInfo, featureFlags);
         }, 250);
     }
 
