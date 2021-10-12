@@ -73,3 +73,4 @@ android/keystore.properties
 ios/applesigningcertificate.p12
 macos_alarie.provisionprofile
 macos_alarie_dev.provisionprofile
+ios/Podfile.lock
