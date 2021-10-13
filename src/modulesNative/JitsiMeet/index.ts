@@ -1,35 +1,26 @@
-import { HostComponent, NativeModules, requireNativeComponent, ViewProps, ViewStyle } from 'react-native';
+import { HostComponent, requireNativeComponent, ViewProps, ViewStyle } from 'react-native';
 
-const { RNJitsiMeetView } = NativeModules;
-
-interface JMViewProps extends ViewProps {
-    style: ViewStyle,
-    onConferenceTerminated: () => void,
-    onConferenceJoined: () => void,
+export interface JitsiMeetOptions {
+    room: string,
+    serverUrl: string,
+    userInfo: {
+        displayName: string,
+        email?: string,
+        avatar?: string,
+    },
+    featureFlags: { [flag: string]: boolean | number }
 }
 
-interface RNJitsiMeetViewInterface {
-    call(
-        url: string,
-        userInfo: { displayName: string },
-        featureFlags: { [flag: string]: boolean | number }
-    ): void
+interface JitsiMeetViewProps extends ViewProps {
+    style: ViewStyle,
+    options: JitsiMeetOptions,
+    onConferenceTerminated: () => void,
+    onConferenceJoined: () => void,
+    onClick?: (event: UIEvent) => void,
 }
 
 class JitsiMeet {
-
-    public View: HostComponent<JMViewProps> = requireNativeComponent('RNJitsiMeetView');
-
-    public call(
-        url: string,
-        userInfo: { displayName: string },
-        featureFlags: { [flag: string]: boolean | number }
-    ) {
-
-        const RNJitsiMeetView_ = RNJitsiMeetView as RNJitsiMeetViewInterface;
-
-        return RNJitsiMeetView_.call(url, userInfo, featureFlags);
-    }
+    public View: HostComponent<JitsiMeetViewProps> = requireNativeComponent('RCTJitsiMeetView'); // RCTJitsiMeetViewManager on native side
 }
 
 export default new JitsiMeet();
