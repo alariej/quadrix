@@ -1,4 +1,4 @@
-import { HostComponent, requireNativeComponent, ViewProps, ViewStyle } from 'react-native';
+import { NativeModules } from 'react-native';
 
 export interface JitsiMeetOptions {
     room: string,
@@ -11,16 +11,20 @@ export interface JitsiMeetOptions {
     featureFlags: { [flag: string]: boolean | number }
 }
 
-interface JitsiMeetViewProps extends ViewProps {
-    style: ViewStyle,
-    options: JitsiMeetOptions,
-    onConferenceTerminated: () => void,
-    onConferenceJoined: () => void,
-    onClick?: (event: UIEvent) => void,
+interface JitsiMeetInterface {
+    launch(options: JitsiMeetOptions): void
 }
 
-class JitsiMeet {
-    public View: HostComponent<JitsiMeetViewProps> = requireNativeComponent('RCTJitsiMeetView'); // RCTJitsiMeetViewManager on native side
+const { JitsiMeet } = NativeModules;
+
+class JitsiMeetModule {
+
+    public launch(options: JitsiMeetOptions) {
+
+        const JitsiMeet_ = JitsiMeet as JitsiMeetInterface;
+
+        return JitsiMeet_.launch(options);
+    }
 }
 
-export default new JitsiMeet();
+export default new JitsiMeetModule();

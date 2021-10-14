@@ -4,7 +4,7 @@ import { JITSI_SERVER_URL } from '../../appconfig';
 import { JITSI_BORDER, BUTTON_JITSI_BACKGROUND, PAGE_MARGIN, TRANSPARENT_BACKGROUND, OPAQUE_BACKGROUND, BUTTON_ROUND_WIDTH,
     SPACING, LOGO_BACKGROUND, BORDER_RADIUS, APP_BACKGROUND, TILE_HEIGHT } from '../../ui';
 import IconSvg, { SvgFile } from '../../components/IconSvg';
-import RCTJitsiMeet, { JitsiMeetOptions } from '../../modulesNative/JitsiMeet';
+import { JitsiMeetOptions } from '../../modulesNative/JitsiMeet';
 import ApiClient from '../../matrix/ApiClient';
 
 const styles = {
@@ -168,6 +168,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
         return (
             <RX.View style={ this.state.isMinimized ? styles.containerMinimized : styles.container }>
                 <RX.View style={ this.state.isMinimized ? styles.jitsiContainerMinimized : styles.jitsiContainer }>
+                    {/* 
                     <RCTJitsiMeet.View
                         style={{ flex: 1, margin: -1 }}
                         options={ this.options }
@@ -175,6 +176,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                         onConferenceJoined={ this.onConferenceJoined }
                         onClick={ e => console.log(e) } // to test propagating touches from jitsimeetsdk
                     />
+                    */}
                     { buttonMinimize }
                 </RX.View>
                 { buttonMaximize }

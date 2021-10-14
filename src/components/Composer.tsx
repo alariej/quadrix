@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
-import { APP_ID } from '../appconfig';
+import { APP_ID, JITSI_SERVER_URL } from '../appconfig';
 import { EMOJI_TEXT, INPUT_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, BUTTON_ROUND_WIDTH, LOGO_BACKGROUND,
     BUTTON_COMPOSER_WIDTH, OPAQUE_BACKGROUND, COMPOSER_BORDER, DIALOG_WIDTH, MODAL_CONTENT_BACKGROUND, FONT_EMOJI_LARGE,
     INPUT_BACKGROUND, BUTTON_HEIGHT, OBJECT_MARGIN} from '../ui';
@@ -19,6 +19,7 @@ import { MessageEventContent_, RoomType } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
 import { TemporaryMessage } from '../models/MessageEvent';
 import AppFont from '../modules/AppFont';
+import JitsiMeet from '../modulesNative/JitsiMeet';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -551,7 +552,35 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                 RX.Modal.show(<DialogContainer content={ text }/>, 'errordialog');
             });
 
-        this.props.showJitsiMeet(jitsiMeetId);
+        // this.props.showJitsiMeet(jitsiMeetId);
+
+        const options = {
+            room: jitsiMeetId,
+            serverUrl: JITSI_SERVER_URL,
+            userInfo: {
+                displayName: ApiClient.credentials.userId,
+            },
+            featureFlags: {
+                'add-people.enabled': false,
+                'calendar.enabled': false,
+                'call-integration.enabled': true,
+                'chat.enabled': false,
+                'conference-timer.enabled': false,
+                'filmstrip.enabled': true,
+                'fullscreen.enabled': false,
+                'invite.enabled': false,
+                'meeting-name.enabled': false,
+                'notifications.enabled': false,
+                'overflow-menu.enabled': false,
+                'pip.enabled': false,
+                'tile-view.enabled': false,
+                'toolbox.alwaysVisible': true,
+                'resolution': 240,
+            }
+        }
+
+        JitsiMeet.launch(options);
+
     }
 
     private onSelectionChange = (start: number, end: number) => {
