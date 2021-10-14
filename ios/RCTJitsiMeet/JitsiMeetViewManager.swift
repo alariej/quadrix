@@ -13,6 +13,7 @@ class RCTJitsiMeetViewManager: RCTViewManager {
 
   override func view() -> UIView! {
     return JitsiMeetView_()
+    // return setTestView()
   }
 
   override class func requiresMainQueueSetup() -> Bool {
@@ -20,11 +21,42 @@ class RCTJitsiMeetViewManager: RCTViewManager {
   }
 }
 
+private func setTestView() -> UIView {
+  let testView = TestView()
+  testView.textColor = UIColor.white
+  testView.textAlignment = NSTextAlignment.center
+  testView.backgroundColor = .red
+  return testView
+}
+
+class TestView: UILabel {
+  private var _options: NSDictionary?
+  @objc var options: NSDictionary? {
+    set {
+      _options = newValue
+      self.text = _options?["room"] as? String
+    }
+    get {
+      return _options
+    }
+  }
+
+  @objc var onConferenceTerminated: RCTDirectEventBlock?
+  @objc var onConferenceJoined: RCTDirectEventBlock?
+  @objc var onConferenceWillJoin: RCTDirectEventBlock?
+
+  @objc var onClick: RCTBubblingEventBlock?
+  open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    guard let onClick = self.onClick else { return }
+    let data: [AnyHashable: Any] = ["event": event as Any]
+    onClick(data)
+  }
+}
+
 class JitsiMeetView_: JitsiMeetView {
   @objc var options: NSDictionary? {
     willSet {
       if let newOptions = newValue {
-        // print(newOptions)
         // self.isUserInteractionEnabled = false
         joinCall(newOptions)
       }
@@ -53,11 +85,6 @@ class JitsiMeetView_: JitsiMeetView {
     onClick(data)
   }
 
-  // does not work in stopping propagation
-  override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-    return false
-  }
-
   required init?(coder: NSCoder) {
     super.init(coder: coder)
   }
@@ -75,7 +102,6 @@ class JitsiMeetView_: JitsiMeetView {
 
   override func removeFromSuperview() {
     leaveCall()
-
     super.removeFromSuperview()
   }
 }
