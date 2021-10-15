@@ -10,6 +10,7 @@ import { APP_BACKGROUND, PAGE_WIDTH_DEFAULT, PAGE_WIDE_PADDING } from '../ui';
 const UnknownAccessToken = 'UnknownAccessToken';
 const OfflineTrigger = 'OfflineTrigger';
 const JitsiActiveTrigger = 'JitsiActiveTrigger';
+const JitsiMaximisedTrigger = 'JitsiMaximisedTrigger';
 const ColorTrigger = 'ColorTrigger';
 const SelectedRoomTrigger = 'SelectedRoomTrigger';
 const LayoutTrigger = 'LayoutTrigger';
@@ -40,6 +41,7 @@ class UiStore extends StoreBase {
     private language: Languages = 'en';
     private isElectron = false;
     private isJitsiActive = false;
+    private isJitsiMaximised = false;
     private appLayout: Layout | undefined;
     private appColor = APP_BACKGROUND[0];
     private selectedRoom = '';
@@ -166,6 +168,18 @@ class UiStore extends StoreBase {
     public getJitsiActive(): boolean {
 
         return this.isJitsiActive;
+    }
+
+    public setJitsiMaximised(isJitsiMaximised: boolean) {
+
+        this.isJitsiMaximised = isJitsiMaximised;
+        this.trigger(JitsiMaximisedTrigger);
+    }
+
+    @autoSubscribeWithKey(JitsiMaximisedTrigger)
+    public getJitsiMaximised(): boolean {
+
+        return this.isJitsiMaximised;
     }
 
     public setAppLayout(layout: ViewOnLayoutEvent) {

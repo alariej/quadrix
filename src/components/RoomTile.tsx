@@ -111,6 +111,7 @@ interface RoomTileState {
     appColor: string;
     isSelected: boolean;
     isShaded: boolean;
+    isJitsiMaximised: boolean;
 }
 
 export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState> {
@@ -157,6 +158,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
             isSelected: selectedRoom === this.props.roomId,
             isShaded: (selectedRoom && selectedRoom !== this.props.roomId) as boolean,
             appColor: UiStore.getAppColor(),
+            isJitsiMaximised: UiStore.getJitsiMaximised(),
         };
     }
 
@@ -388,7 +390,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
             >
                 <RX.View
                     style={ styles.containerTile }
-                    onPress={ () => this.props.onPressRoom!(this.props.roomId) }
+                    onPress={ () => { this.state.isJitsiMaximised ? null : this.props.onPressRoom!(this.props.roomId) } }
                     disableTouchOpacityAnimation={ false }
                     activeOpacity={ 0.8 }
                 >

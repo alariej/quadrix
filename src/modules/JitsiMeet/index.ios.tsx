@@ -6,6 +6,7 @@ import { JITSI_BORDER, BUTTON_JITSI_BACKGROUND, PAGE_MARGIN, TRANSPARENT_BACKGRO
 import IconSvg, { SvgFile } from '../../components/IconSvg';
 import RNJitsiMeet from '../../modulesNative/JitsiMeet';
 import ApiClient from '../../matrix/ApiClient';
+import UiStore from '../../stores/UiStore';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -112,16 +113,19 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
             };
 
             RNJitsiMeet.call(url, userInfo, featureFlags);
+            UiStore.setJitsiMaximised(true);
         }, 250);
     }
 
     private setMinimized = (isMinimized: boolean) => {
 
+        UiStore.setJitsiMaximised(!isMinimized);
         this.setState({ isMinimized: isMinimized });
     }
 
     private onConferenceTerminated = () => {
 
+        UiStore.setJitsiMaximised(false);
         this.props.closeJitsiMeet();
     }
 
