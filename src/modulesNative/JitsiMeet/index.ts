@@ -1,9 +1,8 @@
-import { HostComponent, NativeModules, requireNativeComponent, ViewProps, ViewStyle } from 'react-native';
+import { HostComponent, NativeModules, requireNativeComponent, ViewProps } from 'react-native';
 
 const { RNJitsiMeetView } = NativeModules;
 
-interface JMViewProps extends ViewProps {
-    style: ViewStyle,
+interface JitsiMeetViewProps extends ViewProps {
     onConferenceTerminated: () => void,
     onConferenceJoined: () => void,
 }
@@ -18,7 +17,7 @@ interface RNJitsiMeetViewInterface {
 
 class JitsiMeet {
 
-    public View: HostComponent<JMViewProps> = requireNativeComponent('RNJitsiMeetView');
+    public View: HostComponent<JitsiMeetViewProps> = requireNativeComponent('RNJitsiMeetView');
 
     public call(
         url: string,
