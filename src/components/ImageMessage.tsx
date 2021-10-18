@@ -6,7 +6,6 @@ import { MessageEvent } from '../models/MessageEvent';
 import FullScreenImage from './FullScreenImage';
 import { SPACING, BUTTON_ROUND_WIDTH, PAGE_MARGIN, BORDER_RADIUS } from '../ui';
 import UiStore from '../stores/UiStore';
-import { Headers } from 'reactxp/dist/common/Types';
 import Spinner from './Spinner';
 
 const styles = {
@@ -135,11 +134,6 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
             </RX.View>
         );
 
-        let headers: Headers = {};
-        if (UiStore.getPlatform() === 'ios') {
-            headers = {'Cache-Control':'force-cache'};
-        }
-
         return (
             <RX.View style={ styles.containerMessage }>
                 <RX.View
@@ -154,7 +148,7 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
                         style={ styles.image }
                         source={ this.url }
                         onLoad={ size => this.onLoad(size) }
-                        headers={ headers }
+                        headers={ UiStore.getPlatform() === 'ios' ? { 'Cache-Control':'max-stale' } : undefined }
                     />
 
                     { spinner }

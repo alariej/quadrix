@@ -646,6 +646,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
                     resizeMode={ 'cover' }
                     style={ styles.avatar }
                     source={ this.avatarUrl }
+                    headers={ UiStore.getPlatform() === 'ios' ? { 'Cache-Control':'max-stale' } : undefined }
                 />
             )
         }

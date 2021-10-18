@@ -471,6 +471,7 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
                     style={ [styles.image, this.state.gestureImage, this.state.rotatedImage] }
                     source={ this.state.url }
                     onLoad={ this.onLoad }
+                    headers={ UiStore.getPlatform() === 'ios' ? { 'Cache-Control':'max-stale' } : undefined }
                 />
 
                 { spinner }

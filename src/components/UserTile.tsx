@@ -118,6 +118,7 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
                     resizeMode={ 'cover' }
                     style={ styles.avatar }
                     source={ avatarUrl }
+                    headers={ UiStore.getPlatform() === 'ios' ? { 'Cache-Control':'max-stale' } : undefined }
                 />
             )
         }

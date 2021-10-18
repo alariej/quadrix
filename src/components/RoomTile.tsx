@@ -223,6 +223,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
                     resizeMode={ 'cover' }
                     style={ styles.avatar }
                     source={ this.state.avatarUrl }
+                    headers={ UiStore.getPlatform() === 'ios' ? { 'Cache-Control':'max-stale' } : undefined }
                 />
             )
         }

@@ -336,6 +336,7 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
                     resizeMode={ 'cover' }
                     style={ styles.avatar }
                     source={ this.avatarUrl }
+                    headers={ UiStore.getPlatform() === 'ios' ? { 'Cache-Control':'max-stale' } : undefined }
                 />
             )
         }

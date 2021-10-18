@@ -5,7 +5,6 @@ import { MessageEvent } from '../models/MessageEvent';
 import UiStore from '../stores/UiStore';
 import * as linkify from 'linkifyjs';
 import { jitsiStartedInternal } from '../translations';
-import { Headers } from 'reactxp/dist/common/Types';
 import { LinkifyElement } from '../models/LinkifyElement';
 import utils from '../utils/Utils';
 import AppFont from '../modules/AppFont';
@@ -125,11 +124,6 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 
         if (this.props.message.content.url_preview) {
 
-            let headers: Headers = {};
-            if (UiStore.getPlatform() === 'ios') {
-                headers = {'Cache-Control':'force-cache'};
-            }
-
             const linkifyElement: LinkifyElement = {
                 type: 'url',
                 value: this.props.message.content.url_preview.text!,
@@ -158,7 +152,7 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
                             resizeMode={ 'contain' }
                             style={ styles.image }
                             source={ this.state.previewUrl! }
-                            headers={ headers }
+                            headers={ UiStore.getPlatform() === 'ios' ? { 'Cache-Control':'max-stale' } : undefined }
                             onError={ this.onPreviewImageFail }
                         />
                     </RX.View>
