@@ -191,8 +191,8 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
 
             const h = state.centerPageX - this.screenWidth / 2;
             const v = state.centerPageY - this.screenHeight / 2;
-            const panH = -Math.sign(h) * Math.min(Math.abs(h / 12), 12);
-            const panV = -Math.sign(v) * Math.min(Math.abs(v / 12), 12);
+            const panH = -Math.sign(h) * Math.sign(zoomFactor) * Math.min(Math.abs(h / 12), 12);
+            const panV = -Math.sign(v) * Math.sign(zoomFactor) * Math.min(Math.abs(v / 12), 12);
 
             this.setGestureImageStyle(0, panH, panV);
         }
