@@ -136,6 +136,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
     */
 
     private textInputComponent: RX.TextInput | undefined;
+    private buttonComponent: RX.Button | undefined;
     private textInput = '';
     private textInputStyle: StyleRuleSet<TextStyle>;
     private language: Languages = 'en';
@@ -580,11 +581,14 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
         if (!this.emojiPicker) { return; }
 
-        this.textInputComponent?.focus();
+        this.textInputComponent?.requestFocus();
 
         const popupOptions: RX.Types.PopupOptions = {
             getAnchor: () => {
                 return this.textInputComponent!;
+            },
+            getElementTriggeringPopup: () => {
+                return this.buttonComponent!;
             },
             renderPopup: (_anchorPosition: RX.Types.PopupPosition, _anchorOffset: number, _popupWidth: number, _popupHeight: number) => {
                 return this.emojiPicker;
@@ -650,6 +654,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                 </RX.Button>
                 <RX.Button
                     style={ styles.button }
+                    ref={ component => this.buttonComponent = component! }
                     onPressIn={ this.toggleEmojiPicker }
                     disableTouchOpacityAnimation={ true }
                     disabled={ !this.props.roomActive }
@@ -668,7 +673,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                 </RX.Button>
                 <RX.TextInput
                     style={ [styles.textInput, this.textInputStyle] }
-                    ref={ component => { this.textInputComponent = component! } }
+                    ref={ component => this.textInputComponent = component! }
                     onKeyPress={ this.onKeyPress }
                     onChangeText={ textInput => this.textInput = textInput }
                     value={ this.state.textInput }
