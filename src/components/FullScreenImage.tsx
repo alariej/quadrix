@@ -188,6 +188,13 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
 
             this.lastPinchDist = pinchDist;
             this.setGestureImageStyle(zoomFactor);
+
+            const h = state.centerPageX - this.screenWidth / 2;
+            const v = state.centerPageY - this.screenHeight / 2;
+            const panH = -Math.sign(h) * Math.min(Math.abs(h / 12), 12);
+            const panV = -Math.sign(v) * Math.min(Math.abs(v / 12), 12);
+
+            this.setGestureImageStyle(0, panH, panV);
         }
 
         if (state.isComplete) { this.lastPinchDist = 0; }
@@ -307,8 +314,8 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
 
         if (zoomFactor) {
 
-            zoomedWidth = this.zoomedWidth * (1 + zoomFactor);
-            zoomedHeight = this.zoomedHeight * (1 + zoomFactor);
+            zoomedWidth = Math.max(this.imageWidth, this.zoomedWidth * (1 + zoomFactor));
+            zoomedHeight = Math.max(this.imageHeight, this.zoomedHeight * (1 + zoomFactor));
 
             this.zoomedWidth = zoomedWidth;
             this.zoomedHeight = zoomedHeight;
@@ -475,7 +482,7 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
 
                 <RX.GestureView
                     style={ styles.gestureView }
-                    onTap={() => RX.Modal.dismissAll() }
+                    onTap={ RX.Modal.dismissAll }
                     onPinchZoom={ this.onPinchZoom }
                     onScrollWheel={ this.onScrollWheel }
                     onPan={ this.onPan }
