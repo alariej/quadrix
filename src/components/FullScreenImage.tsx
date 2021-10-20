@@ -26,9 +26,6 @@ const styles = {
         right: 0,
         backgroundColor: TRANSPARENT_BACKGROUND,
     }),
-    image: RX.Styles.createImageStyle({
-        flex: 1,
-    }),
     nextButton: RX.Styles.createButtonStyle({
         position: 'absolute',
         backgroundColor: TRANSPARENT_BACKGROUND,
@@ -310,8 +307,8 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
 
         if (zoomFactor) {
 
-            zoomedWidth = Math.max(this.imageWidth, this.zoomedWidth * (1 + zoomFactor));
-            zoomedHeight = Math.max(this.imageHeight, this.zoomedHeight * (1 + zoomFactor));
+            zoomedWidth = this.zoomedWidth * (1 + zoomFactor);
+            zoomedHeight = this.zoomedHeight * (1 + zoomFactor);
 
             this.zoomedWidth = zoomedWidth;
             this.zoomedHeight = zoomedHeight;
@@ -468,7 +465,7 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
                 onKeyPress={ this.onKeyPress }
             >
                 <RX.Image
-                    style={ [styles.image, this.state.gestureImage, this.state.rotatedImage] }
+                    style={ [this.state.gestureImage, this.state.rotatedImage] }
                     source={ this.state.url }
                     onLoad={ this.onLoad }
                     headers={ UiStore.getPlatform() === 'ios' ? { 'Cache-Control':'max-stale' } : undefined }
