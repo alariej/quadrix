@@ -47,6 +47,12 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
     }),
+    containerAnimated: RX.Styles.createViewStyle({
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        overflow: 'visible'
+    }),
 };
 
 interface FullScreenImageState {
@@ -85,6 +91,9 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
     private platform: string;
     private nextButton: RX.Button | undefined;
     private isLoaded: boolean | undefined;
+    private animatedOpacity!: RX.Animated.Value;
+    private animatedTransform!: RX.Animated.Value;
+    private animatedStyle: RX.Types.AnimatedViewStyleRuleSet;
 
     constructor(props: FullScreenImageProps) {
         super(props);
@@ -266,22 +275,23 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
                 this.positionV = 0;
 
                 const swipeL = state.initialClientX - state.clientX > 50;
-                const swipeR = state.initialClientX - state.clientX < -50;
                 const swipeU = state.initialClientY - state.clientY > 50;
                 const swipeD = state.initialClientY - state.clientY < -50;
 
+                let inc = 0;
+                let direction = 1;
+                let isLandscape = true;
                 if (!this.screenOrientation || this.screenOrientation === 'portrait') {
-
-                    this.showNextImage(swipeL ? 1 : swipeR ? -1 : 0);
-
+                    inc = swipeL ? 1 : -1;
+                    isLandscape = false;
                 } else if (this.screenOrientation === 'landscapeR') {
-
-                    this.showNextImage(swipeD ? 1 : swipeU ? -1 : 0);
-
+                    inc = swipeD ? 1 : -1;
+                    direction = -1;
                 } else {
-
-                    this.showNextImage(swipeU ? 1 : swipeD ? -1 : 0);
+                    inc = swipeU ? 1 : -1;
                 }
+
+                this.fadeImage(inc, direction, isLandscape);
             }
 
         } else {
@@ -352,11 +362,33 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
         this.setState({ gestureImage: gestureImage });
     }
 
-    private showNextImage = (inc: number) => {
+    private fadeImage = (inc: number, direction = 1, isLandscape = false) => {
 
         if (inc === 0) { return }
 
         if (this.currentIndex + inc >= this.imageTimeline.length || this.currentIndex + inc < 0) { return }
+
+        this.animatedOpacity = RX.Animated.createValue(1.0);
+        this.animatedStyle = RX.Styles.createAnimatedViewStyle({
+            opacity: this.animatedOpacity,
+            transform: undefined,
+        });
+
+        const opacityAnimation = RX.Animated.timing(this.animatedOpacity, {
+            toValue: 0,
+            duration: 250,
+            easing: RX.Animated.Easing.Out(),
+            useNativeDriver: true,
+        });
+
+        this.forceUpdate(() => {
+            opacityAnimation.start(() => {
+                this.slideImage(inc, direction, isLandscape);
+            });
+        });
+    }
+
+    private slideImage = (inc: number, direction: number, isLandscape: boolean) => {
 
         this.currentIndex = this.currentIndex + inc;
 
@@ -368,7 +400,30 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
 
         const url = utils.mxcToHttp(nextImage.content.url!, ApiClient.credentials.homeServer);
 
-        this.setState({ url: url });
+        this.animatedTransform = RX.Animated.createValue((isLandscape ? this.screenHeight : this.screenWidth) * inc * direction);
+        this.animatedStyle = RX.Styles.createAnimatedViewStyle({
+            opacity: this.animatedOpacity,
+            transform: isLandscape ? [{ translateY: this.animatedTransform }] : [{ translateX: this.animatedTransform }]
+        });
+
+        const slideAnimation = RX.Animated.parallel([
+            RX.Animated.timing(this.animatedTransform, {
+                duration: 250,
+                toValue: 0,
+                easing: RX.Animated.Easing.Out(),
+                useNativeDriver: true,
+            }),
+            RX.Animated.timing(this.animatedOpacity, {
+                duration: 250,
+                toValue: 1.0,
+                easing: RX.Animated.Easing.In(),
+                useNativeDriver: true,
+            })
+        ]);
+
+        this.setState({ url: url }, () => {
+            slideAnimation.start();
+        });
 
         this.eventId = nextImage.event_id;
 
@@ -378,12 +433,9 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
     private onKeyPress = (event: RX.Types.KeyboardEvent) => {
 
         if (event.keyCode === 39) {
-
-            this.showNextImage(1);
-
+            this.fadeImage(1);
         } else if (event.keyCode === 37) {
-
-            this.showNextImage(-1);
+            this.fadeImage(-1);
         }
     }
 
@@ -426,7 +478,7 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
                 <RX.Button
                     ref={ component => this.nextButton = component! }
                     style={ [styles.nextButton, { height: this.screenHeight, width: this.screenWidth / 5, right: 0 }] }
-                    onPress={ () => this.showNextImage(1) }
+                    onPress={ () => this.fadeImage(1) }
                     disableTouchOpacityAnimation={ true }
                     autoFocus={ true }
                 />
@@ -434,6 +486,7 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
             buttonPrevious = (
                 <RX.Button
                     style={ [styles.nextButton, { height: this.screenHeight, width: this.screenWidth / 5, left: 0 }] }
+                    onPress={ () => this.fadeImage(-1) }
                     disableTouchOpacityAnimation={ true }
                 />
             );
@@ -471,18 +524,20 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
                 onLayout={ this.onLayout }
                 onKeyPress={ this.onKeyPress }
             >
-                <RX.Image
-                    style={ [this.state.gestureImage, this.state.rotatedImage] }
-                    source={ this.state.url }
-                    onLoad={ this.onLoad }
-                    headers={ UiStore.getPlatform() === 'ios' ? { 'Cache-Control':'max-stale' } : undefined }
-                />
+                <RX.Animated.View style={ [styles.containerAnimated, this.animatedStyle] }>
+                    <RX.Image
+                        style={ [this.state.gestureImage, this.state.rotatedImage] }
+                        source={ this.state.url }
+                        onLoad={ this.onLoad }
+                        headers={ UiStore.getPlatform() === 'ios' ? { 'Cache-Control':'max-stale' } : undefined }
+                    />
+                </RX.Animated.View>
 
                 { spinner }
 
                 <RX.GestureView
                     style={ styles.gestureView }
-                    onTap={ RX.Modal.dismissAll }
+                    onTap={ () => RX.Modal.dismissAll() }
                     onPinchZoom={ this.onPinchZoom }
                     onScrollWheel={ this.onScrollWheel }
                     onPan={ this.onPan }
