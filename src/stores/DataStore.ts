@@ -916,11 +916,11 @@ class DataStore extends StoreBase {
     }
 
     // TODO: handle redactions
-    public getImageTimeline(roomId: string): MessageEvent_[] {
+    public getImageTimeline(roomId: string): { timeline: MessageEvent_[], endToken: string } {
 
         const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
 
-        return this.roomSummaryList[roomIndex].timelineEvents
+        const timeline = this.roomSummaryList[roomIndex].timelineEvents
             .filter(event => (
                 event.type === 'm.room.message' &&
                 event.content &&
@@ -929,7 +929,12 @@ class DataStore extends StoreBase {
             ))
             .sort((a, b) =>
                 b.origin_server_ts - a.origin_server_ts
-            )
+            );
+
+        return {
+            timeline: timeline,
+            endToken: this.roomSummaryList[roomIndex].timelineToken!
+        }
     }
 
     @autoSubscribeWithKey('DummyTrigger')

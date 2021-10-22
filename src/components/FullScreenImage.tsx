@@ -9,6 +9,7 @@ import ApiClient from '../matrix/ApiClient';
 import { MessageEvent_ } from '../models/MatrixApi';
 import IconSvg, { SvgFile } from './IconSvg';
 import Spinner from './Spinner';
+import { MESSAGE_COUNT_ADD } from '../appconfig';
 
 const styles = {
     modalView: RX.Styles.createViewStyle({
@@ -85,6 +86,8 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
     private positionV = 0;
     private imageRatio: number;
     private imageTimeline: MessageEvent_[];
+    private endToken: string;
+    private timelineLimited = true;
     private eventId: string;
     private screenOrientation: string | undefined;
     private currentIndex: number;
@@ -100,7 +103,9 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
 
         this.platform = UiStore.getPlatform();
 
-        this.imageTimeline = DataStore.getImageTimeline(props.roomId);
+        const timelineInfo = DataStore.getImageTimeline(props.roomId);
+        this.imageTimeline = timelineInfo.timeline;
+        this.endToken = timelineInfo.endToken;
 
         this.imageRatio = props.imageRatio;
         this.eventId = props.eventId;
@@ -368,6 +373,10 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
 
         if (this.currentIndex + inc >= this.imageTimeline.length || this.currentIndex + inc < 0) { return }
 
+        if (this.imageTimeline.length - this.currentIndex < 5) {
+            if (this.timelineLimited) { this.loadImagesFromServer() }
+        }
+
         this.animatedOpacity = RX.Animated.createValue(1.0);
         this.animatedStyle = RX.Styles.createAnimatedViewStyle({
             opacity: this.animatedOpacity,
@@ -457,6 +466,22 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
             this.setState({ isWebFullscreen: false });
             document.exitFullscreen().catch(_error => null);
         }
+    }
+
+    private loadImagesFromServer = () => {
+
+        ApiClient.getImageEvents(this.props.roomId, MESSAGE_COUNT_ADD, this.endToken)
+            .then(response => {
+
+                this.endToken = response.endToken;
+                this.timelineLimited = response.timelineLimited;
+
+                if (response.events.length === 0) { return }
+
+                this.imageTimeline = this.imageTimeline.concat(response.events);
+
+            })
+            .catch(_error => null);
     }
 
     public render(): JSX.Element | null {

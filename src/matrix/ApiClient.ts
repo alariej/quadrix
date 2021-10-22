@@ -8,7 +8,7 @@ import UiStore from '../stores/UiStore';
 import { PREFIX_MEDIA, PREFIX_REST } from '../appconfig';
 import { PreviewUrl_, LoginParam_, EmailTokenResponse_, LoginResponse_, AuthParam_, PusherGetResponse_, NewRoomOptions_,
     LoginParamType, RegisterStageType, RoomType, GetPublicRoomsResponse_, StateEventContent_,
-    StateEventType, MessageEventContent_, PusherParam_, PushRulesGetResponse_, DirectorySearch_} from '../models/MatrixApi';
+    StateEventType, MessageEventContent_, PusherParam_, PushRulesGetResponse_, DirectorySearch_, MessageEvent_} from '../models/MatrixApi';
 import { RoomSummary } from '../models/RoomSummary';
 import utils from '../utils/Utils';
 import { MessageEvent } from '../models/MessageEvent';
@@ -351,6 +351,36 @@ class ApiClient {
         if (response) {
             const timelineLimited = messageCountAdd === response.chunk.length;
             const events = utils.filterRoomEvents(response.chunk, roomType, previousEventTime);
+            return Promise.resolve({ events: events, endToken: response.end, timelineLimited: timelineLimited });
+        } else {
+            return Promise.resolve({ events: [], endToken: '', timelineLimited: false });
+        }
+    }
+
+    public async getImageEvents(roomId: string, messageCountAdd: number, from: string)
+        : Promise<{ events: MessageEvent_[], endToken: string, timelineLimited: boolean }> {
+
+        const filter = {
+            types: ['m.room.message'],
+            contains_url: true,
+        };
+
+        const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
+
+        const response = await restClient.getRoomMessages(roomId, messageCountAdd, 'b', from, '', filter).catch(_error => null);
+
+        if (response) {
+            const timelineLimited = messageCountAdd === response.chunk.length;
+            const events = response.chunk
+                .filter(event => (
+                    event.type === 'm.room.message' &&
+                    event.content &&
+                    event.content.msgtype === 'm.image' &&
+                    event.content.url
+                ))
+                .sort((a, b) =>
+                    b.origin_server_ts - a.origin_server_ts
+                );
             return Promise.resolve({ events: events, endToken: response.end, timelineLimited: timelineLimited });
         } else {
             return Promise.resolve({ events: [], endToken: '', timelineLimited: false });
