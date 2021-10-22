@@ -60,7 +60,7 @@ class FileHandler {
         })
             .then(response => {
 
-                const fileData = new Uint8Array(Buffer.from(response.data));
+                const fileData = new Uint8Array(Buffer.from(response.data as ArrayBuffer));
 
                 const onComplete = (error: NodeJS.ErrnoException) => {
                     error ? onSuccess(false) : onSuccess(true);
@@ -106,7 +106,7 @@ class FileHandler {
                     }
 
                     const filePath = path.join(cacheAppFolder, fileName!);
-                    const fileData = new Uint8Array(Buffer.from(response.data));
+                    const fileData = new Uint8Array(Buffer.from(response.data as ArrayBuffer));
 
                     const onComplete = (error: NodeJS.ErrnoException) => {
 
