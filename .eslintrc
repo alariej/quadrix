@@ -9,15 +9,13 @@
   },
   "plugins": [
     "@typescript-eslint",
-    "react",
-    "reactxp"
+    "react"
   ],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "plugin:reactxp/recommended",
     "plugin:react/recommended"
   ],
   "env": {
