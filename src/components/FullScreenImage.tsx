@@ -496,25 +496,23 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
             } else {
                 iconFile = require('../resources/svg/fullscreen_enter.json') as SvgFile;
             }
-            if (UiStore.getDesktopOS() !== 'MacOS') {
-                buttonFullscreen = (
-                    <RX.Button
-                        style={ styles.buttonFullscreen }
-                        onPress={ this.toggleFullscreen }
-                        disableTouchOpacityAnimation={ true }
-                        activeOpacity={ 1 }
-                    >
-                        <RX.View style={ styles.containerIcon }>
-                            <IconSvg
-                                source= { iconFile }
-                                fillColor={ ICON_FULLSCREEN_FILL }
-                                height={ 16 }
-                                width={ 16 }
-                            />
-                        </RX.View>
-                    </RX.Button>
-                )
-            }
+            buttonFullscreen = (
+                <RX.Button
+                    style={ styles.buttonFullscreen }
+                    onPress={ this.toggleFullscreen }
+                    disableTouchOpacityAnimation={ true }
+                    activeOpacity={ 1 }
+                >
+                    <RX.View style={ styles.containerIcon }>
+                        <IconSvg
+                            source= { iconFile }
+                            fillColor={ ICON_FULLSCREEN_FILL }
+                            height={ 16 }
+                            width={ 16 }
+                        />
+                    </RX.View>
+                </RX.Button>
+            )
         }
 
         return (
