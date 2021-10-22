@@ -1,10 +1,10 @@
 class ScreenOrientation {
 
-    public addListener(_onChangedOrientation: (oritentation: string) => void) {
+    public addListener(_onChangedOrientation: (orientation: string) => void) {
         // do nothing
     }
 
-    public removeListener(_onChangedOrientation: (oritentation: string) => void) {
+    public removeListener() {
         // do nothing
     }
 

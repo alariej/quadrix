@@ -1,20 +1,28 @@
-import { NativeEventEmitter, NativeModules, StatusBar } from 'react-native';
+import { EmitterSubscription, NativeEventEmitter, NativeModule, NativeModules, StatusBar } from 'react-native';
 
 class ScreenOrientation {
 
-    public addListener(onChangedOrientation: (oritentation: string) => void) {
+    private orientationEmitter: NativeEventEmitter;
+    private orientationListener!: EmitterSubscription;
 
-        const eventEmitter = new NativeEventEmitter(NativeModules.Orientation);
-        eventEmitter.addListener('orientationChanged', onChangedOrientation);
+    constructor() {
+
+        const { Orientation } = NativeModules;
+        this.orientationEmitter = new NativeEventEmitter(Orientation as NativeModule);
     }
 
-    public removeListener(onChangedOrientation: (oritentation: string) => void) {
+    public addListener(onChangedOrientation: (orientation: string) => void) {
 
-        const eventEmitter = new NativeEventEmitter(NativeModules.Orientation);
-        eventEmitter.removeListener('orientationChanged', onChangedOrientation);
+        this.orientationListener = this.orientationEmitter.addListener('orientationChanged', onChangedOrientation);
+    }
+
+    public removeListener() {
+
+        this.orientationListener.remove();
     }
 
     public hideStatusBar(hidden: boolean) {
+
         StatusBar.setHidden(hidden, 'fade');
     }
 }

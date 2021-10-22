@@ -161,7 +161,7 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
     public componentWillUnmount(): void {
 
         ScreenOrientation.hideStatusBar(false);
-        ScreenOrientation.removeListener(this.onChangedOrientation);
+        ScreenOrientation.removeListener();
     }
 
     private onChangedOrientation = (orientation: string) => {

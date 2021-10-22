@@ -1,30 +1,36 @@
-import { NativeEventEmitter, NativeModules, StatusBar } from 'react-native';
+import { EmitterSubscription, NativeEventEmitter, NativeModule, NativeModules, StatusBar } from 'react-native';
+
+interface OrientationInterface {
+    start(): void,
+    stop(): void,
+}
 
 class ScreenOrientation {
 
-    public addListener(onChangedOrientation: (oritentation: string) => void) {
+    private Orientation: OrientationInterface;
+    private orientationEmitter: NativeEventEmitter;
+    private orientationListener!: EmitterSubscription;
+
+    constructor() {
 
         const { Orientation } = NativeModules;
-        Orientation.start(); // eslint-disable-line
-
-        const eventEmitter = new NativeEventEmitter(Orientation);
-        eventEmitter.addListener('orientationChanged', onChangedOrientation);
+        this.Orientation = Orientation as OrientationInterface;
+        this.orientationEmitter = new NativeEventEmitter(Orientation as NativeModule);
     }
 
-    public removeListener(onChangedOrientation: (oritentation: string) => void) {
+    public addListener(onChangedOrientation: (orientation: string) => void) {
 
-        const { Orientation } = NativeModules;
-        Orientation.stop(); // eslint-disable-line
+        this.Orientation.start();
+        this.orientationListener = this.orientationEmitter.addListener('orientationChanged', onChangedOrientation);
+    }
 
-        const eventEmitter = new NativeEventEmitter(Orientation);
-        eventEmitter.removeListener('orientationChanged', onChangedOrientation);
+    public removeListener() {
+
+        this.orientationListener.remove();
     }
 
     public hideStatusBar(hidden: boolean) {
-        /*
-        const { Orientation } = NativeModules;
-        hidden ? Orientation.fullscreenOn() : Orientation.fullscreenOff(); // eslint-disable-line
-        */
+
         StatusBar.setHidden(hidden, 'fade');
     }
 }
