@@ -87,12 +87,12 @@
     "simplerestclients": "1.0.0"
   },
   "notes": {
-    "@react-native-async-storage/async-storage": "must be in project root and match version in reactxp",
-    "@react-native-community/netinfo": "must be in project root and match version in reactxp-netinfo",
-    "axios": "breaking change in 0.23, TODO",
-    "react-native-svg": "must be in project root and match version in reactxp-imagesvg",
-    "react-native-document-picker": "breaking change in 6.0.3, TODO",
+    "@react-native-async-storage/async-storage": "must be in project root + match version in reactxp",
+    "@react-native-community/netinfo": "must be in project root + match version in reactxp-netinfo",
+    "axios": "breaking change in v0.23",
     "electron": "breaking change in v14",
-    "eslint": "v7 required by eslint-plugin-react"
+    "eslint": "v7 required by eslint-plugin-react",
+    "react-native-document-picker": "breaking change in v6",
+    "react-native-svg": "must be in project root + match version in reactxp-imagesvg"
   }
 }
