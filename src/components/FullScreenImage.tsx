@@ -484,6 +484,15 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
             .catch(_error => null);
     }
 
+    private onTap = () => {
+
+        if (this.zoomedHeight === this.imageHeight ) {
+            RX.Modal.dismissAll();
+        } else {
+            this.setImageSize();
+        }
+    }
+
     public render(): JSX.Element | null {
 
         const spinner = (
@@ -560,7 +569,7 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
 
                 <RX.GestureView
                     style={ styles.gestureView }
-                    onTap={ () => RX.Modal.dismissAll() }
+                    onTap={ this.onTap }
                     onPinchZoom={ this.onPinchZoom }
                     onScrollWheel={ this.onScrollWheel }
                     onPan={ this.onPan }
