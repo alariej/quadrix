@@ -121,9 +121,9 @@ class UiStore extends StoreBase {
         }
     }
 
-    public setLocale() {
+    public async setLocale() {
 
-        const locale: string = Locale.getLocale();
+        const locale = await Locale.getLocale();
         const language = locale.slice(0, 2);
 
         switch (language) {

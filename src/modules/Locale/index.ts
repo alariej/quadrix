@@ -1,15 +1,16 @@
-import UiStore from "../../stores/UiStore";
+import UiStore from '../../stores/UiStore';
 
 class Locale {
 
-    public getLocale(): string {
+    public async getLocale(): Promise<string> {
 
         let locale: string;
 
         if (UiStore.getIsElectron()) {
 
-            const { remote } = window.require('electron');
-            locale = remote.app.getLocale();
+            const { ipcRenderer } = window.require('electron');
+
+            locale = await ipcRenderer.invoke('getLocale').catch(_error => null) as string;
 
         } else {
 

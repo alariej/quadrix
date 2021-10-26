@@ -40,7 +40,7 @@ export class App extends ComponentBase<AppProps, AppState> {
         UiStore.setPlatform();
         UiStore.setDevice();
         UiStore.setIsElectron();
-        UiStore.setLocale();
+        UiStore.setLocale().catch(_error => null);
 
         if (UiStore.getPlatform() === 'web') {
             window.oncontextmenu = () => {

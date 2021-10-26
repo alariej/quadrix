@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, ipcMain } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron');
 const path = require('path');
 
 let mainWindow;
@@ -110,7 +110,16 @@ const createWindow = () => {
 }
 
 app.whenReady()
-    .then(_response => { createWindow() })
+    .then(_response => {
+
+        createWindow();
+
+        ipcMain.handle('getLocale', () => { return app.getLocale() });
+        ipcMain.handle('getPath', (_event, dir) => { return app.getPath(dir) }); // eslint-disable-line
+        ipcMain.on('showSaveDialog', (event, options) => {
+            event.returnValue = dialog.showSaveDialogSync(options); // eslint-disable-line
+        });
+    })
     .catch(_error => null);
 
 /*
@@ -120,7 +129,7 @@ app.on('activate', () => {
 */
 
 ipcMain.on('closeApp', () => {
-    if (mainWindow) { mainWindow.removeAllListeners('close') } // eslint-disable-line
+    if (mainWindow) { mainWindow.removeAllListeners('close') }; // eslint-disable-line
     mainWindow = undefined;
     app.quit();
 });

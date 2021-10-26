@@ -7,7 +7,7 @@ import utils from '../../utils/Utils';
 import ApiClient from '../../matrix/ApiClient';
 import { MessageEvent } from '../../models/MessageEvent';
 import Resizer from 'react-image-file-resizer';
-import { remote, shell, SaveDialogSyncOptions } from 'electron';
+import { shell, SaveDialogSyncOptions } from 'electron';
 import path from 'path';
 import fs from 'fs';
 import { FileObject } from '../../models/FileObject';
@@ -15,7 +15,6 @@ import ImageSizeLocal from '../ImageSizeLocal';
 
 declare global {
     interface Window {
-        require(module: 'remote'): typeof remote;
         require(module: 'shell'): typeof shell;
         require(module: 'path'): typeof path;
         require(module: 'fs'): typeof fs;
@@ -24,17 +23,17 @@ declare global {
 
 class FileHandler {
 
-    public saveFile(message: MessageEvent, fetchProgress: (progress: number) => void,
-        onSuccess: (success: boolean) => void, onAbort: () => void): void {
+    public async saveFile(message: MessageEvent, fetchProgress: (progress: number) => void,
+        onSuccess: (success: boolean) => void, onAbort: () => void): Promise<void> {
 
         const url = utils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
         const fileName = message.content.body;
 
-        const { remote } = window.require('electron');
+        const { ipcRenderer } = window.require('electron');
         const path = window.require('path');
         const fs = window.require('fs');
 
-        const homePath = remote.app.getPath('home');
+        const homePath = await ipcRenderer.invoke('getPath', 'home').catch(_error => null) as string;
         const defaultPath = path.join(homePath, fileName!);
 
         const options: SaveDialogSyncOptions = {
@@ -43,7 +42,7 @@ class FileHandler {
             properties: ['showOverwriteConfirmation', 'createDirectory'],
         }
 
-        const savePath = remote.dialog.showSaveDialogSync(options);
+        const savePath = ipcRenderer.sendSync('showSaveDialog', options) as string;
 
         if (!savePath) {
             onAbort();
@@ -91,14 +90,14 @@ class FileHandler {
                 fetchProgress(progressEvent.loaded / progressEvent.total);
             },
         })
-            .then(response => {
+            .then(async response => {
 
                 if (isElectron) {
 
-                    const { remote, shell } = window.require('electron');
+                    const { ipcRenderer, shell } = window.require('electron');
                     const path = window.require('path');
                     const fs = window.require('fs');
-                    const cachePath = remote.app.getPath('cache');
+                    const cachePath = await ipcRenderer.invoke('getPath', 'cache').catch(_error => null) as string;
                     const cacheAppFolder = path.join(cachePath, APP_NAME);
 
                     if (!fs.existsSync(cacheAppFolder)) {
