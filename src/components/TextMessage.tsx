@@ -204,7 +204,7 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 
             if (bodyText) {
 
-                linkifyArray = linkify.find(bodyText); // eslint-disable-line
+                linkifyArray = linkify.find(bodyText);
             }
 
             if (linkifyArray.length > 0) {

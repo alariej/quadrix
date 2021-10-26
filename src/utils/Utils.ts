@@ -160,7 +160,7 @@ class Utils {
 
     public getOnlyUrl(textInput: string): LinkifyElement | undefined {
 
-        const linkifyArray: LinkifyElement[] = linkify.find(textInput); // eslint-disable-line
+        const linkifyArray: LinkifyElement[] = linkify.find(textInput);
 
         if (linkifyArray.length === 1 && linkifyArray[0].type === 'url' && linkifyArray[0].value.length === textInput.length) {
             return linkifyArray[0];
