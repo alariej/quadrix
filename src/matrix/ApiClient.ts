@@ -10,7 +10,7 @@ import { PreviewUrl_, LoginParam_, EmailTokenResponse_, LoginResponse_, AuthPara
     LoginParamType, RegisterStageType, RoomType, GetPublicRoomsResponse_, StateEventContent_,
     StateEventType, MessageEventContent_, PusherParam_, PushRulesGetResponse_, DirectorySearch_, MessageEvent_} from '../models/MatrixApi';
 import { RoomSummary } from '../models/RoomSummary';
-import utils from '../utils/Utils';
+import EventUtils from '../utils/EventUtils';
 import { MessageEvent } from '../models/MessageEvent';
 
 class ApiClient {
@@ -350,7 +350,7 @@ class ApiClient {
 
         if (response) {
             const timelineLimited = messageCountAdd === response.chunk.length;
-            const events = utils.filterRoomEvents(response.chunk, roomType, previousEventTime);
+            const events = EventUtils.filterRoomEvents(response.chunk, roomType, previousEventTime);
             return Promise.resolve({ events: events, endToken: response.end, timelineLimited: timelineLimited });
         } else {
             return Promise.resolve({ events: [], endToken: '', timelineLimited: false });

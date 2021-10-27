@@ -5,7 +5,7 @@ import { HEADER_TEXT, BUTTON_ROUND_WIDTH, BORDER_RADIUS, HEADER_HEIGHT,
     AVATAR_MARGIN, LOGO_BACKGROUND, AVATAR_BACKGROUND, BUTTON_MODAL_TEXT, TRANSPARENT_BACKGROUND, HEADER_STATUS } from '../ui';
 import { ComponentBase } from 'resub';
 import DataStore from '../stores/DataStore';
-import utils from '../utils/Utils';
+import EventUtils from '../utils/EventUtils';
 import { User } from '../models/User';
 import ApiClient from '../matrix/ApiClient';
 import DialogAvatar from '../dialogs/DialogAvatar';
@@ -206,7 +206,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
             partialState.lastSeen = undefined;
         }
 
-        partialState.avatarUrl = utils.mxcToHttp(this.roomSummary.avatarUrl!, ApiClient.credentials.homeServer);
+        partialState.avatarUrl = EventUtils.mxcToHttp(this.roomSummary.avatarUrl!, ApiClient.credentials.homeServer);
         partialState.name = this.roomSummary.name;
         partialState.type = this.roomSummary.type;
         partialState.phase = this.roomSummary.phase;

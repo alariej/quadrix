@@ -5,7 +5,7 @@ import { TILE_BACKGROUND, BUTTON_UNREAD_TEXT, BUTTON_UNREAD_BACKGROUND, TILE_SYS
     from '../ui';
 import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
-import utils from '../utils/Utils';
+import EventUtils from '../utils/EventUtils';
 import ApiClient from '../matrix/ApiClient';
 import { invitationWaiting, archived, invitationNotYetAccepted, encryptedMessage, jitsiStartedShort, image } from '../translations';
 import UiStore from '../stores/UiStore';
@@ -148,7 +148,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
         const selectedRoom = UiStore.getSelectedRoom();
 
         return {
-            avatarUrl: utils.mxcToHttp(roomSummary.avatarUrl!, ApiClient.credentials.homeServer),
+            avatarUrl: EventUtils.mxcToHttp(roomSummary.avatarUrl!, ApiClient.credentials.homeServer),
             name: roomSummary.name!,
             unreadCount: roomSummary.unreadCount,
             phase: roomSummary.phase,
@@ -340,7 +340,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 
             } else {
 
-                messageText = utils.getSystemMessage(this.props.newestRoomEvent, this.state.type);
+                messageText = EventUtils.getSystemMessage(this.props.newestRoomEvent, this.state.type);
             }
         }
 

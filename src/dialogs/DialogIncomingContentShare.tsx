@@ -8,7 +8,7 @@ import { DIALOG_WIDTH, SPACING, BUTTON_MODAL_TEXT, FONT_LARGE, BORDER_RADIUS, TR
     MODAL_CONTENT_BACKGROUND } from '../ui';
 import UiStore from '../stores/UiStore';
 import { messageCouldNotBeSent, cancel, pressSend, fileCouldNotUpload, pressLoad, Languages } from '../translations';
-import utils from '../utils/Utils';
+import EventUtils from '../utils/EventUtils';
 import RoomTile from '../components/RoomTile';
 import { SharedContent } from '../models/SharedContent';
 import DataStore from '../stores/DataStore';
@@ -143,7 +143,7 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
 
             this.props.showTempForwardedMessage(this.props.roomId, message, tempId);
 
-            const linkifyElement = utils.getOnlyUrl(this.props.sharedContent.uri);
+            const linkifyElement = EventUtils.getOnlyUrl(this.props.sharedContent.uri);
 
             if (linkifyElement) {
 
@@ -152,7 +152,7 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
                     body: this.props.sharedContent.uri,
                 }
 
-                const previewData = await utils.getLinkPreview(linkifyElement);
+                const previewData = await EventUtils.getLinkPreview(linkifyElement);
 
                 if (previewData) {
                     urlMessageContent = {

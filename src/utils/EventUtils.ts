@@ -8,7 +8,7 @@ import ApiClient from '../matrix/ApiClient';
 import { LinkPreview_, MessageEvent_, RoomType } from '../models/MatrixApi';
 import { LinkifyElement } from '../models/LinkifyElement';
 
-class Utils {
+class EventUtils {
 
     public mxcToHttp(mxcUrl: string, server: string): string {
 
@@ -221,4 +221,4 @@ class Utils {
         return { user: user, server: server }
     }
 }
-export default new Utils();
+export default new EventUtils();

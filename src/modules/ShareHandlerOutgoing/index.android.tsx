@@ -1,7 +1,7 @@
 import Share from 'react-native-share';
 import { MessageEvent } from '../../models/MessageEvent';
 import RNFetchBlob from 'rn-fetch-blob'
-import utils from '../../utils/Utils';
+import EventUtils from '../../utils/EventUtils';
 import ApiClient from '../../matrix/ApiClient';
 import { shareWith } from '../../translations';
 import UiStore from '../../stores/UiStore';
@@ -26,7 +26,7 @@ class ShareHandlerOutgoing {
 
         } else {
 
-            const url = utils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
+            const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
             const fileName = message.content.body;
             const mimeType = message.content.info!.mimetype;
 

@@ -10,7 +10,7 @@ import { ComponentBase } from 'resub';
 import { BUTTON_MODAL_TEXT, FONT_LARGE, BORDER_RADIUS, INPUT_BORDER, OBJECT_MARGIN, BUTTON_LONG_WIDTH, CONTAINER_PADDING,
     BUTTON_HEIGHT, AVATAR_BACKGROUND, AVATAR_LARGE_WIDTH, BUTTON_SHORT_WIDTH, BUTTON_MODAL_BACKGROUND, SPACING,
     OPAQUE_BACKGROUND, BUTTON_DISABLED_TEXT, DIALOG_WIDTH} from '../ui';
-import utils from '../utils/Utils';
+import EventUtils from '../utils/EventUtils';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { ErrorResponse_, RoomPhase, RoomType, StateEventContent_ } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
@@ -265,7 +265,7 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
 
         await ApiClient.sendStateEvent(this.props.roomId, 'm.room.avatar', content, '').catch(error => { return Promise.reject(error) });
 
-        this.avatarUrl = utils.mxcToHttp(fileUri, ApiClient.credentials.homeServer);
+        this.avatarUrl = EventUtils.mxcToHttp(fileUri, ApiClient.credentials.homeServer);
 
         this.avatarFile = undefined;
 

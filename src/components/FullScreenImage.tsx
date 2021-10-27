@@ -4,7 +4,7 @@ import { OPAQUE_DARK_BACKGROUND, TRANSPARENT_BACKGROUND, SPACING, BUTTON_ROUND_W
 import UiStore from '../stores/UiStore';
 import ScreenOrientation from '../modules/ScreenOrientation';
 import DataStore from '../stores/DataStore';
-import utils from '../utils/Utils';
+import EventUtils from '../utils/EventUtils';
 import ApiClient from '../matrix/ApiClient';
 import { MessageEvent_ } from '../models/MatrixApi';
 import IconSvg, { SvgFile } from './IconSvg';
@@ -407,7 +407,7 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
 
         this.setImageSize();
 
-        const url = utils.mxcToHttp(nextImage.content.url!, ApiClient.credentials.homeServer);
+        const url = EventUtils.mxcToHttp(nextImage.content.url!, ApiClient.credentials.homeServer);
 
         this.animatedTransform = RX.Animated.createValue((isLandscape ? this.screenHeight : this.screenWidth) * inc * direction);
         this.animatedStyle = RX.Styles.createAnimatedViewStyle({

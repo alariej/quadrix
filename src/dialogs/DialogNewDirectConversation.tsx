@@ -10,7 +10,7 @@ import { inviteUser, cancel, userServer, errorNoConfirm, theUserId, doesntSeemTo
     Languages, searchUser, tooManySearchResults, noSearchResults, enterSearch, searchInstruction } from '../translations';
 import { User } from '../models/User';
 import UserTile from '../components/UserTile';
-import Utils from '../utils/Utils';
+import EventUtils from '../utils/EventUtils';
 import { PlatformType } from 'reactxp/dist/common/Types';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import AppFont from '../modules/AppFont';
@@ -331,7 +331,7 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
     private onEditUserId = (text: string) => {
 
         this.userId = text;
-        const userId = Utils.parseUserId(text);
+        const userId = EventUtils.parseUserId(text);
         this.setState({ isSearch: !(userId.user && userId.server) });
     }
 

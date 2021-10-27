@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { User } from '../models/User';
 import DataStore from '../stores/DataStore';
-import utils from '../utils/Utils';
+import EventUtils from '../utils/EventUtils';
 import ApiClient from '../matrix/ApiClient';
 import { TILE_BACKGROUND, BUTTON_LONG_TEXT, TILE_SYSTEM_TEXT, BORDER_RADIUS, SPACING, FONT_NORMAL, FONT_LARGE,
     FONT_SMALL, TILE_HEIGHT, AVATAR_SMALL_WIDTH, AVATAR_MARGIN, BUTTON_MODAL_TEXT, LIGHT_BACKGROUND, TILE_MESSAGE_TEXT } from '../ui';
@@ -96,7 +96,7 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
 
     public render(): JSX.Element | null {
 
-        const avatarUrl = utils.mxcToHttp(this.props.user.avatarUrl!, ApiClient.credentials.homeServer);
+        const avatarUrl = EventUtils.mxcToHttp(this.props.user.avatarUrl!, ApiClient.credentials.homeServer);
 
         const avatarIsUrl = avatarUrl && avatarUrl.includes('https');
 

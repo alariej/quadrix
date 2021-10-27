@@ -13,7 +13,7 @@ import { haveAnAccount, noAccount, register, login, userPassword, repeatPassword
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { ErrorResponse_ } from '../models/MatrixApi';
 import { TERMS_URL } from '../appconfig';
-import Utils from '../utils/Utils';
+import EventUtils from '../utils/EventUtils';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import AppFont from '../modules/AppFont';
 
@@ -141,7 +141,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 
                 if (lastUserId) {
 
-                    const userId = Utils.parseUserId(lastUserId);
+                    const userId = EventUtils.parseUserId(lastUserId);
 
                     this.userId = userId.user;
                     this.server = userId.server;
@@ -197,7 +197,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 
             if (!this.state.loginExpanded) {
 
-                const userId = Utils.parseUserId(this.userId);
+                const userId = EventUtils.parseUserId(this.userId);
 
                 user = userId.user;
                 server = userId.server;
@@ -303,7 +303,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 
         if (this.userId && !this.state.loginExpanded) {
 
-            const userId = Utils.parseUserId(this.userId);
+            const userId = EventUtils.parseUserId(this.userId);
 
             this.userId = userId.user;
             this.server = userId.server;

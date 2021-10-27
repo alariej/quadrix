@@ -2,7 +2,7 @@ import { autoSubscribeWithKey, AutoSubscribeStore, StoreBase } from 'resub';
 import { RoomSummary } from '../models/RoomSummary';
 import { User } from '../models/User';
 import ApiClient from '../matrix/ApiClient';
-import utils from '../utils/Utils';
+import EventUtils from '../utils/EventUtils';
 import { MessageEvent } from '../models/MessageEvent';
 import { MessageEvent_, RoomData_, RoomPhase, RoomSummary_, RoomTimeline_, RoomType, SyncResponse_ } from '../models/MatrixApi';
 
@@ -461,7 +461,7 @@ class DataStore extends StoreBase {
 
         if (!timeline.events) { return; }
 
-        const newEvents = utils.filterRoomEvents(timeline.events.slice(0).reverse(), this.roomSummaryList[roomIndex].type!);
+        const newEvents = EventUtils.filterRoomEvents(timeline.events.slice(0).reverse(), this.roomSummaryList[roomIndex].type!);
         this.roomSummaryList[roomIndex].newEventsLimited = timeline.limited;
 
         if (newEvents.length > 0) { this.roomSummaryList[roomIndex].newEvents = newEvents; }
@@ -909,7 +909,7 @@ class DataStore extends StoreBase {
 
         const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
 
-        return utils.filterRoomEvents(
+        return EventUtils.filterRoomEvents(
             this.roomSummaryList[roomIndex].timelineEvents.slice(0).reverse(),
             this.roomSummaryList[roomIndex].type!
         );

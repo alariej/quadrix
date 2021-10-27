@@ -3,7 +3,7 @@ import { PREFIX_UPLOAD, APP_NAME } from '../../appconfig';
 import axios from 'axios';
 import UiStore from '../../stores/UiStore';
 import { save } from '../../translations';
-import utils from '../../utils/Utils';
+import EventUtils from '../../utils/EventUtils';
 import ApiClient from '../../matrix/ApiClient';
 import { MessageEvent } from '../../models/MessageEvent';
 import Resizer from 'react-image-file-resizer';
@@ -26,7 +26,7 @@ class FileHandler {
     public async saveFile(message: MessageEvent, fetchProgress: (progress: number) => void,
         onSuccess: (success: boolean) => void, onAbort: () => void): Promise<void> {
 
-        const url = utils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
+        const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
         const fileName = message.content.body;
 
         const { ipcRenderer } = window.require('electron');
@@ -76,7 +76,7 @@ class FileHandler {
     public viewFile(message: MessageEvent, fetchProgress: (progress: number) => void,
         onSuccess: (success: boolean) => void, onNoAppFound: () => void): void {
 
-        const url = utils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
+        const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
         const fileName = message.content.body;
         const mimeType = message.content.info!.mimetype;
 

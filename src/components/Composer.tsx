@@ -14,7 +14,7 @@ import { messageCouldNotBeSent, cancel, wrote, sending, clickHereOrPressShftEnte
     jitsiStartedInternal, fileCouldNotUpload, pressSend, pressLoad, Languages } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
 import EmojiPicker from './EmojiPicker';
-import utils from '../utils/Utils';
+import EventUtils from '../utils/EventUtils';
 import { MessageEventContent_, RoomType } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
 import { TemporaryMessage } from '../models/MessageEvent';
@@ -298,7 +298,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
             RX.Modal.show(<DialogContainer content={ text }/>, 'errordialog');
         }
 
-        const linkifyElement = utils.getOnlyUrl(textInput);
+        const linkifyElement = EventUtils.getOnlyUrl(textInput);
 
         if (linkifyElement) {
 
@@ -307,7 +307,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                 body: textInput,
             }
 
-            const previewData = await utils.getLinkPreview(linkifyElement);
+            const previewData = await EventUtils.getLinkPreview(linkifyElement);
 
             if (previewData) {
                 urlMessageContent = {

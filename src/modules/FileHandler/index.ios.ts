@@ -3,7 +3,7 @@ import DocumentPicker from 'react-native-document-picker';
 import { PREFIX_UPLOAD } from '../../appconfig';
 import { Credentials } from '../../models/Credentials';
 import { MessageEvent } from '../../models/MessageEvent';
-import utils from '../../utils/Utils';
+import EventUtils from '../../utils/EventUtils';
 import ApiClient from '../../matrix/ApiClient';
 import ImageResizer, { Response as ImageResizerResponse, ResizeFormat } from "react-native-image-resizer";
 import { FileObject } from '../../models/FileObject';
@@ -15,7 +15,7 @@ class FileHandler {
     public saveFile(message: MessageEvent, fetchProgress: (progress: number) => void,
         onSuccess: (success: boolean) => void, _onAbort: () => void): void {
 
-        const url = utils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
+        const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
         const fileName = message.content.body;
 
         RNFetchBlob.config({
@@ -37,7 +37,7 @@ class FileHandler {
     public viewFile(message: MessageEvent, fetchProgress: (progress: number) => void,
         onSuccess: (success: boolean) => void, onNoAppFound: () => void): void {
 
-        const url = utils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
+        const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
         const fileName = message.content.body;
 
         RNFetchBlob.config({

@@ -7,7 +7,7 @@ import { INPUT_BORDER, MODAL_CONTENT_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, F
     OPAQUE_BACKGROUND, JITSI_BORDER} from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
-import utils from '../utils/Utils';
+import EventUtils from '../utils/EventUtils';
 import { ComponentBase } from 'resub';
 import UiStore from '../stores/UiStore';
 import FileHandler from '../modules/FileHandler';
@@ -308,7 +308,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
             this.displayName = response.displayname;
         }
 
-        this.avatarUrl = utils.mxcToHttp(response.avatar_url, ApiClient.credentials.homeServer);
+        this.avatarUrl = EventUtils.mxcToHttp(response.avatar_url, ApiClient.credentials.homeServer);
         this.displayNameRemote = response.displayname;
 
         return Promise.resolve();
@@ -370,7 +370,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
         await ApiClient.setProfileAvatarUrl(ApiClient.credentials.userIdFull, fileUri)
             .catch(error => { return Promise.reject(error) });
 
-        this.avatarUrl = utils.mxcToHttp(fileUri, ApiClient.credentials.homeServer);
+        this.avatarUrl = EventUtils.mxcToHttp(fileUri, ApiClient.credentials.homeServer);
 
         this.avatarFile = undefined;
 

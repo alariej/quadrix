@@ -9,7 +9,7 @@ import DataStore from '../stores/DataStore';
 import { VirtualListView, VirtualListViewItemInfo, VirtualListViewCellRenderDetails } from 'reactxp-virtuallistview';
 import MessageTile from './MessageTile';
 import ApiClient from '../matrix/ApiClient';
-import utils from '../utils/Utils';
+import EventUtils from '../utils/EventUtils';
 import { MessageEvent, TemporaryMessage } from '../models/MessageEvent';
 import { MessageEventContent_, RoomType } from '../models/MatrixApi';
 import SystemMessage from './SystemMessage';
@@ -490,7 +490,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
         } else {
 
-            const systemMessage = utils.getSystemMessage(cellRender.item.event, this.props.roomType);
+            const systemMessage = EventUtils.getSystemMessage(cellRender.item.event, this.props.roomType);
 
             MessageWrapper = (
                 <RX.View

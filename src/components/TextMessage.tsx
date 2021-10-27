@@ -6,7 +6,7 @@ import UiStore from '../stores/UiStore';
 import * as linkify from 'linkifyjs';
 import { jitsiStartedInternal } from '../translations';
 import { LinkifyElement } from '../models/LinkifyElement';
-import utils from '../utils/Utils';
+import EventUtils from '../utils/EventUtils';
 import AppFont from '../modules/AppFont';
 
 const styles = {
@@ -86,7 +86,7 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
             value: '',
         }
 
-        utils.getLinkPreview(linkifyElement)
+        EventUtils.getLinkPreview(linkifyElement)
             .then(response => {
                 this.setState({ previewUrl: response?.image_url });
             })
@@ -175,7 +175,7 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 
             renderContent = urlPreview;
 
-        } else if (utils.isAllEmojis(this.props.message.content.body!)) {
+        } else if (EventUtils.isAllEmojis(this.props.message.content.body!)) {
 
             renderContent = (
                 <RX.Text
