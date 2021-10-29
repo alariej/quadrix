@@ -101,7 +101,7 @@ const styles = {
     }),
 };
 
-type EmojiFile = { [emoji: string]: { text: string, name: string } };
+type EmojiFile = string[];
 
 interface ComposerProps extends RX.CommonProps {
     roomId: string;
@@ -219,23 +219,22 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
     private getEmojiArray = (): ReactElement[] => {
 
-        const emojiJson = require('../resources/emoji/emoji.json') as EmojiFile;
+        const emojiJson = require('../resources/emoji/data-ordered-emoji.json') as EmojiFile;
 
-        return Object.values(emojiJson)
-            .map((emoji, i: number) => {
-                return (
-                    <RX.Button
-                        key={ i }
-                        style={ styles.emojiButton }
-                        onPress={ event => this.addEmoji(event, emoji.text) }
-                        disableTouchOpacityAnimation={ true }
-                    >
-                        <RX.Text style={ styles.emoji }>
-                            { emoji.text }
-                        </RX.Text>
-                    </RX.Button>
-                );
-            });
+        return emojiJson.map((emoji, i: number) => {
+            return (
+                <RX.Button
+                    key={ i }
+                    style={ styles.emojiButton }
+                    onPress={ event => this.addEmoji(event, emoji) }
+                    disableTouchOpacityAnimation={ true }
+                >
+                    <RX.Text style={ styles.emoji }>
+                        { emoji }
+                    </RX.Text>
+                </RX.Button>
+            );
+        });
     }
 
     private getTextInputFromStorage = (roomId: string) => {
