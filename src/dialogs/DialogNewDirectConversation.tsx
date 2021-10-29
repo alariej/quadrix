@@ -111,10 +111,10 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
 
             const userList = (
                 <RX.View
-                    style={[
+                    style={ [
                         styles.userListView,
                         { height: Math.min(UiStore.getDevice() === 'mobile' ? 4 : 7, userTiles.length) * (TILE_HEIGHT + SPACING) }
-                    ]}
+                    ] }
                 >
                     <RX.ScrollView
                         style={ { width: this.platform === 'web' ? DIALOG_WIDTH + 30 : DIALOG_WIDTH} }
@@ -205,10 +205,10 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
 
                     const userList = (
                         <RX.View
-                            style={[
+                            style={ [
                                 styles.userListView,
                                 { height: Math.min(UiStore.getDevice() === 'mobile' ? 4 : 7, userTiles.length) * (TILE_HEIGHT + SPACING) }
-                            ]}
+                            ] }
                         >
                             <RX.ScrollView
                                 style={ { width: this.platform === 'web' ? DIALOG_WIDTH + 30 : DIALOG_WIDTH } }

@@ -400,7 +400,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
         if (!this.state.layout) { return null; }
 
         const roomListPage = (
-            <RX.View style={[styles.containerRoomList, { width: this.state.layout.pageWidth - PAGE_MARGIN * 2 }]}>
+            <RX.View style={ [styles.containerRoomList, { width: this.state.layout.pageWidth - PAGE_MARGIN * 2 }] }>
                 { this.roomList }
             </RX.View>
         );
@@ -423,7 +423,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
         }
 
         const roomPage = (
-            <RX.View style={[styles.containerRoom, { width: this.state.layout.pageWidth - PAGE_MARGIN * 2 }]}>
+            <RX.View style={ [styles.containerRoom, { width: this.state.layout.pageWidth - PAGE_MARGIN * 2 }] }>
                 { room }
             </RX.View>
         );
@@ -448,16 +448,16 @@ export default class Main extends ComponentBase<MainProps, MainState> {
         return (
             <RX.View style={{ flex: 1 }}>
                 <RX.View
-                    style={[
+                    style={ [
                         styles.container,
                         {
                             width: this.state.layout.containerWidth,
                             alignSelf: this.state.layout.type === 'wide' ? 'center' : undefined,
                         }
-                    ]}
+                    ] }
                 >
                     <RX.Animated.View
-                        style={[styles.containerAnimated, this.animatedStyle]}
+                        style={ [styles.containerAnimated, this.animatedStyle] }
                     >
                         { roomListPage }
                         { paddingLeft}

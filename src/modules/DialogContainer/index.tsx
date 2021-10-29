@@ -167,18 +167,18 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
                 activeOpacity={ 1 }
             >
                 <RX.Animated.View style={ [styles.animatedView, this.animatedStyle] }>
-                    <RX.View style={[
+                    <RX.View style={ [
                         styles.contentContainer,
                         { backgroundColor: this.props.backgroundColorContent || MODAL_CONTENT_BACKGROUND }
-                    ]}>
+                    ] }>
                         { this.props.content }
                     </RX.View>
                     <RX.View style={ styles.bottomContainer }>
                         <RX.View
-                            style={[
+                            style={ [
                                 styles.buttonContainer,
                                 { justifyContent: this.props.cancelButton && this.props.confirmButton ? 'space-between' : 'center' }
-                            ]}
+                            ] }
                         >
                             { confirmButton }
                             { cancelButton}

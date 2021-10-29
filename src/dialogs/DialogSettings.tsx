@@ -663,7 +663,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
                     activeOpacity={ 1 }
                 >
                     <RX.View style={ styles.containerIcon }>
-                        <RX.Text style={[styles.checkboxText, { color: 'white' }]}>
+                        <RX.Text style={ [styles.checkboxText, { color: 'white' }] }>
                             { this.state.appColor === APP_BACKGROUND[i] ? '✓' : '' }
                         </RX.Text>
                     </RX.View>
@@ -755,7 +755,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
                                 disableTouchOpacityAnimation={ true }
                                 activeOpacity={ 1 }
                             >
-                                <RX.Text style={[styles.checkboxText, { color: this.emailNotifications ? 'limegreen' : 'red' }]}>
+                                <RX.Text style={ [styles.checkboxText, { color: this.emailNotifications ? 'limegreen' : 'red' }] }>
                                     { this.emailNotifications ? '✓' : '✗' }
                                 </RX.Text>
                             </RX.Button>

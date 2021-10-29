@@ -182,18 +182,18 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
                         keyboardShouldPersistTaps={ 'always' }
                         scrollEnabled={ this.props.scrollEnabled || false }
                     >
-                        <RX.View style={[
+                        <RX.View style={ [
                             styles.contentContainer, { backgroundColor: this.props.backgroundColorContent || MODAL_CONTENT_BACKGROUND }
-                        ]}>
+                        ] }>
                             { this.props.content }
                         </RX.View>
                     </RX.ScrollView>
                     <RX.View style={ styles.bottomContainer }>
                         <RX.View
-                            style={[
+                            style={ [
                                 styles.buttonContainer,
                                 { justifyContent: this.props.cancelButton && this.props.confirmButton ? 'space-between' : 'center' }
-                            ]}
+                            ] }
                         >
                             { confirmButton }
                             { cancelButton}

@@ -144,7 +144,7 @@ export class App extends ComponentBase<AppProps, AppState> {
 
         return (
             <RX.View
-                style={[styles.container, { backgroundColor: this.state.backgroundColor }]}
+                style={ [styles.container, { backgroundColor: this.state.backgroundColor }] }
                 onLayout={ this.setLayout }
                 useSafeInsets={ true }
             >

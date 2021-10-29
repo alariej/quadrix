@@ -68,7 +68,7 @@ export default class DialogRoomPicker extends RX.Component<DialogRoomPickerProps
             >
 
                 <RX.View
-                    style={[styles.label, { backgroundColor: UiStore.getAppColor() }]}
+                    style={ [styles.label, { backgroundColor: UiStore.getAppColor() }] }
                     onPress={ (event: RX.Types.SyntheticEvent) => event.stopPropagation() }
                     disableTouchOpacityAnimation={ true }
                     activeOpacity={ 1 }

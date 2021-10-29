@@ -23,7 +23,7 @@ export default class ModalSpinner extends RX.Component<SpinnerProps, RX.Stateles
     public render(): JSX.Element | null {
 
         return (
-            <RX.View style={[styles.modalScreen, { backgroundColor: this.props.backgroundColor || OPAQUE_BACKGROUND }]}>
+            <RX.View style={ [styles.modalScreen, { backgroundColor: this.props.backgroundColor || OPAQUE_BACKGROUND }] }>
                 <RX.View style={ styles.modalView }>
                     <Spinner isVisible={ true } />
                 </RX.View>

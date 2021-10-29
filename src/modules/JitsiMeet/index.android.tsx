@@ -257,7 +257,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
 
                     <WebView
                         scrollEnabled={ false }
-                        originWhitelist={['*']}
+                        originWhitelist={ ['*'] }
                         source={{
                             html: html,
                             baseUrl: `${url}`,

@@ -70,7 +70,7 @@ export default class ReCaptcha extends Component<ReCaptchaProps, RX.Stateless> {
                         width: UiStore.getAppLayout_().pageWidth - PAGE_MARGIN,
                         backgroundColor: TRANSPARENT_BACKGROUND,
                     }}
-                    originWhitelist={['*']}
+                    originWhitelist={ ['*'] }
                     source={{
                         html: html,
                         baseUrl: `${url}`,
