@@ -138,7 +138,7 @@ class FileHandler {
                 1280,
                 1280,
                 compressFormat,
-                95,
+                90,
                 0,
                 undefined,
                 false,
