@@ -23,31 +23,27 @@ declare global {
 
 class FileHandler {
 
-    public async saveFile(message: MessageEvent, fetchProgress: (progress: number) => void,
-        onSuccess: (success: boolean) => void, onAbort: () => void): Promise<void> {
+    public cacheAppFolder = '';
 
-        const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
-        const fileName = message.content.body;
+    public setCacheAppFolder(): void {
 
         const { ipcRenderer } = window.require('electron');
         const path = window.require('path');
         const fs = window.require('fs');
 
-        const homePath = await ipcRenderer.invoke('getPath', 'home').catch(_error => null) as string;
-        const defaultPath = path.join(homePath, fileName!);
+        ipcRenderer.invoke('getPath', 'cache')
+            .then(response => {
+                this.cacheAppFolder = path.join(response as string, APP_NAME);
+                if (!fs.existsSync(this.cacheAppFolder)) {
+                    fs.mkdirSync(this.cacheAppFolder);
+                }
+            })
+            .catch(_error => null);
+    }
 
-        const options: SaveDialogSyncOptions = {
-            title: save[UiStore.getLanguage()],
-            defaultPath: defaultPath,
-            properties: ['showOverwriteConfirmation', 'createDirectory'],
-        }
+    private downloadFile(message: MessageEvent, filePath: string, fetchProgress: (progress: number) => void): void {
 
-        const savePath = ipcRenderer.sendSync('showSaveDialog', options) as string;
-
-        if (!savePath) {
-            onAbort();
-            return;
-        }
+        const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
 
         axios.request({
             url: url,
@@ -61,72 +57,97 @@ class FileHandler {
 
                 const fileData = new Uint8Array(Buffer.from(response.data as ArrayBuffer));
 
-                const onComplete = (error: NodeJS.ErrnoException) => {
-                    error ? onSuccess(false) : onSuccess(true);
+                const onComplete = (_error: NodeJS.ErrnoException) => {
+                    // do nothing
                 }
 
-                fs.writeFile(savePath, fileData, onComplete);
-
+                const fs = window.require('fs');
+                fs.writeFile(filePath, fileData, onComplete);
             })
-            .catch(_error => {
-                onSuccess(false);
-            });
+            .catch(_error => null);
+    }
+
+    public cacheFile(message: MessageEvent, fetchProgress: (progress: number) => void): void {
+
+        if (!UiStore.getIsElectron()) { return; }
+
+        const cachedFileName = EventUtils.getCachedFileName(message, ApiClient.credentials.homeServer);
+
+        const fs = window.require('fs');
+        const path = window.require('path');
+
+        const cachedFilePath = path.join(this.cacheAppFolder, cachedFileName);
+
+        if (!fs.existsSync(cachedFilePath)) { this.downloadFile(message, cachedFilePath, fetchProgress); }
+    }
+
+    public async saveFile(message: MessageEvent, onSuccess: (success: boolean) => void, onAbort: () => void): Promise<void> {
+
+        const fileName = message.content.body;
+
+        const { ipcRenderer } = window.require('electron');
+        const path = window.require('path');
+        const fs = window.require('fs');
+
+        const homePath = await ipcRenderer.invoke('getPath', 'home').catch(_error => null) as string;
+        const homeFilePath = path.join(homePath, fileName!);
+
+        const options: SaveDialogSyncOptions = {
+            title: save[UiStore.getLanguage()],
+            defaultPath: homeFilePath,
+            properties: ['showOverwriteConfirmation', 'createDirectory'],
+        }
+
+        const savePath = ipcRenderer.sendSync('showSaveDialog', options) as string;
+
+        if (!savePath) {
+            onAbort();
+            return;
+        }
+
+        const cachedFileName = EventUtils.getCachedFileName(message, ApiClient.credentials.homeServer);
+        const cachedFilePath = path.join(this.cacheAppFolder, cachedFileName);
+
+        const onComplete = (error: NodeJS.ErrnoException) => {
+            error ? onSuccess(false) : onSuccess(true);
+        }
+
+        fs.copyFile(cachedFilePath, savePath, onComplete);
     }
 
     public viewFile(message: MessageEvent, fetchProgress: (progress: number) => void,
         onSuccess: (success: boolean) => void, onNoAppFound: () => void): void {
 
-        const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
-        const fileName = message.content.body;
-        const mimeType = message.content.info!.mimetype;
+        if (UiStore.getIsElectron()) {
 
-        const isElectron = UiStore.getIsElectron();
+            const cachedFileName = EventUtils.getCachedFileName(message, ApiClient.credentials.homeServer);
+            const fs = window.require('fs');
+            const path = window.require('path');
+            const cachedFilePath = path.join(this.cacheAppFolder, cachedFileName);
 
-        axios.request({
-            url: url,
-            method: 'GET',
-            responseType: isElectron ? 'arraybuffer' : 'blob',
-            onDownloadProgress: function(progressEvent: {loaded: number, total: number}) {
-                fetchProgress(progressEvent.loaded / progressEvent.total);
-            },
-        })
-            .then(async response => {
+            if (fs.existsSync(cachedFilePath)) {
+                const { shell } = window.require('electron');
+                shell.openPath(cachedFilePath).catch(_error => onNoAppFound());
+                fetchProgress(1);
+                onSuccess(true);
+            } else {
+                onSuccess(false);
+            }
+        } else {
 
-                if (isElectron) {
+            const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
+            const fileName = message.content.body;
+            const mimeType = message.content.info!.mimetype;
 
-                    const { ipcRenderer, shell } = window.require('electron');
-                    const path = window.require('path');
-                    const fs = window.require('fs');
-                    const cachePath = await ipcRenderer.invoke('getPath', 'cache').catch(_error => null) as string;
-                    const cacheAppFolder = path.join(cachePath, APP_NAME);
-
-                    if (!fs.existsSync(cacheAppFolder)) {
-                        fs.mkdirSync(cacheAppFolder);
-                    }
-
-                    const filePath = path.join(cacheAppFolder, fileName!);
-                    const fileData = new Uint8Array(Buffer.from(response.data as ArrayBuffer));
-
-                    const onComplete = (error: NodeJS.ErrnoException) => {
-
-                        if (error) {
-                            onSuccess(false);
-                        } else {
-                            onSuccess(true);
-
-                            shell.openPath(filePath)
-                                .then(() => {
-                                    setTimeout(fs.unlinkSync, 10000, filePath);
-                                })
-                                .catch(() => {
-                                    onNoAppFound();
-                                });
-                        }
-                    }
-
-                    fs.writeFile(filePath, fileData, onComplete);
-
-                } else {
+            axios.request({
+                url: url,
+                method: 'GET',
+                responseType: 'blob',
+                onDownloadProgress: function(progressEvent: {loaded: number, total: number}) {
+                    fetchProgress(progressEvent.loaded / progressEvent.total);
+                },
+            })
+                .then(response => {
 
                     const blob = new Blob([response.data], { type: mimeType });
                     const uri = window.URL.createObjectURL(blob);
@@ -139,11 +160,11 @@ class FileHandler {
                     document.body.removeChild(aElement);
 
                     onSuccess(true);
-                }
-            })
-            .catch(() => {
-                onSuccess(false);
-            });
+                })
+                .catch(() => {
+                    onSuccess(false);
+                });
+        }
     }
 
     public pickFile(onlyImages?: boolean): Promise<FileObject> {

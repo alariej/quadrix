@@ -321,10 +321,6 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 
         const isAndroid = UiStore.getPlatform() === 'android';
 
-        const fetchProgress = (_progress: number) => {
-            // not used yet
-        }
-
         const onSuccess = (success: boolean) => {
 
             RX.Modal.dismiss('savefilespinner');
@@ -369,12 +365,12 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
         if (UiStore.getIsElectron()) {
 
             setTimeout(() => {
-                FileHandler.saveFile(this.props.event, fetchProgress, onSuccess, onAbort).catch(_error => null);
+                FileHandler.saveFile(this.props.event, onSuccess, onAbort).catch(_error => null);
             }, 200);
 
         } else {
 
-            FileHandler.saveFile(this.props.event, fetchProgress, onSuccess, onAbort).catch(_error => null);
+            FileHandler.saveFile(this.props.event, onSuccess, onAbort).catch(_error => null);
         }
     }
 
