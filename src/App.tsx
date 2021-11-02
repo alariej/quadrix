@@ -8,6 +8,7 @@ import DataStore from './stores/DataStore';
 import { ViewOnLayoutEvent } from 'reactxp/dist/common/Types';
 import { ComponentBase } from 'resub';
 import { APP_BACKGROUND } from './ui';
+import FileHandler from './modules/FileHandler';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -48,7 +49,7 @@ export class App extends ComponentBase<AppProps, AppState> {
             };
         }
 
-        if (UiStore.getPlatform() === 'web' && UiStore.getIsElectron()) {
+        if (UiStore.getIsElectron()) {
 
             const { webFrame } = window.require('electron');
 
@@ -61,6 +62,10 @@ export class App extends ComponentBase<AppProps, AppState> {
 
         this.appColorSubscription = UiStore.subscribe(this.changeAppColor, UiStore.ColorTrigger);
         this.sharedContent = props.sharedContent || '';
+
+        if (UiStore.getIsElectron() || ['android', 'ios'].includes(UiStore.getPlatform())) {
+            FileHandler.setCacheAppFolder();
+        }
     }
 
     private changeAppColor = () => {
