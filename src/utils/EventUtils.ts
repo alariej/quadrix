@@ -18,6 +18,10 @@ class EventUtils {
         return http;
     }
 
+    public getCachedFileName(message: MessageEvent, server: string): string {
+        return message.content.url?.replace('mxc://' + server + '/', '') + '_' + message.content.body;
+    }
+
     public filterEvent(event: MessageEvent_, roomType: RoomType): boolean {
 
         if (!event) { return false; }
