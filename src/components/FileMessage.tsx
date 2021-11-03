@@ -75,18 +75,11 @@ export default class FileMessage extends RX.Component<FileMessageProps, FileMess
         }
     }
 
-    public componentDidMount(): void {
-
-        const fetchProgress = (progress: number) => {
-            this.setState({ progressValue: progress });
-        }
-
-        FileHandler.cacheFile(this.props.message, fetchProgress);
-    }
-
     private viewFile = (event: RX.Types.SyntheticEvent) => {
 
         event.stopPropagation();
+
+        if (this.state.progressValue > 0) { return; }
 
         this.setState({ linkOpacity: 0.2, showProgress: true, progressValue: 0 });
 

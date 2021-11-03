@@ -41,53 +41,62 @@ class FileHandler {
             .catch(_error => null);
     }
 
-    private downloadFile(message: MessageEvent, filePath: string, fetchProgress: (progress: number) => void): void {
+    // electron only
+    private async downloadFile(message: MessageEvent, filePath: string, fetchProgress: (progress: number) => void): Promise<void> {
 
         const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
 
-        axios.request({
+        const response = await axios.request({
             url: url,
             method: 'GET',
             responseType: 'arraybuffer',
-            onDownloadProgress: (progressEvent: {loaded: number, total: number}) => {
+            onDownloadProgress: (progressEvent: { loaded: number, total: number }) => {
                 fetchProgress(progressEvent.loaded / progressEvent.total);
             },
-        })
-            .then(response => {
+        }).catch(_error => { return Promise.reject() });
 
-                const fileData = new Uint8Array(Buffer.from(response.data as ArrayBuffer));
-
-                const onComplete = (_error: NodeJS.ErrnoException) => {
-                    // do nothing
-                }
-
-                const fs = window.require('fs');
-                fs.writeFile(filePath, fileData, onComplete);
-            })
-            .catch(_error => null);
-    }
-
-    public cacheFile(message: MessageEvent, fetchProgress: (progress: number) => void): void {
-
-        if (!UiStore.getIsElectron()) { return; }
-
-        const cachedFileName = EventUtils.getCachedFileName(message, ApiClient.credentials.homeServer);
+        const fileData = new Uint8Array(Buffer.from(response.data as ArrayBuffer));
 
         const fs = window.require('fs');
-        const path = window.require('path');
 
-        const cachedFilePath = path.join(this.cacheAppFolder, cachedFileName);
+        const writeFile = (filePath: string, fileData: Uint8Array) => new Promise(resolve => fs.writeFile(filePath, fileData, resolve));
 
-        if (!fs.existsSync(cachedFilePath)) { this.downloadFile(message, cachedFilePath, fetchProgress); }
+        await writeFile(filePath, fileData).catch(_error => { return Promise.reject() });
+
+        return Promise.resolve();
     }
 
+    // electron only
+    private async cacheFile(message: MessageEvent, fetchProgress: (progress: number) => void): Promise<string> {
+
+        const cachedFileName = EventUtils.getCachedFileName(message, ApiClient.credentials.homeServer);
+        const path = window.require('path');
+        const cachedFilePath = path.join(this.cacheAppFolder, cachedFileName);
+        const fs = window.require('fs');
+
+        if (!fs.existsSync(cachedFilePath)) {
+            await this.downloadFile(message, cachedFilePath, fetchProgress)
+                .catch(_error => { return Promise.reject() });
+        }
+
+        return Promise.resolve(cachedFilePath);
+    }
+
+    // electron only
     public async saveFile(message: MessageEvent, onSuccess: (success: boolean) => void, onAbort: () => void): Promise<void> {
+
+        const fetchProgress = (_progress: number) => null;
+
+        const cachedFilePath = await this.cacheFile(message, fetchProgress)
+            .catch(_error => {
+                onSuccess(false)
+                return Promise.reject();
+            });
 
         const fileName = message.content.body;
 
         const { ipcRenderer } = window.require('electron');
         const path = window.require('path');
-        const fs = window.require('fs');
 
         const homePath = await ipcRenderer.invoke('getPath', 'home').catch(_error => null) as string;
         const homeFilePath = path.join(homePath, fileName!);
@@ -102,17 +111,17 @@ class FileHandler {
 
         if (!savePath) {
             onAbort();
-            return;
+            return Promise.resolve();
         }
 
-        const cachedFileName = EventUtils.getCachedFileName(message, ApiClient.credentials.homeServer);
-        const cachedFilePath = path.join(this.cacheAppFolder, cachedFileName);
+        const fs = window.require('fs');
 
-        const onComplete = (error: NodeJS.ErrnoException) => {
-            error ? onSuccess(false) : onSuccess(true);
-        }
+        const copyFile = (filePath: string, savePath: string) => new Promise(resolve => fs.copyFile(filePath, savePath, resolve));
 
-        fs.copyFile(cachedFilePath, savePath, onComplete);
+        await copyFile(cachedFilePath, savePath).catch(_error => { onSuccess(false); return Promise.reject(); });
+
+        onSuccess(true);
+        return Promise.resolve();
     }
 
     public viewFile(message: MessageEvent, fetchProgress: (progress: number) => void,
@@ -120,19 +129,15 @@ class FileHandler {
 
         if (UiStore.getIsElectron()) {
 
-            const cachedFileName = EventUtils.getCachedFileName(message, ApiClient.credentials.homeServer);
-            const fs = window.require('fs');
-            const path = window.require('path');
-            const cachedFilePath = path.join(this.cacheAppFolder, cachedFileName);
+            this.cacheFile(message, fetchProgress)
+                .then(response => {
+                    const { shell } = window.require('electron');
+                    shell.openPath(response).catch(_error => onNoAppFound());
+                    fetchProgress(1);
+                    onSuccess(true);
+                })
+                .catch(_error => { onSuccess(false) });
 
-            if (fs.existsSync(cachedFilePath)) {
-                const { shell } = window.require('electron');
-                shell.openPath(cachedFilePath).catch(_error => onNoAppFound());
-                fetchProgress(1);
-                onSuccess(true);
-            } else {
-                onSuccess(false);
-            }
         } else {
 
             const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
@@ -143,7 +148,7 @@ class FileHandler {
                 url: url,
                 method: 'GET',
                 responseType: 'blob',
-                onDownloadProgress: function(progressEvent: {loaded: number, total: number}) {
+                onDownloadProgress: function(progressEvent: { loaded: number, total: number }) {
                     fetchProgress(progressEvent.loaded / progressEvent.total);
                 },
             })
