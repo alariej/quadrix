@@ -61,8 +61,8 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.15.9",
     "@react-native-community/netinfo": "6.0.4",
-    "@react-native-firebase/app": "12.9.3",
-    "@react-native-firebase/messaging": "12.9.3",
+    "@react-native-firebase/app": "13.0.0",
+    "@react-native-firebase/messaging": "13.0.0",
     "axios": "0.21.4",
     "date-fns": "2.25.0",
     "linkifyjs": "3.0.3",
