@@ -25,6 +25,7 @@ class FileHandler {
 
     public cacheAppFolder = '';
 
+    // electron only
     public setCacheAppFolder(): void {
 
         const { ipcRenderer } = window.require('electron');
