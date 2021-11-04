@@ -259,7 +259,7 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
 
         const content: StateEventContent_ = {
             url: fileUri,
-            size: this.avatarFile.size,
+            size: this.avatarFile.size!,
             mimetype: this.avatarFile.type,
         };
 
