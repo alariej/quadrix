@@ -14,6 +14,12 @@ import Exif from 'react-native-exif';
 
 class FileHandler {
 
+    public cacheAppFolder = '';
+
+    public setCacheAppFolder(): void {
+        this.cacheAppFolder = RNFetchBlob.fs.dirs.CacheDir;
+    }
+
     private async requestWriteStoragePermission(): Promise<boolean> {
 
         const granted: PermissionStatus =
@@ -32,79 +38,87 @@ class FileHandler {
         return granted === PermissionsAndroid.RESULTS.GRANTED;
     }
 
-    public async saveFile(message: MessageEvent, fetchProgress: (progress: number) => void,
-        onSuccess: (success: boolean) => void, _onAbort: () => void): Promise<void> {
+    private async downloadFile(message: MessageEvent, filePath: string, fetchProgress: (progress: number) => void): Promise<void> {
+
+        const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
+
+        await RNFetchBlob.config({
+            overwrite: true,
+            path: filePath,
+        })
+            .fetch('GET', url, { 'Content-Type' : 'octet-stream' })
+            .progress({ interval: 250 }, (received, total) => {
+                fetchProgress(received / total);
+            })
+            .then((_response) => {
+                return Promise.resolve();
+            })
+            .catch(_error => {
+                return Promise.reject();
+            });
+    }
+
+    private async cacheFile(message: MessageEvent, fetchProgress: (progress: number) => void): Promise<string> {
+
+        const cachedFileName = EventUtils.getCachedFileName(message, ApiClient.credentials.homeServer);
+        const cachedFilePath = this.cacheAppFolder + '/' + cachedFileName;
+
+        const alreadyCached = await RNFetchBlob.fs.exists(cachedFilePath);
+
+        if (!alreadyCached) {
+            await this.downloadFile(message, cachedFilePath, fetchProgress)
+                .catch(_error => { return Promise.reject() });
+        }
+
+        return Promise.resolve(cachedFilePath);
+    }
+
+    public async saveFile(message: MessageEvent, onSuccess: (success: boolean) => void, _onAbort: () => void): Promise<void> {
 
         const isGranted = await this.requestWriteStoragePermission();
 
         if(!isGranted) { onSuccess(false); return; }
 
-        const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
-        const fileName = message.content.body;
-        const mimeType = message.content.info!.mimetype;
+        const fetchProgress = (_progress: number) => null;
 
-        RNFetchBlob.config({
-            addAndroidDownloads: {
-                useDownloadManager: true,
-                notification: true,
-                mime: mimeType,
-                path: RNFetchBlob.fs.dirs.DownloadDir + '/' + fileName,
-            },
-        })
-            .fetch('GET', url, { 'Content-Type' : 'octet-stream' })
-            .progress({ interval: 250 }, (received, total) => {
-                fetchProgress(received / total);
-            })
-            .then(() => {
-                onSuccess(true);
-            })
-            .catch(() => {
+        const cachedFilePath = await this.cacheFile(message, fetchProgress)
+            .catch(_error => {
                 onSuccess(false);
+                return Promise.reject();
             });
+
+        const fileName = message.content.body;
+        const homePath = RNFetchBlob.fs.dirs.DownloadDir;
+        const homeFilePath = homePath + '/' + fileName;
+
+        await RNFetchBlob.fs.cp(cachedFilePath, homeFilePath)
+            .catch(_error => {
+                onSuccess(false);
+                return Promise.reject();
+            });
+
+        onSuccess(true);
+        return Promise.resolve();
     }
 
     public viewFile(message: MessageEvent, fetchProgress: (progress: number) => void,
         onSuccess: (success: boolean) => void, onNoAppFound: () => void): void {
 
-        const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
-        const fileName = message.content.body;
         const mimeType = message.content.info!.mimetype;
 
-        RNFetchBlob.config({
-            overwrite: true,
-            path: RNFetchBlob.fs.dirs.CacheDir + '/' + fileName,
-        })
-            .fetch('GET', url, { 'Content-Type' : 'octet-stream' })
-            .progress({ interval: 250 }, (received, total) => {
-                fetchProgress(received / total);
-            })
-            .then((response) => {
+        this.cacheFile(message, fetchProgress)
+            .then(response => {
+
                 onSuccess(true);
-                const filePath = response.path();
 
-                RNFetchBlob.android.actionViewIntent(filePath, mimeType!)
-                    .then(() => {
-
+                RNFetchBlob.android.actionViewIntent(response, mimeType!)
+                    .then(_response => {
                         // HACK: to detect if there is a suitable app for viewing the file
-                        // doesn't seem to work for some file types (something.xll)
-                        if (RX.App.getActivationState() === 2) {
-                            // app goes in the background
-                            // assumption: file gets opened by an external app
-                        } else {
-                            onNoAppFound();
-                        }
-
-                        setTimeout(() => {
-                            RNFetchBlob.fs.unlink(filePath).catch(_error => null);
-                        }, 5000);
+                        if (RX.App.getActivationState() !== 2) { onNoAppFound() }
                     })
-                    .catch(() => {
-                        RNFetchBlob.fs.unlink(filePath).catch(_error => null);
-                    });
+                    .catch(_error => onNoAppFound());
             })
-            .catch(() => {
-                onSuccess(false);
-            });
+            .catch(_error => onSuccess(false) );
     }
 
     public async pickFile(onlyImages?: boolean): Promise<FileObject> {
@@ -218,7 +232,7 @@ class FileHandler {
                         1280,
                         1280,
                         compressFormat,
-                        95,
+                        90,
                         rotation + 90,
                         undefined,
                         false,
@@ -231,8 +245,6 @@ class FileHandler {
                 }
             }
         }
-
-        // return Promise.resolve('');
 
         const url = 'https://' + credentials.homeServer + PREFIX_UPLOAD;
 
