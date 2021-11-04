@@ -123,7 +123,7 @@ class FileHandler {
 
     public async pickFile(onlyImages?: boolean): Promise<FileObject> {
 
-        const response = await DocumentPicker.pick({
+        const response = await DocumentPicker.pickSingle({
             type: [onlyImages ? DocumentPicker.types.images : DocumentPicker.types.allFiles],
         });
 
@@ -134,7 +134,7 @@ class FileHandler {
             imageSize = { width: 0, height: 0 }
         }
 
-        const file = {
+        const file: FileObject = {
             size: response.size,
             name: response.name,
             type: response.type || 'unknown',
