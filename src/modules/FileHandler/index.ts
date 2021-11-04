@@ -90,7 +90,7 @@ class FileHandler {
 
         const cachedFilePath = await this.cacheFile(message, fetchProgress)
             .catch(_error => {
-                onSuccess(false)
+                onSuccess(false);
                 return Promise.reject();
             });
 
@@ -119,7 +119,11 @@ class FileHandler {
 
         const copyFile = (filePath: string, savePath: string) => new Promise(resolve => fs.copyFile(filePath, savePath, resolve));
 
-        await copyFile(cachedFilePath, savePath).catch(_error => { onSuccess(false); return Promise.reject(); });
+        await copyFile(cachedFilePath, savePath)
+            .catch(_error => {
+                onSuccess(false);
+                return Promise.reject();
+            });
 
         onSuccess(true);
         return Promise.resolve();
@@ -137,7 +141,7 @@ class FileHandler {
                     fetchProgress(1);
                     onSuccess(true);
                 })
-                .catch(_error => { onSuccess(false) });
+                .catch(_error => onSuccess(false) );
 
         } else {
 
