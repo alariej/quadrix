@@ -1017,3 +1017,27 @@ export const syncError: Translation = {
     de: 'Die App scheint keine Daten vom Server zu erhalten. Das Problem liegt wahrscheinlich auf der Serverseite. Sie können trotzdem versuchen, sich abzumelden, die App zu schließen und neu zu starten.',
     fr: 'L\'application ne semble pas pouvoir obtenir de données du serveur. Le problème se situe probablement du côté du serveur. Vous pouvez toujours essayer de vous déconnecter, de fermer et de redémarrer l\'application.',
 }
+
+export const batteryOptimizationTitle: Translation = {
+    en: 'Battery Optimization Whitelist',
+    de: 'Whitelist für Batterie-Optimierung',
+    fr: 'Whitelist pour l\'optimisation de la batterie'
+}
+
+export const batteryOptimizationText: Translation = {
+    en: 'To enable push notifications for new messages, please whitelist quadrix from the battery optimization settings',
+    de: 'Um Push-Benachrichtigungen für neue Nachrichten zu aktivieren, nehmen Sie quadrix in den Einstellungen zur Batterieoptimierung auf die Whitelist',
+    fr: 'Pour activer les notifications en mode "push" pour les nouveaux messages, veuillez mettre quadrix sur la whitelist dans les paramètres d\'optimisation de la batterie'
+}
+
+export const doNotShowAgain: Translation = {
+    en: 'Do not show again',
+    de: 'Nicht mehr anzeigen',
+    fr: 'Ne pas montrer de nouveau'
+}
+
+export const whitelist: Translation = {
+    en: 'Whitelist',
+    de: 'Whitelist',
+    fr: 'Whitelist'
+}
