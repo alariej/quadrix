@@ -18,7 +18,7 @@ export const createNewGroup: Translation = {
 }
 
 export const joinPublicComm: Translation = {
-    en: 'Join public Group',
+    en: 'Join public group',
     de: 'Öffentliche Gruppe beitreten',
     fr: 'Joindre un groupe public',
 }
