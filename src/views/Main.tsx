@@ -226,7 +226,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
         } else {
 
-            if (ApiClient.isSyncStopped()) {
+            if (ApiClient.isSyncStopped() && ApiClient.isConnected) {
 
                 DataStore.setSyncComplete(false);
 
