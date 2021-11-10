@@ -12,56 +12,87 @@ import * as ImagePicker from 'react-native-image-picker';
 
 class FileHandler {
 
-    public saveFile(message: MessageEvent, fetchProgress: (progress: number) => void,
-        onSuccess: (success: boolean) => void, _onAbort: () => void): void {
+    public cacheAppFolder = '';
+
+    public setCacheAppFolder(): void {
+        this.cacheAppFolder = RNFetchBlob.fs.dirs.CacheDir;
+    }
+
+    private async downloadFile(message: MessageEvent, filePath: string, fetchProgress: (progress: number) => void): Promise<void> {
 
         const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
-        const fileName = message.content.body;
 
-        RNFetchBlob.config({
-            fileCache: true,
-            path: RNFetchBlob.fs.dirs.DocumentDir + '/' + fileName,
+        await RNFetchBlob.config({
+            overwrite: true,
+            path: filePath,
         })
             .fetch('GET', url, { 'Content-Type' : 'octet-stream' })
             .progress({ interval: 250 }, (received, total) => {
                 fetchProgress(received / total);
             })
-            .then(_response => {
-                onSuccess(true);
+            .then((_response) => {
+                return Promise.resolve();
             })
             .catch(_error => {
-                onSuccess(false);
+                return Promise.reject();
             });
+    }
+
+    private async cacheFile(message: MessageEvent, fetchProgress: (progress: number) => void): Promise<string> {
+
+        const cachedFileName = EventUtils.getCachedFileName(message, ApiClient.credentials.homeServer);
+        const cachedFilePath = this.cacheAppFolder + '/' + cachedFileName;
+
+        const alreadyCached = await RNFetchBlob.fs.exists(cachedFilePath);
+
+        if (!alreadyCached) {
+            await this.downloadFile(message, cachedFilePath, fetchProgress)
+                .catch(_error => { return Promise.reject() });
+        }
+
+        return Promise.resolve(cachedFilePath);
+    }
+
+    public async saveFile(message: MessageEvent, onSuccess: (success: boolean) => void, _onAbort: () => void): Promise<void> {
+
+        const fetchProgress = (_progress: number) => null;
+
+        const cachedFilePath = await this.cacheFile(message, fetchProgress)
+            .catch(_error => {
+                onSuccess(false);
+                return Promise.reject();
+            });
+
+        const fileName = message.content.body;
+        const homePath = RNFetchBlob.fs.dirs.DocumentDir;
+        const homeFilePath = homePath + '/' + fileName;
+
+        await RNFetchBlob.fs.cp(cachedFilePath, homeFilePath)
+            .catch(_error => {
+                onSuccess(false);
+                return Promise.reject();
+            });
+
+        onSuccess(true);
+        return Promise.resolve();
     }
 
     public viewFile(message: MessageEvent, fetchProgress: (progress: number) => void,
         onSuccess: (success: boolean) => void, onNoAppFound: () => void): void {
 
-        const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
-        const fileName = message.content.body;
+        this.cacheFile(message, fetchProgress)
+            .then(response => {
 
-        RNFetchBlob.config({
-            overwrite: true,
-            path: RNFetchBlob.fs.dirs.CacheDir + '/' + fileName,
-        })
-            .fetch('GET', url, { 'Content-Type' : 'octet-stream' })
-            .progress({ interval: 250 }, (received, total) => {
-                fetchProgress(received / total);
-            })
-            .then((response) => {
                 onSuccess(true);
-                const filePath = response.path();
 
                 setTimeout(() => {
-                    RNFetchBlob.ios.openDocument(filePath)
+                    RNFetchBlob.ios.openDocument(response)
                         .catch(_error => {
                             onNoAppFound();
                         })
-                }, 500);
+                }, 250);
             })
-            .catch((_error) => {
-                onSuccess(false);
-            });
+            .catch(_error => onSuccess(false) );
     }
 
     public async pickFile(onlyImages?: boolean): Promise<FileObject> {
