@@ -19,7 +19,10 @@ class ShareViewController: SLComposeServiceViewController {
 	private func handleContent() {
 
 		if let content = extensionContext!.inputItems[0] as? NSExtensionItem {
-			if let attachments = content.attachments {
+
+      // NSLog("%@", content)
+
+      if let attachments = content.attachments {
 				for (index, attachment) in (attachments).enumerated() {
 					if attachment.hasItemConformingToTypeIdentifier(typeImage) {
 						handleMedia(content: content, attachment: attachment, mediaType: typeImage, index: index)
@@ -41,26 +44,62 @@ class ShareViewController: SLComposeServiceViewController {
 		// and move redirectToApp call to handleContent function
 		attachment.loadItem(forTypeIdentifier: mediaType, options: nil) { [weak self] data, error in
 
-			let this = self
-			let url = data as? URL
-			let filePrefix = UUID().uuidString
-			let fileExtension = url!.pathExtension
-			let fileName = "\(filePrefix).\(fileExtension)"
-			let mimeType = this!.getMimeType(fileExtension: fileExtension)
-			let fileSize = this!.getFileSize(path: url!)
-			let filePath = FileManager.default
-				.containerURL(forSecurityApplicationGroupIdentifier: "group.ios.share.extension")!
-				.appendingPathComponent(fileName)
-			let isCopied = this!.copyFile(at: url!, to: filePath)
+			// NSLog("%@", attachment)
+			// NSLog("Data \(data!)")
 
-			if(isCopied) {
-				this!.sharedContent.append(sharedContentType(uri: filePath.absoluteString, mimeType: mimeType, fileName: fileName, fileSize: fileSize))
+			let this = self
+
+			var fileExtension: String?
+			var fileName: String?
+			var mimeType: String?
+			var fileSize: Int?
+			var filePath: URL?
+			var isCopied: Bool = false
+
+			let cachePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.ios.share.extension")!
+
+			// NSLog("cachePath \(cachePath)")
+
+			if let urlData = data as? URL {
+
+				// NSLog("urlData \(urlData)")
+
+				fileExtension = urlData.pathExtension
+				fileName = "share.\(fileExtension!)"
+				mimeType = this!.getMimeType(fileExtension: fileExtension!)
+				fileSize = this!.getFileSize(path: urlData)
+				filePath = cachePath.appendingPathComponent(fileName!)
+
+				// NSLog("filePath \(filePath!)")
+
+				isCopied = this!.copyFile(at: urlData, to: filePath!)
+
+			// for screenshots, which pass the image directly
+			} else if let imageData = data as? UIImage {
+
+				// NSLog("imageData \(imageData)")
+
+				fileExtension = "PNG"
+				fileName = "share.\(fileExtension!)"
+				mimeType = this!.getMimeType(fileExtension: fileExtension!)
+				filePath = cachePath.appendingPathComponent(fileName!)
+
+				// NSLog("filePath \(filePath!)")
+
+				try? isCopied = imageData.pngData()?.write(to: filePath!) != nil
+
+				fileSize = this!.getFileSize(path: filePath!)
 			}
 
-			if index == (content.attachments?.count)! - 1 {
-				let sharedContentJson = this!.toJsonString(data: this!.sharedContent)
-				let sharedContentEncoded = sharedContentJson.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!
-				this!.redirectToApp(sharedContentEncoded: sharedContentEncoded)
+			if(isCopied) {
+
+				this!.sharedContent.append(sharedContentType(uri: filePath!.absoluteString, mimeType: mimeType!, fileName: fileName!, fileSize: fileSize!))
+
+				if index == (content.attachments?.count)! - 1 {
+					let sharedContentJson = this!.toJsonString(data: this!.sharedContent)
+					let sharedContentEncoded = sharedContentJson.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!
+					this!.redirectToApp(sharedContentEncoded: sharedContentEncoded)
+				}
 			}
 		}
 	}
