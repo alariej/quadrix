@@ -1,6 +1,6 @@
 class AppFont {
 
-    public fontFamily = 'Helvetica Neue'; // 'Courier New Italic';
+    public fontFamily = 'System';
 }
 
 export default new AppFont();
