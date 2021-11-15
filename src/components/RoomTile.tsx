@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { TILE_BACKGROUND, BUTTON_UNREAD_TEXT, BUTTON_UNREAD_BACKGROUND, TILE_SYSTEM_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, FONT_NORMAL,
-    AVATAR_SMALL_WIDTH, TILE_HEIGHT, AVATAR_MARGIN, TRANSPARENT_BACKGROUND, ICON_INFO_FILL, BUTTON_MODAL_TEXT, TILE_MESSAGE_TEXT }
+    AVATAR_SMALL_WIDTH, TILE_HEIGHT, TRANSPARENT_BACKGROUND, ICON_INFO_FILL, BUTTON_MODAL_TEXT, TILE_MESSAGE_TEXT }
     from '../ui';
 import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
@@ -36,8 +36,6 @@ const styles = {
         alignItems: 'center',
         width: AVATAR_SMALL_WIDTH,
         height: AVATAR_SMALL_WIDTH,
-        marginRight: AVATAR_MARGIN,
-        marginLeft: SPACING
     }),
     avatar: RX.Styles.createImageStyle({
         flex: 1,
@@ -47,17 +45,14 @@ const styles = {
     }),
     containerRoomInfo: RX.Styles.createViewStyle({
         flex: 1,
-        height: TILE_HEIGHT - 2 * SPACING,
-        flexDirection: 'column',
+        padding: 2 * SPACING,
     }),
     containerRoomName: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
         color: TILE_MESSAGE_TEXT,
-        height: (TILE_HEIGHT - 2 * SPACING) / 2,
-        lineHeight: (TILE_HEIGHT - 4 * SPACING) / 2,
         flexDirection: 'row',
         alignItems: 'center',
-        paddingTop: SPACING
+        marginBottom: SPACING,
     }),
     roomName: RX.Styles.createTextStyle({
         fontSize: FONT_LARGE,
@@ -67,24 +62,19 @@ const styles = {
         fontSize: FONT_NORMAL,
     }),
     containerNewestMessage: RX.Styles.createViewStyle({
-        flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        height: (TILE_HEIGHT - 2 * SPACING) / 2,
-        paddingBottom: SPACING
     }),
     newestMessageText:  RX.Styles.createTextStyle({
         flex: 1,
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         color: TILE_SYSTEM_TEXT,
-        lineHeight: (TILE_HEIGHT - 4 * SPACING) / 2,
     }),
     unreadNumber: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
         height: 24,
         width: 24,
-        marginLeft: 8,
         borderRadius: 12,
         backgroundColor: BUTTON_UNREAD_BACKGROUND,
         fontSize: FONT_LARGE,
