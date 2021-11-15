@@ -20,7 +20,11 @@ import IconSvg, { SvgFile } from './IconSvg';
 import { differenceInDays, format, isSameYear, isToday, isYesterday, Locale } from 'date-fns';
 import Spinner from './Spinner';
 import AppFont from '../modules/AppFont';
-import background from '../resources/png/background.png';
+import background100 from '../resources/png/background100.png';
+import background200 from '../resources/png/background200.png';
+import background400 from '../resources/png/background400.png';
+import background600 from '../resources/png/background600.png';
+import background800 from '../resources/png/background800.png';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -115,7 +119,6 @@ const styles = {
         bottom: 0,
         right: 0,
         opacity: 0.1,
-        // backgroundColor: TRANSPARENT_BACKGROUND,
     }),
     image: RX.Styles.createImageStyle({
         flex: 1,
@@ -714,6 +717,30 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
             );
         }
 
+        let backgroundImage: string;
+
+        switch (RX.UserInterface.getPixelRatio()) {
+            case 1:
+                backgroundImage = background100 as string;
+                break;
+
+            case 2:
+                backgroundImage = background200 as string;
+                break;
+
+            case 4:
+                backgroundImage = background400 as string;
+                break;
+
+            case 6:
+                backgroundImage = background600 as string;
+                break;
+
+            default:
+                backgroundImage = background800 as string;
+                break;
+        }
+
         return (
 
             <RX.View
@@ -723,9 +750,10 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
                 <RX.View style={ styles.background }>
                     <RX.Image
+                        resizeMethod={ 'resize' }
                         resizeMode={ 'repeat' }
                         style={ styles.image }
-                        source={ background as string }
+                        source={ backgroundImage }
                     />
                 </RX.View>
 
