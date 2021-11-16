@@ -26,7 +26,7 @@ const styles = {
         backgroundColor: TILE_BACKGROUND,
         borderRadius: BORDER_RADIUS,
         marginBottom: SPACING,
-        padding: SPACING,
+        padding: 2 * SPACING,
         height: TILE_HEIGHT,
         cursor: 'pointer',
         alignItems: 'center',
@@ -45,7 +45,7 @@ const styles = {
     }),
     containerRoomInfo: RX.Styles.createViewStyle({
         flex: 1,
-        padding: 2 * SPACING,
+        paddingHorizontal: 2 * SPACING,
     }),
     containerRoomName: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
