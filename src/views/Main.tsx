@@ -2,8 +2,8 @@ import React, { ReactElement } from 'react';
 import RX, { Types } from 'reactxp';
 import RoomList from './RoomList';
 import Room from './Room';
-import { PAGE_MARGIN, MODAL_CONTENT_TEXT, FONT_LARGE, COMPOSER_BORDER, LOGO_BACKGROUND,
-    PAGE_WIDE_PADDING, BUTTON_LONG_TEXT, OBJECT_MARGIN, TRANSPARENT_BACKGROUND } from '../ui';
+import { PAGE_MARGIN, MODAL_CONTENT_TEXT, FONT_LARGE, COMPOSER_BORDER,
+    PAGE_WIDE_PADDING, OBJECT_MARGIN, TRANSPARENT_BACKGROUND, HEADER_HEIGHT } from '../ui';
 import DataStore from '../stores/DataStore';
 import { MessageEvent } from '../models/MessageEvent';
 import ApiClient from '../matrix/ApiClient';
@@ -13,11 +13,11 @@ import UiStore, { Layout } from '../stores/UiStore';
 import RXNetInfo from 'reactxp-netinfo';
 import { deviceOffline } from '../translations';
 import JitsiMeet from '../modules/JitsiMeet';
-import IconSvg, { SvgFile } from '../components/IconSvg';
 import { ComponentBase } from 'resub';
 import Pushers from '../modules/Pushers';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import AppFont from '../modules/AppFont';
+import logogreen from '../resources/png/logogreen.png';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -51,18 +51,16 @@ const styles = {
         borderLeftWidth: 1,
         borderColor: COMPOSER_BORDER,
     }),
-    textPlaceholder: RX.Styles.createTextStyle({
-        fontFamily: AppFont.fontFamily,
-        flexDirection: 'row',
-        fontSize: FONT_LARGE,
-        textAlign: 'center',
-        color: BUTTON_LONG_TEXT,
-        marginBottom: OBJECT_MARGIN,
+    background: RX.Styles.createViewStyle({
+        position: 'absolute',
+        top: HEADER_HEIGHT,
+        bottom: 0,
+        right: 0,
+        padding: OBJECT_MARGIN * 2,
+        opacity: 0.15,
     }),
-    viewPlaceholder: RX.Styles.createViewStyle({
+    image: RX.Styles.createImageStyle({
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
     }),
 };
 
@@ -406,19 +404,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
         );
 
         let room: ReactElement | undefined;
-
-        if (!this.state.showRoom || !this.room) {
-            room = (
-                <RX.View style={ styles.viewPlaceholder }>
-                    <IconSvg
-                        source= { require('../resources/svg/appname.json') as SvgFile }
-                        height={ 36 }
-                        width={ 36 * 347.48401 / 89.798973 }
-                        fillColor={ LOGO_BACKGROUND }
-                    />
-                </RX.View>
-            );
-        } else {
+        if (this.state.showRoom && this.room) {
             room = this.room;
         }
 
@@ -440,10 +426,22 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
         let paddingLeft;
         let paddingRight;
+        let backgroundPadding = 0;
         if (this.state.layout.type === 'wide') {
             paddingLeft = <RX.View style={ styles.paddingLeft }/>;
             paddingRight = <RX.View style={ styles.paddingRight }/>;
+            backgroundPadding = PAGE_WIDE_PADDING * 2;
         }
+
+        const backgroundImage = (
+            <RX.View style={ [styles.background, { left: this.state.layout.pageWidth + backgroundPadding }] }>
+                <RX.Image
+                    resizeMode={ 'contain' }
+                    style={ styles.image }
+                    source={ logogreen as string }
+                />
+            </RX.View>
+        );
 
         return (
             <RX.View style={{ flex: 1 }}>
@@ -459,6 +457,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
                     <RX.Animated.View
                         style={ [styles.containerAnimated, this.animatedStyle] }
                     >
+                        { backgroundImage }
                         { roomListPage }
                         { paddingLeft}
                         { paddingRight }

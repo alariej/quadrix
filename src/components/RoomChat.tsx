@@ -20,7 +20,6 @@ import IconSvg, { SvgFile } from './IconSvg';
 import { differenceInDays, format, isSameYear, isToday, isYesterday, Locale } from 'date-fns';
 import Spinner from './Spinner';
 import AppFont from '../modules/AppFont';
-import logogreen from '../resources/png/logogreen.png';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -107,18 +106,6 @@ const styles = {
         color: MODAL_CONTENT_TEXT,
         fontSize: FONT_LARGE,
         margin: 12,
-    }),
-    background: RX.Styles.createViewStyle({
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
-        padding: OBJECT_MARGIN,
-        opacity: 0.2,
-    }),
-    image: RX.Styles.createImageStyle({
-        flex: 1,
     }),
 };
 
@@ -720,14 +707,6 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
                 style={ styles.container }
                 onPress={ () => RX.UserInterface.dismissKeyboard() }
             >
-
-                <RX.View style={ styles.background }>
-                    <RX.Image
-                        resizeMode={ 'contain' }
-                        style={ styles.image }
-                        source={ logogreen as string }
-                    />
-                </RX.View>
 
                 <VirtualListView
                     onScroll={ this.onScroll }
