@@ -45,7 +45,7 @@ const styles = {
     }),
     containerRoomInfo: RX.Styles.createViewStyle({
         flex: 1,
-        paddingHorizontal: 2 * SPACING,
+        paddingLeft: 2 * SPACING,
     }),
     containerRoomName: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
@@ -80,6 +80,7 @@ const styles = {
         fontSize: FONT_LARGE,
         color: BUTTON_UNREAD_TEXT,
         textAlign: 'center',
+        marginLeft: 2 * SPACING,
     }),
 };
 
