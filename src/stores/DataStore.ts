@@ -193,14 +193,14 @@ class DataStore extends StoreBase {
                 case 'm.room.message':
                     roomEventTriggers.isNewMessageEvent = true;
                     if (this.roomSummaryList[roomIndex].type !== 'community') {
-                        this.setPresenceFromEvent(event);
+                        roomEventTriggers.isNewUserPresence = this.setPresenceFromEvent(event);
                     }
                     break;
 
                 case 'm.room.member':
                     if (this.roomSummaryList[roomIndex].type !== 'community') {
                         roomEventTriggers.isNewMemberEvent = true;
-                        this.setPresenceFromEvent(event);
+                        roomEventTriggers.isNewUserPresence = this.setPresenceFromEvent(event);
                     }
                     this.setRoomMember(event, roomIndex);
                     break;
@@ -213,17 +213,11 @@ class DataStore extends StoreBase {
                 case 'm.room.name':
                     roomEventTriggers.isNewRoomNameEvent = true;
                     this.roomSummaryList[roomIndex].name = event.content.name;
-                    if (this.roomSummaryList[roomIndex].type !== 'community') {
-                        this.setPresenceFromEvent(event);
-                    }
                     break;
 
                 case 'm.room.avatar':
                     roomEventTriggers.isNewRoomAvatarEvent = true;
                     this.roomSummaryList[roomIndex].avatarUrl = event.content.url;
-                    if (this.roomSummaryList[roomIndex].type !== 'community') {
-                        this.setPresenceFromEvent(event);
-                    }
                     break;
 
                 case 'm.room.canonical_alias':
@@ -467,26 +461,27 @@ class DataStore extends StoreBase {
         if (newEvents.length > 0) { this.roomSummaryList[roomIndex].newEvents = newEvents; }
     }
 
+    // comes from sync
     public updateUserPresence(syncData: SyncResponse_) {
 
         if (!syncData.presence) { return }
 
-        let isNewUserPresence = false;
+        let isNewPresence = false;
 
         const time = Date.now();
 
         syncData.presence.events
             .map((event) => {
-                if (event.type === 'm.presence' && event.content && event.sender !== ApiClient.credentials.userIdFull) {
+                if (event.type === 'm.presence' && event.content) {
 
                     this.lastSeenTime[event.sender] = Math.max(
                         this.lastSeenTime[event.sender] || 0, time - event.content.last_active_ago!
                     );
-                    isNewUserPresence = true;
+                    isNewPresence = true;
                 }
             });
 
-        if (isNewUserPresence) {
+        if (isNewPresence) {
             this.trigger(UserPresenceTrigger);
         }
     }
@@ -788,7 +783,7 @@ class DataStore extends StoreBase {
             this.trigger(RoomSummaryTrigger);
         }
 
-        if (roomEventTriggers.isNewUserPresence || roomEventTriggers.isNewReadReceipt || roomEventTriggers.isNewMessageEvent) {
+        if (roomEventTriggers.isNewUserPresence || roomEventTriggers.isNewReadReceipt) {
             this.trigger(UserPresenceTrigger);
         }
 
@@ -841,14 +836,15 @@ class DataStore extends StoreBase {
     }
 
     // HACK: fake presence
-    private setPresenceFromEvent(event: MessageEvent_) {
+    private setPresenceFromEvent(event: MessageEvent_): boolean {
 
         const userId = event.sender;
         const timestamp = event.origin_server_ts;
+        const isNewPresence = timestamp > this.lastSeenTime[userId];
 
-        this.lastSeenTime[userId] = Math.max(
-            this.lastSeenTime[userId] || 0, timestamp,
-        );
+        this.lastSeenTime[userId] = Math.max(this.lastSeenTime[userId] || 0, timestamp);
+
+        return isNewPresence;
     }
 
     // HACK: fake presence
@@ -1043,14 +1039,11 @@ class DataStore extends StoreBase {
         return sortedRoomList;
     }
 
-    // on matrix.org, the presence function is turned off, so we need to find a kind of
-    // temporary solution, using a list of latest read receipts.
-    // used in roomheader
+    // used in userpresence
     @autoSubscribeWithKey(UserPresenceTrigger)
-    public getLastSeenTime(contactId: string): number {
+    public getLastSeenTime(userId: string): number {
 
-        const lastSeenTime = this.lastSeenTime[contactId];
-        return lastSeenTime || 0;
+        return this.lastSeenTime[userId] || 0;
     }
 
     // used in roomchat

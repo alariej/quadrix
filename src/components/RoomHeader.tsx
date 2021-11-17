@@ -12,13 +12,13 @@ import DialogAvatar from '../dialogs/DialogAvatar';
 import DialogRoomHeader from '../dialogs/DialogRoomHeader';
 import UiStore from '../stores/UiStore';
 import { RoomSummary } from '../models/RoomSummary';
-import { recentActivity, online, communityMembers, notepad, yesterdayWord, todayWord, Languages } from '../translations';
+import { communityMembers, notepad, Languages } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
-import { differenceInDays, differenceInMilliseconds, format, isToday, isYesterday, Locale } from 'date-fns';
 import { StyleRuleSet, TextStyle } from 'reactxp/dist/common/Types';
 import { RoomPhase, RoomType } from '../models/MatrixApi';
 import Pushers from '../modules/Pushers';
 import AppFont from '../modules/AppFont';
+import UserPresence from './UserPresence';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -121,7 +121,6 @@ interface RoomHeaderState {
     name: string,
     type: RoomType,
     phase: RoomPhase,
-    lastSeen: string,
     members: { [id: string]: User },
     contactId: string,
     totalUnreadCount: number,
@@ -139,7 +138,6 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
     private joinMembersCount = 0;
     private roomSummary!: RoomSummary;
     private language: Languages = 'en';
-    private locale: Locale;
     private unreadTextStyle: StyleRuleSet<TextStyle> = undefined;
     private isMounted_: boolean | undefined;
 
@@ -147,7 +145,6 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
         super(props);
 
         this.language = UiStore.getLanguage();
-        this.locale = UiStore.getLocale();
 
         if (UiStore.getPlatform() !== 'android') {
             this.unreadTextStyle = RX.Styles.createTextStyle({
@@ -174,15 +171,6 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
         && (initState || this.props.roomId !== nextProps.roomId || prevState.phase !== this.roomSummary.phase)) {
 
             this.getRoomMembersFromServer(nextProps.roomId);
-
-            if (this.roomSummary.type === 'direct') {
-
-                this.getContactPresence();
-
-            } else {
-
-                partialState.lastSeen = undefined;
-            }
         }
 
         let roomMembers: { [id: string]: User };
@@ -193,17 +181,6 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
         } else {
 
             roomMembers = this.roomSummary.members;
-        }
-
-        if (!initState && this.roomSummary.type === 'direct') {
-
-            const lastSeenTime = DataStore.getLastSeenTime(this.roomSummary.contactId!);
-
-            partialState.lastSeen = this.getLastSeen(lastSeenTime);
-
-        } else {
-
-            partialState.lastSeen = undefined;
         }
 
         partialState.avatarUrl = EventUtils.mxcToHttp(this.roomSummary.avatarUrl!, ApiClient.credentials.homeServer);
@@ -266,24 +243,6 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
             .catch(_error => null);
     }
 
-    private getContactPresence = () => {
-
-        ApiClient.getPresence(this.roomSummary.contactId!)
-            .then(response => {
-
-                let lastSeenTime;
-
-                if (response.last_active_ago) {
-                    lastSeenTime = Date.now() - response.last_active_ago;
-                } else {
-                    lastSeenTime = DataStore.getLastSeenTime(this.roomSummary.contactId!);
-                }
-
-                if (this.isMounted_) { this.setState({ lastSeen: this.getLastSeen(lastSeenTime) }); }
-            })
-            .catch(_error => null);
-    }
-
     private onPressHomeButton = () => {
 
         RX.UserInterface.dismissKeyboard();
@@ -323,52 +282,6 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
             />,
             'dialogroomheader'
         );
-    }
-
-    private getLastSeen = (lastSeenTime: number): string => {
-
-        let lastSeen = '';
-
-        if (!lastSeenTime || lastSeenTime < 100) {
-
-            lastSeen = recentActivity[this.language] + 'N/A';
-
-        } else if (differenceInMilliseconds(new Date(), lastSeenTime) < 30000) {
-
-            lastSeen = online[this.language];
-
-            const resetLastSeen = () => {
-                const lastSeenTime = DataStore.getLastSeenTime(this.roomSummary.contactId!);
-                if (this.isMounted_) { this.setState({ lastSeen: this.getLastSeen(lastSeenTime) }); }
-            }
-
-            setTimeout(resetLastSeen, 31000);
-
-        } else {
-
-            let lastSeenTimeFormatted;
-
-            if (isToday(lastSeenTime)) {
-
-                lastSeenTimeFormatted = todayWord[this.language] + format(lastSeenTime, ' HH:mm', { locale: this.locale });
-
-            } else if (isYesterday(lastSeenTime)) {
-
-                lastSeenTimeFormatted = yesterdayWord[this.language] + format(lastSeenTime, ' HH:mm', { locale: this.locale });
-
-            } else if (differenceInDays(new Date(), lastSeenTime) > 180) {
-
-                lastSeenTimeFormatted = format(lastSeenTime, 'd MMM. yyyy', { locale: this.locale });
-
-            } else {
-
-                lastSeenTimeFormatted = format(lastSeenTime, 'd MMM. HH:mm', { locale: this.locale });
-            }
-
-            lastSeen = recentActivity[this.language] + lastSeenTimeFormatted;
-        }
-
-        return lastSeen;
     }
 
     public render(): JSX.Element | null {
@@ -445,11 +358,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 
         if (this.state.type === 'direct') {
 
-            subtitle = (
-                <RX.Text>
-                    { this.state.lastSeen }
-                </RX.Text>
-            );
+            subtitle = <UserPresence userId={ this.state.contactId }/>;
 
         } else if (this.state.type === 'community') {
 

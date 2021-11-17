@@ -5,11 +5,12 @@ import DataStore from '../stores/DataStore';
 import EventUtils from '../utils/EventUtils';
 import ApiClient from '../matrix/ApiClient';
 import { TILE_BACKGROUND, BUTTON_LONG_TEXT, TILE_SYSTEM_TEXT, BORDER_RADIUS, SPACING, FONT_NORMAL, FONT_LARGE,
-    FONT_SMALL, TILE_HEIGHT, AVATAR_SMALL_WIDTH, AVATAR_MARGIN, BUTTON_MODAL_TEXT, LIGHT_BACKGROUND, TILE_MESSAGE_TEXT } from '../ui';
+    FONT_SMALL, TILE_HEIGHT, AVATAR_SMALL_WIDTH, BUTTON_MODAL_TEXT, LIGHT_BACKGROUND, TILE_MESSAGE_TEXT } from '../ui';
 import UiStore from '../stores/UiStore';
 import { invited, left, admin } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
 import AppFont from '../modules/AppFont';
+import UserPresence from './UserPresence';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -19,15 +20,13 @@ const styles = {
         borderRadius: BORDER_RADIUS,
         backgroundColor: TILE_BACKGROUND,
         alignItems: 'center',
-        padding: SPACING,
+        padding: 2 * SPACING,
     }),
     containerAvatar: RX.Styles.createViewStyle({
         justifyContent: 'center',
         alignItems: 'center',
         width: AVATAR_SMALL_WIDTH,
         height: AVATAR_SMALL_WIDTH,
-        marginRight: AVATAR_MARGIN,
-        marginLeft: SPACING
     }),
     avatar: RX.Styles.createImageStyle({
         flex: 1,
@@ -38,27 +37,24 @@ const styles = {
     containerUserInfo: RX.Styles.createViewStyle({
         flex: 1,
         flexDirection: 'column',
+        paddingLeft: 2 * SPACING,
     }),
     containerRoomName: RX.Styles.createTextStyle({
         alignItems: 'center',
-        paddingTop: SPACING
     }),
     userName: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
         fontWeight: 'bold',
         color: TILE_MESSAGE_TEXT,
-        lineHeight: (TILE_HEIGHT - 4 * SPACING) / 2,
     }),
     containerUserId: RX.Styles.createViewStyle({
-        flex: 1,
-        paddingBottom: SPACING
+        // not used
     }),
     userId: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         color: TILE_SYSTEM_TEXT,
-        lineHeight: (TILE_HEIGHT - 4 * SPACING) / 2,
     }),
     containerStatus: RX.Styles.createViewStyle({
         position: 'absolute',
@@ -152,6 +148,17 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
             }
         }
 
+        let lastSeen: ReactElement | undefined;
+        if (['direct', 'group'].includes(roomType!)) {
+            lastSeen = (
+                <RX.View style={ styles.containerUserId }>
+                    <RX.Text numberOfLines={ 1 } style={ styles.userId }>
+                        <UserPresence userId={ this.props.user.id }/>
+                    </RX.Text>
+                </RX.View>
+            )
+        }
+
         return (
             <RX.View
                 style={ [styles.container, { cursor: this.props.canPress ? 'pointer' : 'default' }] }
@@ -164,7 +171,10 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
                     { status! }
                 </RX.View>
                 <RX.View style={ styles.containerUserInfo }>
-                    <RX.Text numberOfLines={ 1 } style={ styles.containerRoomName }>
+                    <RX.Text
+                        numberOfLines={ 1 }
+                        style={ [styles.containerRoomName, { marginBottom: ['direct', 'group'].includes(roomType!) ? 0 : SPACING }] }
+                    >
                         <RX.Text numberOfLines={ 1 } style={ styles.userName }>
                             { this.props.user.name || this.props.user.id }
                         </RX.Text>
@@ -174,6 +184,7 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
                             { this.props.user.id }
                         </RX.Text>
                     </RX.View>
+                    { lastSeen }
                 </RX.View>
             </RX.View>
         )
