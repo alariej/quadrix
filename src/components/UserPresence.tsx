@@ -27,9 +27,12 @@ export default class UserPresence extends ComponentBase<UserPresenceProps, UserP
         this.language = UiStore.getLanguage();
         this.locale = UiStore.getLocale();
     }
-    protected _buildState(nextProps: UserPresenceProps): UserPresenceState {
 
-        return { lastSeenTime: DataStore.getLastSeenTime(nextProps.userId) }
+    protected _buildState(nextProps: UserPresenceProps, _initState: boolean, prevState: UserPresenceState): UserPresenceState {
+
+        const lastSeenTime = DataStore.getLastSeenTime(nextProps.userId);
+
+        return { lastSeenTime: Math.max(lastSeenTime, prevState?.lastSeenTime || 0) }
     }
 
     public componentDidMount(): void {
@@ -41,8 +44,8 @@ export default class UserPresence extends ComponentBase<UserPresenceProps, UserP
             .then(response => {
                 if (response?.last_active_ago) {
                     const lastSeenTime = Date.now() - response.last_active_ago;
-                    if (lastSeenTime > this.state.lastSeenTime) {
-                        if (this.isMounted_) { this.setState({ lastSeenTime: lastSeenTime }) }
+                    if (this.isMounted_ && lastSeenTime > this.state.lastSeenTime) {
+                        this.setState({ lastSeenTime: lastSeenTime });
                     }
                 }
             })
