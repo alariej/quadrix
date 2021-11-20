@@ -53,17 +53,14 @@ const styles = {
     }),
     containerRoomInfo: RX.Styles.createViewStyle({
         flex: 1,
-        height: HEADER_HEIGHT - 2 * SPACING,
-        flexDirection: 'column',
+        paddingLeft: 2 * SPACING,
     }),
     containerRoomName: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
         color: HEADER_TEXT,
-        height: (HEADER_HEIGHT - 2 * SPACING) / 2,
-        lineHeight: (HEADER_HEIGHT - 4 * SPACING) / 2,
         flexDirection: 'row',
         alignItems: 'center',
-        paddingTop: SPACING
+        marginBottom: SPACING,
     }),
     roomName: RX.Styles.createTextStyle({
         fontSize: FONT_LARGE,
@@ -73,16 +70,13 @@ const styles = {
         fontSize: FONT_NORMAL,
     }),
     containerSubtitle: RX.Styles.createViewStyle({
-        flex: 1,
-        height: (HEADER_HEIGHT - 2 * SPACING) / 2,
-        paddingBottom: SPACING
+        // not used
     }),
     subtitle: RX.Styles.createTextStyle({
         flex: 1,
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         color: HEADER_STATUS,
-        lineHeight: (HEADER_HEIGHT - 4 * SPACING) / 2,
     }),
     containerHomeButton: RX.Styles.createViewStyle({
         width: BUTTON_ROUND_WIDTH,
