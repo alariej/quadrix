@@ -3,9 +3,19 @@ import RX from 'reactxp';
 import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
 import ApiClient from '../matrix/ApiClient';
-import { Languages, online, recentActivity, todayWord, yesterdayWord } from '../translations';
+import { Languages, online, todayWord, yesterdayWord } from '../translations';
 import UiStore from '../stores/UiStore';
 import { differenceInDays, differenceInMilliseconds, format, isToday, isYesterday } from 'date-fns';
+import IconSvg, { SvgFile } from './IconSvg';
+import { SPACING } from '../ui';
+import AppFont from '../modules/AppFont';
+
+const styles = {
+    container: RX.Styles.createViewStyle({
+        flexDirection: 'row',
+        alignItems: 'center',
+    }),
+}
 
 interface UserPresenceState {
     lastSeenTime: number;
@@ -13,6 +23,8 @@ interface UserPresenceState {
 
 interface UserPresenceProps extends RX.CommonProps {
     userId: string;
+    fontColor: string;
+    fontSize: number;
 }
 
 export default class UserPresence extends ComponentBase<UserPresenceProps, UserPresenceState> {
@@ -30,9 +42,11 @@ export default class UserPresence extends ComponentBase<UserPresenceProps, UserP
 
     protected _buildState(nextProps: UserPresenceProps, _initState: boolean, prevState: UserPresenceState): UserPresenceState {
 
+        const prevLastSeenTime = this.props.userId !== nextProps.userId ? 0 : prevState?.lastSeenTime || 0;
+
         const lastSeenTime = DataStore.getLastSeenTime(nextProps.userId);
 
-        return { lastSeenTime: Math.max(lastSeenTime, prevState?.lastSeenTime || 0) }
+        return { lastSeenTime: Math.max(lastSeenTime, prevLastSeenTime) }
     }
 
     public componentDidMount(): void {
@@ -66,7 +80,7 @@ export default class UserPresence extends ComponentBase<UserPresenceProps, UserP
 
         if (!this.state.lastSeenTime || this.state.lastSeenTime < 100) {
 
-            lastSeenText = recentActivity[this.language] + 'N/A';
+            lastSeenText = 'N/A';
 
         } else if (differenceInMilliseconds(new Date(), this.state.lastSeenTime) < 30000) {
 
@@ -76,32 +90,41 @@ export default class UserPresence extends ComponentBase<UserPresenceProps, UserP
 
         } else {
 
-            let lastSeenTimeFormatted = '';
-
             if (isToday(this.state.lastSeenTime)) {
 
-                lastSeenTimeFormatted = todayWord[this.language] + format(this.state.lastSeenTime, ' HH:mm', { locale: this.locale });
+                lastSeenText = todayWord[this.language] + format(this.state.lastSeenTime, ' HH:mm', { locale: this.locale });
 
             } else if (isYesterday(this.state.lastSeenTime)) {
 
-                lastSeenTimeFormatted = yesterdayWord[this.language] + format(this.state.lastSeenTime, ' HH:mm', { locale: this.locale });
+                lastSeenText = yesterdayWord[this.language] + format(this.state.lastSeenTime, ' HH:mm', { locale: this.locale });
 
             } else if (differenceInDays(new Date(), this.state.lastSeenTime) > 30) {
 
-                lastSeenTimeFormatted = format(this.state.lastSeenTime, 'd MMM. yyyy', { locale: this.locale });
+                lastSeenText = format(this.state.lastSeenTime, 'd MMM. yyyy', { locale: this.locale });
 
             } else {
 
-                lastSeenTimeFormatted = format(this.state.lastSeenTime, 'd MMM. HH:mm', { locale: this.locale });
+                lastSeenText = format(this.state.lastSeenTime, 'd MMM. HH:mm', { locale: this.locale });
             }
-
-            lastSeenText = recentActivity[this.language] + lastSeenTimeFormatted;
         }
 
+        const activityIcon = (
+            <IconSvg
+                source= { require('../resources/svg/activity.json') as SvgFile }
+                style={ { marginRight: SPACING, opacity: 0.7 } }
+                fillColor={ this.props.fontColor }
+                height={ this.props.fontSize }
+                width={ this.props.fontSize }
+            />
+        );
+
         return (
-            <RX.Text>
-                { lastSeenText}
-            </RX.Text>
+            <RX.View style={ styles.container }>
+                { activityIcon }
+                <RX.Text style={{ color: this.props.fontColor, fontSize: this.props.fontSize, fontFamily: AppFont.fontFamily }}>
+                    { lastSeenText }
+                </RX.Text>
+            </RX.View>
         );
     }
 }

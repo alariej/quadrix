@@ -152,9 +152,11 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
         if (['direct', 'group'].includes(roomType!)) {
             lastSeen = (
                 <RX.View style={ styles.containerUserId }>
-                    <RX.Text numberOfLines={ 1 } style={ styles.userId }>
-                        <UserPresence userId={ this.props.user.id }/>
-                    </RX.Text>
+                    <UserPresence
+                        userId={ this.props.user.id }
+                        fontColor={ TILE_SYSTEM_TEXT }
+                        fontSize={ FONT_NORMAL }
+                    />
                 </RX.View>
             )
         }

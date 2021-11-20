@@ -358,12 +358,17 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 
         if (this.state.type === 'direct') {
 
-            subtitle = <UserPresence userId={ this.state.contactId }/>;
+            subtitle =
+                <UserPresence
+                    userId={ this.state.contactId }
+                    fontColor={ HEADER_STATUS }
+                    fontSize={ FONT_NORMAL }
+                />;
 
         } else if (this.state.type === 'community') {
 
             subtitle = (
-                <RX.Text>
+                <RX.Text numberOfLines={ 1 } style={ styles.subtitle }>
                     { communityMembers(this.joinMembersCount, this.language) }
                 </RX.Text>
             );
@@ -371,7 +376,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
         } else if (this.state.type === 'notepad') {
 
             subtitle = (
-                <RX.Text>
+                <RX.Text numberOfLines={ 1 } style={ styles.subtitle }>
                     { notepad[this.language] }
                 </RX.Text>
             );
@@ -416,7 +421,11 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
                 }
             });
 
-            subtitle = memberRenderArray;
+            subtitle = (
+                <RX.Text numberOfLines={ 1 } style={ styles.subtitle }>
+                    { memberRenderArray }
+                </RX.Text>
+            );
         }
 
         let unread: ReactElement | undefined = undefined;
@@ -452,9 +461,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
                             { alias }
                         </RX.Text>
                         <RX.View style={ styles.containerSubtitle }>
-                            <RX.Text numberOfLines={ 1 } style={ styles.subtitle }>
-                                { subtitle }
-                            </RX.Text>
+                            { subtitle }
                         </RX.View>
                     </RX.View>
                 </RX.View>
