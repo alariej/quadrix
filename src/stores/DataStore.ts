@@ -148,7 +148,6 @@ class DataStore extends StoreBase {
 
         if (this.roomSummaryList[roomIndex].type === 'direct') {
             this.setContactId(roomIndex);
-            this.setDirectRoomNameAvatar(roomIndex);
         }
 
         if (this.roomSummaryList[roomIndex].type === 'community' && !this.roomSummaryList[roomIndex].name) {
@@ -378,25 +377,6 @@ class DataStore extends StoreBase {
         }
     }
 
-    private setDirectRoomNameAvatar(roomIndex: number): boolean {
-
-        const name = this.roomSummaryList[roomIndex].name;
-        const avatarUrl = this.roomSummaryList[roomIndex].avatarUrl;
-
-        const contact: User = this.roomSummaryList[roomIndex].members[this.roomSummaryList[roomIndex].contactId!];
-
-        if (contact) {
-            this.roomSummaryList[roomIndex].name = contact.name!;
-            this.roomSummaryList[roomIndex].avatarUrl = contact.avatarUrl!;
-        }
-
-        if (!this.roomSummaryList[roomIndex].name) {
-            this.roomSummaryList[roomIndex].name = this.roomSummaryList[roomIndex].contactId;
-        }
-
-        return ((name !== this.roomSummaryList[roomIndex].name) || (avatarUrl !== this.roomSummaryList[roomIndex].avatarUrl));
-    }
-
     private setRoomActive(roomIndex: number): boolean {
 
         const active = this.roomSummaryList[roomIndex].active;
@@ -523,10 +503,6 @@ class DataStore extends StoreBase {
 
         const roomEventTriggers = { ...roomEventTriggers1, ...roomEventTriggers2 };
 
-        if (this.roomSummaryList[roomIndex].type === 'direct' && roomEventTriggers.isNewMemberEvent) {
-            roomEventTriggers.isNewRoomNameEvent = this.setDirectRoomNameAvatar(roomIndex) || roomEventTriggers.isNewRoomNameEvent;
-        }
-
         if (this.roomSummaryList[roomIndex].type !== 'community' && roomEventTriggers.isNewMemberEvent) {
             this.setRoomInfoFromSummary(roomObj.summary, roomIndex);
             roomEventTriggers.isNewActiveStatus = this.setRoomActive(roomIndex);
@@ -562,7 +538,6 @@ class DataStore extends StoreBase {
             if (this.roomSummaryList[roomIndex].type === 'direct') {
 
                 this.setContactId(roomIndex);
-                this.setDirectRoomNameAvatar(roomIndex);
             }
 
             roomEventTriggers.isNewActiveStatus = this.setRoomActive(roomIndex);
@@ -580,10 +555,6 @@ class DataStore extends StoreBase {
         this.setRoomInfoFromSummary(roomObj.summary, roomIndex);
 
         const roomEventTriggers = this.setRoomInfoFromEvents(roomObj.timeline.events, roomIndex);
-
-        if (this.roomSummaryList[roomIndex].type === 'direct' && roomEventTriggers.isNewMemberEvent) {
-            roomEventTriggers.isNewRoomNameEvent = this.setDirectRoomNameAvatar(roomIndex) || roomEventTriggers.isNewRoomNameEvent;
-        }
 
         this.roomSummaryList[roomIndex].phase = 'join';
         this.roomSummaryList[roomIndex].unreadCount = 0;
@@ -633,7 +604,6 @@ class DataStore extends StoreBase {
             if (this.roomSummaryList[roomIndex].type === 'direct') {
 
                 this.setContactId(roomIndex);
-                this.setDirectRoomNameAvatar(roomIndex);
             }
 
             roomEventTriggers.isNewActiveStatus = this.setRoomActive(roomIndex);

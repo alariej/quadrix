@@ -138,9 +138,19 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 
         const selectedRoom = UiStore.getSelectedRoom();
 
+        let avatarUrl: string | undefined;
+        let name: string | undefined;
+        if (roomSummary.type === 'direct') {
+            name = roomSummary.members[roomSummary.contactId!].name;
+            avatarUrl = roomSummary.members[roomSummary.contactId!].avatarUrl;
+        } else {
+            name = roomSummary.name;
+            avatarUrl = roomSummary.avatarUrl;
+        }
+
         return {
-            avatarUrl: EventUtils.mxcToHttp(roomSummary.avatarUrl!, ApiClient.credentials.homeServer),
-            name: roomSummary.name!,
+            avatarUrl: EventUtils.mxcToHttp(avatarUrl!, ApiClient.credentials.homeServer),
+            name: name!,
             unreadCount: roomSummary.unreadCount,
             phase: roomSummary.phase,
             contactPhase: contactPhase,

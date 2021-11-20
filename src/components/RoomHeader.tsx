@@ -183,8 +183,18 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
             roomMembers = this.roomSummary.members;
         }
 
-        partialState.avatarUrl = EventUtils.mxcToHttp(this.roomSummary.avatarUrl!, ApiClient.credentials.homeServer);
-        partialState.name = this.roomSummary.name;
+        let avatarUrl: string | undefined;
+        let name: string | undefined;
+        if (this.roomSummary.type === 'direct') {
+            name = this.roomSummary.members[this.roomSummary.contactId!].name;
+            avatarUrl = this.roomSummary.members[this.roomSummary.contactId!].avatarUrl;
+        } else {
+            name = this.roomSummary.name;
+            avatarUrl = this.roomSummary.avatarUrl;
+        }
+
+        partialState.avatarUrl = EventUtils.mxcToHttp(avatarUrl!, ApiClient.credentials.homeServer);
+        partialState.name = name;
         partialState.type = this.roomSummary.type;
         partialState.phase = this.roomSummary.phase;
         partialState.members = roomMembers;
