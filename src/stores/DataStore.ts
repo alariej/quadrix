@@ -1050,15 +1050,13 @@ class DataStore extends StoreBase {
 
         let users: { [id: string]: User } = {};
 
-        this.roomSummaryList
-            .filter(roomSummary => (
-                roomSummary.type !== 'community'
-            ))
-            .map(roomSummary => {
+        for (const roomSummary of this.roomSummaryList) {
+            if (roomSummary.type !== 'community') {
                 users = { ...users, ...roomSummary.members }
-            });
+            }
+        }
 
-        return Object.values(users).filter((user => (user.id !== ApiClient.credentials.userIdFull)));
+        return Object.values(users).filter((user => (user.id && user.id !== ApiClient.credentials.userIdFull)));
     }
 
     public addMembers(roomId: string, members: { [id: string]: User }) {
