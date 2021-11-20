@@ -134,6 +134,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
     private language: Languages = 'en';
     private unreadTextStyle: StyleRuleSet<TextStyle> = undefined;
     private isMounted_: boolean | undefined;
+    private messageCount: { [id: string]: number } = {};
 
     constructor(props: RoomHeaderProps) {
         super(props);
@@ -225,6 +226,15 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
     }
 
     private getRoomMembersFromServer = (roomId: string) => {
+
+        if (this.roomSummary.type === 'group') {
+            let i = 0;
+            for (const event of this.roomSummary.timelineEvents) {
+                i++;
+                this.messageCount[event.sender] = (this.messageCount[event.sender] || 0) + 1;
+                if (i >= 100) { break }
+            }
+        }
 
         ApiClient.getRoomMembers(roomId, false)
             .then(members => {
@@ -394,12 +404,11 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
                 userArray = Object.values(this.state.members)
                     .filter(member => (
                         member.membership &&
-                    member.membership !== 'leave'
+                        member.membership !== 'leave'
                     ))
-                    .sort((a, b) => (
-                        b.membership!.localeCompare(a.membership!) || // join before invite
-                    a.id.localeCompare(b.id) // alphabetic
-                    ));
+                    .sort((a, b) => {
+                        return (this.messageCount[b.id] - this.messageCount[a.id]) || a.id.localeCompare(b.id);
+                    })
             }
 
             const memberRenderArray: Array<ReactElement> = [];
