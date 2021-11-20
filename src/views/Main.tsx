@@ -3,7 +3,7 @@ import RX, { Types } from 'reactxp';
 import RoomList from './RoomList';
 import Room from './Room';
 import { PAGE_MARGIN, MODAL_CONTENT_TEXT, FONT_LARGE, COMPOSER_BORDER,
-    PAGE_WIDE_PADDING, OBJECT_MARGIN, TRANSPARENT_BACKGROUND, HEADER_HEIGHT } from '../ui';
+    PAGE_WIDE_PADDING, OBJECT_MARGIN, TRANSPARENT_BACKGROUND, HEADER_HEIGHT, TILE_WIDTH } from '../ui';
 import DataStore from '../stores/DataStore';
 import { MessageEvent } from '../models/MessageEvent';
 import ApiClient from '../matrix/ApiClient';
@@ -17,7 +17,7 @@ import { ComponentBase } from 'resub';
 import Pushers from '../modules/Pushers';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import AppFont from '../modules/AppFont';
-import logogreen from '../resources/png/logogreen.png';
+import IconSvg, { SvgFile } from '../components/IconSvg';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -57,10 +57,9 @@ const styles = {
         bottom: 0,
         right: 0,
         padding: OBJECT_MARGIN * 2,
-        opacity: 0.15,
-    }),
-    image: RX.Styles.createImageStyle({
-        flex: 1,
+        opacity: 0.03,
+        alignItems: 'center',
+        justifyContent: 'center',
     }),
 };
 
@@ -435,10 +434,11 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
         const backgroundImage = (
             <RX.View style={ [styles.background, { left: this.state.layout.pageWidth + backgroundPadding }] }>
-                <RX.Image
-                    resizeMode={ 'contain' }
-                    style={ styles.image }
-                    source={ logogreen as string }
+                <IconSvg
+                    source= { require('../resources/svg/logo.json') as SvgFile }
+                    height={ TILE_WIDTH }
+                    width={ TILE_WIDTH }
+                    fillColor={ 'white' }
                 />
             </RX.View>
         );
