@@ -156,8 +156,8 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
         const userListItems = Object.values(members)
             .filter(member => (
                 member.id !== 'unknown' &&
-            member.membership &&
-            member.membership !== 'leave'
+                member.membership &&
+                member.membership !== 'leave'
             ))
             .sort((a, b) => (
                 ((b.powerLevel || 0) - (a.powerLevel || 0))
