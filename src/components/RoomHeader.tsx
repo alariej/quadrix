@@ -228,11 +228,8 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
     private getRoomMembersFromServer = (roomId: string) => {
 
         if (this.roomSummary.type === 'group') {
-            let i = 0;
-            for (const event of this.roomSummary.timelineEvents) {
-                i++;
+            for (const event of this.roomSummary.timelineEvents.slice(-100)) {
                 this.messageCount[event.sender] = (this.messageCount[event.sender] || 0) + 1;
-                if (i >= 100) { break }
             }
         }
 
@@ -407,7 +404,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
                         member.membership !== 'leave'
                     ))
                     .sort((a, b) => {
-                        return (this.messageCount[b.id] - this.messageCount[a.id]) || a.id.localeCompare(b.id);
+                        return (((this.messageCount[b.id] || 0) - (this.messageCount[a.id]) || 0)) || a.id.localeCompare(b.id);
                     })
             }
 
