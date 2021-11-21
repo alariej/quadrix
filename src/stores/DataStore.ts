@@ -1040,12 +1040,6 @@ class DataStore extends StoreBase {
         return oldestMarker;
     }
 
-    public getRoomMembers(roomId: string): { [id: string]: User } {
-
-        const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
-        return this.roomSummaryList[roomIndex].members;
-    }
-
     public getUsers():  User[] {
 
         let users: { [id: string]: User } = {};
