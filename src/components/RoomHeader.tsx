@@ -410,8 +410,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 
             const memberRenderArray: Array<ReactElement> = [];
 
-            userArray.map(member => {
-
+            for (const member of userArray) {
                 const separator = memberRenderArray.length ? ', ' : '';
                 let memberRender: ReactElement;
                 if (member.membership === 'join') {
@@ -429,7 +428,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
                     );
                     memberRenderArray.push(memberRender);
                 }
-            });
+            }
 
             subtitle = (
                 <RX.Text numberOfLines={ 1 } style={ styles.subtitle }>
