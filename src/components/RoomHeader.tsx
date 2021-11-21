@@ -148,7 +148,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
         }
     }
 
-    protected _buildState(nextProps: RoomHeaderProps): Partial<RoomHeaderState> {
+    protected _buildState(nextProps: RoomHeaderProps, initState: boolean): Partial<RoomHeaderState> {
 
         const partialState: Partial<RoomHeaderState> = {};
 
@@ -167,6 +167,13 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
             Object.keys(this.roomSummary.members).length))
         {
             this.getRoomMembersFromServer(nextProps.roomId);
+        }
+
+        if (this.roomSummary.type === 'group' && (initState || (this.props.roomId !== nextProps.roomId))) {
+
+            for (const event of this.roomSummary.timelineEvents.slice(-100)) {
+                this.messageCount[event.sender] = (this.messageCount[event.sender] || 0) + 1;
+            }
         }
 
         let avatarUrl: string | undefined;
@@ -217,12 +224,6 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
     }
 
     private getRoomMembersFromServer = (roomId: string) => {
-
-        if (this.roomSummary.type === 'group') {
-            for (const event of this.roomSummary.timelineEvents.slice(-100)) {
-                this.messageCount[event.sender] = (this.messageCount[event.sender] || 0) + 1;
-            }
-        }
 
         ApiClient.getRoomMembers(roomId, false)
             .then(members => {
@@ -399,7 +400,9 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
                         member.membership !== 'leave'
                     ))
                     .sort((a, b) => {
-                        return (((this.messageCount[b.id] || 0) - (this.messageCount[a.id]) || 0)) || a.id.localeCompare(b.id);
+                        const c = this.messageCount[a.id] || 0;
+                        const d = this.messageCount[b.id] || 0;
+                        return d - c;
                     })
             }
 
