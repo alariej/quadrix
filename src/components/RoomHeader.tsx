@@ -148,7 +148,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
         }
     }
 
-    protected _buildState(nextProps: RoomHeaderProps, initState: boolean, prevState: RoomHeaderState): Partial<RoomHeaderState> {
+    protected _buildState(nextProps: RoomHeaderProps): Partial<RoomHeaderState> {
 
         const partialState: Partial<RoomHeaderState> = {};
 
@@ -163,19 +163,10 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
         this.joinMembersCount = this.roomSummary.joinMembersCount!;
 
         if (this.roomSummary.type !== 'community'
-        && (initState || this.props.roomId !== nextProps.roomId || prevState.phase !== this.roomSummary.phase)) {
-
+            && ((this.roomSummary.inviteMembersCount! || 0 + this.roomSummary.joinMembersCount! || 0) !==
+            Object.keys(this.roomSummary.members).length))
+        {
             this.getRoomMembersFromServer(nextProps.roomId);
-        }
-
-        let roomMembers: { [id: string]: User };
-        if (prevState && this.props.roomId === nextProps.roomId) {
-
-            roomMembers = { ...prevState.members, ...this.roomSummary.members };
-
-        } else {
-
-            roomMembers = this.roomSummary.members;
         }
 
         let avatarUrl: string | undefined;
@@ -192,7 +183,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
         partialState.name = name;
         partialState.type = this.roomSummary.type;
         partialState.phase = this.roomSummary.phase;
-        partialState.members = roomMembers;
+        partialState.members = this.roomSummary.members;
         partialState.contactId = this.roomSummary.contactId;
         partialState.totalUnreadCount = DataStore.getUnreadTotal(nextProps.roomId);
 
@@ -237,14 +228,18 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
             .then(members => {
 
                 const members_: { [id: string]: User } = {};
-                Object.values(this.state.members)
-                    .map(member => {
-                        members_[member.id] = { ...member, ...members[member.id] }
-                    });
+                for (const member of Object.values(members)) {
+                    members_[member.id] = {
+                        ...member,
+                        powerLevel: this.roomSummary.members[member.id]?.powerLevel || undefined,
+                    }
+                }
 
-                if (this.isMounted_) { this.setState({ members: { ...members, ...members_ } }); }
+                DataStore.addMembers(roomId, members_);
 
-                DataStore.addMembers(this.props.roomId, members_);
+                if (this.isMounted_ && roomId === this.props.roomId) {
+                    this.forceUpdate();
+                }
 
                 if (RX.Modal.isDisplayed('dialogroomheader')) {
                     RX.Modal.dismiss('dialogroomheader');
