@@ -280,6 +280,7 @@ class DataStore extends StoreBase {
             ...(event.content.is_direct && { isDirect: true })
         };
 
+        // TODO: doesn't powerlevel get lost here?
         this.roomSummaryList[roomIndex].members[member.id] = { ...this.roomSummaryList[roomIndex].members[member.id], ...member }
 
         // in case a 3rd party invite has been accepted, need to reset contactid
