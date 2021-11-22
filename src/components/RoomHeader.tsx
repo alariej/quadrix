@@ -171,6 +171,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 
         if (this.roomSummary.type === 'group' && (initState || (this.props.roomId !== nextProps.roomId))) {
 
+            this.messageCount = {};
             for (const event of this.roomSummary.timelineEvents.slice(-100)) {
                 this.messageCount[event.sender] = (this.messageCount[event.sender] || 0) + 1;
             }
