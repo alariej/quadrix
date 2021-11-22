@@ -162,10 +162,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
         this.alias = this.roomSummary.alias!;
         this.joinMembersCount = this.roomSummary.joinMembersCount!;
 
-        if (this.roomSummary.type !== 'community'
-            && ((this.roomSummary.inviteMembersCount! || 0 + this.roomSummary.joinMembersCount! || 0) !==
-            Object.keys(this.roomSummary.members).length))
-        {
+        if (this.roomSummary.type !== 'community' && (initState || this.props.roomId !== nextProps.roomId)) {
             this.getRoomMembersFromServer(nextProps.roomId);
         }
 
