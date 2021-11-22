@@ -9,7 +9,7 @@ import UiStore from '../stores/UiStore';
 import { ComponentBase } from 'resub';
 import { BUTTON_MODAL_TEXT, FONT_LARGE, BORDER_RADIUS, INPUT_BORDER, OBJECT_MARGIN, BUTTON_LONG_WIDTH, CONTAINER_PADDING,
     BUTTON_HEIGHT, AVATAR_BACKGROUND, AVATAR_LARGE_WIDTH, BUTTON_SHORT_WIDTH, BUTTON_MODAL_BACKGROUND, SPACING,
-    OPAQUE_BACKGROUND, BUTTON_DISABLED_TEXT, DIALOG_WIDTH} from '../ui';
+    OPAQUE_BACKGROUND, BUTTON_DISABLED_TEXT, DIALOG_WIDTH, AVATAR_FOREGROUND} from '../ui';
 import EventUtils from '../utils/EventUtils';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { ErrorResponse_, RoomPhase, RoomType, StateEventContent_ } from '../models/MatrixApi';
@@ -296,7 +296,7 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
                 avatar = (
                     <IconSvg
                         source= { require('../resources/svg/contact.json') as SvgFile }
-                        fillColor={ BUTTON_MODAL_TEXT }
+                        fillColor={ AVATAR_FOREGROUND }
                         height={ AVATAR_LARGE_WIDTH * 0.5 }
                         width={ AVATAR_LARGE_WIDTH * 0.5 }
                     />
@@ -305,7 +305,7 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
                 avatar = (
                     <IconSvg
                         source= { require('../resources/svg/notepad.json') as SvgFile }
-                        fillColor={ BUTTON_MODAL_TEXT }
+                        fillColor={ AVATAR_FOREGROUND }
                         height={ AVATAR_LARGE_WIDTH * 0.6 }
                         width={ AVATAR_LARGE_WIDTH * 0.6 }
                         style={{ marginLeft: AVATAR_LARGE_WIDTH / 14, marginBottom: AVATAR_LARGE_WIDTH / 14 }}
@@ -315,7 +315,7 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
                 avatar = (
                     <IconSvg
                         source= { require('../resources/svg/group.json') as SvgFile }
-                        fillColor={ BUTTON_MODAL_TEXT }
+                        fillColor={ AVATAR_FOREGROUND }
                         height={ AVATAR_LARGE_WIDTH * 0.7 }
                         width={ AVATAR_LARGE_WIDTH * 0.7 }
                     />
@@ -324,7 +324,7 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
                 avatar = (
                     <IconSvg
                         source= { require('../resources/svg/community.json') as SvgFile }
-                        fillColor={ BUTTON_MODAL_TEXT }
+                        fillColor={ AVATAR_FOREGROUND }
                         height={ AVATAR_LARGE_WIDTH * 0.6 }
                         width={ AVATAR_LARGE_WIDTH * 0.6 }
                     />

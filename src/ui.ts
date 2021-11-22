@@ -84,6 +84,7 @@ export const INPUT_BACKGROUND = 'white';
 export const INPUT_TEXT = 'black';
 export const INPUT_BORDER = 'lightgrey';
 export const PLACEHOLDER_TEXT = 'dimgrey';
+export const AVATAR_FOREGROUND = '#4d4d4d';
 export const AVATAR_BACKGROUND = 'white';
 export const LINK_TEXT = 'blue';
 export const FOOTER_TEXT = 'grey';

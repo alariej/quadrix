@@ -5,7 +5,7 @@ import DataStore from '../stores/DataStore';
 import EventUtils from '../utils/EventUtils';
 import ApiClient from '../matrix/ApiClient';
 import { TILE_BACKGROUND, BUTTON_LONG_TEXT, TILE_SYSTEM_TEXT, BORDER_RADIUS, SPACING, FONT_NORMAL, FONT_LARGE,
-    FONT_SMALL, TILE_HEIGHT, AVATAR_SMALL_WIDTH, BUTTON_MODAL_TEXT, LIGHT_BACKGROUND, TILE_MESSAGE_TEXT } from '../ui';
+    FONT_SMALL, TILE_HEIGHT, AVATAR_SMALL_WIDTH, LIGHT_BACKGROUND, TILE_MESSAGE_TEXT, AVATAR_FOREGROUND } from '../ui';
 import UiStore from '../stores/UiStore';
 import { invited, left, admin } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
@@ -103,7 +103,7 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
             avatar = (
                 <IconSvg
                     source= { require('../resources/svg/contact.json') as SvgFile }
-                    fillColor={ BUTTON_MODAL_TEXT }
+                    fillColor={ AVATAR_FOREGROUND }
                     height={ AVATAR_SMALL_WIDTH * 0.5 }
                     width={ AVATAR_SMALL_WIDTH * 0.5 }
                 />

@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { TILE_BACKGROUND, BUTTON_UNREAD_TEXT, BUTTON_UNREAD_BACKGROUND, TILE_SYSTEM_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, FONT_NORMAL,
-    AVATAR_SMALL_WIDTH, TILE_HEIGHT, TRANSPARENT_BACKGROUND, ICON_INFO_FILL, BUTTON_MODAL_TEXT, TILE_MESSAGE_TEXT }
+    AVATAR_SMALL_WIDTH, TILE_HEIGHT, TRANSPARENT_BACKGROUND, ICON_INFO_FILL, TILE_MESSAGE_TEXT, AVATAR_FOREGROUND }
     from '../ui';
 import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
@@ -184,7 +184,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
                 avatar = (
                     <IconSvg
                         source= { require('../resources/svg/contact.json') as SvgFile }
-                        fillColor={ BUTTON_MODAL_TEXT }
+                        fillColor={ AVATAR_FOREGROUND }
                         height={ AVATAR_SMALL_WIDTH * 0.5 }
                         width={ AVATAR_SMALL_WIDTH * 0.5 }
                     />
@@ -193,7 +193,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
                 avatar = (
                     <IconSvg
                         source= { require('../resources/svg/notepad.json') as SvgFile }
-                        fillColor={ BUTTON_MODAL_TEXT }
+                        fillColor={ AVATAR_FOREGROUND }
                         height={ AVATAR_SMALL_WIDTH * 0.6 }
                         width={ AVATAR_SMALL_WIDTH * 0.6 }
                         style={{ marginLeft: AVATAR_SMALL_WIDTH / 14, marginBottom: AVATAR_SMALL_WIDTH / 14 }}
@@ -203,7 +203,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
                 avatar = (
                     <IconSvg
                         source= { require('../resources/svg/group.json') as SvgFile }
-                        fillColor={ BUTTON_MODAL_TEXT }
+                        fillColor={ AVATAR_FOREGROUND }
                         height={ AVATAR_SMALL_WIDTH * 0.7 }
                         width={ AVATAR_SMALL_WIDTH * 0.7 }
                     />
@@ -212,7 +212,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
                 avatar = (
                     <IconSvg
                         source= { require('../resources/svg/community.json') as SvgFile }
-                        fillColor={ BUTTON_MODAL_TEXT }
+                        fillColor={ AVATAR_FOREGROUND }
                         height={ AVATAR_SMALL_WIDTH * 0.6 }
                         width={ AVATAR_SMALL_WIDTH * 0.6 }
                     />

@@ -3,7 +3,7 @@ import RX from 'reactxp';
 import EventUtils from '../utils/EventUtils';
 import ApiClient from '../matrix/ApiClient';
 import { TILE_BACKGROUND, TILE_SYSTEM_TEXT, BORDER_RADIUS, AVATAR_WIDTH, FONT_LARGE, FONT_NORMAL, TILE_WIDTH, SPACING,
-    TILE_HEIGHT_COMMUNITY, BUTTON_MODAL_TEXT } from '../ui';
+    TILE_HEIGHT_COMMUNITY, AVATAR_FOREGROUND } from '../ui';
 import UiStore from '../stores/UiStore';
 import { alias, topic, members } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
@@ -87,7 +87,7 @@ export default class CommunityTile extends RX.Component<CommunityTileProps, RX.S
             avatar = (
                 <IconSvg
                     source= { require('../resources/svg/community.json') as SvgFile }
-                    fillColor={ BUTTON_MODAL_TEXT }
+                    fillColor={ AVATAR_FOREGROUND }
                     height={ AVATAR_WIDTH * 0.6 }
                     width={ AVATAR_WIDTH * 0.6 }
                 />

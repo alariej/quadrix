@@ -4,7 +4,7 @@ import { INPUT_BORDER, MODAL_CONTENT_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, F
     BUTTON_HEIGHT, TRANSPARENT_BACKGROUND, MODAL_CONTENT_BACKGROUND, BUTTON_ROUND_BACKGROUND,
     PLACEHOLDER_TEXT, AVATAR_BACKGROUND, BUTTON_MODAL_TEXT, AVATAR_MEDIUM_WIDTH, CHECKBOX_BACKGROUND, DIALOG_WIDTH,
     APP_BACKGROUND, TILE_MESSAGE_TEXT, BUTTON_SHORT_WIDTH, BUTTON_DISABLED_TEXT, BUTTON_MODAL_BACKGROUND,
-    OPAQUE_BACKGROUND, JITSI_BORDER} from '../ui';
+    OPAQUE_BACKGROUND, JITSI_BORDER, AVATAR_FOREGROUND} from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
 import EventUtils from '../utils/EventUtils';
@@ -635,7 +635,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
             avatar = (
                 <IconSvg
                     source= { require('../resources/svg/contact.json') as SvgFile }
-                    fillColor={ BUTTON_MODAL_TEXT }
+                    fillColor={ AVATAR_FOREGROUND }
                     height={ AVATAR_MEDIUM_WIDTH * 0.5 }
                     width={ AVATAR_MEDIUM_WIDTH * 0.5 }
                 />

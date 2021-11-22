@@ -5,7 +5,7 @@ import DialogNewNotepad from './DialogNewNotepad';
 import DialogNewDirectConversation from './DialogNewDirectConversation';
 import DialogJoinCommunity from './DialogJoinCommunity';
 import { BUTTON_MODAL_BACKGROUND, BUTTON_MODAL_TEXT, OPAQUE_BACKGROUND, BORDER_RADIUS, DIALOG_WIDTH, SPACING,
-    AVATAR_SMALL_WIDTH, TILE_HEIGHT, FONT_LARGE, AVATAR_MARGIN } from '../ui';
+    AVATAR_SMALL_WIDTH, TILE_HEIGHT, FONT_LARGE, AVATAR_MARGIN, AVATAR_FOREGROUND } from '../ui';
 import UiStore from '../stores/UiStore';
 import { createNewConv, createNewGroup, joinPublicComm, createNewNote } from '../translations';
 import IconSvg, { SvgFile } from '../components/IconSvg';
@@ -111,7 +111,7 @@ export default class DialogNewRoom extends RX.Component<DialogNewRoomProps, RX.S
                     <RX.View style={ styles.containerAvatar }>
                         <IconSvg
                             source= { require('../resources/svg/community.json') as SvgFile }
-                            fillColor={ BUTTON_MODAL_TEXT }
+                            fillColor={ AVATAR_FOREGROUND }
                             height={ AVATAR_SMALL_WIDTH * 0.6 }
                             width={ AVATAR_SMALL_WIDTH * 0.6 }
                         />
@@ -144,7 +144,7 @@ export default class DialogNewRoom extends RX.Component<DialogNewRoomProps, RX.S
                         <RX.View style={ styles.containerAvatar }>
                             <IconSvg
                                 source= { require('../resources/svg/contact.json') as SvgFile }
-                                fillColor={ BUTTON_MODAL_TEXT }
+                                fillColor={ AVATAR_FOREGROUND }
                                 height={ AVATAR_SMALL_WIDTH * 0.5 }
                                 width={ AVATAR_SMALL_WIDTH * 0.5 }
                             />
@@ -162,7 +162,7 @@ export default class DialogNewRoom extends RX.Component<DialogNewRoomProps, RX.S
                         <RX.View style={ styles.containerAvatar }>
                             <IconSvg
                                 source= { require('../resources/svg/group.json') as SvgFile }
-                                fillColor={ BUTTON_MODAL_TEXT }
+                                fillColor={ AVATAR_FOREGROUND }
                                 height={ AVATAR_SMALL_WIDTH * 0.7 }
                                 width={ AVATAR_SMALL_WIDTH * 0.7 }
                             />
@@ -183,7 +183,7 @@ export default class DialogNewRoom extends RX.Component<DialogNewRoomProps, RX.S
                         <RX.View style={ styles.containerAvatar }>
                             <IconSvg
                                 source= { require('../resources/svg/notepad.json') as SvgFile }
-                                fillColor={ BUTTON_MODAL_TEXT }
+                                fillColor={ AVATAR_FOREGROUND }
                                 height={ AVATAR_SMALL_WIDTH * 0.6 }
                                 width={ AVATAR_SMALL_WIDTH * 0.6 }
                                 style={{ marginLeft: AVATAR_SMALL_WIDTH / 14, marginBottom: AVATAR_SMALL_WIDTH / 14 }}

@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { HEADER_TEXT, BUTTON_ROUND_WIDTH, BORDER_RADIUS, HEADER_HEIGHT,
     SPACING, FONT_NORMAL, FONT_LARGE, AVATAR_SMALL_WIDTH, ICON_REDUCTION_FACTOR, BUTTON_UNREAD_TEXT, BUTTON_UNREAD_BACKGROUND, FONT_SMALL,
-    AVATAR_MARGIN, LOGO_BACKGROUND, AVATAR_BACKGROUND, BUTTON_MODAL_TEXT, TRANSPARENT_BACKGROUND, HEADER_STATUS } from '../ui';
+    AVATAR_MARGIN, LOGO_BACKGROUND, AVATAR_BACKGROUND, TRANSPARENT_BACKGROUND, HEADER_STATUS, AVATAR_FOREGROUND } from '../ui';
 import { ComponentBase } from 'resub';
 import DataStore from '../stores/DataStore';
 import EventUtils from '../utils/EventUtils';
@@ -299,7 +299,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
                 avatar = (
                     <IconSvg
                         source= { require('../resources/svg/contact.json') as SvgFile }
-                        fillColor={ BUTTON_MODAL_TEXT }
+                        fillColor={ AVATAR_FOREGROUND }
                         height={ AVATAR_SMALL_WIDTH * 0.5 }
                         width={ AVATAR_SMALL_WIDTH * 0.5 }
                     />
@@ -308,7 +308,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
                 avatar = (
                     <IconSvg
                         source= { require('../resources/svg/notepad.json') as SvgFile }
-                        fillColor={ BUTTON_MODAL_TEXT }
+                        fillColor={ AVATAR_FOREGROUND }
                         height={ AVATAR_SMALL_WIDTH * 0.6 }
                         width={ AVATAR_SMALL_WIDTH * 0.6 }
                         style={{ marginLeft: AVATAR_SMALL_WIDTH / 14, marginBottom: AVATAR_SMALL_WIDTH / 14 }}
@@ -318,7 +318,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
                 avatar = (
                     <IconSvg
                         source= { require('../resources/svg/group.json') as SvgFile }
-                        fillColor={ BUTTON_MODAL_TEXT }
+                        fillColor={ AVATAR_FOREGROUND }
                         height={ AVATAR_SMALL_WIDTH * 0.7 }
                         width={ AVATAR_SMALL_WIDTH * 0.7 }
                     />
@@ -327,7 +327,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
                 avatar = (
                     <IconSvg
                         source= { require('../resources/svg/community.json') as SvgFile }
-                        fillColor={ BUTTON_MODAL_TEXT }
+                        fillColor={ AVATAR_FOREGROUND }
                         height={ AVATAR_SMALL_WIDTH * 0.6 }
                         width={ AVATAR_SMALL_WIDTH * 0.6 }
                     />
