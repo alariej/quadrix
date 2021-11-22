@@ -1043,11 +1043,17 @@ class DataStore extends StoreBase {
 
     public getUsers():  User[] {
 
-        let users: { [id: string]: User } = {};
+        const users: { [id: string]: User } = {};
 
         for (const roomSummary of this.roomSummaryList) {
             if (roomSummary.type !== 'community') {
-                users = { ...users, ...roomSummary.members }
+                for (const member of Object.values(roomSummary.members)) {
+                    users[member.id] = {
+                        id: member.id,
+                        name: member.name || users[member.id]?.name || undefined,
+                        avatarUrl: member.avatarUrl || users[member.id]?.avatarUrl || undefined,
+                    }
+                }
             }
         }
 
