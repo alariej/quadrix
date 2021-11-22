@@ -720,12 +720,6 @@ export const admin: Translation = {
     fr: 'Admin',
 }
 
-export const recentActivity: Translation = {
-    en: 'Recent activity: ',
-    de: 'Zuletzt aktiv: ',
-    fr: 'Activité récente: ',
-}
-
 export const online: Translation = {
     en: 'Online',
     de: 'Online',
