@@ -53,7 +53,11 @@ class FileHandler {
         return Promise.resolve(cachedFilePath);
     }
 
-    public async saveFile(message: MessageEvent, onSuccess: (success: boolean) => void, _onAbort: () => void): Promise<void> {
+    public async saveFile(
+        message: MessageEvent,
+        onSuccess: (success: boolean, fileName?: string) => void,
+        _onAbort: () => void
+    ): Promise<void> {
 
         const fetchProgress = (_progress: number) => null;
 
@@ -75,6 +79,10 @@ class FileHandler {
 
         onSuccess(true);
         return Promise.resolve();
+    }
+
+    public openFileExplorer(_onAppFound: (isFound: boolean) => void): void {
+        // not used
     }
 
     public viewFile(message: MessageEvent, fetchProgress: (progress: number) => void,

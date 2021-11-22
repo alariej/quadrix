@@ -84,7 +84,11 @@ class FileHandler {
     }
 
     // electron only
-    public async saveFile(message: MessageEvent, onSuccess: (success: boolean) => void, onAbort: () => void): Promise<void> {
+    public async saveFile(
+        message: MessageEvent,
+        onSuccess: (success: boolean, fileName?: string) => void,
+        onAbort: () => void
+    ): Promise<void> {
 
         const fetchProgress = (_progress: number) => null;
 
@@ -99,7 +103,7 @@ class FileHandler {
         const { ipcRenderer } = window.require('electron');
         const path = window.require('path');
 
-        const homePath = await ipcRenderer.invoke('getPath', 'home').catch(_error => null) as string;
+        const homePath = await ipcRenderer.invoke('getPath', 'downloads').catch(_error => null) as string;
         const homeFilePath = path.join(homePath, fileName!);
 
         const options: SaveDialogSyncOptions = {
@@ -127,6 +131,10 @@ class FileHandler {
 
         onSuccess(true);
         return Promise.resolve();
+    }
+
+    public openFileExplorer(_onAppFound: (isFound: boolean) => void): void {
+        // not used
     }
 
     public viewFile(message: MessageEvent, fetchProgress: (progress: number) => void,

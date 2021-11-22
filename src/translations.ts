@@ -641,6 +641,12 @@ export const noApplicationWasFound: Translation = {
     fr: 'Aucune application n\'a été trouvée pour visualiser ce fichier automatiquement. Vous pouvez essayer de sauvegarder le fichier et de l\'ouvrir manuellement avec une application appropriée.',
 }
 
+export const noFileExplorerWasFound: Translation = {
+    en: 'The file explorer could not be launched automatically. Please try to launch it manually from the main application menu on this device.',
+    de: 'Der Datei-Explorer konnte nicht automatisch gestartet werden. Bitte versuchen Sie, ihn manuell über das Hauptanwendungsmenü auf diesem Gerät zu starten.',
+    fr: 'L\'explorateur de fichiers n\'a pas pu être lancé automatiquement. Veuillez essayer de le lancer manuellement à partir du menu principal des applications de l\' appareil.',
+}
+
 export const fileCouldNotAccess: Translation = {
     en: 'The file could not be accessed. There could be a problem with the network or with the permissions on your device.',
     de: 'Die Datei konnte nicht zugegriffen werden. Es könnte ein Problem mit dem Netzwerk oder mit den Berechtigungen auf Ihrem Gerät vorliegen.',
@@ -660,9 +666,15 @@ export const fileHasBeenSaved: Translation = {
 }
 
 export const fileHasBeenSavedAndroid: Translation = {
-    en: 'The file has been saved to your device\'s Downloads folder.',
-    de: 'Die Datei wurde im Ordner Downloads Ihres Geräts gespeichert.',
-    fr: 'Le fichier a été sauvegardé dans le dossier Téléchargements de votre appareil.',
+    en: '...has been saved to your device\'s Download folder.',
+    de: '...wurde im Ordner Download Ihres Geräts gespeichert.',
+    fr: '...a été sauvegardé dans le dossier Download de votre appareil.',
+}
+
+export const toFolder: Translation = {
+    en: 'To Folder',
+    de: 'Zum Ordner',
+    fr: 'Vers dossier',
 }
 
 export const fileCouldNotBeSaved: Translation = {
@@ -672,9 +684,9 @@ export const fileCouldNotBeSaved: Translation = {
 }
 
 export const cannotShareFromDownload: Translation = {
-    en: 'An error occurred. Sharing files using the Download app is currently not supported. Please try sharing the file using the File Manager app.',
-    de: 'Ein Fehler ist aufgetreten. Das Teilen von Dateien mit der Download-App wird derzeit nicht unterstützt. Bitte versuchen Sie, die Datei mit der Datei-Manager-App zu teilen.',
-    fr: 'Une erreur s\'est produite. Le partage de fichiers à l\'aide de l\'application Download n\'est actuellement pas supporté. Veuillez essayer de partager le fichier en utilisant l\'application Gestionnaire de fichiers.',
+    en: 'An error occurred. Sharing files using the Downloads app is currently not supported. Please try sharing the file using the File Manager app.',
+    de: 'Ein Fehler ist aufgetreten. Das Teilen von Dateien mit der Downloads-App wird derzeit nicht unterstützt. Bitte versuchen Sie, die Datei mit der Datei-Manager-App zu teilen.',
+    fr: 'Une erreur s\'est produite. Le partage de fichiers à l\'aide de l\'application Téléchargements n\'est actuellement pas supporté. Veuillez essayer de partager le fichier en utilisant l\'application Gestionnaire de fichiers.',
 }
 /*
 export const downloading: Translation = {

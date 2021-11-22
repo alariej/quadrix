@@ -73,7 +73,11 @@ class FileHandler {
         return Promise.resolve(cachedFilePath);
     }
 
-    public async saveFile(message: MessageEvent, onSuccess: (success: boolean) => void, _onAbort: () => void): Promise<void> {
+    public async saveFile(
+        message: MessageEvent,
+        onSuccess: (success: boolean, fileName?: string) => void,
+        _onAbort: () => void
+    ): Promise<void> {
 
         const isGranted = await this.requestWriteStoragePermission();
 
@@ -97,8 +101,22 @@ class FileHandler {
                 return Promise.reject();
             });
 
-        onSuccess(true);
+        onSuccess(true, fileName);
         return Promise.resolve();
+    }
+
+    public openFileExplorer(onAppFound: (isFound: boolean) => void): void {
+
+        const mimeType = 'vnd.android.document/directory'; // opens the Downloads app
+        // const mimeType = '*/*'; // shows an application chooser
+
+        RNFetchBlob.android.actionViewIntent('', mimeType)
+            .then(_response => {
+
+                // HACK: to detect if there is a suitable app for viewing the file
+                onAppFound(RX.App.getActivationState() !== 1);
+            })
+            .catch(_error => onAppFound(false));
     }
 
     public viewFile(message: MessageEvent, fetchProgress: (progress: number) => void,
@@ -113,8 +131,9 @@ class FileHandler {
 
                 RNFetchBlob.android.actionViewIntent(response, mimeType!)
                     .then(_response => {
+
                         // HACK: to detect if there is a suitable app for viewing the file
-                        if (RX.App.getActivationState() !== 2) { onNoAppFound() }
+                        if (RX.App.getActivationState() === 1) { onNoAppFound() }
                     })
                     .catch(_error => onNoAppFound());
             })

@@ -6,14 +6,14 @@ import UiStore from '../stores/UiStore';
 import MessageTile from '../components/MessageTile';
 import DialogRoomPicker from './DialogRoomPicker';
 import { OPAQUE_BACKGROUND, BUTTON_MODAL_BACKGROUND, BUTTON_MODAL_TEXT, BUTTON_DISABLED_TEXT, BORDER_RADIUS, BUTTON_HEIGHT, FONT_LARGE,
-    SPACING, BUTTON_SHORT_WIDTH, TRANSPARENT_BACKGROUND, OPAQUE_LIGHT_BACKGROUND } from '../ui';
+    SPACING, BUTTON_SHORT_WIDTH, TRANSPARENT_BACKGROUND, OPAQUE_LIGHT_BACKGROUND, OBJECT_MARGIN } from '../ui';
 import { LayoutInfo } from 'reactxp/dist/common/Types';
 import DataStore from '../stores/DataStore';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
 import { forward, reply, forwardTo, messageCouldNotBeSent, noApplicationWasFound, open, save, share, fileCouldNotAccess, fileHasBeenSaved,
     fileHasBeenSavedAndroid, fileCouldNotBeSaved, Languages, report, messageHasBeenReported, cancel,
-    doYouReallyWantToReport, pressOKToForward1, pressOKToForward2} from '../translations';
+    doYouReallyWantToReport, pressOKToForward1, pressOKToForward2, toFolder, close, noFileExplorerWasFound} from '../translations';
 import FileHandler from '../modules/FileHandler';
 import ShareHandlerOutgoing from '../modules/ShareHandlerOutgoing';
 import { ErrorResponse_, RoomType } from '../models/MatrixApi';
@@ -66,6 +66,17 @@ const styles = {
         color: BUTTON_MODAL_TEXT,
         fontSize: FONT_LARGE,
         margin: 12,
+    }),
+    saveDialog: RX.Styles.createTextStyle({
+        flex: 1,
+        flexDirection: 'column',
+        margin: 12,
+    }),
+    saveDialogText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
+        textAlign: 'center',
+        color: BUTTON_MODAL_TEXT,
+        fontSize: FONT_LARGE,
     }),
     modalMessageCover: RX.Styles.createViewStyle({
         position: 'absolute',
@@ -321,28 +332,77 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 
         const isAndroid = UiStore.getPlatform() === 'android';
 
-        const onSuccess = (success: boolean) => {
+        const onSuccess = (success: boolean, fileName: string) => {
 
             RX.Modal.dismiss('savefilespinner');
 
             if (success) {
 
-                const message = isAndroid ? fileHasBeenSavedAndroid[this.language] : fileHasBeenSaved[this.language];
+                if (isAndroid) {
 
-                const text = (
-                    <RX.Text style={styles.textDialog}>
-                        <RX.Text>
-                            { message }
+                    const message = fileHasBeenSavedAndroid[this.language];
+
+                    const text = (
+                        <RX.View style={ styles.saveDialog }>
+                            <RX.Text style={ [styles.saveDialogText, { fontWeight: 'bold', marginBottom: OBJECT_MARGIN }] }>
+                                { fileName }
+                            </RX.Text>
+                            <RX.Text style={ styles.saveDialogText }>
+                                { message }
+                            </RX.Text>
+                        </RX.View>
+                    );
+
+                    const onAppFound = (isFound: boolean) => {
+
+                        RX.Modal.dismissAll();
+
+                        if (!isFound) {
+                            const text = (
+                                <RX.Text style={ styles.textDialog }>
+                                    <RX.Text>
+                                        { noFileExplorerWasFound[this.language] }
+                                    </RX.Text>
+                                </RX.Text>
+                            );
+
+                            RX.Modal.show(<DialogContainer content={ text }/>, 'warningDialog');
+                        }
+                    }
+
+                    const saveConfirmation = (
+                        <DialogContainer
+                            content={ text }
+                            confirmButton={ true }
+                            confirmButtonText={ toFolder[this.language] }
+                            cancelButton={ true }
+                            cancelButtonText={ close[this.language] }
+                            onConfirm={ () => FileHandler.openFileExplorer(onAppFound) }
+                            onCancel={ () => RX.Modal.dismissAll() }
+                        />
+                    );
+
+                    RX.Modal.show(saveConfirmation, 'fileSavedDialog');
+
+                } else {
+
+                    const message = fileHasBeenSaved[this.language];
+
+                    const text = (
+                        <RX.Text style={styles.textDialog}>
+                            <RX.Text>
+                                { message }
+                            </RX.Text>
                         </RX.Text>
-                    </RX.Text>
-                );
+                    );
 
-                RX.Modal.show(<DialogContainer content={ text }/>, 'successDialog');
+                    RX.Modal.show(<DialogContainer content={ text }/>, 'successDialog');
+                }
 
             } else {
 
                 const text = (
-                    <RX.Text style={styles.textDialog}>
+                    <RX.Text style={ styles.textDialog }>
                         <RX.Text>
                             { fileCouldNotBeSaved[this.language] }
                         </RX.Text>
