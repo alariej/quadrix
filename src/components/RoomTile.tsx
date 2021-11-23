@@ -64,6 +64,7 @@ const styles = {
     containerNewestMessage: RX.Styles.createViewStyle({
         flexDirection: 'row',
         alignItems: 'center',
+        maxHeight: FONT_LARGE + 2
     }),
     newestMessageText:  RX.Styles.createTextStyle({
         flex: 1,
