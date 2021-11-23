@@ -20,9 +20,9 @@ class ShareViewController: SLComposeServiceViewController {
 
 		if let content = extensionContext!.inputItems[0] as? NSExtensionItem {
 
-      // NSLog("%@", content)
+			// NSLog("%@", content)
 
-      if let attachments = content.attachments {
+			if let attachments = content.attachments {
 				for (index, attachment) in (attachments).enumerated() {
 					if attachment.hasItemConformingToTypeIdentifier(typeImage) {
 						handleMedia(content: content, attachment: attachment, mediaType: typeImage, index: index)
@@ -49,8 +49,9 @@ class ShareViewController: SLComposeServiceViewController {
 
 			let this = self
 
+			var fileNameApp: String?
 			var fileExtension: String?
-			var fileName: String?
+			var fileNameCache: String?
 			var mimeType: String?
 			var fileSize: Int?
 			var filePath: URL?
@@ -65,10 +66,11 @@ class ShareViewController: SLComposeServiceViewController {
 				// NSLog("urlData \(urlData)")
 
 				fileExtension = urlData.pathExtension
-				fileName = "share.\(fileExtension!)"
+				fileNameCache = "share.\(fileExtension!)"
 				mimeType = this!.getMimeType(fileExtension: fileExtension!)
 				fileSize = this!.getFileSize(path: urlData)
-				filePath = cachePath.appendingPathComponent(fileName!)
+				filePath = cachePath.appendingPathComponent(fileNameCache!)
+				fileNameApp = urlData.lastPathComponent
 
 				// NSLog("filePath \(filePath!)")
 
@@ -80,20 +82,23 @@ class ShareViewController: SLComposeServiceViewController {
 				// NSLog("imageData \(imageData)")
 
 				fileExtension = "PNG"
-				fileName = "share.\(fileExtension!)"
+				fileNameCache = "share.\(fileExtension!)"
 				mimeType = this!.getMimeType(fileExtension: fileExtension!)
-				filePath = cachePath.appendingPathComponent(fileName!)
+				filePath = cachePath.appendingPathComponent(fileNameCache!)
 
 				// NSLog("filePath \(filePath!)")
 
 				try? isCopied = imageData.pngData()?.write(to: filePath!) != nil
 
 				fileSize = this!.getFileSize(path: filePath!)
+
+				let filePrefix = UUID().uuidString
+				fileNameApp = "\(filePrefix).\(fileExtension!)"
 			}
 
 			if(isCopied) {
 
-				this!.sharedContent.append(sharedContentType(uri: filePath!.absoluteString, mimeType: mimeType!, fileName: fileName!, fileSize: fileSize!))
+				this!.sharedContent.append(sharedContentType(uri: filePath!.absoluteString, mimeType: mimeType!, fileName: fileNameApp!, fileSize: fileSize!))
 
 				if index == (content.attachments?.count)! - 1 {
 					let sharedContentJson = this!.toJsonString(data: this!.sharedContent)
