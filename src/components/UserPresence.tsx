@@ -100,11 +100,11 @@ export default class UserPresence extends ComponentBase<UserPresenceProps, UserP
 
             } else if (differenceInDays(new Date(), this.state.lastSeenTime) > 30) {
 
-                lastSeenText = format(this.state.lastSeenTime, 'd MMM. yyyy', { locale: this.locale });
+                lastSeenText = format(this.state.lastSeenTime, 'd MMM yyyy', { locale: this.locale });
 
             } else {
 
-                lastSeenText = format(this.state.lastSeenTime, 'd MMM. HH:mm', { locale: this.locale });
+                lastSeenText = format(this.state.lastSeenTime, 'd MMM HH:mm', { locale: this.locale });
             }
         }
 
