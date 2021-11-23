@@ -267,6 +267,8 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
     private shareContent = (event: { url: string }) => {
 
+        RX.StatusBar.setBarStyle('light-content', true);
+
         this.showRoomList();
         ShareHandlerIncoming.shareContent(event.url, this.showTempForwardedMessage);
     }
