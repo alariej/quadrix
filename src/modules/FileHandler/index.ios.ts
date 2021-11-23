@@ -71,11 +71,15 @@ class FileHandler {
         const homePath = RNFetchBlob.fs.dirs.DocumentDir;
         const homeFilePath = homePath + '/' + fileName;
 
-        await RNFetchBlob.fs.cp(cachedFilePath, homeFilePath)
-            .catch(_error => {
-                onSuccess(false);
-                return Promise.reject();
-            });
+        const alreadyCopied = await RNFetchBlob.fs.exists(homeFilePath);
+
+        if (!alreadyCopied) {
+            await RNFetchBlob.fs.cp(cachedFilePath, homeFilePath)
+                .catch(_error => {
+                    onSuccess(false);
+                    return Promise.reject();
+                });
+        }
 
         onSuccess(true);
         return Promise.resolve();
