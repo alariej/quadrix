@@ -18,6 +18,27 @@ class FileHandler {
         this.cacheAppFolder = RNFetchBlob.fs.dirs.CacheDir;
     }
 
+    public clearCacheAppFolder(): void {
+
+        RNFetchBlob.fs.exists(this.cacheAppFolder)
+            .then(isCache => {
+                if (isCache) {
+                    return this.cacheAppFolder;
+                } else {
+                    throw 'no cache found';
+                }
+            })
+            .then(cacheAppFolder => {
+                return RNFetchBlob.fs.lstat(cacheAppFolder);
+            })
+            .then(cachedFiles => {
+                for (const file of cachedFiles) {
+                    RNFetchBlob.fs.unlink(file.path + file.filename).catch(_error => null);
+                }
+            })
+            .catch(_error => null);
+    }
+
     private async downloadFile(message: MessageEvent, filePath: string, fetchProgress: (progress: number) => void): Promise<void> {
 
         const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
