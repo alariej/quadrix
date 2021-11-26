@@ -1,4 +1,3 @@
-import RX from 'reactxp';
 import RNFetchBlob from 'rn-fetch-blob'
 import DocumentPicker from 'react-native-document-picker';
 import { PREFIX_UPLOAD } from '../../appconfig';
@@ -132,12 +131,7 @@ class FileHandler {
         // const mimeType = '*/*'; // shows an application chooser
 
         RNFetchBlob.android.actionViewIntent('', mimeType)
-            .then(_response => {
-
-                // HACK: to detect if there is a suitable app for viewing the file
-                onAppFound(RX.App.getActivationState() !== 1);
-            })
-            .catch(_error => onAppFound(false));
+            .catch(_error => onNoAppFound());
     }
 
     public viewFile(message: MessageEvent, fetchProgress: (progress: number) => void,
@@ -151,11 +145,6 @@ class FileHandler {
                 onSuccess(true);
 
                 RNFetchBlob.android.actionViewIntent(response, mimeType!)
-                    .then(_response => {
-
-                        // HACK: to detect if there is a suitable app for viewing the file
-                        if (RX.App.getActivationState() === 1) { onNoAppFound() }
-                    })
                     .catch(_error => onNoAppFound());
             })
             .catch(_error => onSuccess(false) );
