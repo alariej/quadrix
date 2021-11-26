@@ -180,7 +180,7 @@ class FileHandler {
                 mediaType: 'photo',
             }
 
-            ImagePicker.launchImageLibrary(options, setFile);
+            ImagePicker.launchImageLibrary(options, setFile).catch(_error => null);
         });
     }
 
