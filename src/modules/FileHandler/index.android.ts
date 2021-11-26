@@ -1,4 +1,3 @@
-import RX from 'reactxp';
 import RNFetchBlob from 'rn-fetch-blob'
 import DocumentPicker from 'react-native-document-picker';
 import { PREFIX_UPLOAD } from '../../appconfig';
@@ -18,6 +17,27 @@ class FileHandler {
 
     public setCacheAppFolder(): void {
         this.cacheAppFolder = RNFetchBlob.fs.dirs.CacheDir;
+    }
+
+    public clearCacheAppFolder(): void {
+
+        RNFetchBlob.fs.exists(this.cacheAppFolder)
+            .then(isCache => {
+                if (isCache) {
+                    return this.cacheAppFolder;
+                } else {
+                    throw 'no cache found';
+                }
+            })
+            .then(cacheAppFolder => {
+                return RNFetchBlob.fs.lstat(cacheAppFolder);
+            })
+            .then(cachedFiles => {
+                for (const file of cachedFiles) {
+                    RNFetchBlob.fs.unlink(file.path + file.filename).catch(_error => null);
+                }
+            })
+            .catch(_error => null);
     }
 
     private async requestWriteStoragePermission(): Promise<boolean> {
@@ -105,18 +125,13 @@ class FileHandler {
         return Promise.resolve();
     }
 
-    public openFileExplorer(onAppFound: (isFound: boolean) => void): void {
+    public openFileExplorer(onNoAppFound: () => void): void {
 
         const mimeType = 'vnd.android.document/directory'; // opens the Downloads app
         // const mimeType = '*/*'; // shows an application chooser
 
         RNFetchBlob.android.actionViewIntent('', mimeType)
-            .then(_response => {
-
-                // HACK: to detect if there is a suitable app for viewing the file
-                onAppFound(RX.App.getActivationState() !== 1);
-            })
-            .catch(_error => onAppFound(false));
+            .catch(_error => onNoAppFound());
     }
 
     public viewFile(message: MessageEvent, fetchProgress: (progress: number) => void,
@@ -130,11 +145,6 @@ class FileHandler {
                 onSuccess(true);
 
                 RNFetchBlob.android.actionViewIntent(response, mimeType!)
-                    .then(_response => {
-
-                        // HACK: to detect if there is a suitable app for viewing the file
-                        if (RX.App.getActivationState() === 1) { onNoAppFound() }
-                    })
                     .catch(_error => onNoAppFound());
             })
             .catch(_error => onSuccess(false) );

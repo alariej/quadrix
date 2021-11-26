@@ -19,6 +19,7 @@ import { RoomPhase, RoomType } from '../models/MatrixApi';
 import Pushers from '../modules/Pushers';
 import AppFont from '../modules/AppFont';
 import UserPresence from './UserPresence';
+import FileHandler from '../modules/FileHandler';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -214,6 +215,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 
         ApiClient.stopSync();
         ApiClient.clearNextSyncToken();
+        FileHandler.clearCacheAppFolder();
         await ApiClient.clearStorage();
         await ApiClient.storeLastUserId();
         DataStore.clearRoomSummaryList();

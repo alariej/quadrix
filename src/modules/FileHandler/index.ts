@@ -43,6 +43,26 @@ class FileHandler {
     }
 
     // electron only
+    public clearCacheAppFolder(): void {
+
+        if (!UiStore.getIsElectron()) { return }
+
+        const fs = window.require('fs');
+        const path = window.require('path');
+
+        const isCache = fs.existsSync(this.cacheAppFolder);
+
+        if (isCache) {
+
+            const cachedFiles = fs.readdirSync(this.cacheAppFolder);
+
+            for (const file of cachedFiles) {
+                fs.unlinkSync(path.join(this.cacheAppFolder, file));
+            }
+        }
+    }
+
+    // electron only
     private async downloadFile(message: MessageEvent, filePath: string, fetchProgress: (progress: number) => void): Promise<void> {
 
         const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
@@ -133,7 +153,7 @@ class FileHandler {
         return Promise.resolve();
     }
 
-    public openFileExplorer(_onAppFound: (isFound: boolean) => void): void {
+    public openFileExplorer(_onNoAppFound: () => void): void {
         // not used
     }
 

@@ -353,21 +353,19 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                         </RX.View>
                     );
 
-                    const onAppFound = (isFound: boolean) => {
+                    const onNoAppFound = () => {
 
                         RX.Modal.dismissAll();
 
-                        if (!isFound) {
-                            const text = (
-                                <RX.Text style={ styles.textDialog }>
-                                    <RX.Text>
-                                        { noFileExplorerWasFound[this.language] }
-                                    </RX.Text>
+                        const text = (
+                            <RX.Text style={ styles.textDialog }>
+                                <RX.Text>
+                                    { noFileExplorerWasFound[this.language] }
                                 </RX.Text>
-                            );
+                            </RX.Text>
+                        );
 
-                            RX.Modal.show(<DialogContainer content={ text }/>, 'warningDialog');
-                        }
+                        RX.Modal.show(<DialogContainer content={ text }/>, 'warningDialog');
                     }
 
                     const saveConfirmation = (
@@ -377,7 +375,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                             confirmButtonText={ toFolder[this.language] }
                             cancelButton={ true }
                             cancelButtonText={ close[this.language] }
-                            onConfirm={ () => FileHandler.openFileExplorer(onAppFound) }
+                            onConfirm={ () => FileHandler.openFileExplorer(onNoAppFound) }
                             onCancel={ () => RX.Modal.dismissAll() }
                         />
                     );

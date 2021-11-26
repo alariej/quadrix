@@ -14,6 +14,7 @@ import IconSvg, { SvgFile } from './IconSvg';
 import { APP_VERSION, APP_WEBSITE, TERMS_URL, GIT_REPO_URL } from '../appconfig';
 import Pushers from '../modules/Pushers';
 import AppFont from '../modules/AppFont';
+import FileHandler from '../modules/FileHandler';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -127,6 +128,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 
         ApiClient.stopSync();
         ApiClient.clearNextSyncToken();
+        FileHandler.clearCacheAppFolder();
         await ApiClient.clearStorage();
         await ApiClient.storeLastUserId();
         DataStore.clearRoomSummaryList();
