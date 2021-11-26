@@ -153,7 +153,7 @@ class FileHandler {
         return Promise.resolve();
     }
 
-    public openFileExplorer(_onAppFound: (isFound: boolean) => void): void {
+    public openFileExplorer(_onNoAppFound: () => void): void {
         // not used
     }
 

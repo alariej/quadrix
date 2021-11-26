@@ -126,7 +126,7 @@ class FileHandler {
         return Promise.resolve();
     }
 
-    public openFileExplorer(onAppFound: (isFound: boolean) => void): void {
+    public openFileExplorer(onNoAppFound: () => void): void {
 
         const mimeType = 'vnd.android.document/directory'; // opens the Downloads app
         // const mimeType = '*/*'; // shows an application chooser
