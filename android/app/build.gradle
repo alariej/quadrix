@@ -80,7 +80,7 @@ project.ext.react = [
     devDisabledInRelease: true,
     entryFile: "index.js",
     bundleAssetName: "app.bundle",
-    enableHermes: false,  // clean and rebuild if changing
+    enableHermes: true,  // clean and rebuild if changing
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -98,7 +98,7 @@ def enableSeparateBuildPerCPUArchitecture = false
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
  */
-def enableProguardInReleaseBuilds = false
+def enableProguardInReleaseBuilds = true
 
 /**
  * The preferred build flavor of JavaScriptCore.
@@ -192,6 +192,7 @@ android {
         pickFirst "lib/arm64-v8a/libc++_shared.so"
         pickFirst "lib/x86/libc++_shared.so"
         pickFirst "lib/x86_64/libc++_shared.so"
+        // exclude "**/libjsc*.so" // needed for hermes release build?
     }
 
     // applicationVariants are e.g. debug, release
@@ -203,16 +204,19 @@ android {
             def abi = output.getFilter(OutputFile.ABI)
             if (abi != null) {  // null for the universal-debug, universal-release variants
                 output.versionCodeOverride =
-                        defaultConfig.versionCode * 1000 + versionCodes.get(abi)            }
+                    defaultConfig.versionCode * 1000 + versionCodes.get(abi)            }
         }
     }
 }
+
+def hermesPath = "../../node_modules/hermes-engine/android/";
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    implementation jscFlavor
+    debugImplementation jscFlavor
+    releaseImplementation files(hermesPath + "hermes-release.aar")
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
