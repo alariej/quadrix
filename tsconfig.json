@@ -29,6 +29,6 @@
     }
   },
 
-  "include": ["src/**/*", "web/**/*", "*.config.js", "index.js", "electron-main.js", "scripts/*", "types/png.d.ts"],
+  "include": ["src/**/*", "web/**/*", "*.config.js", "index.js", "electron-main*", "scripts/*", "types/png.d.ts"],
   "exclude": ["node_modules"]
 }

@@ -14,7 +14,7 @@ const options = {
     appVersion: package.version,
     prune: true,
     derefSymlinks: false,
-    ignore: ['^\/(?!(dist-web|macos|electron-main\.js|package\.json))'],
+    ignore: ['^\/(?!(dist-web|macos|electron-main-mac\.js|package\.json))'],
     extendInfo: './macos/custom.plist',
     extraResource: [
         './macos/de.lproj',
