@@ -5,8 +5,9 @@ import { ComponentBase } from 'resub';
 import UiStore from '../stores/UiStore';
 import MessageTile from '../components/MessageTile';
 import DialogRoomPicker from './DialogRoomPicker';
-import { OPAQUE_BACKGROUND, BUTTON_MODAL_BACKGROUND, BUTTON_MODAL_TEXT, BUTTON_DISABLED_TEXT, BORDER_RADIUS, BUTTON_HEIGHT, FONT_LARGE,
-    SPACING, BUTTON_SHORT_WIDTH, TRANSPARENT_BACKGROUND, OPAQUE_LIGHT_BACKGROUND, OBJECT_MARGIN } from '../ui';
+import { OPAQUE_BACKGROUND, BUTTON_MODAL_BACKGROUND, BUTTON_MODAL_TEXT, BUTTON_DISABLED_TEXT, BORDER_RADIUS,
+    STACKED_BUTTON_HEIGHT, FONT_LARGE, SPACING, BUTTON_SHORT_WIDTH, TRANSPARENT_BACKGROUND,
+    OPAQUE_LIGHT_BACKGROUND, OBJECT_MARGIN } from '../ui';
 import { LayoutInfo } from 'reactxp/dist/common/Types';
 import DataStore from '../stores/DataStore';
 import ApiClient from '../matrix/ApiClient';
@@ -39,7 +40,7 @@ const styles = {
     buttonDialog: RX.Styles.createViewStyle({
         borderRadius: BORDER_RADIUS,
         width: BUTTON_SHORT_WIDTH,
-        height: BUTTON_HEIGHT,
+        height: STACKED_BUTTON_HEIGHT,
         backgroundColor: BUTTON_MODAL_BACKGROUND,
         margin: SPACING / 2,
         shadowOffset: { width: -1, height: 1 },
@@ -647,7 +648,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
             }
 
             const appLayout = UiStore.getAppLayout_();
-            const containerHeight = n * (BUTTON_HEIGHT + 2 * SPACING);
+            const containerHeight = n * (STACKED_BUTTON_HEIGHT + 2 * SPACING);
             let pos = (this.props.layout.height - containerHeight - SPACING) / 2;
             pos = Math.min(pos, appLayout.screenHeight - this.props.layout.y - containerHeight);
             pos = Math.max(pos, -1 * this.props.layout.y);
