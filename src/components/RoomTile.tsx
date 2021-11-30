@@ -169,7 +169,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
         if (!this.state.type) { return null; }
 
         let unread: ReactElement | undefined;
-        if (this.state.unreadCount !== undefined && this.state.unreadCount > 0 && !this.state.isSelected) {
+        if (this.state.unreadCount !== undefined && this.state.unreadCount > 0) {
             unread = (
                 <RX.Text style={ [styles.unreadNumber, this.unreadTextStyle] }>
                     { this.state.unreadCount > 9 ? '9+' : this.state.unreadCount }

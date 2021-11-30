@@ -675,7 +675,7 @@ class DataStore extends StoreBase {
 
             const roomIndex = this.roomSummaryList.findIndex((roomSummary) => roomSummary.id === roomId);
 
-            if (roomIndex === -1 ) {
+            if (roomIndex === -1) {
                 roomEventTriggers = this.initialiseNewInviteRoom(syncData.rooms.invite[roomId], roomId);
             }
         }
@@ -733,14 +733,15 @@ class DataStore extends StoreBase {
             roomEventTriggers.isNewRedactionEvent ||
             roomEventTriggers.isNewMemberEvent ||
             roomEventTriggers.isNewRoomNameEvent ||
-            roomEventTriggers.isNewRoomAvatarEvent ||
-            roomEventTriggers.isNewUnreadCount
+            roomEventTriggers.isNewRoomAvatarEvent
         ) {
             this.trigger(RoomListTrigger);
         }
 
         if (roomEventTriggers.isNewUnreadCount) {
+            this.trigger(RoomListTrigger);
             this.trigger(UnreadTotalTrigger);
+            this.trigger(RoomSummaryTrigger);
         }
 
         if (
@@ -767,10 +768,10 @@ class DataStore extends StoreBase {
 
         if (!roomObj.unread_notifications) { return false; }
 
-        const oldUnreadCount = this.roomSummaryList[roomIndex].unreadCount;
+        const isNewUnreadCount = this.roomSummaryList[roomIndex].unreadCount !== roomObj.unread_notifications.notification_count;
         this.roomSummaryList[roomIndex].unreadCount = roomObj.unread_notifications.notification_count;
 
-        return (oldUnreadCount !== this.roomSummaryList[roomIndex].unreadCount);
+        return isNewUnreadCount;
     }
 
     private updateReadReceipts(roomObj: RoomData_, roomIndex: number): boolean {
@@ -926,7 +927,7 @@ class DataStore extends StoreBase {
     public getRoomType(roomId: string): RoomType | undefined {
 
         const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
-        return (roomIndex > -1) ? this.roomSummaryList[roomIndex].type: undefined;
+        return (roomIndex > -1) ? this.roomSummaryList[roomIndex].type : undefined;
     }
 
     // used in inviteroom
@@ -998,13 +999,13 @@ class DataStore extends StoreBase {
         const sortedRoomList = this.roomSummaryList
             .filter((roomSummary) => (
                 roomSummary &&
-            roomSummary.phase !== 'leave' &&
-            roomSummary.type
+                roomSummary.phase !== 'leave' &&
+                roomSummary.type
             ))
             .sort((a, b) => (
                 a.phase.localeCompare(b.phase) ||
-            (b.unreadCount - a.unreadCount) ||
-            ((b.newEvents[0] ? b.newEvents[0].time : 0) - (a.newEvents[0] ? a.newEvents[0].time : 0))
+                (b.unreadCount - a.unreadCount) ||
+                ((b.newEvents[0] ? b.newEvents[0].time : 0) - (a.newEvents[0] ? a.newEvents[0].time : 0))
             ));
 
         return sortedRoomList;
@@ -1041,7 +1042,7 @@ class DataStore extends StoreBase {
         return oldestMarker;
     }
 
-    public getUsers():  User[] {
+    public getUsers(): User[] {
 
         const users: { [id: string]: User } = {};
 

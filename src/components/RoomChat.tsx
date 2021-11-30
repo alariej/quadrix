@@ -424,7 +424,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
         this.eventListItems.some(item => {
             if (item.event.senderId !== ApiClient.credentials.userIdFull) {
-                DataStore.setUnread(this.props.roomId, 0);
+                // DataStore.setUnread(this.props.roomId, 0);
                 ApiClient.sendReadReceipt(this.props.roomId, item.event.eventId).catch(_error => null);
                 return true;
             }
