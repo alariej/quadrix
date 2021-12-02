@@ -7,6 +7,7 @@ import FullScreenImage from './FullScreenImage';
 import { SPACING, BUTTON_ROUND_WIDTH, PAGE_MARGIN, BORDER_RADIUS } from '../ui';
 import UiStore from '../stores/UiStore';
 import Spinner from './Spinner';
+import CachedImage from './CachedImage';
 
 const styles = {
     containerMessage: RX.Styles.createViewStyle({
@@ -116,7 +117,7 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
         RX.Modal.show(fullScreenImage, 'fullscreenimage');
     }
 
-    private onLoad = (size: { width: number, height: number }) => {
+    private onLoad = (size: RX.Types.Dimensions) => {
 
         if (this.isMounted_) { this.setState({ showSpinner: false }); }
 
@@ -134,6 +135,9 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
             </RX.View>
         );
 
+        console.log('************************1')
+        console.log(this.props.message)
+
         return (
             <RX.View style={ styles.containerMessage }>
                 <RX.View
@@ -143,12 +147,14 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
                     onContextMenu={ () => this.props.showContextDialog() }
                     disableTouchOpacityAnimation={ true }
                 >
-                    <RX.Image
+                    <CachedImage
                         resizeMode={ 'contain' }
                         style={ styles.image }
                         source={ this.url }
-                        onLoad={ size => this.onLoad(size) }
-                        headers={ UiStore.getPlatform() === 'ios' ? { 'Cache-Control':'max-stale' } : undefined }
+                        onLoad={ this.onLoad }
+                        // headers={ UiStore.getPlatform() === 'ios' ? { 'Cache-Control':'max-stale' } : undefined }
+                        mimeType={ this.props.message.content.info?.mimetype }
+                        animated={ true }
                     />
 
                     { spinner }
