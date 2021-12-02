@@ -76,8 +76,6 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
     constructor(props: DialogContainerProps) {
         super(props);
 
-        this.state = { confirmDisabled: false }
-
         this.animatedValue = RX.Animated.createValue(0.9);
         this.animatedStyle = RX.Styles.createAnimatedViewStyle({
             transform: [{ scale: this.animatedValue }]
