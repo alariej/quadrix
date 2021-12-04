@@ -14,6 +14,7 @@ import { StyleRuleSet, TextStyle } from 'reactxp/dist/common/Types';
 import { RoomPhase, RoomType } from '../models/MatrixApi';
 import { MessageEvent } from '../models/MessageEvent';
 import AppFont from '../modules/AppFont';
+import CachedImage from '../modules/CachedImage';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -221,11 +222,10 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
             }
         } else if (avatarIsUrl) {
             avatar = (
-                <RX.Image
+                <CachedImage
                     resizeMode={ 'cover' }
                     style={ styles.avatar }
                     source={ this.state.avatarUrl }
-                    headers={ UiStore.getPlatform() === 'ios' ? { 'Cache-Control':'max-stale' } : undefined }
                 />
             )
         }

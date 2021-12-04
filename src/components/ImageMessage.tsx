@@ -7,7 +7,7 @@ import FullScreenImage from './FullScreenImage';
 import { SPACING, BUTTON_ROUND_WIDTH, PAGE_MARGIN, BORDER_RADIUS } from '../ui';
 import UiStore from '../stores/UiStore';
 import Spinner from './Spinner';
-import CachedImage from './CachedImage';
+import CachedImage from '../modules/CachedImage';
 
 const styles = {
     containerMessage: RX.Styles.createViewStyle({
@@ -135,9 +135,6 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
             </RX.View>
         );
 
-        console.log('************************1')
-        console.log(this.props.message)
-
         return (
             <RX.View style={ styles.containerMessage }>
                 <RX.View
@@ -152,7 +149,6 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
                         style={ styles.image }
                         source={ this.url }
                         onLoad={ this.onLoad }
-                        // headers={ UiStore.getPlatform() === 'ios' ? { 'Cache-Control':'max-stale' } : undefined }
                         mimeType={ this.props.message.content.info?.mimetype }
                         animated={ true }
                     />

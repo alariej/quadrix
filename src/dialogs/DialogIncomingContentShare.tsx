@@ -252,7 +252,7 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
                 <RX.View style={ styles.containerModalContent }>
                     <RX.View style={ styles.containerContent } >
                         <RX.Image
-                            resizeMode={ 'contain' } // required for image to cover the width set in style
+                            resizeMode={ 'contain' }
                             style={ [styles.image, heightStyle] }
                             source={ this.props.sharedContent.uri }
                         />

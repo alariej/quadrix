@@ -20,6 +20,7 @@ import Pushers from '../modules/Pushers';
 import AppFont from '../modules/AppFont';
 import UserPresence from './UserPresence';
 import FileHandler from '../modules/FileHandler';
+import CachedImage from '../modules/CachedImage';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -337,11 +338,10 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
             }
         } else if (avatarIsUrl) {
             avatar = (
-                <RX.Image
+                <CachedImage
                     resizeMode={ 'cover' }
                     style={ styles.avatar }
                     source={ this.state.avatarUrl }
-                    headers={ UiStore.getPlatform() === 'ios' ? { 'Cache-Control':'max-stale' } : undefined }
                 />
             )
         }

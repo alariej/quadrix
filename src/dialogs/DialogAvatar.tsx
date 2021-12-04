@@ -16,6 +16,7 @@ import { ErrorResponse_, RoomPhase, RoomType, StateEventContent_ } from '../mode
 import { FileObject } from '../models/FileObject';
 import Spinner from '../components/Spinner';
 import AppFont from '../modules/AppFont';
+import CachedImage from '../modules/CachedImage';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -332,11 +333,10 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
             }
         } else {
             avatar = (
-                <RX.Image
+                <CachedImage
                     resizeMode={ 'cover' }
                     style={ styles.avatar }
                     source={ this.avatarUrl }
-                    headers={ UiStore.getPlatform() === 'ios' ? { 'Cache-Control':'max-stale' } : undefined }
                 />
             )
         }

@@ -10,6 +10,7 @@ import { MessageEvent_ } from '../models/MatrixApi';
 import IconSvg, { SvgFile } from './IconSvg';
 import Spinner from './Spinner';
 import { MESSAGE_COUNT_ADD } from '../appconfig';
+import CachedImage from '../modules/CachedImage';
 
 const styles = {
     modalView: RX.Styles.createViewStyle({
@@ -557,11 +558,12 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
                 onKeyPress={ this.onKeyPress }
             >
                 <RX.Animated.View style={ [styles.containerAnimated, this.animatedStyle] }>
-                    <RX.Image
+                    <CachedImage
+                        resizeMode={ 'contain' }
                         style={ [this.state.gestureImage, this.state.rotatedImage] }
                         source={ this.state.url }
                         onLoad={ this.onLoad }
-                        headers={ UiStore.getPlatform() === 'ios' ? { 'Cache-Control':'max-stale' } : undefined }
+                        animated={ true }
                     />
                 </RX.Animated.View>
 

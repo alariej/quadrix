@@ -20,6 +20,7 @@ import DataStore from '../stores/DataStore';
 import Pushers from '../modules/Pushers';
 import Spinner from '../components/Spinner';
 import AppFont from '../modules/AppFont';
+import CachedImage from '../modules/CachedImage';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -642,11 +643,11 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
             )
         } else {
             avatar = (
-                <RX.Image
+                <CachedImage
                     resizeMode={ 'cover' }
                     style={ styles.avatar }
                     source={ this.avatarUrl }
-                    headers={ UiStore.getPlatform() === 'ios' ? { 'Cache-Control':'max-stale' } : undefined }
+                    animated={ true }
                 />
             )
         }

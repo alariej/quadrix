@@ -11,6 +11,7 @@ import { invited, left, admin } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
 import AppFont from '../modules/AppFont';
 import UserPresence from './UserPresence';
+import CachedImage from '../modules/CachedImage';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -110,11 +111,10 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
             )
         } else {
             avatar = (
-                <RX.Image
+                <CachedImage
                     resizeMode={ 'cover' }
                     style={ styles.avatar }
                     source={ avatarUrl }
-                    headers={ UiStore.getPlatform() === 'ios' ? { 'Cache-Control':'max-stale' } : undefined }
                 />
             )
         }
