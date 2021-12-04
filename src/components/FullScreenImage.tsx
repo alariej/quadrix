@@ -558,13 +558,15 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
                 onKeyPress={ this.onKeyPress }
             >
                 <RX.Animated.View style={ [styles.containerAnimated, this.animatedStyle] }>
-                    <CachedImage
-                        resizeMode={ 'contain' }
-                        style={ [this.state.gestureImage, this.state.rotatedImage] }
-                        source={ this.state.url }
-                        onLoad={ this.onLoad }
-                        animated={ true }
-                    />
+                    <RX.View style={ [this.state.gestureImage, this.state.rotatedImage] }>
+                        <CachedImage
+                            resizeMode={ 'contain' }
+                            style={{ flex: 1 }}
+                            source={ this.state.url }
+                            onLoad={ this.onLoad }
+                            animated={ true }
+                        />
+                    </RX.View>
                 </RX.Animated.View>
 
                 { spinner }
