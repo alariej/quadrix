@@ -19,7 +19,7 @@ const styles = {
     roomWrapper: RX.Styles.createViewStyle({
         backgroundColor: OPAQUE_DUMMY_BACKGROUND,
     }),
-    containerArrowButton: RX.Styles.createViewStyle({
+    arrowButton: RX.Styles.createViewStyle({
         position: 'absolute',
         top: HEADER_HEIGHT + SPACING + 12,
         right: 12,
@@ -29,14 +29,6 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         cursor: 'pointer',
-    }),
-    roundButton: RX.Styles.createViewStyle({
-        width: BUTTON_ROUND_WIDTH - 10,
-        height: BUTTON_ROUND_WIDTH - 10,
-        borderRadius: (BUTTON_ROUND_WIDTH - 10) / 2,
-        justifyContent: 'center',
-        alignItems: 'center',
-        opacity: 0.8
     }),
 };
 
@@ -163,23 +155,20 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
             const iconColor = this.state.totalUnreadCount ? BUTTON_UNREAD_BACKGROUND : LOGO_BACKGROUND;
 
             arrowButton = (
-                <RX.View
-                    style={ styles.containerArrowButton }
+                <RX.Button
+                    style={ styles.arrowButton }
                     onPress={ this.onPressArrowButton }
+                    disableTouchOpacityAnimation={ true }
+                    activeOpacity={ 1 }
                 >
-                    <RX.Button
-                        style={ [styles.roundButton, { backgroundColor: iconColor }] }
-                        disableTouchOpacityAnimation={ true }
-                        activeOpacity={ 1 }
-                    >
-                        <IconSvg
-                            source= { require('../resources/svg/arrow_up.json') as SvgFile }
-                            fillColor={ this.state.appColor }
-                            height={ 12 }
-                            width={ 12 }
-                        />
-                    </RX.Button>
-                </RX.View>
+                    <IconSvg
+                        source= { require('../resources/svg/arrow.json') as SvgFile }
+                        style={{ opacity: 0.9 }}
+                        fillColor={ iconColor }
+                        height={ 24 }
+                        width={ 24 }
+                    />
+                </RX.Button>
             );
         }
 

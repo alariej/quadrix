@@ -26,7 +26,7 @@ const styles = {
         flex: 1,
         borderRadius: BORDER_RADIUS,
     }),
-    containerArrowButton: RX.Styles.createViewStyle({
+    arrowButton: RX.Styles.createViewStyle({
         position: 'absolute',
         top: 12,
         right: 12,
@@ -37,7 +37,7 @@ const styles = {
         alignItems: 'center',
         cursor: 'pointer',
     }),
-    containerMoreButton: RX.Styles.createViewStyle({
+    moreButton: RX.Styles.createViewStyle({
         position: 'absolute',
         bottom: 12,
         right: 12,
@@ -47,24 +47,6 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         cursor: 'pointer',
-    }),
-    roundButton: RX.Styles.createViewStyle({
-        width: BUTTON_ROUND_WIDTH - 10,
-        height: BUTTON_ROUND_WIDTH - 10,
-        borderRadius: (BUTTON_ROUND_WIDTH - 10) / 2,
-        justifyContent: 'center',
-        alignItems: 'center',
-        opacity: 0.8
-    }),
-    containerIcon: RX.Styles.createViewStyle({
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    }),
-    moreButtonText: RX.Styles.createTextStyle({
-        fontFamily: AppFont.fontFamily,
-        fontSize: 18,
-        fontWeight: 'bold',
     }),
     containerLoadingButton: RX.Styles.createViewStyle({
         position: 'absolute',
@@ -648,23 +630,20 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
             const iconColor = this.state.showNewMessageButton ? BUTTON_UNREAD_BACKGROUND : LOGO_BACKGROUND;
 
             arrowButton = (
-                <RX.View
-                    style={ styles.containerArrowButton }
+                <RX.Button
+                    style={ styles.arrowButton }
                     onPress={ this.onPressArrowButton }
+                    disableTouchOpacityAnimation={ true }
+                    activeOpacity={ 1 }
                 >
-                    <RX.Button
-                        style={ [styles.roundButton, { backgroundColor: iconColor }] }
-                        disableTouchOpacityAnimation={ true }
-                        activeOpacity={ 1 }
-                    >
-                        <IconSvg
-                            source= { require('../resources/svg/arrow_up.json') as SvgFile }
-                            fillColor={ this.state.appColor }
-                            height={ 12 }
-                            width={ 12 }
-                        />
-                    </RX.Button>
-                </RX.View>
+                    <IconSvg
+                        source= { require('../resources/svg/arrow.json') as SvgFile }
+                        style={{ opacity: 0.9 }}
+                        fillColor={ iconColor }
+                        height={ 24 }
+                        width={ 24 }
+                    />
+                </RX.Button>
             );
         }
 
@@ -673,24 +652,22 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
         if (this.state.showMoreButton) {
 
             moreButton = (
-                <RX.View
-                    style={ styles.containerMoreButton }
+                <RX.Button
+                    style={ styles.moreButton }
                     onPress={ this.onPressMoreButton }
+                    disableTouchOpacityAnimation={ true }
+                    activeOpacity={ 1 }
+                    disabled={ this.state.offline }
+                    disabledOpacity={ 0.15 }
                 >
-                    <RX.Button
-                        style={ [styles.roundButton, { backgroundColor: LOGO_BACKGROUND }] }
-                        disableTouchOpacityAnimation={ true }
-                        activeOpacity={ 1 }
-                        disabled={ this.state.offline }
-                        disabledOpacity={ 0.15 }
-                    >
-                        <RX.View style={ styles.containerIcon }>
-                            <RX.Text style={ [styles.moreButtonText, { color: this.state.appColor }] }>
-                                ...
-                            </RX.Text>
-                        </RX.View>
-                    </RX.Button>
-                </RX.View>
+                    <IconSvg
+                        source= { require('../resources/svg/more.json') as SvgFile }
+                        style={{ opacity: 0.9 }}
+                        fillColor={ LOGO_BACKGROUND }
+                        height={ 24 }
+                        width={ 24 }
+                    />
+                </RX.Button>
             );
         }
 
