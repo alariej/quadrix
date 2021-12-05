@@ -3,8 +3,8 @@ import RX from 'reactxp';
 import { ComponentBase } from 'resub';
 import DataStore from '../stores/DataStore';
 import RoomTile from '../components/RoomTile';
-import { BUTTON_ROUND_BACKGROUND, BUTTON_ROUND_WIDTH, BUTTON_UNREAD_BACKGROUND, HEADER_HEIGHT, LOGO_BACKGROUND, OPAQUE_DUMMY_BACKGROUND,
-    SPACING, TILE_HEIGHT } from '../ui';
+import { BUTTON_ROUND_WIDTH, BUTTON_UNREAD_BACKGROUND, HEADER_HEIGHT, LOGO_BACKGROUND, OPAQUE_DUMMY_BACKGROUND,
+    SPACING, TILE_HEIGHT, TRANSPARENT_BACKGROUND } from '../ui';
 import RoomListHeader from '../components/RoomListHeader';
 import { VirtualListView, VirtualListViewItemInfo, VirtualListViewCellRenderDetails } from 'reactxp-virtuallistview';
 import UiStore from '../stores/UiStore';
@@ -25,18 +25,19 @@ const styles = {
         right: 12,
         width: BUTTON_ROUND_WIDTH,
         height: BUTTON_ROUND_WIDTH,
-    }),
-    roundButton: RX.Styles.createViewStyle({
-        width: BUTTON_ROUND_WIDTH,
-        height: BUTTON_ROUND_WIDTH,
-        borderRadius: BUTTON_ROUND_WIDTH / 2,
-        backgroundColor: BUTTON_ROUND_BACKGROUND,
-        borderWidth: 1,
-        borderColor: LOGO_BACKGROUND,
+        backgroundColor: TRANSPARENT_BACKGROUND,
         justifyContent: 'center',
         alignItems: 'center',
+        cursor: 'pointer',
     }),
-
+    roundButton: RX.Styles.createViewStyle({
+        width: BUTTON_ROUND_WIDTH - 10,
+        height: BUTTON_ROUND_WIDTH - 10,
+        borderRadius: (BUTTON_ROUND_WIDTH - 10) / 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+        opacity: 0.8
+    }),
 };
 
 interface RoomListProps extends RX.CommonProps {
@@ -55,6 +56,7 @@ interface RoomListState {
     totalUnreadCount: number;
     syncComplete: boolean;
     offline: boolean;
+    appColor: string;
 }
 
 export default class RoomList extends ComponentBase<RoomListProps, RoomListState> {
@@ -69,6 +71,8 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
         if (initState) {
             partialState.showArrowButton = false;
         }
+
+        partialState.appColor = UiStore.getAppColor();
 
         partialState.syncComplete = DataStore.getSyncComplete();
 
@@ -159,18 +163,20 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
             const iconColor = this.state.totalUnreadCount ? BUTTON_UNREAD_BACKGROUND : LOGO_BACKGROUND;
 
             arrowButton = (
-                <RX.View style={ styles.containerArrowButton }>
+                <RX.View
+                    style={ styles.containerArrowButton }
+                    onPress={ this.onPressArrowButton }
+                >
                     <RX.Button
-                        style={ [styles.roundButton, { borderColor: iconColor }] }
-                        onPress={ this.onPressArrowButton }
+                        style={ [styles.roundButton, { backgroundColor: iconColor }] }
                         disableTouchOpacityAnimation={ true }
                         activeOpacity={ 1 }
                     >
                         <IconSvg
                             source= { require('../resources/svg/arrow_up.json') as SvgFile }
-                            fillColor={ iconColor }
-                            height={ 16 }
-                            width={ 16 }
+                            fillColor={ this.state.appColor }
+                            height={ 12 }
+                            width={ 12 }
                         />
                     </RX.Button>
                 </RX.View>

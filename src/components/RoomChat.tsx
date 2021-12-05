@@ -1,8 +1,8 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
-import { BUTTON_ROUND_BACKGROUND, BUTTON_UNREAD_BACKGROUND, OPAQUE_DUMMY_BACKGROUND, TILE_BACKGROUND,
+import { BUTTON_UNREAD_BACKGROUND, OPAQUE_DUMMY_BACKGROUND, TILE_BACKGROUND,
     MODAL_CONTENT_TEXT, BUTTON_LONG_TEXT, BORDER_RADIUS, BUTTON_LONG_WIDTH, BUTTON_HEIGHT, BUTTON_ROUND_WIDTH, FONT_NORMAL, SPACING,
-    FONT_LARGE, LOGO_BACKGROUND, MESSAGE_HEIGHT_DEFAULT, DARK_BACKGROUND, OBJECT_MARGIN } from '../ui';
+    FONT_LARGE, LOGO_BACKGROUND, MESSAGE_HEIGHT_DEFAULT, DARK_BACKGROUND, OBJECT_MARGIN, TRANSPARENT_BACKGROUND } from '../ui';
 import { MESSAGE_COUNT_ADD } from  '../appconfig';
 import { ComponentBase } from 'resub';
 import DataStore from '../stores/DataStore';
@@ -32,6 +32,10 @@ const styles = {
         right: 12,
         width: BUTTON_ROUND_WIDTH,
         height: BUTTON_ROUND_WIDTH,
+        backgroundColor: TRANSPARENT_BACKGROUND,
+        justifyContent: 'center',
+        alignItems: 'center',
+        cursor: 'pointer',
     }),
     containerMoreButton: RX.Styles.createViewStyle({
         position: 'absolute',
@@ -39,16 +43,18 @@ const styles = {
         right: 12,
         width: BUTTON_ROUND_WIDTH,
         height: BUTTON_ROUND_WIDTH,
-    }),
-    roundButton: RX.Styles.createViewStyle({
-        width: BUTTON_ROUND_WIDTH,
-        height: BUTTON_ROUND_WIDTH,
-        borderRadius: BUTTON_ROUND_WIDTH / 2,
-        backgroundColor: BUTTON_ROUND_BACKGROUND,
-        borderWidth: 1,
-        borderColor: LOGO_BACKGROUND,
+        backgroundColor: TRANSPARENT_BACKGROUND,
         justifyContent: 'center',
         alignItems: 'center',
+        cursor: 'pointer',
+    }),
+    roundButton: RX.Styles.createViewStyle({
+        width: BUTTON_ROUND_WIDTH - 10,
+        height: BUTTON_ROUND_WIDTH - 10,
+        borderRadius: (BUTTON_ROUND_WIDTH - 10) / 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+        opacity: 0.8
     }),
     containerIcon: RX.Styles.createViewStyle({
         flex: 1,
@@ -57,9 +63,8 @@ const styles = {
     }),
     moreButtonText: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
-        fontSize: 24,
+        fontSize: 18,
         fontWeight: 'bold',
-        color: LOGO_BACKGROUND,
     }),
     containerLoadingButton: RX.Styles.createViewStyle({
         position: 'absolute',
@@ -122,6 +127,7 @@ interface RoomChatState {
     showLoadingButton: boolean;
     showNewMessageButton: boolean;
     offline: boolean;
+    appColor: string;
 }
 
 interface RoomChatProps extends RX.CommonProps {
@@ -162,6 +168,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
         const partialState: Partial<RoomChatState> = {};
 
         partialState.offline =  UiStore.getOffline();
+        partialState.appColor = UiStore.getAppColor();
 
         if (initState || this.props.roomId !== nextProps.roomId) {
 
@@ -527,13 +534,13 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
         // @ts-ignore
         const distanceToBottom = this.virtualListView!._containerHeight - scrollHeight - this.virtualListView!._layoutHeight;
 
-        if (!this.state.showMoreButton && !this.state.showLoadingButton && distanceToBottom < 20) {
+        if (!this.state.showMoreButton && !this.state.showLoadingButton && distanceToBottom < 120) {
 
             if (this.endToken && this.timelineLimited) {
                 this.setState({ showMoreButton: true });
             }
 
-        } else if (this.state.showMoreButton && distanceToBottom >= 20) {
+        } else if (this.state.showMoreButton && distanceToBottom >= 120) {
 
             this.setState({ showMoreButton: false });
         }
@@ -641,18 +648,20 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
             const iconColor = this.state.showNewMessageButton ? BUTTON_UNREAD_BACKGROUND : LOGO_BACKGROUND;
 
             arrowButton = (
-                <RX.View style={ styles.containerArrowButton }>
+                <RX.View
+                    style={ styles.containerArrowButton }
+                    onPress={ this.onPressArrowButton }
+                >
                     <RX.Button
-                        style={ [styles.roundButton, { borderColor: iconColor }] }
-                        onPress={ this.onPressArrowButton }
+                        style={ [styles.roundButton, { backgroundColor: iconColor }] }
                         disableTouchOpacityAnimation={ true }
                         activeOpacity={ 1 }
                     >
                         <IconSvg
                             source= { require('../resources/svg/arrow_up.json') as SvgFile }
-                            fillColor={ iconColor }
-                            height={ 16 }
-                            width={ 16 }
+                            fillColor={ this.state.appColor }
+                            height={ 12 }
+                            width={ 12 }
                         />
                     </RX.Button>
                 </RX.View>
@@ -664,17 +673,19 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
         if (this.state.showMoreButton) {
 
             moreButton = (
-                <RX.View style={ styles.containerMoreButton }>
+                <RX.View
+                    style={ styles.containerMoreButton }
+                    onPress={ this.onPressMoreButton }
+                >
                     <RX.Button
-                        style={ styles.roundButton }
-                        onPress={ this.onPressMoreButton }
+                        style={ [styles.roundButton, { backgroundColor: LOGO_BACKGROUND }] }
                         disableTouchOpacityAnimation={ true }
                         activeOpacity={ 1 }
                         disabled={ this.state.offline }
                         disabledOpacity={ 0.15 }
                     >
                         <RX.View style={ styles.containerIcon }>
-                            <RX.Text style={ styles.moreButtonText }>
+                            <RX.Text style={ [styles.moreButtonText, { color: this.state.appColor }] }>
                                 ...
                             </RX.Text>
                         </RX.View>
