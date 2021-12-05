@@ -44,13 +44,12 @@ const styles = {
     button: RX.Styles.createViewStyle({
         width: BUTTON_COMPOSER_WIDTH,
         height: BUTTON_COMPOSER_WIDTH,
+        justifyContent: 'center',
+        alignItems: 'center',
     }),
     buttonSend: RX.Styles.createViewStyle({
         width: BUTTON_ROUND_WIDTH + SPACING / 2,
         height: BUTTON_COMPOSER_WIDTH,
-    }),
-    containerIcon: RX.Styles.createViewStyle({
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     }),
@@ -624,15 +623,13 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     disabledOpacity={ disabledOpacity }
                     activeOpacity={ 1 }
                 >
-                    <RX.View style={ styles.containerIcon }>
-                        <IconSvg
-                            source= { require('../resources/svg/video.json') as SvgFile }
-                            fillColor={ LOGO_BACKGROUND }
-                            height={ 16 }
-                            width={ 16 }
-                            style={ { marginLeft: 3 }}
-                        />
-                    </RX.View>
+                    <IconSvg
+                        source= { require('../resources/svg/video.json') as SvgFile }
+                        fillColor={ LOGO_BACKGROUND }
+                        height={ 16 }
+                        width={ 16 }
+                        style={ { marginLeft: 3 }}
+                    />
                 </RX.Button>
                 <RX.Button
                     style={ styles.button }
@@ -642,14 +639,12 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     disabledOpacity={ disabledOpacity }
                     activeOpacity={ 1 }
                 >
-                    <RX.View style={ styles.containerIcon }>
-                        <IconSvg
-                            source= { require('../resources/svg/plus.json') as SvgFile }
-                            fillColor={ LOGO_BACKGROUND }
-                            height={ 20 }
-                            width={ 20 }
-                        />
-                    </RX.View>
+                    <IconSvg
+                        source= { require('../resources/svg/plus.json') as SvgFile }
+                        fillColor={ LOGO_BACKGROUND }
+                        height={ 20 }
+                        width={ 20 }
+                    />
                 </RX.Button>
                 <RX.Button
                     style={ styles.button }
@@ -660,15 +655,13 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     disabledOpacity={ disabledOpacity }
                     activeOpacity={ 1 }
                 >
-                    <RX.View style={ styles.containerIcon }>
-                        <IconSvg
-                            source= { require('../resources/svg/smiley.json') as SvgFile }
-                            fillColor={ LOGO_BACKGROUND }
-                            height={ 16 }
-                            width={ 16 }
-                            style={ { marginRight: 3 }}
-                        />
-                    </RX.View>
+                    <IconSvg
+                        source= { require('../resources/svg/smiley.json') as SvgFile }
+                        fillColor={ LOGO_BACKGROUND }
+                        height={ 16 }
+                        width={ 16 }
+                        style={ { marginRight: 3 }}
+                    />
                 </RX.Button>
                 <RX.TextInput
                     style={ [styles.textInput, this.textInputStyle] }
@@ -696,14 +689,12 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     disabledOpacity={ disabledOpacity }
                     activeOpacity={ 1 }
                 >
-                    <RX.View style={ styles.containerIcon }>
-                        <IconSvg
-                            source= { require('../resources/svg/send.json') as SvgFile }
-                            fillColor={ LOGO_BACKGROUND }
-                            height={ 20 }
-                            width={ 20 }
-                        />
-                    </RX.View>
+                    <IconSvg
+                        source= { require('../resources/svg/send.json') as SvgFile }
+                        fillColor={ LOGO_BACKGROUND }
+                        height={ 20 }
+                        width={ 20 }
+                    />
                 </RX.Button>
             </RX.View>
         );
