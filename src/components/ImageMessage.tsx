@@ -58,9 +58,15 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 
             this.url = EventUtils.mxcToHttp(this.props.message.content.info!.thumbnail_url!, ApiClient.credentials.homeServer);
 
-            this.heightStyle = RX.Styles.createViewStyle({
-                height: width * props.message.content.info!.thumbnail_info!.h / props.message.content.info!.thumbnail_info!.w,
-            }, false);
+            if (props.message.content.info!.thumbnail_info!.w && props.message.content.info!.thumbnail_info!.h) {
+                this.heightStyle = RX.Styles.createViewStyle({
+                    height: width * props.message.content.info!.thumbnail_info!.h / props.message.content.info!.thumbnail_info!.w,
+                }, false);
+            } else {
+                this.heightStyle = RX.Styles.createViewStyle({
+                    height: width,
+                }, false);
+            }
 
             this.urlFull = EventUtils.mxcToHttp(props.message.content.url!, ApiClient.credentials.homeServer);
 
@@ -69,13 +75,10 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
             this.url = EventUtils.mxcToHttp(props.message.content.url!, ApiClient.credentials.homeServer);
 
             if (props.message.content.info!.w && props.message.content.info!.h) {
-
                 this.heightStyle = RX.Styles.createViewStyle({
                     height: width * props.message.content.info!.h / props.message.content.info!.w,
                 }, false);
-
             } else {
-
                 this.heightStyle = RX.Styles.createViewStyle({
                     height: width,
                 }, false);

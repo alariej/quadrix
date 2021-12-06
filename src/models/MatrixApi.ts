@@ -38,7 +38,7 @@ export interface LoginParam_ {
     session?: string,
 }
 
-export interface  LoginResponse_ {
+export interface LoginResponse_ {
     user_id: string,
     access_token: string,
     device_id: string,
@@ -88,8 +88,13 @@ export interface MessageEventContentInfo_ {
     size?: number,
     h?: number,
     w?: number,
-    thumbnail_url?:string,
-    thumbnail_info?: { h: number, w: number},
+    thumbnail_url?: string,
+    thumbnail_info?: {
+        mimetype?: string,
+        size?: number,
+        h?: number,
+        w?: number
+    },
 }
 
 export interface MessageEventContent_ {
