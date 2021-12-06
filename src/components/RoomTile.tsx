@@ -48,24 +48,30 @@ const styles = {
         flex: 1,
         paddingLeft: 2 * SPACING,
     }),
-    containerRoomName: RX.Styles.createTextStyle({
-        fontFamily: AppFont.fontFamily,
-        color: TILE_MESSAGE_TEXT,
+    containerRoomName: RX.Styles.createViewStyle({
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: SPACING,
+        maxHeight: FONT_LARGE + 4,
+        marginBottom: 2,
     }),
     roomName: RX.Styles.createTextStyle({
+        flex: -1,
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
+        color: TILE_MESSAGE_TEXT,
         fontWeight: 'bold',
     }),
     alias: RX.Styles.createTextStyle({
+        flex: 1,
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
+        color: TILE_MESSAGE_TEXT,
+        marginLeft: SPACING,
     }),
     containerNewestMessage: RX.Styles.createViewStyle({
         flexDirection: 'row',
-        alignItems: 'center',
-        maxHeight: FONT_LARGE + 2
+        alignItems: 'flex-end',
+        maxHeight: FONT_LARGE + 4,
     }),
     newestMessageText:  RX.Styles.createTextStyle({
         flex: 1,
@@ -350,23 +356,19 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
         if (this.alias && this.state.type === 'community' && this.state.name !== this.alias) {
             alias = (
                 <RX.Text numberOfLines={ 1 } style={ styles.alias }>
-                    { '  ' + this.alias }
+                    { this.alias }
                 </RX.Text>
             );
         } else if (this.state.type === 'direct' && this.state.name !== this.state.contactId) {
             alias = (
                 <RX.Text numberOfLines={ 1 } style={ styles.alias }>
-                    { '  ' + this.state.contactId }
+                    { this.state.contactId }
                 </RX.Text>
             );
         }
 
         const messageRender = (
-            <RX.Text
-                key={ 'text' }
-                style={ styles.newestMessageText }
-                numberOfLines={ 1 }
-            >
+            <RX.Text numberOfLines={ 1 } style={ styles.newestMessageText }>
                 { messageText }
             </RX.Text>
         );
@@ -401,12 +403,12 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
                         { avatar! }
                     </RX.View>
                     <RX.View style={ styles.containerRoomInfo }>
-                        <RX.Text numberOfLines={ 1 } style={ styles.containerRoomName }>
+                        <RX.View style={ styles.containerRoomName }>
                             <RX.Text numberOfLines={ 1 } style={ styles.roomName }>
                                 { this.state.name }
                             </RX.Text>
                             { alias }
-                        </RX.Text>
+                        </RX.View>
                         <RX.View style={ styles.containerNewestMessage }>
                             { messageTypeIcon }
                             { messageRender }
