@@ -78,7 +78,8 @@ const styles = {
         flexDirection: 'row',
         justifyContent: 'center',
         marginRight: 16,
-        marginBottom: SPACING,
+        marginTop: OBJECT_MARGIN - SPACING,
+        marginBottom: OBJECT_MARGIN,
     }),
     date: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
