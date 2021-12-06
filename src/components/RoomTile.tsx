@@ -26,7 +26,7 @@ const styles = {
         flexDirection: 'row',
         backgroundColor: TILE_BACKGROUND,
         borderRadius: BORDER_RADIUS,
-        marginBottom: SPACING,
+        marginBottom: 1,
         padding: 2 * SPACING,
         height: TILE_HEIGHT,
         cursor: 'pointer',

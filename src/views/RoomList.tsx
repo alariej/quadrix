@@ -87,7 +87,7 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
 
             const roomInfo: RoomListItemInfo = {
                 key: room.id,
-                height: TILE_HEIGHT + SPACING,
+                height: TILE_HEIGHT + 1,
                 template: 'room',
                 room: room,
                 newestEvent: room.newEvents[0],

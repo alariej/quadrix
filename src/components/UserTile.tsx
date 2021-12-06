@@ -17,7 +17,7 @@ const styles = {
     container: RX.Styles.createViewStyle({
         flexDirection: 'row',
         height: TILE_HEIGHT,
-        marginBottom: SPACING,
+        marginBottom: 1,
         borderRadius: BORDER_RADIUS,
         backgroundColor: TILE_BACKGROUND,
         alignItems: 'center',

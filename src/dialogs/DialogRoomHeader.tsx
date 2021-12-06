@@ -29,7 +29,7 @@ const styles = {
         alignSelf: 'center',
         justifyContent: 'center',
         width: TILE_WIDTH,
-        minHeight: TILE_HEIGHT + SPACING,
+        minHeight: TILE_HEIGHT + 1,
         maxHeight: 360,
     }),
     button: RX.Styles.createViewStyle({
@@ -165,7 +165,7 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
             .map(member => {
                 return {
                     key: member.id,
-                    height: TILE_HEIGHT + SPACING,
+                    height: TILE_HEIGHT + 1,
                     template: 'member',
                     member: member,
                     measureHeight: false,
@@ -375,7 +375,7 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
                     disableTouchOpacityAnimation={ true }
                 >
                     <RX.View
-                        style={ [styles.modalView, { height: userTiles.length * (TILE_HEIGHT + SPACING) }] }
+                        style={ [styles.modalView, { height: userTiles.length * (TILE_HEIGHT + 1) }] }
                         onPress={ (event: RX.Types.SyntheticEvent) => event.stopPropagation() }
                         disableTouchOpacityAnimation={ true }
                         activeOpacity={ 1 }
@@ -509,7 +509,7 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
                 { topicTile }
 
                 <RX.View
-                    style={ [styles.modalView, { height: this.state.userListItems.length * (TILE_HEIGHT + SPACING) }] }
+                    style={ [styles.modalView, { height: this.state.userListItems.length * (TILE_HEIGHT + 1) }] }
                     onPress={ (event: RX.Types.SyntheticEvent) => event.stopPropagation() }
                     disableTouchOpacityAnimation={ true }
                     activeOpacity={ 1 }
