@@ -52,7 +52,7 @@ const styles = {
         flexDirection: 'row',
         alignItems: 'center',
         maxHeight: FONT_LARGE + 4,
-        marginBottom: 2,
+        marginBottom: SPACING,
     }),
     roomName: RX.Styles.createTextStyle({
         flex: -1,
