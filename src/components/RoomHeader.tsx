@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { HEADER_TEXT, BUTTON_ROUND_WIDTH, BORDER_RADIUS, HEADER_HEIGHT,
     SPACING, FONT_NORMAL, FONT_LARGE, AVATAR_SMALL_WIDTH, ICON_REDUCTION_FACTOR, BUTTON_UNREAD_TEXT, BUTTON_UNREAD_BACKGROUND, FONT_SMALL,
-    AVATAR_MARGIN, LOGO_BACKGROUND, AVATAR_BACKGROUND, TRANSPARENT_BACKGROUND, HEADER_STATUS, AVATAR_FOREGROUND } from '../ui';
+    LOGO_BACKGROUND, AVATAR_BACKGROUND, TRANSPARENT_BACKGROUND, HEADER_STATUS, AVATAR_FOREGROUND } from '../ui';
 import { ComponentBase } from 'resub';
 import DataStore from '../stores/DataStore';
 import EventUtils from '../utils/EventUtils';
@@ -42,9 +42,6 @@ const styles = {
         alignItems: 'center',
         width: AVATAR_SMALL_WIDTH,
         height: AVATAR_SMALL_WIDTH,
-        borderRadius: AVATAR_SMALL_WIDTH / 2,
-        marginRight: AVATAR_MARGIN,
-        backgroundColor: AVATAR_BACKGROUND,
         cursor: 'pointer',
     }),
     avatar: RX.Styles.createImageStyle({
