@@ -36,6 +36,7 @@ const styles = {
         position: 'absolute',
         flexDirection: 'column',
         right: -2 * SPACING,
+        overflow: 'visible',
     }),
     buttonDialog: RX.Styles.createViewStyle({
         borderRadius: BORDER_RADIUS,
@@ -44,7 +45,7 @@ const styles = {
         backgroundColor: BUTTON_MODAL_BACKGROUND,
         margin: SPACING / 2,
         shadowOffset: { width: -1, height: 1 },
-        shadowColor: OPAQUE_BACKGROUND,
+        shadowColor: OPAQUE_LIGHT_BACKGROUND,
         shadowRadius: 3,
         elevation: 3,
         shadowOpacity: 1,
