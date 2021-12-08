@@ -25,7 +25,7 @@ const styles = {
         height: TILE_HEIGHT,
         backgroundColor: BUTTON_MODAL_BACKGROUND,
         padding: SPACING,
-        marginBottom: SPACING,
+        marginBottom: 1,
         cursor: 'pointer',
     }),
     buttonText: RX.Styles.createTextStyle({
