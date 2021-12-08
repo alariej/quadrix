@@ -43,7 +43,7 @@ const styles = {
         width: BUTTON_SHORT_WIDTH,
         height: STACKED_BUTTON_HEIGHT,
         backgroundColor: BUTTON_MODAL_BACKGROUND,
-        margin: SPACING / 2,
+        marginBottom: 1,
         shadowOffset: { width: -1, height: 1 },
         shadowColor: OPAQUE_LIGHT_BACKGROUND,
         shadowRadius: 3,
@@ -649,8 +649,8 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
             }
 
             const appLayout = UiStore.getAppLayout_();
-            const containerHeight = n * (STACKED_BUTTON_HEIGHT + 2 * SPACING);
-            let pos = (this.props.layout.height - containerHeight - SPACING) / 2;
+            const containerHeight = n * (STACKED_BUTTON_HEIGHT + 2 * 1);
+            let pos = (this.props.layout.height - containerHeight - 1) / 2;
             pos = Math.min(pos, appLayout.screenHeight - this.props.layout.y - containerHeight);
             pos = Math.max(pos, -1 * this.props.layout.y);
 
