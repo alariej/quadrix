@@ -4,7 +4,7 @@ import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
 import DataStore from '../stores/DataStore';
 import { MODAL_CONTENT_TEXT, BORDER_RADIUS, FONT_LARGE, TILE_HEIGHT, BUTTON_HEIGHT, INPUT_BACKGROUND, CONTAINER_PADDING,
-    PLACEHOLDER_TEXT, TRANSPARENT_BACKGROUND, DIALOG_WIDTH, TILE_BACKGROUND } from '../ui';
+    PLACEHOLDER_TEXT, TRANSPARENT_BACKGROUND, DIALOG_WIDTH, TILE_BACKGROUND, OBJECT_MARGIN } from '../ui';
 import UiStore from '../stores/UiStore';
 import { inviteUser, cancel, userServer, errorNoConfirm, theUserId, doesntSeemToExist, warningNoSelfDirect,
     Languages, searchUser, tooManySearchResults, noSearchResults, enterSearch, searchInstruction } from '../translations';
@@ -42,6 +42,7 @@ const styles = {
         paddingHorizontal: CONTAINER_PADDING,
         height: BUTTON_HEIGHT,
         borderRadius: BORDER_RADIUS,
+        marginTop: OBJECT_MARGIN - 1,
         alignSelf: 'stretch',
         backgroundColor: INPUT_BACKGROUND,
     }),
