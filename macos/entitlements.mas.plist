@@ -20,5 +20,9 @@
     <true/>
     <key>com.apple.security.personal-information.photos-library</key>
     <true/>
+    <key>com.apple.application-identifier</key>
+	  <string>W988UQ8696.chat.quadrix.mac</string>
+	  <key>com.apple.developer.team-identifier</key>
+	  <string>W988UQ8696</string>
   </dict>
 </plist>
