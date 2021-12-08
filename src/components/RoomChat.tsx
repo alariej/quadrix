@@ -1,8 +1,24 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
-import { BUTTON_UNREAD_BACKGROUND, OPAQUE_DUMMY_BACKGROUND, TILE_BACKGROUND,
-    MODAL_CONTENT_TEXT, BUTTON_LONG_TEXT, BORDER_RADIUS, BUTTON_LONG_WIDTH, BUTTON_HEIGHT, BUTTON_ROUND_WIDTH, FONT_NORMAL, SPACING,
-    FONT_LARGE, LOGO_BACKGROUND, MESSAGE_HEIGHT_DEFAULT, DARK_BACKGROUND, OBJECT_MARGIN, TRANSPARENT_BACKGROUND } from '../ui';
+import {
+    BUTTON_UNREAD_BACKGROUND,
+    OPAQUE_DUMMY_BACKGROUND,
+    MODAL_CONTENT_TEXT,
+    BUTTON_LONG_TEXT,
+    BORDER_RADIUS,
+    BUTTON_LONG_WIDTH,
+    BUTTON_HEIGHT,
+    BUTTON_ROUND_WIDTH,
+    FONT_NORMAL,
+    SPACING,
+    FONT_LARGE,
+    LOGO_BACKGROUND,
+    MESSAGE_HEIGHT_DEFAULT,
+    DARK_BACKGROUND,
+    OBJECT_MARGIN,
+    TRANSPARENT_BACKGROUND,
+    HEADER_STATUS
+} from '../ui';
 import { MESSAGE_COUNT_ADD } from  '../appconfig';
 import { ComponentBase } from 'resub';
 import DataStore from '../stores/DataStore';
@@ -77,16 +93,13 @@ const styles = {
     containerDate: RX.Styles.createViewStyle({
         flexDirection: 'row',
         justifyContent: 'center',
-        marginRight: 16,
         marginTop: OBJECT_MARGIN - SPACING,
         marginBottom: OBJECT_MARGIN,
     }),
     date: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
-        padding: 3,
-        borderRadius: 4,
-        backgroundColor: TILE_BACKGROUND,
+        color: HEADER_STATUS,
     }),
     textDialog: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
