@@ -54,22 +54,30 @@ const styles = {
         flex: 1,
         paddingLeft: 2 * SPACING,
     }),
-    containerRoomName: RX.Styles.createTextStyle({
-        fontFamily: AppFont.fontFamily,
-        color: HEADER_TEXT,
+    containerRoomName: RX.Styles.createViewStyle({
         flexDirection: 'row',
         alignItems: 'center',
+        maxHeight: FONT_LARGE + 4,
         marginBottom: SPACING,
     }),
     roomName: RX.Styles.createTextStyle({
+        flex: -1,
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
+        color: HEADER_TEXT,
         fontWeight: 'bold',
     }),
     alias: RX.Styles.createTextStyle({
+        flex: 1,
+        fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
+        color: HEADER_TEXT,
+        marginLeft: SPACING,
     }),
     containerSubtitle: RX.Styles.createViewStyle({
-        // not used
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        maxHeight: FONT_NORMAL + 4,
     }),
     subtitle: RX.Styles.createTextStyle({
         flex: 1,
@@ -347,13 +355,13 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
         if (this.alias && this.state.type === 'community' && this.state.name !== this.alias) {
             alias = (
                 <RX.Text numberOfLines={ 1 } style={ styles.alias }>
-                    { '  ' + this.alias }
+                    { this.alias }
                 </RX.Text>
             );
         } else if (this.state.type === 'direct' && this.state.name !== this.state.contactId) {
             alias = (
                 <RX.Text numberOfLines={ 1 } style={ styles.alias }>
-                    { '  ' + this.state.contactId }
+                    { this.state.contactId }
                 </RX.Text>
             );
         }
@@ -458,12 +466,12 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
                         { avatar! }
                     </RX.View>
                     <RX.View style={ styles.containerRoomInfo }>
-                        <RX.Text numberOfLines={ 1 } style={ styles.containerRoomName }>
+                        <RX.View style={ styles.containerRoomName }>
                             <RX.Text numberOfLines={ 1 } style={ styles.roomName }>
                                 { this.state.name }
                             </RX.Text>
                             { alias }
-                        </RX.Text>
+                        </RX.View>
                         <RX.View style={ styles.containerSubtitle }>
                             { subtitle }
                         </RX.View>
