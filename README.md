@@ -15,7 +15,8 @@
 ## Use cases:
 
 - Private homeserver owners looking to get their non-tech friends + family to chat on Matrix
-- Small organizations or companies wanting a simple, self-hosted, open-source instant messaging solution
+- Matrix users participating in unencrypted public rooms only
+- Small organizations looking for a simple, self-hosted, open-source instant messaging solution
 
 ## One code base, several platforms:
 
