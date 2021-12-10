@@ -10,7 +10,6 @@ import UiStore from '../stores/UiStore';
 import { invited, left, admin } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
 import AppFont from '../modules/AppFont';
-import UserPresence from './UserPresence';
 import CachedImage from '../modules/CachedImage';
 
 const styles = {
@@ -148,19 +147,6 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
             }
         }
 
-        let lastSeen: ReactElement | undefined;
-        if (['direct', 'group'].includes(roomType!)) {
-            lastSeen = (
-                <RX.View style={ styles.containerUserId }>
-                    <UserPresence
-                        userId={ this.props.user.id }
-                        fontColor={ TILE_SYSTEM_TEXT }
-                        fontSize={ FONT_NORMAL }
-                    />
-                </RX.View>
-            )
-        }
-
         return (
             <RX.View
                 style={ [styles.container, { cursor: this.props.canPress ? 'pointer' : 'default' }] }
@@ -186,7 +172,6 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
                             { this.props.user.id }
                         </RX.Text>
                     </RX.View>
-                    { lastSeen }
                 </RX.View>
             </RX.View>
         )
