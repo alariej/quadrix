@@ -97,6 +97,7 @@ interface RoomListHeaderProps extends RX.CommonProps {
 
 interface RoomListHeaderState {
     offline: boolean;
+    isJitsiMaximised: boolean;
 }
 
 export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, RoomListHeaderState> {
@@ -117,6 +118,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 
         return {
             offline: UiStore.getOffline(),
+            isJitsiMaximised: UiStore.getJitsiMaximised(),
         };
     }
 
@@ -245,7 +247,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
             <RX.View style={ styles.container }>
                 <RX.View
                     style={ styles.containerHeader}
-                    onPress={ this.onPressTile }
+                    onPress={ () => this.state.isJitsiMaximised ? null : this.onPressTile() }
                     disableTouchOpacityAnimation={ true }
                     activeOpacity={ 1 }
                 >
@@ -260,7 +262,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
                 </RX.View>
                 <RX.Button
                     style={ styles.roundButton }
-                    onPress={ this.onPressNewChat }
+                    onPress={ () => this.state.isJitsiMaximised ? null : this.onPressNewChat() }
                     disableTouchOpacityAnimation={ false }
                     underlayColor={ LOGO_BACKGROUND }
                     activeOpacity={ 0.8 }
@@ -278,7 +280,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
                 </RX.Button>
                 <RX.Button
                     style={ styles.roundButton }
-                    onPress={ this.onPressSettings }
+                    onPress={ () => this.state.isJitsiMaximised ? null : this.onPressSettings() }
                     disableTouchOpacityAnimation={ false }
                     underlayColor={ LOGO_BACKGROUND }
                     activeOpacity={ 0.8 }
@@ -296,7 +298,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
                 </RX.Button>
                 <RX.Button
                     style={ styles.roundButton }
-                    onPress={ this.onLogout }
+                    onPress={ () => this.state.isJitsiMaximised ? null : this.onLogout() }
                     disableTouchOpacityAnimation={ false }
                     underlayColor={ LOGO_BACKGROUND }
                     activeOpacity={ 0.8 }
