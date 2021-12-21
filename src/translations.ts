@@ -851,6 +851,12 @@ export const userIdPasswordMissing: Translation = {
     fr: 'ID d\'usager ou mot de passe manquant.',
 }
 
+export const deviceOfflineLogin: Translation = {
+    en: 'Your device seems to be offline. Try again once your device has an internet connection.',
+    de: 'Ihr Gerät scheint offline zu sein. Versuchen Sie es erneut, sobald Ihr Gerät eine Internetverbindung hat.',
+    fr: 'Votre appareil semble être hors ligne. Essayez à nouveau dès que votre appareil dispose d\'une connexion internet.',
+}
+
 export const userIdInUse: Translation = {
     en: 'The User ID you entered is already in-use on this server. Please try a new one.',
     de: 'Die eingegebene Benutzer-ID ist auf diesem Server bereits vergeben. Bitte versuchen Sie eine neue.',

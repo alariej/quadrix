@@ -8,7 +8,8 @@ import UiStore from '../stores/UiStore';
 import { PREFIX_MEDIA, PREFIX_REST } from '../appconfig';
 import { PreviewUrl_, LoginParam_, EmailTokenResponse_, LoginResponse_, AuthParam_, PusherGetResponse_, NewRoomOptions_,
     LoginParamType, RegisterStageType, RoomType, GetPublicRoomsResponse_, StateEventContent_,
-    StateEventType, MessageEventContent_, PusherParam_, PushRulesGetResponse_, DirectorySearch_, MessageEvent_} from '../models/MatrixApi';
+    StateEventType, MessageEventContent_, PusherParam_, PushRulesGetResponse_, DirectorySearch_, MessageEvent_
+} from '../models/MatrixApi';
 import { RoomSummary } from '../models/RoomSummary';
 import EventUtils from '../utils/EventUtils';
 import { MessageEvent } from '../models/MessageEvent';
@@ -16,12 +17,6 @@ import { MessageEvent } from '../models/MessageEvent';
 class ApiClient {
 
     public credentials!: Credentials;
-    public isConnected = false;
-
-    public setIsConnected(isConnected: boolean) {
-
-        this.isConnected = isConnected;
-    }
 
     // login + credentials
 
@@ -105,14 +100,14 @@ class ApiClient {
     }
 
     public register(userId: string, password: string, server: string, type?: RegisterStageType, session?: string,
-        param?: { sid: string, client_secret: string } | string ): Promise<LoginResponse_> {
+        param?: { sid: string, client_secret: string } | string): Promise<LoginResponse_> {
 
         const restClient = new RestClient('', server, PREFIX_REST);
 
         let auth: AuthParam_ | undefined;
         if (session) {
 
-            if (type === 'm.login.email.identity' && typeof(param) !== 'string') {
+            if (type === 'm.login.email.identity' && typeof (param) !== 'string') {
 
                 auth = {
                     type: type,
@@ -169,7 +164,7 @@ class ApiClient {
 
         const pusher: PusherParam_ = {
             append: false,
-            app_display_name:'Email Notifications',
+            app_display_name: 'Email Notifications',
             app_id: 'm.email',
             device_display_name: emailAddress,
             kind: wantPusher ? 'email' : null,
@@ -315,7 +310,7 @@ class ApiClient {
         return restClient.createNewRoom(options!);
     }
 
-    public getPublicRooms(options: { limit: number, filter: { generic_search_term: string }}, server: string)
+    public getPublicRooms(options: { limit: number, filter: { generic_search_term: string } }, server: string)
         : Promise<GetPublicRoomsResponse_> {
 
         const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
@@ -389,7 +384,7 @@ class ApiClient {
 
     public sendReadReceipt(roomId: string, eventId: string): Promise<void> {
 
-        if (!this.isConnected) { return Promise.resolve(); }
+        if (UiStore.getOffline()) { return Promise.resolve(); }
 
         const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
 
@@ -464,7 +459,7 @@ class ApiClient {
         return restClient.getUserProfile(userId);
     }
 
-    public get3pid(): Promise<{ threepids: [{ medium: string, address: string}] }> {
+    public get3pid(): Promise<{ threepids: [{ medium: string, address: string }] }> {
 
         const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
 
@@ -529,7 +524,7 @@ class ApiClient {
 
     public storeDatastore(): Promise<[void, void]> {
 
-        const storeRoomSummary = async function(): Promise<void> {
+        const storeRoomSummary = async function (): Promise<void> {
 
             const roomSummaryList = DataStore.getRoomSummaryList();
 
@@ -538,7 +533,7 @@ class ApiClient {
             return Promise.resolve();
         }
 
-        const storeLastSeenTime = async function(): Promise<void> {
+        const storeLastSeenTime = async function (): Promise<void> {
 
             const lastSeenTime = DataStore.getLastSeenTimeArray();
 
@@ -552,7 +547,7 @@ class ApiClient {
 
     public restoreDataStore(): Promise<[void, void]> {
 
-        const restoreRoomSummary = async function(): Promise<void> {
+        const restoreRoomSummary = async function (): Promise<void> {
 
             const response = await RX.Storage.getItem('roomSummaryList').catch(error => { return Promise.reject(error) });
 
@@ -567,7 +562,7 @@ class ApiClient {
             return Promise.resolve();
         }
 
-        const restoreLastSeenTime = async function(): Promise<void> {
+        const restoreLastSeenTime = async function (): Promise<void> {
 
             const response = await RX.Storage.getItem('lastSeenTime').catch(error => { return Promise.reject(error) });
 

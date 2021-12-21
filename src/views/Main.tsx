@@ -10,7 +10,6 @@ import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
 import ShareHandlerIncoming from '../modules/ShareHandlerIncoming';
 import UiStore, { Layout } from '../stores/UiStore';
-import RXNetInfo from 'reactxp-netinfo';
 import { deviceOffline } from '../translations';
 import JitsiMeet from '../modules/JitsiMeet';
 import { ComponentBase } from 'resub';
@@ -84,12 +83,17 @@ export default class Main extends ComponentBase<MainProps, MainState> {
     private roomList: ReactElement | undefined;
     private room: ReactElement | undefined;
     private appLayoutSubscription: number;
+    private appOfflineSubscription: number;
+    private isOffline: boolean;
 
     constructor(props: MainProps) {
         super(props);
 
         this.appLayoutSubscription = UiStore.subscribe(this.changeAppLayout, UiStore.LayoutTrigger);
+        this.appOfflineSubscription = UiStore.subscribe(this.changeAppOffline, UiStore.OfflineTrigger);
 
+        this.isOffline = UiStore.getOffline();
+        
         this.roomList = (
             <RoomList
                 showRoom={ this.showRoom }
@@ -105,91 +109,80 @@ export default class Main extends ComponentBase<MainProps, MainState> {
         }
     }
 
-    public componentDidMount(): void {
+    public async componentDidMount(): Promise<void> {
         super.componentDidMount();
 
         UiStore.setUnknownAccessToken(false);
 
         Pushers.set(ApiClient.credentials).catch(_error => null);
 
-        RXNetInfo.isConnected()
-            .then(async isConnected => {
+        if (!this.isOffline) {
 
-                ApiClient.setIsConnected(isConnected);
+            DataStore.setSyncComplete(false);
 
-                if (isConnected) {
+            const storedSyncToken = await ApiClient.getStoredSyncToken()!;
 
-                    DataStore.setSyncComplete(false);
+            if (storedSyncToken) {
 
-                    const storedSyncToken = await ApiClient.getStoredSyncToken()!;
+                ApiClient.setNextSyncToken(storedSyncToken);
 
-                    if (storedSyncToken) {
+                await ApiClient.restoreDataStore()
+                    .then(_response => {
 
-                        ApiClient.setNextSyncToken(storedSyncToken);
+                        ApiClient.startSync(storedSyncToken);
+                        this.showRoomList();
+                        ShareHandlerIncoming.launchedFromSharedContent(this.props.sharedContent, this.shareContent);
+                    })
+                    .catch(_error => {
 
-                        await ApiClient.restoreDataStore()
-                            .then(_response => {
-
-                                ApiClient.startSync(storedSyncToken);
-                                this.showRoomList();
-                                ShareHandlerIncoming.launchedFromSharedContent(this.props.sharedContent, this.shareContent);
-                            })
-                            .catch(_error => {
-
-                                ApiClient.clearNextSyncToken();
-                                ApiClient.startSync('');
-                                this.showRoomList();
-                            });
-
-                    } else {
                         ApiClient.clearNextSyncToken();
                         ApiClient.startSync('');
                         this.showRoomList();
-                    }
+                    });
 
-                } else {
+            } else {
+                ApiClient.clearNextSyncToken();
+                ApiClient.startSync('');
+                this.showRoomList();
+            }
 
-                    UiStore.setOffline(true);
+        } else {
 
-                    await ApiClient.getStoredSyncToken()
-                        .then(token => {
-                            ApiClient.setNextSyncToken(token!);
-                        })
-                        .catch(_error => null);
+            await ApiClient.getStoredSyncToken()
+                .then(token => {
+                    ApiClient.setNextSyncToken(token!);
+                })
+                .catch(_error => null);
 
-                    await ApiClient.restoreDataStore()
-                        .then(_response => {
+            await ApiClient.restoreDataStore()
+                .then(_response => {
 
-                            ApiClient.stopSync();
-                            DataStore.setSyncComplete(true);
-                            this.showRoomList();
-                        })
-                        .catch(_error => {
+                    ApiClient.stopSync();
+                    DataStore.setSyncComplete(true);
+                    this.showRoomList();
+                })
+                .catch(_error => {
 
-                            const text = (
-                                <RX.Text style={ styles.textDialog }>
-                                    { deviceOffline[UiStore.getLanguage()] }
-                                </RX.Text>
-                            );
+                    const text = (
+                        <RX.Text style={ styles.textDialog }>
+                            { deviceOffline[UiStore.getLanguage()] }
+                        </RX.Text>
+                    );
 
-                            const dialog = (
-                                <DialogContainer
-                                    content={ text }
-                                    confirmButton={ true }
-                                    confirmButtonText={ 'OK' }
-                                    onConfirm={ () => { RX.Modal.dismissAll(); this.showRoomList() } }
-                                />
-                            );
+                    const dialog = (
+                        <DialogContainer
+                            content={ text }
+                            confirmButton={ true }
+                            confirmButtonText={ 'OK' }
+                            onConfirm={ () => { RX.Modal.dismissAll(); this.showRoomList() } }
+                        />
+                    );
 
-                            RX.Modal.show(dialog, 'modaldialog_nodata');
-                        });
-                }
-            })
-            .catch(_error => null);
+                    RX.Modal.show(dialog, 'modaldialog_nodata');
+                });
+        }
 
         RX.App.activationStateChangedEvent.subscribe(this.activationChanged);
-
-        RXNetInfo.connectivityChangedEvent.subscribe(this.connectivityChanged);
 
         RX.Input.backButtonEvent.subscribe(this.onBackButton);
 
@@ -205,13 +198,12 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
         RX.Input.backButtonEvent.unsubscribe(this.onBackButton);
 
-        RXNetInfo.connectivityChangedEvent.unsubscribe(this.connectivityChanged);
-
         RX.App.activationStateChangedEvent.unsubscribe(this.activationChanged);
 
         ShareHandlerIncoming.removeListener(this.shareContent);
 
         UiStore.unsubscribe(this.appLayoutSubscription);
+        UiStore.unsubscribe(this.appOfflineSubscription);
     }
 
     private activationChanged = (activationState: Types.AppActivationState) => {
@@ -223,7 +215,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
         } else {
 
-            if (ApiClient.isSyncStopped() && ApiClient.isConnected) {
+            if (ApiClient.isSyncStopped() && !this.isOffline) {
 
                 DataStore.setSyncComplete(false);
 
@@ -237,19 +229,16 @@ export default class Main extends ComponentBase<MainProps, MainState> {
         }
     }
 
-    private connectivityChanged = (isConnected: boolean) => {
+    private changeAppOffline = () => {
 
-        ApiClient.setIsConnected(isConnected);
+        this.isOffline = UiStore.getOffline();
 
-        if (!isConnected) {
+        if (this.isOffline) {
 
-            UiStore.setOffline(true);
             ApiClient.stopSync();
             ApiClient.storeAppData().catch(_error => null);
 
         } else {
-
-            UiStore.setOffline(false);
 
             if (ApiClient.isSyncStopped()) {
 

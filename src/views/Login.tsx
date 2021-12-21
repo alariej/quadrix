@@ -6,10 +6,9 @@ import { BUTTON_LONG_BACKGROUND, BUTTON_MODAL_BACKGROUND, BUTTON_LONG_TEXT, INPU
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
 import DialogRegister from '../dialogs/DialogRegister';
-import RXNetInfo from 'reactxp-netinfo';
 import UiStore from '../stores/UiStore';
 import { haveAnAccount, noAccount, register, login, userPassword, repeatPassword, server, userServer, userId, passwordNoMatch,
-    userIdPasswordMissing, errorInvalidPassword, Languages, termsPrivacyLicense } from '../translations';
+    userIdPasswordMissing, errorInvalidPassword, Languages, termsPrivacyLicense, deviceOfflineLogin } from '../translations';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { ErrorResponse_ } from '../models/MatrixApi';
 import { TERMS_URL } from '../appconfig';
@@ -99,7 +98,6 @@ interface LoginProps extends RX.CommonProps {
 }
 
 interface LoginState {
-    offline: boolean;
     loginExpanded: boolean;
     register: boolean;
     repeatPassword: string;
@@ -124,7 +122,6 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 
         this.state = {
             repeatPassword: '',
-            offline: false,
             loginExpanded: true,
             register: false,
             server: '',
@@ -152,28 +149,24 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
                 }
             })
             .catch(_error => null);
-
-        RXNetInfo.isConnected()
-            .then(isConnected => {
-                this.setState({ offline: !isConnected });
-            })
-            .catch(_error => null);
-
-        RXNetInfo.connectivityChangedEvent
-            .subscribe(isConnected => {
-                this.setState({ offline: !isConnected });
-            });
-    }
-
-    public componentWillUnmount(): void {
-
-        RXNetInfo.connectivityChangedEvent
-            .unsubscribe(() => null);
     }
 
     private onPressMainButton = () => {
 
         RX.UserInterface.dismissKeyboard();
+
+        if (UiStore.getOffline()) {
+
+            const text = (
+                <RX.Text style={ styles.errorDialog }>
+                    { deviceOfflineLogin[this.language] }
+                </RX.Text>
+            );
+
+            RX.Modal.show(<DialogContainer content={ text }/>, 'modaldialog');
+
+            return;
+        }
 
         if (!this.userId || !this.password) {
 
