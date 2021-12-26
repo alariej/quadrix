@@ -34,6 +34,12 @@ export class App extends ComponentBase<AppProps, AppState> {
     constructor(props: AppProps) {
         super(props);
 
+        RXNetInfo.isConnected()
+            .then(response => {
+                UiStore.setOffline(!response)
+            })
+            .catch(_error => null);
+
         RX.UserInterface.useCustomScrollbars(true);
         RX.StatusBar.setTranslucent(false);
         RX.StatusBar.setBarStyle('light-content', true);
