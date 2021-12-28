@@ -463,7 +463,7 @@ export default class DialogRegister extends RX.Component<DialogRegisterProps, Di
                     disableTouchOpacityAnimation={ true }
                     activeOpacity={ 1 }
                 >
-                    <RX.Text style={ styles.buttonText }>
+                    <RX.Text allowFontScaling={ false } style={ styles.buttonText }>
                         { cancel[UiStore.getLanguage()] }
                     </RX.Text>
                 </RX.Button>

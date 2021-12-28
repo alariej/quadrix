@@ -376,7 +376,10 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
                         disabled={ this.state.offline }
                         disabledOpacity={ 1 }
                     >
-                        <RX.Text style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }>
+                        <RX.Text
+                            allowFontScaling={ false }
+                            style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }
+                        >
                             { photos[this.language] }
                         </RX.Text>
                     </RX.Button>
@@ -388,7 +391,10 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
                         disabled={ this.state.offline }
                         disabledOpacity={ 1 }
                     >
-                        <RX.Text style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }>
+                        <RX.Text
+                            allowFontScaling={ false }
+                            style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }
+                        >
                             { files[this.language] }
                         </RX.Text>
                     </RX.Button>

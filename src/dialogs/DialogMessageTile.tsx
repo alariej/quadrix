@@ -554,7 +554,10 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                         disabled={ this.state.offline }
                         disabledOpacity={ 1 }
                     >
-                        <RX.Text style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }>
+                        <RX.Text
+                            allowFontScaling={ false }
+                            style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }
+                        >
                             { open[this.language] }
                         </RX.Text>
                     </RX.Button>
@@ -572,7 +575,10 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                         disabled={ this.state.offline }
                         disabledOpacity={ 1 }
                     >
-                        <RX.Text style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }>
+                        <RX.Text
+                            allowFontScaling={ false }
+                            style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }
+                        >
                             { save[this.language] }
                         </RX.Text>
                     </RX.Button>
@@ -590,7 +596,10 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                         disabled={ this.state.offline }
                         disabledOpacity={ 1 }
                     >
-                        <RX.Text style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }>
+                        <RX.Text
+                            allowFontScaling={ false }
+                            style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }
+                        >
                             { share[this.language] }
                         </RX.Text>
                     </RX.Button>
@@ -608,7 +617,10 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                         disabled={ this.state.offline }
                         disabledOpacity={ 1 }
                     >
-                        <RX.Text style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }>
+                        <RX.Text
+                            allowFontScaling={ false }
+                            style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }
+                        >
                             { reply[this.language] }
                         </RX.Text>
                     </RX.Button>
@@ -624,7 +636,10 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                     disabled={ this.state.offline }
                     disabledOpacity={ 1 }
                 >
-                    <RX.Text style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }>
+                    <RX.Text
+                        allowFontScaling={ false }
+                        style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }
+                    >
                         { forward[this.language] }
                     </RX.Text>
                 </RX.Button>
@@ -641,7 +656,10 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                         disabled={ this.state.offline }
                         disabledOpacity={ 1 }
                     >
-                        <RX.Text style={ [styles.buttonText, { color: this.state.offline ? BUTTON_DISABLED_TEXT : 'red' }] }>
+                        <RX.Text
+                            allowFontScaling={ false }
+                            style={ [styles.buttonText, { color: this.state.offline ? BUTTON_DISABLED_TEXT : 'red' }] }
+                        >
                             { report[this.language] }
                         </RX.Text>
                     </RX.Button>

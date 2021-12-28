@@ -228,7 +228,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     onPress={ event => this.addEmoji(event, emoji) }
                     disableTouchOpacityAnimation={ true }
                 >
-                    <RX.Text style={ styles.emoji }>
+                    <RX.Text allowFontScaling={ false } style={ styles.emoji }>
                         { emoji }
                     </RX.Text>
                 </RX.Button>

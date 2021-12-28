@@ -692,7 +692,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
             loadingButton = (
                 <RX.View style={ styles.containerLoadingButton }>
                     <RX.View style={ styles.loadingButton }>
-                        <RX.Text style={ styles.loadingButtonText }>
+                        <RX.Text allowFontScaling={ false } style={ styles.loadingButtonText }>
                             { fetchingMessages[this.language] }
                         </RX.Text>
                         <RX.View style={ styles.spinner }>

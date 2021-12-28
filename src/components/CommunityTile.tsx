@@ -116,17 +116,17 @@ export default class CommunityTile extends RX.Component<CommunityTileProps, RX.S
                 </RX.View>
                 <RX.View style={ styles.containerRoomInfo }>
                     <RX.View style={ styles.roomInfo }>
-                        <RX.Text numberOfLines={ 1 } style={ styles.roomName }>
+                        <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.roomName }>
                             { this.props.roomResponse.name || this.props.roomResponse.canonical_alias }
                         </RX.Text>
                     </RX.View>
                     <RX.View style={ styles.roomInfo } title={ this.props.roomResponse.canonical_alias }>
-                        <RX.Text numberOfLines={ 1 } style={ styles.label }>
+                        <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.label }>
                             { alias[language] + ': ' + (this.props.roomResponse.canonical_alias || '-') }
                         </RX.Text>
                     </RX.View>
                     <RX.View style={ styles.roomInfo }>
-                        <RX.Text numberOfLines={ 1 } style={ styles.label }>
+                        <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.label }>
                             {
                                 topic[language] + ': ' +
                                 (this.props.roomResponse.topic ? this.props.roomResponse.topic.replace(/\n|\s{2,}/g, ' ') : '-')
@@ -134,7 +134,7 @@ export default class CommunityTile extends RX.Component<CommunityTileProps, RX.S
                         </RX.Text>
                     </RX.View>
                     <RX.View style={ styles.roomInfo }>
-                        <RX.Text numberOfLines={ 1 } style={ styles.label }>
+                        <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.label }>
                             { members[language] + ': ' + this.props.roomResponse.num_joined_members }
                         </RX.Text>
                     </RX.View>

@@ -664,7 +664,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
                     activeOpacity={ 1 }
                 >
                     <RX.View style={ styles.containerIcon }>
-                        <RX.Text style={ [styles.checkboxText, { color: 'white' }] }>
+                        <RX.Text allowFontScaling={ false } style={ [styles.checkboxText, { color: 'white' }] }>
                             { this.state.appColor === APP_BACKGROUND[i] ? '✓' : '' }
                         </RX.Text>
                     </RX.View>
@@ -688,7 +688,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
                         activeOpacity={ 1 }
                     >
                         <RX.View style={ styles.containerIcon }>
-                            <RX.Text style={ styles.zoomButtonText }>
+                            <RX.Text allowFontScaling={ false } style={ styles.zoomButtonText }>
                                 +
                             </RX.Text>
                         </RX.View>
@@ -700,7 +700,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
                         activeOpacity={ 1 }
                     >
                         <RX.View style={ styles.containerIcon }>
-                            <RX.Text style={ styles.zoomButtonText }>
+                            <RX.Text allowFontScaling={ false } style={ styles.zoomButtonText }>
                                 −
                             </RX.Text>
                         </RX.View>
@@ -712,7 +712,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
                         activeOpacity={ 1 }
                     >
                         <RX.View style={ styles.containerIcon }>
-                            <RX.Text style={ styles.zoomButtonText }>
+                            <RX.Text allowFontScaling={ false } style={ styles.zoomButtonText }>
                                 ⊡
                             </RX.Text>
                         </RX.View>
@@ -728,13 +728,13 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
 
                     <RX.View style={ styles.rowContainer }>
 
-                        <RX.Text style={ styles.label }>
+                        <RX.Text allowFontScaling={ false } style={ styles.label }>
                             { emailAddress[this.language] }
                         </RX.Text>
 
                         <RX.View style={ styles.textField } title={ this.emailAddress }>
 
-                            <RX.Text numberOfLines={ 1 } style={ styles.userId }>
+                            <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.userId }>
                                 { this.emailAddress || '_' }
                             </RX.Text>
 
@@ -744,7 +744,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
 
                     <RX.View style={ styles.rowContainer }>
 
-                        <RX.Text style={ styles.label }>
+                        <RX.Text allowFontScaling={ false } style={ styles.label }>
                             { emailNotifications[this.language] }
                         </RX.Text>
 
@@ -756,7 +756,10 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
                                 disableTouchOpacityAnimation={ true }
                                 activeOpacity={ 1 }
                             >
-                                <RX.Text style={ [styles.checkboxText, { color: this.emailNotifications ? 'limegreen' : 'red' }] }>
+                                <RX.Text
+                                    allowFontScaling={ false }
+                                    style={ [styles.checkboxText, { color: this.emailNotifications ? 'limegreen' : 'red' }] }
+                                >
                                     { this.emailNotifications ? '✓' : '✗' }
                                 </RX.Text>
                             </RX.Button>
@@ -784,7 +787,10 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
                         disabled={ this.state.offline }
                         disabledOpacity={ 1 }
                     >
-                        <RX.Text style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }>
+                        <RX.Text
+                            allowFontScaling={ false }
+                            style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }
+                        >
                             { photos[this.language] }
                         </RX.Text>
                     </RX.Button>
@@ -796,7 +802,10 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
                         disabled={ this.state.offline }
                         disabledOpacity={ 1 }
                     >
-                        <RX.Text style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }>
+                        <RX.Text
+                            allowFontScaling={ false }
+                            style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }
+                        >
                             { files[this.language] }
                         </RX.Text>
                     </RX.Button>
@@ -817,7 +826,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
 
                     <RX.View style={ styles.rowContainer }>
 
-                        <RX.Text style={ styles.label }>
+                        <RX.Text allowFontScaling={ false } style={ styles.label }>
                             { userId[this.language] }
                         </RX.Text>
 
@@ -828,10 +837,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
                             activeOpacity={ 1 }
                         >
 
-                            <RX.Text
-                                numberOfLines={ 1 }
-                                style={ styles.userId }
-                            >
+                            <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.userId }>
                                 { ApiClient.credentials.userIdFull }
                             </RX.Text>
 
@@ -841,7 +847,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
 
                     <RX.View style={ styles.rowContainer }>
 
-                        <RX.Text style={ styles.label }>
+                        <RX.Text allowFontScaling={ false } style={ styles.label }>
                             { displayName[this.language] }
                         </RX.Text>
 
@@ -869,7 +875,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
 
                     <RX.View style={ styles.rowContainer }>
 
-                        <RX.Text style={ styles.label }>
+                        <RX.Text allowFontScaling={ false } style={ styles.label }>
                             { profilePicture[this.language] }
                         </RX.Text>
 
@@ -893,7 +899,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
 
                     <RX.View style={ styles.rowContainer }>
 
-                        <RX.Text style={ styles.label }>
+                        <RX.Text allowFontScaling={ false } style={ styles.label }>
                             { userPassword[this.language] }
                         </RX.Text>
 

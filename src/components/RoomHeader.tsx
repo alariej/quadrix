@@ -354,13 +354,13 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
         let alias: ReactElement | undefined = undefined;
         if (this.alias && this.state.type === 'community' && this.state.name !== this.alias) {
             alias = (
-                <RX.Text numberOfLines={ 1 } style={ styles.alias }>
+                <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.alias }>
                     { this.alias }
                 </RX.Text>
             );
         } else if (this.state.type === 'direct' && this.state.name !== this.state.contactId) {
             alias = (
-                <RX.Text numberOfLines={ 1 } style={ styles.alias }>
+                <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.alias }>
                     { this.state.contactId }
                 </RX.Text>
             );
@@ -380,7 +380,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
         } else if (this.state.type === 'community') {
 
             subtitle = (
-                <RX.Text numberOfLines={ 1 } style={ styles.subtitle }>
+                <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.subtitle }>
                     { communityMembers(this.joinMembersCount, this.language) }
                 </RX.Text>
             );
@@ -388,7 +388,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
         } else if (this.state.type === 'notepad') {
 
             subtitle = (
-                <RX.Text numberOfLines={ 1 } style={ styles.subtitle }>
+                <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.subtitle }>
                     { notepad[this.language] }
                 </RX.Text>
             );
@@ -418,14 +418,14 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
                 let memberRender: ReactElement;
                 if (member.membership === 'join') {
                     memberRender = (
-                        <RX.Text numberOfLines={ 1 } key={ member.id }>
+                        <RX.Text allowFontScaling={ false } numberOfLines={ 1 } key={ member.id }>
                             { separator + (member.name || member.id) }
                         </RX.Text>
                     );
                     memberRenderArray.push(memberRender);
                 } else if (member.membership === 'invite') {
                     memberRender = (
-                        <RX.Text numberOfLines={ 1 } key={ member.id } style={ {fontStyle: 'italic'} }>
+                        <RX.Text allowFontScaling={ false } numberOfLines={ 1 } key={ member.id } style={ {fontStyle: 'italic'} }>
                             { separator + (member.name || member.id) }
                         </RX.Text>
                     );
@@ -434,7 +434,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
             }
 
             subtitle = (
-                <RX.Text numberOfLines={ 1 } style={ styles.subtitle }>
+                <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.subtitle }>
                     { memberRenderArray }
                 </RX.Text>
             );
@@ -443,7 +443,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
         let unread: ReactElement | undefined = undefined;
         if (this.state.totalUnreadCount !== undefined && this.state.totalUnreadCount > 0) {
             unread = (
-                <RX.Text style={ [styles.unreadNumber, this.unreadTextStyle] }>
+                <RX.Text allowFontScaling={ false } style={ [styles.unreadNumber, this.unreadTextStyle] }>
                     { this.state.totalUnreadCount > 9 ? '9+' : this.state.totalUnreadCount }
                 </RX.Text>
             );
@@ -467,7 +467,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
                     </RX.View>
                     <RX.View style={ styles.containerRoomInfo }>
                         <RX.View style={ styles.containerRoomName }>
-                            <RX.Text numberOfLines={ 1 } style={ styles.roomName }>
+                            <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.roomName }>
                                 { this.state.name }
                             </RX.Text>
                             { alias }

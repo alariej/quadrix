@@ -123,7 +123,7 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
             if (this.props.user.membership === 'invite') {
                 status = (
                     <RX.View style={ styles.containerStatus }>
-                        <RX.Text numberOfLines={ 1 } style={ styles.status }>
+                        <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.status }>
                             { invited[UiStore.getLanguage()] }
                         </RX.Text>
                     </RX.View>
@@ -131,7 +131,7 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
             } else if (this.props.user.membership === 'leave') {
                 status = (
                     <RX.View style={ styles.containerStatus }>
-                        <RX.Text numberOfLines={ 1 } style={ styles.status }>
+                        <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.status }>
                             { left[UiStore.getLanguage()] }
                         </RX.Text>
                     </RX.View>
@@ -139,7 +139,7 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
             } else if (this.props.user.powerLevel === 100 && !['direct', 'notepad'].includes(roomType!)) {
                 status = (
                     <RX.View style={ styles.containerStatus }>
-                        <RX.Text numberOfLines={ 1 } style={ styles.status }>
+                        <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.status }>
                             { admin[UiStore.getLanguage()] }
                         </RX.Text>
                     </RX.View>
@@ -160,15 +160,16 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
                 </RX.View>
                 <RX.View style={ styles.containerUserInfo }>
                     <RX.Text
+                        allowFontScaling={ false }
                         numberOfLines={ 1 }
                         style={ [styles.containerRoomName, { marginBottom: ['direct', 'group'].includes(roomType!) ? 0 : SPACING }] }
                     >
-                        <RX.Text numberOfLines={ 1 } style={ styles.userName }>
+                        <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.userName }>
                             { this.props.user.name || this.props.user.id }
                         </RX.Text>
                     </RX.Text>
                     <RX.View style={ styles.containerUserId }>
-                        <RX.Text numberOfLines={ 1 } style={ styles.userId }>
+                        <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.userId }>
                             { this.props.user.id }
                         </RX.Text>
                     </RX.View>

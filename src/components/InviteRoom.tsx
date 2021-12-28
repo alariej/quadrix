@@ -156,7 +156,7 @@ export default class InviteRoom extends ComponentBase<InviteRoomProps, InviteRoo
                             disabled={ this.state.offline }
                             disabledOpacity={ 0.15 }
                         >
-                            <RX.Text style={ styles.buttonText }>
+                            <RX.Text allowFontScaling={ false } style={ styles.buttonText }>
                                 { acceptInvitation[language] }
                             </RX.Text>
                         </RX.Button>
@@ -168,7 +168,7 @@ export default class InviteRoom extends ComponentBase<InviteRoomProps, InviteRoo
                             disabled={ this.state.offline }
                             disabledOpacity={ 0.15 }
                         >
-                            <RX.Text style={ styles.buttonText }>
+                            <RX.Text allowFontScaling={ false } style={ styles.buttonText }>
                                 { rejectInvitation[language] }
                             </RX.Text>
                         </RX.Button>

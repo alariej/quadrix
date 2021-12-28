@@ -134,7 +134,7 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
                     disabled={ this.props.confirmDisabled }
                     activeOpacity={ 1 }
                 >
-                    <RX.Text style={ [styles.buttonText, disabledStyle] }>
+                    <RX.Text allowFontScaling={ false } style={ [styles.buttonText, disabledStyle] }>
                         { this.props.confirmButtonText || 'OK' }
                     </RX.Text>
                 </RX.Button>
@@ -150,7 +150,7 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
                     disableTouchOpacityAnimation={ true }
                     activeOpacity={ 1 }
                 >
-                    <RX.Text style={ this.props.buttonTextStyle || styles.buttonText }>
+                    <RX.Text allowFontScaling={ false } style={ this.props.buttonTextStyle || styles.buttonText }>
                         { this.props.cancelButtonText || cancel[UiStore.getLanguage()] }
                     </RX.Text>
                 </RX.Button>

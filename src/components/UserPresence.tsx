@@ -121,7 +121,10 @@ export default class UserPresence extends ComponentBase<UserPresenceProps, UserP
         return (
             <RX.View style={ styles.container }>
                 { activityIcon }
-                <RX.Text style={{ color: this.props.fontColor, fontSize: this.props.fontSize, fontFamily: AppFont.fontFamily }}>
+                <RX.Text
+                    allowFontScaling={ false }
+                    style={{ color: this.props.fontColor, fontSize: this.props.fontSize, fontFamily: AppFont.fontFamily }}
+                >
                     { lastSeenText }
                 </RX.Text>
             </RX.View>

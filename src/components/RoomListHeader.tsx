@@ -192,16 +192,21 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
                     width={ 24 * 347.48401 / 89.798973 }
                     fillColor={ LOGO_BACKGROUND }
                 />
-                <RX.Text style={ styles.textVersion }>
+                <RX.Text 
+                    allowFontScaling={ false }
+                    style={ styles.textVersion }
+                >
                     { 'Version: ' + APP_VERSION }
                 </RX.Text>
                 <RX.Text
+                    allowFontScaling={ false }
                     style={ styles.link }
                     onPress={ event => this.openUrl(GIT_REPO_URL, event) }
                 >
                     { APP_WEBSITE }
                 </RX.Text>
                 <RX.Text
+                    allowFontScaling={ false }
                     style={ styles.link }
                     onPress={ event => this.openUrl(TERMS_URL, event) }
                 >
@@ -255,7 +260,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
                     { disconnected! }
 
                     <RX.View style={ styles.userNameContainer }>
-                        <RX.Text style={ styles.userName }>
+                        <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.userName }>
                             { ApiClient.credentials.userIdFull }
                         </RX.Text>
                     </RX.View>

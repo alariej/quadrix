@@ -201,17 +201,17 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
         if (this.props.roomType !== 'direct' && ApiClient.credentials.userIdFull !== this.props.event.senderId) {
             footer = (
                 <RX.View style={ styles.footer } title={ this.props.event.senderId + ' - ' + timestamp }>
-                    <RX.Text style={ styles.footerSenderId } numberOfLines={ 1 }>
+                    <RX.Text allowFontScaling={ false } style={ styles.footerSenderId } numberOfLines={ 1 }>
                         { this.props.event.senderId }
                     </RX.Text>
-                    <RX.Text style={ styles.footerTimestamp } numberOfLines={ 1 }>
+                    <RX.Text allowFontScaling={ false } style={ styles.footerTimestamp } numberOfLines={ 1 }>
                         {  ' - ' + timestamp }
                     </RX.Text>
                 </RX.View>
             );
         } else {
             footer = (
-                <RX.Text style={ styles.footerTimestamp }>
+                <RX.Text allowFontScaling={ false } style={ styles.footerTimestamp }>
                     { timestamp }
                 </RX.Text>
             );

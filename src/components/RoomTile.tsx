@@ -178,7 +178,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
         let unread: ReactElement | undefined;
         if (this.state.unreadCount !== undefined && this.state.unreadCount > 0) {
             unread = (
-                <RX.Text style={ [styles.unreadNumber, this.unreadTextStyle] }>
+                <RX.Text allowFontScaling={ false } style={ [styles.unreadNumber, this.unreadTextStyle] }>
                     { this.state.unreadCount > 9 ? '9+' : this.state.unreadCount }
                 </RX.Text>
             );
@@ -355,20 +355,20 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
         let alias: ReactElement | undefined;
         if (this.alias && this.state.type === 'community' && this.state.name !== this.alias) {
             alias = (
-                <RX.Text numberOfLines={ 1 } style={ styles.alias }>
+                <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.alias }>
                     { this.alias }
                 </RX.Text>
             );
         } else if (this.state.type === 'direct' && this.state.name !== this.state.contactId) {
             alias = (
-                <RX.Text numberOfLines={ 1 } style={ styles.alias }>
+                <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.alias }>
                     { this.state.contactId }
                 </RX.Text>
             );
         }
 
         const messageRender = (
-            <RX.Text numberOfLines={ 1 } style={ styles.newestMessageText }>
+            <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.newestMessageText }>
                 { messageText }
             </RX.Text>
         );
@@ -404,7 +404,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
                     </RX.View>
                     <RX.View style={ styles.containerRoomInfo }>
                         <RX.View style={ styles.containerRoomName }>
-                            <RX.Text numberOfLines={ 1 } style={ styles.roomName }>
+                            <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.roomName }>
                                 { this.state.name }
                             </RX.Text>
                             { alias }
