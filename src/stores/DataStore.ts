@@ -1092,22 +1092,30 @@ class DataStore extends StoreBase {
         this.roomSummaryList.splice(roomIndex, 1);
     }
 
-    public getTopic(roomId: string) {
+    public getTopic(roomId: string): string | undefined {
 
         const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
         return this.roomSummaryList[roomIndex].topic;
     }
 
-    public getAlias(roomId: string) {
+    public getAlias(roomId: string): string | undefined {
 
         const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
         return this.roomSummaryList[roomIndex].alias;
     }
 
-    public getRoomName(roomId: string) {
+    public getRoomName(roomId: string): string | undefined {
 
         const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
-        return roomIndex > -1 ? this.roomSummaryList[roomIndex].name : '';
+
+        let roomName: string | undefined;
+        if (this.roomSummaryList[roomIndex].type === 'direct') {
+            roomName = this.roomSummaryList[roomIndex].members[this.roomSummaryList[roomIndex].contactId!].name;
+        } else {
+            roomName = this.roomSummaryList[roomIndex].name;
+        }
+
+        return roomIndex > -1 ? roomName : '';
     }
 
     public getRoomSummaryList() {
