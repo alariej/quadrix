@@ -404,6 +404,8 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
 
         const nextImage = this.imageTimeline[this.currentIndex];
 
+        if (!nextImage) { return; }
+
         this.imageRatio = nextImage.content.info!.w! / nextImage.content.info!.h!;
 
         this.setImageSize();
