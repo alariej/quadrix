@@ -70,7 +70,7 @@ The quadrix apps do not collect any information whatsover: No user ID's, no IP a
 
 quadrix is released under the [GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.html), requiring everyone to share their modifications when they also share the software in public. That aspect is commonly referred to as Copyleft.
 
-Copyright (c) 2021 Jean-François Alarie
+Copyright (c) 2022 Jean-François Alarie
 
 ## Contact:
 
