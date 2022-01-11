@@ -714,6 +714,13 @@ export const deviceOffline: Translation = {
     fr: 'Votre appareil semble être hors ligne, et aucune donnée ne peut être trouvée dans le stockage local. Veuillez vous connecter pour consulter vos messages.',
 }
 
+// not used yet
+export const serverOffline: Translation = {
+    en: 'The Matrix server you are trying to access seems to be offline.',
+    de: 'Ihr Gerät scheint offline zu sein, und es können keine Daten im lokalen Speicher gefunden werden. Bitte gehen Sie online, um Ihre Nachrichten zu sehen.',
+    fr: 'Votre appareil semble être hors ligne, et aucune donnée ne peut être trouvée dans le stockage local. Veuillez vous connecter pour consulter vos messages.',
+}
+
 export const invited: Translation = {
     en: 'Invited',
     de: 'E\'laden',
