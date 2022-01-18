@@ -15,6 +15,7 @@ import { format } from 'date-fns';
 import { RoomType } from '../models/MatrixApi';
 import Spinner from './Spinner';
 import AppFont from '../modules/AppFont';
+import VideoMessage from './VideoMessage';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -144,6 +145,16 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
             message = (
                 <ImageMessage
                     roomId={ this.props.roomId }
+                    message={ this.props.event }
+                    showContextDialog={ this.showContextDialog }
+                />
+            );
+        } else if (this.props.event.content.msgtype === 'm.video') {
+
+            messageType = 'media';
+
+            message = (
+                <VideoMessage
                     message={ this.props.event }
                     showContextDialog={ this.showContextDialog }
                 />

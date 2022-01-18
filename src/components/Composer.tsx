@@ -19,6 +19,7 @@ import { MessageEventContentInfo_, MessageEventContent_, RoomType } from '../mod
 import { FileObject } from '../models/FileObject';
 import { TemporaryMessage } from '../models/MessageEvent';
 import AppFont from '../modules/AppFont';
+import Video from '../modules/Video';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -143,6 +144,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
     private isWeb: boolean;
     private selection: { start: number, end: number } | undefined;
     private emojiPicker: ReactElement | undefined;
+    private videoHeight: number | undefined;
+    private videoWidth: number | undefined;
 
     constructor(props: ComposerProps) {
         super(props);
@@ -371,15 +374,36 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
                 if (fileUri) {
 
+                    const messageType = EventUtils.messageMediaType(file.type);
+                    let mediaHeight: number | undefined;
+                    let mediaWidth: number | undefined;
+
+                    switch (messageType) {
+                        case 'm.image':
+                            mediaHeight = file.imageHeight;
+                            mediaWidth = file.imageWidth;
+                            break;
+
+                        case 'm.video':
+                            mediaHeight = this.videoHeight;
+                            mediaWidth = this.videoWidth;
+                            break;
+
+                        default:
+                            mediaHeight = undefined;
+                            mediaWidth = undefined;
+                            break;
+                    }
+
                     const messageContentInfo: MessageEventContentInfo_ = {
-                        h: file.imageHeight,
-                        w: file.imageWidth,
+                        h: mediaHeight,
+                        w: mediaWidth,
                         size: file.size!,
                         mimetype: file.type,
                     }
 
                     const messageContent: MessageEventContent_ = {
-                        msgtype: EventUtils.messageMediaType(file.type),
+                        msgtype: messageType,
                         body: file.name,
                         info: messageContentInfo,
                         url: fileUri,
@@ -443,6 +467,17 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     </RX.View>
                 );
 
+            } else if (file.type.startsWith('video')) {
+
+                content = (
+                    <RX.View style={ styles.containerContent } >
+                        <Video
+                            uri={ file.uri }
+                            id={ 'videopreview' }
+                        />
+                    </RX.View>
+                );
+
             } else {
 
                 content = (
@@ -467,6 +502,18 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
             );
 
             RX.Modal.show(dialog, 'filesendingdialog');
+
+            if (file.type.startsWith('video') && UiStore.getPlatform() === 'web') {
+
+                const video = document.getElementById('videopreview');
+
+                video!.onloadedmetadata = (event) => {
+                    // @ts-ignore
+                    this.videoHeight = event.target.videoHeight; // eslint-disable-line
+                    // @ts-ignore
+                    this.videoWidth = event.target.videoWidth; // eslint-disable-line
+                };
+            }
         });
     }
 
