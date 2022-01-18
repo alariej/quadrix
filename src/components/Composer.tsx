@@ -15,7 +15,7 @@ import { messageCouldNotBeSent, cancel, wrote, sending, clickHereOrPressShftEnte
 import IconSvg, { SvgFile } from './IconSvg';
 import EmojiPicker from './EmojiPicker';
 import EventUtils from '../utils/EventUtils';
-import { MessageEventContent_, RoomType } from '../models/MatrixApi';
+import { MessageEventContentInfo_, MessageEventContent_, RoomType } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
 import { TemporaryMessage } from '../models/MessageEvent';
 import AppFont from '../modules/AppFont';
@@ -314,7 +314,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                 }
             }
 
-            ApiClient.sendTextMessage(this.props.roomId, urlMessageContent, tempId)
+            ApiClient.sendMessage(this.props.roomId, urlMessageContent, tempId)
                 .then((_response) => {
                     this.setState({ sendDisabled: false });
                 })
@@ -331,7 +331,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     body: textInput,
                 }
 
-                ApiClient.sendTextMessage(this.props.roomId, messageContent, tempId)
+                ApiClient.sendMessage(this.props.roomId, messageContent, tempId)
                     .then((_response) => {
                         this.setState({ sendDisabled: false });
                     })
@@ -371,16 +371,21 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
                 if (fileUri) {
 
-                    ApiClient.sendMediaMessage(
-                        this.props.roomId,
-                        file.name,
-                        file.type,
-                        file.size!,
-                        fileUri,
-                        tempId,
-                        file.imageWidth!,
-                        file.imageHeight!
-                    )
+                    const messageContentInfo: MessageEventContentInfo_ = {
+                        h: file.imageHeight,
+                        w: file.imageWidth,
+                        size: file.size!,
+                        mimetype: file.type,
+                    }
+
+                    const messageContent: MessageEventContent_ = {
+                        msgtype: EventUtils.messageMediaType(file.type),
+                        body: file.name,
+                        info: messageContentInfo,
+                        url: fileUri,
+                    }
+
+                    ApiClient.sendMessage(this.props.roomId, messageContent, tempId)
                         .catch(_error => {
 
                             this.props.showTempSentMessage({ body: '', tempId: tempId });
@@ -538,7 +543,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
             jitsi_started: true,
         }
 
-        ApiClient.sendTextMessage(this.props.roomId, messageContent, tempId)
+        ApiClient.sendMessage(this.props.roomId, messageContent, tempId)
             .catch(_error => {
 
                 const text = (

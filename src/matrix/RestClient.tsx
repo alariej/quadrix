@@ -1,7 +1,7 @@
 import { GenericRestClient, ApiCallOptions } from 'simplerestclients';
 import { PreviewUrl_, LoginParam_, LoginResponse_, PusherGetResponse_, EmailTokenResponse_, AuthParam_, PusherParam_, NewRoomOptions_,
     GetPublicRoomsResponse_, MessageEvent_, StateEventContent_, StateEventType, GetJoinedMembersResponse_, GetRoomMembersResponse_,
-    MessageEventContent_, MessageEventContentInfo_, SyncFilter_, SyncResponse_, PushRulesGetResponse_,
+    MessageEventContent_, SyncFilter_, SyncResponse_, PushRulesGetResponse_,
     DirectorySearch_ } from '../models/MatrixApi';
 
 export default class RestClient extends GenericRestClient {
@@ -79,40 +79,9 @@ export default class RestClient extends GenericRestClient {
         return this.performApiPut<void>('pushrules/global/room/' + roomId, content);
     }
 
-    public sendTextMessage(roomId: string, messageContent: MessageEventContent_, tempId: string): Promise<void> {
+    public sendMessage(roomId: string, messageContent: MessageEventContent_, tempId: string): Promise<void> {
 
         return this.performApiPut<void>('rooms/' + roomId + '/send/m.room.message/' + tempId, messageContent);
-    }
-
-    public sendMediaMessage(roomId: string, name: string, mimeType: string, size: number, url: string,
-        tempId: string, width: number, height: number): Promise<void> {
-
-        let msgType: string;
-        let info: MessageEventContentInfo_;
-        if (mimeType.includes('image')) {
-            msgType = 'm.image';
-            info = {
-                h: height,
-                w: width,
-                size: size,
-                mimetype: mimeType,
-            };
-        } else {
-            msgType = 'm.file';
-            info = {
-                size: size,
-                mimetype: mimeType,
-            };
-        }
-
-        const content: MessageEventContent_ = {
-            msgtype: msgType,
-            body: name,
-            info: info,
-            url: url,
-        };
-
-        return this.performApiPut<void>('rooms/' + roomId + '/send/m.room.message/' + tempId, content);
     }
 
     public sendStateEvent(roomId: string, type: StateEventType, content: StateEventContent_, stateKey?: string): Promise<void> {

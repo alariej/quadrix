@@ -17,10 +17,11 @@ import { forward, reply, forwardTo, messageCouldNotBeSent, noApplicationWasFound
     doYouReallyWantToReport, pressOKToForward1, pressOKToForward2, toFolder, close, noFileExplorerWasFound} from '../translations';
 import FileHandler from '../modules/FileHandler';
 import ShareHandlerOutgoing from '../modules/ShareHandlerOutgoing';
-import { ErrorResponse_, RoomType } from '../models/MatrixApi';
+import { ErrorResponse_, MessageEventContentInfo_, MessageEventContent_, RoomType } from '../models/MatrixApi';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import Spinner from '../components/Spinner';
 import AppFont from '../modules/AppFont';
+import EventUtils from '../utils/EventUtils';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -249,7 +250,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 
             this.props.showTempForwardedMessage!(roomId, this.props.event, tempId);
 
-            ApiClient.sendTextMessage(roomId, this.props.event.content, tempId)
+            ApiClient.sendMessage(roomId, this.props.event.content, tempId)
                 .catch(_error => {
                     showError();
                 });
@@ -260,16 +261,21 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 
             this.props.showTempForwardedMessage!(roomId, this.props.event, tempId);
 
-            ApiClient.sendMediaMessage(
-                roomId,
-                this.props.event.content.body!,
-                this.props.event.content.info!.mimetype!,
-                this.props.event.content.info!.size!,
-                this.props.event.content.url!,
-                tempId,
-                this.props.event.content.info!.w!,
-                this.props.event.content.info!.h!,
-            )
+            const messageContentInfo: MessageEventContentInfo_ = {
+                h: this.props.event.content.info!.h,
+                w: this.props.event.content.info!.w,
+                size: this.props.event.content.info!.size,
+                mimetype: this.props.event.content.info!.mimetype,
+            }
+
+            const messageContent: MessageEventContent_ = {
+                msgtype: EventUtils.messageMediaType(this.props.event.content.info!.mimetype!),
+                body: this.props.event.content.body,
+                info: messageContentInfo,
+                url: this.props.event.content.url,
+            }
+
+            ApiClient.sendMessage(this.props.roomId, messageContent, tempId)
                 .catch(_error => {
                     showError();
                 });

@@ -430,19 +430,11 @@ class ApiClient {
         }
     }
 
-    public sendTextMessage(roomId: string, messageContent: MessageEventContent_, tempId: string): Promise<void> {
+    public sendMessage(roomId: string, messageContent: MessageEventContent_, tempId: string): Promise<void> {
 
         const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
 
-        return restClient.sendTextMessage(roomId, messageContent, tempId);
-    }
-
-    public sendMediaMessage(roomId: string, name: string, mimeType: string, size: number, url: string, tempId: string, width: number,
-        height: number): Promise<void> {
-
-        const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
-
-        return restClient.sendMediaMessage(roomId, name, mimeType, size, url, tempId, width, height);
+        return restClient.sendMessage(roomId, messageContent, tempId);
     }
 
     public getPreviewUrl(url: string): Promise<PreviewUrl_> {

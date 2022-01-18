@@ -12,7 +12,7 @@ import EventUtils from '../utils/EventUtils';
 import RoomTile from '../components/RoomTile';
 import { SharedContent } from '../models/SharedContent';
 import DataStore from '../stores/DataStore';
-import { MessageEventContent_ } from '../models/MatrixApi';
+import { MessageEventContentInfo_, MessageEventContent_ } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
 import ImageSizeLocal from '../modules/ImageSizeLocal';
 import SpinnerUtils from '../utils/SpinnerUtils';
@@ -128,7 +128,7 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
 
             const tempId = 'text' + Date.now();
 
-            const messageContent = {
+            const messageContent: MessageEventContent_ = {
                 body: this.props.sharedContent.uri,
                 msgtype: 'm.text',
             };
@@ -161,14 +161,14 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
                     }
                 }
 
-                ApiClient.sendTextMessage(this.props.roomId, urlMessageContent, tempId)
+                ApiClient.sendMessage(this.props.roomId, urlMessageContent, tempId)
                     .catch(() => {
                         showError(tempId, messageCouldNotBeSent[this.language]);
                     });
 
             } else {
 
-                ApiClient.sendTextMessage(this.props.roomId, messageContent, tempId)
+                ApiClient.sendMessage(this.props.roomId, messageContent, tempId)
                     .catch(() => {
                         showError(tempId, messageCouldNotBeSent[this.language]);
                     });
@@ -211,16 +211,21 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
 
                     if (fileUri) {
 
-                        ApiClient.sendMediaMessage(
-                            this.props.roomId,
-                            file.name,
-                            file.type,
-                            file.size!,
-                            fileUri,
-                            tempId,
-                            this.imageWidth,
-                            this.imageHeight
-                        )
+                        const messageContentInfo: MessageEventContentInfo_ = {
+                            h: file.imageHeight,
+                            w: file.imageWidth,
+                            size: file.size!,
+                            mimetype: file.type,
+                        }
+
+                        const messageContent: MessageEventContent_ = {
+                            msgtype: EventUtils.messageMediaType(file.type),
+                            body: file.name,
+                            info: messageContentInfo,
+                            url: fileUri,
+                        }
+
+                        ApiClient.sendMessage(this.props.roomId, messageContent, tempId)
                             .catch(() => {
                                 showError(tempId, messageCouldNotBeSent[this.language]);
                             });
