@@ -7,7 +7,7 @@ import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
 import EventUtils from '../utils/EventUtils';
 import ApiClient from '../matrix/ApiClient';
-import { invitationWaiting, archived, invitationNotYetAccepted, encryptedMessage, jitsiStartedShort, image } from '../translations';
+import { invitationWaiting, archived, invitationNotYetAccepted, encryptedMessage, jitsiStartedShort, image, video } from '../translations';
 import UiStore from '../stores/UiStore';
 import IconSvg, { SvgFile } from './IconSvg';
 import { StyleRuleSet, TextStyle } from 'reactxp/dist/common/Types';
@@ -295,6 +295,19 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
                     messageTypeIcon = (
                         <IconSvg
                             source= { require('../resources/svg/image.json') as SvgFile }
+                            style={ { marginRight: SPACING } }
+                            fillColor={ ICON_INFO_FILL }
+                            height={ 16 }
+                            width={ 16 }
+                        />
+                    );
+                } else if (this.props.newestRoomEvent.content.msgtype === 'm.video') {
+
+                    messageText = video[UiStore.getLanguage()];
+
+                    messageTypeIcon = (
+                        <IconSvg
+                            source= { require('../resources/svg/video_media.json') as SvgFile }
                             style={ { marginRight: SPACING } }
                             fillColor={ ICON_INFO_FILL }
                             height={ 16 }
