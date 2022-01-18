@@ -224,5 +224,17 @@ class EventUtils {
 
         return { user: user, server: server }
     }
+
+    public messageMediaType(fileType: string): string {
+
+        if (fileType.includes('image')) {
+            return 'm.image';
+        } else if (fileType.includes('video')) {
+            return 'm.video';
+        } else {
+            return 'm.file';
+        }
+    }
 }
+
 export default new EventUtils();
