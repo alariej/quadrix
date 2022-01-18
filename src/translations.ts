@@ -708,6 +708,12 @@ export const image: Translation = {
     fr: 'Image',
 }
 
+export const video: Translation = {
+    en: 'Video',
+    de: 'Video',
+    fr: 'Vidéo',
+}
+
 export const deviceOffline: Translation = {
     en: 'Your device seems to be offline, and no data can be found in the local storage. Please go online to view your messages.',
     de: 'Ihr Gerät scheint offline zu sein, und es können keine Daten im lokalen Speicher gefunden werden. Bitte gehen Sie online, um Ihre Nachrichten zu sehen.',
