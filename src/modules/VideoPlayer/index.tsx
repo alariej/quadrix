@@ -2,12 +2,12 @@ import React from 'react';
 import RX from 'reactxp';
 import { BORDER_RADIUS } from '../../ui';
 
-interface VideoProps {
+interface VideoPlayerProps {
     uri: string;
     id?: string;
 }
 
-export default class Video extends RX.Component<VideoProps, RX.Stateless> {
+export default class VideoPlayer extends RX.Component<VideoPlayerProps, RX.Stateless> {
 
     public render(): JSX.Element {
 

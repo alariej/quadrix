@@ -19,7 +19,7 @@ import { MessageEventContentInfo_, MessageEventContent_, RoomType } from '../mod
 import { FileObject } from '../models/FileObject';
 import { TemporaryMessage } from '../models/MessageEvent';
 import AppFont from '../modules/AppFont';
-import Video from '../modules/Video';
+import VideoPlayer from '../modules/VideoPlayer';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -471,7 +471,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
                 content = (
                     <RX.View style={ styles.containerContent } >
-                        <Video
+                        <VideoPlayer
                             uri={ file.uri }
                             id={ 'videopreview' }
                         />

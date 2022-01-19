@@ -5,7 +5,7 @@ import ApiClient from '../matrix/ApiClient';
 import { MessageEvent } from '../models/MessageEvent';
 import { SPACING, BUTTON_ROUND_WIDTH, PAGE_MARGIN, BORDER_RADIUS } from '../ui';
 import UiStore from '../stores/UiStore';
-import Video from '../modules/Video';
+import VideoPlayer from '../modules/VideoPlayer';
 
 const styles = {
     containerMessage: RX.Styles.createViewStyle({
@@ -55,7 +55,7 @@ export default class VideoMessage extends RX.Component<VideoMessageProps, RX.Sta
                     onContextMenu={ () => this.props.showContextDialog() }
                     disableTouchOpacityAnimation={ true }
                 >
-                    <Video
+                    <VideoPlayer
                         uri={ this.url }
                     />
                 </RX.View>
