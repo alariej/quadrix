@@ -469,11 +469,16 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
             } else if (file.type.startsWith('video')) {
 
+                const setDimensions = (videoHeight: number, videoWidth: number) => {
+                    this.videoHeight = videoHeight;
+                    this.videoWidth = videoWidth;
+                }
+
                 content = (
                     <RX.View style={ styles.containerContent } >
                         <VideoPlayer
                             uri={ file.uri }
-                            id={ 'videopreview' }
+                            setDimensions={ setDimensions }
                         />
                     </RX.View>
                 );
@@ -502,18 +507,6 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
             );
 
             RX.Modal.show(dialog, 'filesendingdialog');
-
-            if (file.type.startsWith('video') && UiStore.getPlatform() === 'web') {
-
-                const video = document.getElementById('videopreview');
-
-                video!.onloadedmetadata = (event) => {
-                    // @ts-ignore
-                    this.videoHeight = event.target.videoHeight; // eslint-disable-line
-                    // @ts-ignore
-                    this.videoWidth = event.target.videoWidth; // eslint-disable-line
-                };
-            }
         });
     }
 

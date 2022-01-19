@@ -3,19 +3,9 @@ import RX from 'reactxp';
 import EventUtils from '../utils/EventUtils';
 import ApiClient from '../matrix/ApiClient';
 import { MessageEvent } from '../models/MessageEvent';
-import { SPACING, BUTTON_ROUND_WIDTH, PAGE_MARGIN, BORDER_RADIUS } from '../ui';
+import { SPACING, BUTTON_ROUND_WIDTH, PAGE_MARGIN } from '../ui';
 import UiStore from '../stores/UiStore';
 import VideoPlayer from '../modules/VideoPlayer';
-
-const styles = {
-    containerMessage: RX.Styles.createViewStyle({
-        // not used
-    }),
-    video: RX.Styles.createImageStyle({
-        flex: 1,
-        borderRadius: BORDER_RADIUS - 2,
-    }),
-};
 
 interface VideoMessageProps {
     message: MessageEvent;
@@ -48,17 +38,13 @@ export default class VideoMessage extends RX.Component<VideoMessageProps, RX.Sta
     public render(): JSX.Element | null {
 
         return (
-            <RX.View style={ styles.containerMessage }>
-                <RX.View
-                    style={ this.heightStyle }
-                    onLongPress={ () => this.props.showContextDialog() }
-                    onContextMenu={ () => this.props.showContextDialog() }
-                    disableTouchOpacityAnimation={ true }
-                >
-                    <VideoPlayer
-                        uri={ this.url }
-                    />
-                </RX.View>
+            <RX.View
+                style={ this.heightStyle }
+                onLongPress={ () => this.props.showContextDialog() }
+                onContextMenu={ () => this.props.showContextDialog() }
+                disableTouchOpacityAnimation={ true }
+            >
+                <VideoPlayer uri={ this.url }/>
             </RX.View>
         );
     }

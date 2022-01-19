@@ -116,7 +116,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
     private language: Languages = 'en';
     private isElectron: boolean;
     private isMobile: boolean;
-    private isFileOrImage: boolean;
+    private isMedia: boolean;
     private animatedValue: RX.Animated.Value;
     private animatedStyle: RX.Types.AnimatedViewStyleRuleSet;
     private confirmationDialog: ReactElement | undefined;
@@ -127,7 +127,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
         this.language = UiStore.getLanguage();
         this.isElectron = UiStore.getIsElectron();
         this.isMobile = ['android', 'ios'].includes(UiStore.getPlatform());
-        this.isFileOrImage = ['m.file', 'm.image'].includes(this.props.event.content.msgtype!);
+        this.isMedia = ['m.file', 'm.image', 'm.video'].includes(this.props.event.content.msgtype!);
 
         this.animatedValue = RX.Animated.createValue(0.4);
         this.animatedStyle = RX.Styles.createAnimatedViewStyle({
@@ -549,7 +549,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
         if (!this.state.showConfirmationDialog && !this.state.showSpinner) {
 
             n = 1;
-            if (this.isFileOrImage && (this.isElectron || this.isMobile)) {
+            if (this.isMedia && (this.isElectron || this.isMobile)) {
                 n++;
                 openButton = (
                     <RX.Button
@@ -570,7 +570,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                 )
             }
 
-            if (this.isFileOrImage && (this.isElectron || this.isMobile)) {
+            if (this.isMedia && (this.isElectron || this.isMobile)) {
                 n++;
                 saveAsButton = (
                     <RX.Button
