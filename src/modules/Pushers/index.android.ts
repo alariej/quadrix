@@ -4,8 +4,6 @@ import { Credentials } from '../../models/Credentials';
 import { PusherParam_ } from '../../models/MatrixApi';
 import { PUSH_GATEWAY_URL, APP_ID_ANDROID, APP_NAME, PREFIX_REST } from '../../appconfig';
 import UiStore from '../../stores/UiStore';
-import AndroidWhitelist from 'react-native-android-whitelist';
-import { batteryOptimizationText, batteryOptimizationTitle, cancel, doNotShowAgain, whitelist } from '../../translations';
 
 class Pushers {
 
@@ -48,16 +46,6 @@ class Pushers {
     public async set(credentials: Credentials): Promise<void> {
 
         const language = UiStore.getLanguage();
-
-        const config = {
-            title: batteryOptimizationTitle[language],
-            text: batteryOptimizationText[language],
-            doNotShowAgainText: doNotShowAgain[language],
-            positiveText: whitelist[language],
-            negativeText: cancel[language]
-        }
-
-        AndroidWhitelist.alert(config)
 
         const firebaseToken = await messaging().getToken();
 
