@@ -163,11 +163,14 @@ class FileHandler {
             imageSize = { width: 0, height: 0 }
         }
 
+        const stat = await ReactNativeBlobUtil.fs.stat(response.uri).catch(_err => null);
+
         const file: FileObject = {
             size: response.size,
             name: response.name,
             type: response.type || 'unknown',
             uri: response.uri,
+            path: 'file://' + stat?.path,
             imageWidth: imageSize.width,
             imageHeight: imageSize.height,
         }
