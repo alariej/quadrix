@@ -1,4 +1,4 @@
-import RNFetchBlob from 'rn-fetch-blob'
+import ReactNativeBlobUtil from 'react-native-blob-util'
 import DocumentPicker from 'react-native-document-picker';
 import { PREFIX_UPLOAD } from '../../appconfig';
 import { Credentials } from '../../models/Credentials';
@@ -15,12 +15,12 @@ class FileHandler {
     public cacheAppFolder = '';
 
     public setCacheAppFolder(): void {
-        this.cacheAppFolder = RNFetchBlob.fs.dirs.CacheDir;
+        this.cacheAppFolder = ReactNativeBlobUtil.fs.dirs.CacheDir;
     }
 
     public clearCacheAppFolder(): void {
 
-        RNFetchBlob.fs.exists(this.cacheAppFolder)
+        ReactNativeBlobUtil.fs.exists(this.cacheAppFolder)
             .then(isCache => {
                 if (isCache) {
                     return this.cacheAppFolder;
@@ -29,11 +29,11 @@ class FileHandler {
                 }
             })
             .then(cacheAppFolder => {
-                return RNFetchBlob.fs.lstat(cacheAppFolder);
+                return ReactNativeBlobUtil.fs.lstat(cacheAppFolder);
             })
             .then(cachedFiles => {
                 for (const file of cachedFiles) {
-                    RNFetchBlob.fs.unlink(file.path + file.filename).catch(_error => null);
+                    ReactNativeBlobUtil.fs.unlink(file.path + file.filename).catch(_error => null);
                 }
             })
             .catch(_error => null);
@@ -43,7 +43,7 @@ class FileHandler {
 
         const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
 
-        await RNFetchBlob.config({
+        await ReactNativeBlobUtil.config({
             overwrite: true,
             path: filePath,
         })
@@ -64,7 +64,7 @@ class FileHandler {
         const cachedFileName = EventUtils.getCachedFileName(message, ApiClient.credentials.homeServer);
         const cachedFilePath = this.cacheAppFolder + '/' + cachedFileName;
 
-        const alreadyCached = await RNFetchBlob.fs.exists(cachedFilePath);
+        const alreadyCached = await ReactNativeBlobUtil.fs.exists(cachedFilePath);
 
         if (!alreadyCached) {
             await this.downloadFile(message, cachedFilePath, fetchProgress)
@@ -89,13 +89,13 @@ class FileHandler {
             });
 
         const fileName = message.content.body;
-        const homePath = RNFetchBlob.fs.dirs.DocumentDir;
+        const homePath = ReactNativeBlobUtil.fs.dirs.DocumentDir;
         const homeFilePath = homePath + '/' + fileName;
 
-        const alreadyCopied = await RNFetchBlob.fs.exists(homeFilePath);
+        const alreadyCopied = await ReactNativeBlobUtil.fs.exists(homeFilePath);
 
         if (!alreadyCopied) {
-            await RNFetchBlob.fs.cp(cachedFilePath, homeFilePath)
+            await ReactNativeBlobUtil.fs.cp(cachedFilePath, homeFilePath)
                 .catch(_error => {
                     onSuccess(false);
                     return Promise.reject();
@@ -119,7 +119,7 @@ class FileHandler {
                 onSuccess(true);
 
                 setTimeout(() => {
-                    RNFetchBlob.ios.openDocument(response)
+                    ReactNativeBlobUtil.ios.openDocument(response)
                         .catch(_error => {
                             onNoAppFound();
                         })
@@ -219,19 +219,19 @@ class FileHandler {
 
         const url = 'https://' + credentials.homeServer + PREFIX_UPLOAD;
 
-        const response: { respInfo: { status: number }, data: string} = await RNFetchBlob.fetch('POST', url, {
+        const response: { respInfo: { status: number }, data: string} = await ReactNativeBlobUtil.fetch('POST', url, {
 
             Authorization: 'Bearer ' + credentials.accessToken,
             'Content-Type': 'application/octet-stream',
 
-        }, RNFetchBlob.wrap(file.uri.replace('file://', '')))
+        }, ReactNativeBlobUtil.wrap(file.uri.replace('file://', '')))
             .uploadProgress({ interval: 100 }, (written, total) => {
                 fetchProgress(written / total);
             })
             .catch(error => { return Promise.reject(error) })
             .finally(() => {
                 if (resizedImage && resizedImage.uri) {
-                    RNFetchBlob.fs.unlink(resizedImage.uri).catch(_error => null);
+                    ReactNativeBlobUtil.fs.unlink(resizedImage.uri).catch(_error => null);
                 }
             });
 

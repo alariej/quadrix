@@ -84,7 +84,7 @@
     "reactxp-netinfo": "github:alariej/reactxp-netinfo",
     "reactxp-virtuallistview": "github:alariej/reactxp-virtuallistview",
     "resub": "github:alariej/ReSub",
-    "rn-fetch-blob": "github:alariej/rn-fetch-blob",
+    "react-native-blob-util": "0.13.18",
     "simplerestclients": "1.0.0"
   },
   "notes": {

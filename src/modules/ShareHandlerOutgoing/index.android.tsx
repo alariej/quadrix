@@ -1,6 +1,6 @@
 import Share from 'react-native-share';
 import { MessageEvent } from '../../models/MessageEvent';
-import RNFetchBlob from 'rn-fetch-blob'
+import ReactNativeBlobUtil from 'react-native-blob-util'
 import EventUtils from '../../utils/EventUtils';
 import ApiClient from '../../matrix/ApiClient';
 import { shareWith } from '../../translations';
@@ -30,9 +30,9 @@ class ShareHandlerOutgoing {
             const fileName = message.content.body;
             const mimeType = message.content.info!.mimetype;
 
-            RNFetchBlob.config({
+            ReactNativeBlobUtil.config({
                 overwrite: true,
-                path: RNFetchBlob.fs.dirs.CacheDir + '/' + fileName,
+                path: ReactNativeBlobUtil.fs.dirs.CacheDir + '/' + fileName,
             })
                 .fetch('GET', url, { 'Content-Type' : 'octet-stream' })
                 .then(response => {
@@ -53,7 +53,7 @@ class ShareHandlerOutgoing {
 
                     await Share.open(options).catch(_error => null);
 
-                    await RNFetchBlob.fs.unlink(filePath).catch(_error => null);
+                    await ReactNativeBlobUtil.fs.unlink(filePath).catch(_error => null);
                 })
                 .catch((_error) => {
                     onSuccess(false);
