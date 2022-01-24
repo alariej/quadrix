@@ -164,13 +164,13 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
 
             <RX.View
                 style={ [styles.container, { backgroundColor: this.props.backgroundColor || OPAQUE_BACKGROUND }] }
-                onPress={ this.onPressOutside }
+                onPress={ this.props.cancelButton ? undefined : this.onPressOutside }
                 disableTouchOpacityAnimation={ true }
                 activeOpacity={ 1 }
             >
                 <RX.Animated.View
                     style={ [styles.animatedView, this.animatedStyle] }
-                    onPress={ (event: RX.Types.SyntheticEvent) => event.stopPropagation() }
+                    // onPress={ (event: RX.Types.SyntheticEvent) => event.stopPropagation() }
                     disableTouchOpacityAnimation={ true }
                     activeOpacity={ 1 }
                 >
