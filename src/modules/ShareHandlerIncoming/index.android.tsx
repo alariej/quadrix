@@ -7,6 +7,7 @@ import { sendTo } from '../../translations';
 import UiStore from '../../stores/UiStore';
 import { SharedContent } from '../../models/SharedContent';
 import { MessageEvent } from '../../models/MessageEvent';
+import ReactNativeBlobUtil from 'react-native-blob-util';
 
 class ShareHandlerIncoming {
 
@@ -51,13 +52,18 @@ class ShareHandlerIncoming {
         RX.Modal.show(dialogRoomPicker, 'DialogRoomPicker');
     }
 
-    private askSendContent(
+    private async askSendContent(
         roomId: string,
         sharedContent: SharedContent,
         showTempForwardedMessage: (roomId: string, message: MessageEvent, tempId: string) => void)
-        : void {
+        : Promise<void> {
 
         RX.Modal.dismiss('DialogRoomPicker');
+
+        if (sharedContent.uri.startsWith('content://')) {
+            const stat = await ReactNativeBlobUtil.fs.stat(sharedContent.uri).catch(_err => null);
+            sharedContent.uri = 'file://' + stat?.path;
+        }
 
         const dialogIncomingContentShare = (
             <DialogIncomingContentShare

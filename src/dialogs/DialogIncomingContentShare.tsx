@@ -17,6 +17,7 @@ import { FileObject } from '../models/FileObject';
 import ImageSizeLocal from '../modules/ImageSizeLocal';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import AppFont from '../modules/AppFont';
+import VideoPlayer from '../modules/VideoPlayer';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -67,6 +68,8 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
     private imageHeight = 0;
     private imageWidth = 0;
     private language: Languages = 'en';
+    private videoHeight: number | undefined;
+    private videoWidth: number | undefined;
 
     constructor(props: DialogIncomingContentShareProps) {
         super(props);
@@ -77,6 +80,8 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
             this.contentType = 'm.text';
         } else if (props.sharedContent.mimeType!.startsWith('application')) {
             this.contentType = 'm.file';
+        } else if (props.sharedContent.mimeType!.startsWith('video')) {
+            this.contentType = 'm.video';
         }
 
         this.state = { imageRatio: 1 }
@@ -210,16 +215,36 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
                 .then(fileUri => {
 
                     if (fileUri) {
+                        const messageType = EventUtils.messageMediaType(file.type);
+                        let mediaHeight: number | undefined;
+                        let mediaWidth: number | undefined;
+
+                        switch (messageType) {
+                            case 'm.image':
+                                mediaHeight = file.imageHeight;
+                                mediaWidth = file.imageWidth;
+                                break;
+
+                            case 'm.video':
+                                mediaHeight = this.videoHeight;
+                                mediaWidth = this.videoWidth;
+                                break;
+
+                            default:
+                                mediaHeight = undefined;
+                                mediaWidth = undefined;
+                                break;
+                        }
 
                         const messageContentInfo: MessageEventContentInfo_ = {
-                            h: file.imageHeight,
-                            w: file.imageWidth,
+                            h: mediaHeight,
+                            w: mediaWidth,
                             size: file.size!,
                             mimetype: file.type,
                         }
 
                         const messageContent: MessageEventContent_ = {
-                            msgtype: EventUtils.messageMediaType(file.type),
+                            msgtype: messageType,
                             body: file.name,
                             info: messageContentInfo,
                             url: fileUri,
@@ -260,6 +285,30 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
                             resizeMode={ 'contain' }
                             style={ [styles.image, heightStyle] }
                             source={ this.props.sharedContent.uri }
+                        />
+                    </RX.View>
+                    <RoomTile
+                        key={ this.props.roomId }
+                        roomId={ this.props.roomId }
+                        newestRoomEvent={ newestRoomEvent }
+                        nonShadeable={ true }
+                    />
+                </RX.View>
+            );
+
+        } else if (this.contentType === 'm.video') {
+
+            const setDimensions = (videoHeight: number, videoWidth: number) => {
+                this.videoHeight = videoHeight;
+                this.videoWidth = videoWidth;
+            }
+
+            content = (
+                <RX.View style={ styles.containerModalContent }>
+                    <RX.View style={ styles.containerContent } >
+                        <VideoPlayer
+                            uri={ this.props.sharedContent.uri }
+                            setDimensions={ setDimensions }
                         />
                     </RX.View>
                     <RoomTile

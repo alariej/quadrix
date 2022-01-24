@@ -59,7 +59,7 @@ public class MainActivity extends ReactActivity {
             String fileName = "";
             String fileSize = "";
 
-            if (mimeType.startsWith("image/") || mimeType.startsWith("application/")) {
+            if (mimeType.startsWith("image/") || mimeType.startsWith("application/") || mimeType.startsWith("video/")) {
 
                 Uri _uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
 
@@ -123,7 +123,7 @@ public class MainActivity extends ReactActivity {
                     String fileName = "";
                     String fileSize = "";
 
-                    if (mimeType.startsWith("image/") || mimeType.startsWith("application/")) {
+                    if (mimeType.startsWith("image/") || mimeType.startsWith("application/") || mimeType.startsWith("video/")) {
 
                         Uri _uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
 
