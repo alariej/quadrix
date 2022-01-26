@@ -249,7 +249,7 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
 
         if (!this.avatarUrl || !this.avatarFile) { return Promise.resolve() }
 
-        const fetchProgress = (_progress: number) => {
+        const fetchProgress = (_text: string, _progress: number) => {
             // not used yet
         }
 

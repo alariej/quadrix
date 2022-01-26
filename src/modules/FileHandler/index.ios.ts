@@ -9,6 +9,8 @@ import ImageResizer, { Response as ImageResizerResponse, ResizeFormat } from "re
 import { FileObject } from '../../models/FileObject';
 import ImageSizeLocal from '../ImageSizeLocal';
 import * as ImagePicker from 'react-native-image-picker';
+import { uploadingFile } from '../../translations';
+import UiStore from '../../stores/UiStore';
 
 class FileHandler {
 
@@ -184,7 +186,7 @@ class FileHandler {
         });
     }
 
-    public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (progress: number) => void,
+    public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (text: string, progress: number) => void,
         _isIntent = false): Promise<string> {
 
         let resizedImage: ImageResizerResponse | null;
@@ -226,7 +228,7 @@ class FileHandler {
 
         }, ReactNativeBlobUtil.wrap(file.uri.replace('file://', '')))
             .uploadProgress({ interval: 100 }, (written, total) => {
-                fetchProgress(written / total);
+                fetchProgress(uploadingFile[UiStore.getLanguage()], written / total);
             })
             .catch(error => { return Promise.reject(error) })
             .finally(() => {

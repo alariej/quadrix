@@ -187,7 +187,7 @@ class FileHandler {
         return Promise.resolve(null);
     }
 
-    public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (progress: number) => void,
+    public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (text: string, progress: number) => void,
         isIntent = false): Promise<string> {
 
         let resizedImage: ImageResizerResponse | null;
@@ -292,7 +292,7 @@ class FileHandler {
 
         }, ReactNativeBlobUtil.wrap(file.uri))
             .uploadProgress({ interval: 100 }, (written, total) => {
-                fetchProgress(written / total);
+                fetchProgress(uploadingFile[UiStore.getLanguage()], written / total);
             })
             .catch(error => { return Promise.reject(error) })
             .finally(() => {

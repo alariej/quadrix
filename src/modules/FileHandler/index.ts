@@ -2,7 +2,7 @@ import { Credentials } from '../../models/Credentials';
 import { PREFIX_UPLOAD, APP_NAME } from '../../appconfig';
 import axios from 'axios';
 import UiStore from '../../stores/UiStore';
-import { save } from '../../translations';
+import { save, uploadingFile } from '../../translations';
 import EventUtils from '../../utils/EventUtils';
 import ApiClient from '../../matrix/ApiClient';
 import { MessageEvent } from '../../models/MessageEvent';
@@ -253,7 +253,7 @@ class FileHandler {
         return Promise.resolve(null);
     }
 
-    public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (progress: number) => void,
+    public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (text: string, progress: number) => void,
         _isIntent = false): Promise<string> {
 
         const axiosInstance = axios.create({
@@ -267,7 +267,7 @@ class FileHandler {
 
         const config = {
             onUploadProgress: function(progressEvent: { loaded: number, total: number }) {
-                fetchProgress(progressEvent.loaded / progressEvent.total);
+                fetchProgress(uploadingFile[UiStore.getLanguage()], progressEvent.loaded / progressEvent.total);
             }
         };
 

@@ -359,7 +359,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
 
         if (!this.avatarUrl || !this.avatarFile) { return Promise.resolve() }
 
-        const fetchProgress = (_progress: number) => {
+        const fetchProgress = (_text: string, _progress: number) => {
             // not used yet
         }
 

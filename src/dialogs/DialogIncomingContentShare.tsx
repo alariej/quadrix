@@ -183,7 +183,7 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
 
             const tempId = 'media' + Date.now();
 
-            const fetchProgress = (_progress: number) => {
+            const fetchProgress = (_text: string, _progress: number) => {
                 // not used yet
             }
 
