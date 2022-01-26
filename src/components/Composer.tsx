@@ -20,6 +20,7 @@ import { FileObject } from '../models/FileObject';
 import { TemporaryMessage } from '../models/MessageEvent';
 import AppFont from '../modules/AppFont';
 import VideoPlayer from '../modules/VideoPlayer';
+import ProgressDialog from '../modules/ProgressDialog/index.native';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -117,6 +118,8 @@ interface ComposerState {
     offline: boolean;
     jitsiActive: boolean;
     sendDisabled: boolean;
+    showProgress: boolean;
+    progressValue: number;
 }
 
 export default class Composer extends ComponentBase<ComposerProps, ComposerState> {
@@ -146,6 +149,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
     private emojiPicker: ReactElement | undefined;
     private videoHeight: number | undefined;
     private videoWidth: number | undefined;
+    private progressText = '';
 
     constructor(props: ComposerProps) {
         super(props);
@@ -173,6 +177,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
         if (initState) {
 
             partialState.sendDisabled = false;
+            partialState.showProgress = false;
             this.getTextInputFromStorage(nextProps.roomId);
 
         } else if (this.props.roomId !== nextProps.roomId) {
@@ -348,8 +353,9 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
     private onPressAttachmentButton = async () => {
 
-        const fetchProgress = (_progress: number) => {
-            // not used yet
+        const fetchProgress = (_text: string,_progress: number) => {
+            this.progressText = _text;
+            this.setState({ progressValue: _progress });
         }
 
         const file = await FileHandler.pickFile(false);
@@ -369,8 +375,16 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
         this.props.showTempSentMessage({ body: '[' + sending[this.language] + file.name + ']', tempId: tempId });
 
+        this.setState({ showProgress: true });
+
         FileHandler.uploadFile(ApiClient.credentials, file, fetchProgress)
             .then(fileUri => {
+
+                this.setState({
+                    showProgress: false,
+                    progressValue: 0,
+                });
+                this.progressText = '';
 
                 if (fileUri) {
 
@@ -428,6 +442,12 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                 }
             })
             .catch(_error => {
+
+                this.setState({
+                    showProgress: false,
+                    progressValue: 0,
+                });
+                this.progressText = '';
 
                 this.props.showTempSentMessage({ body: '', tempId: tempId });
 
@@ -653,6 +673,16 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
         const disabledOpacity = 0.4;
 
+        let progressDialog: ReactElement | undefined;
+        if (this.state.showProgress) {
+            progressDialog = (
+                <ProgressDialog
+                    text={ this.progressText }
+                    value={ this.state.progressValue }
+                />
+            )
+        }
+
         return(
             <RX.View style={ styles.container }>
                 <RX.Button
@@ -741,6 +771,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                         width={ 20 }
                     />
                 </RX.Button>
+                { progressDialog }
             </RX.View>
         );
     }

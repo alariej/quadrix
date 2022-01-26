@@ -702,6 +702,8 @@ export const cannotLoadImage: Translation = {
 }
 */
 
+
+
 export const image: Translation = {
     en: 'Image',
     de: 'Bild',
@@ -1065,4 +1067,22 @@ export const whitelist: Translation = {
     en: 'Whitelist',
     de: 'Whitelist',
     fr: 'Whitelist'
+}
+
+export const pleaseWait: Translation = {
+    en: 'Please wait...',
+    de: 'Bitte warten...',
+    fr: 'Veuillez attendre...'
+}
+
+export const compressingVideo: Translation = {
+    en: 'Compressing video: ',
+    de: 'Komprimieren des Videos: ',
+    fr: 'Compression de la vidéo: '
+}
+
+export const uploadingFile: Translation = {
+    en: 'Uploading file: ',
+    de: 'Hochladen der Datei: ',
+    fr: 'Téléchargement du fichier: '
 }
