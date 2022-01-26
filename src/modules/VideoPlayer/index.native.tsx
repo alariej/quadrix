@@ -1,51 +1,136 @@
-import * as React from 'react';
-import * as RX from 'reactxp';
-import Video, { OnLoadData } from 'react-native-video';
-import { BORDER_RADIUS } from '../../ui';
-import { StyleSheet } from 'react-native';
+import React from 'react';
+import RX from 'reactxp';
+import { WebView, WebViewMessageEvent } from 'react-native-webview';
+import { BORDER_RADIUS, DIALOG_WIDTH, SPACING } from '../../ui';
 
-const styles = StyleSheet.create({
-    image: {
+const styles = {
+    container: RX.Styles.createViewStyle({
         flex: 1,
+        overflow: 'hidden',
         borderRadius: BORDER_RADIUS - 2,
-    },
-});
+    }),
+}
 
 interface VideoPlayerProps {
     uri: string;
     setDimensions?: (videoHeight: number, videoWidth: number) => void;
 }
 
-export default class VideoPlayer extends RX.Component<VideoPlayerProps, RX.Stateless> {
+interface VideoPlayerState {
+    height: number | undefined;
+}
 
-    private videoPlayer: Video | undefined;
+export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPlayerState> {
+
+    private html: string;
+    private webView: WebView | undefined;
+
+    constructor(props: VideoPlayerProps) {
+        super(props);
+
+        this.state = { height: undefined };
+
+        this.html =
+            `
+            <!DOCTYPE html>
+            <html style="height: 100%; width: 100%">
+                <head>
+                    <meta charset="utf-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+                </head>
+                <body style="height: 100%; width: 100%; display: flex; padding: 0px; margin: 0px; backgroundColor: 'orange'">
+                    <script type="text/javascript">
+                        let videoPlayer;
+                        const onLoadedMetadata = (height, width) => {
+                            const dimensions = {
+                                height: height,
+                                width: width,
+                            }
+                            const dimensions_ = JSON.stringify(dimensions);
+                            window.ReactNativeWebView.postMessage(dimensions_);
+                            videoPlayer = document.getElementById("videoPlayer");
+                        };
+                    </script>
+                    <video
+                        id="videoPlayer"
+                        src="${ props.uri }#t=0.001"
+                        onloadedmetadata="onLoadedMetadata(this.videoHeight, this.videoWidth)"
+                        height="100%"
+                        width="100%"
+                        controls
+                        muted
+                    />
+                </body>
+            </html>
+            `;
+    }
+
+    // <button style="position:absolute;height:80px;width:80px;margin:8px onclick="alert('hello')">Press</button>
+
+    private onMessage = (message: WebViewMessageEvent) => {
+
+        const dimensions = JSON.parse(message.nativeEvent.data) as { height: number, width: number };
+
+        if (this.props.setDimensions) {
+            this.setState({
+                height: (dimensions.height * (DIALOG_WIDTH - 2 * SPACING) / dimensions.width),
+            });
+            this.props.setDimensions(dimensions.height, dimensions.width);
+        }
+    }
+
+    private onPressView = () => {
+
+        const togglePlay =
+            `
+            videoPlayer.requestFullscreen().catch(error => alert(error.message));
+            if (videoPlayer.paused || videoPlayer.ended) {
+                videoPlayer.play();
+            } else {
+                videoPlayer.pause();
+            }
+            `;
+
+        this.webView?.injectJavaScript(togglePlay);
+    }
 
     public render(): JSX.Element {
 
         return (
-            <Video
-                ref={ component => this.videoPlayer = component! }
-                controls={ true }
-                muted={ true }
-                // paused={ true }
-                source={{ uri: this.props.uri }}
-                style={ styles.image }
-                useTextureView={ false }
-                onLoad={ this.onLoadData }
-                // resizeMode={ this.props.resizeMode || 'contain' }
-            />
+            <RX.View
+                style={ [styles.container, { height: this.state.height }] }
+                // onPress={ this.onPressView }
+            >
+                <WebView
+                    ref={ component => this.webView = component! }
+                    scrollEnabled={ false }
+                    originWhitelist={ ['*'] }
+                    source={{
+                        html: this.html,
+                    }}
+                    onMessage={ this.onMessage }
+                    mediaPlaybackRequiresUserAction={ false }
+                    allowsInlineMediaPlayback={ true }
+                    allowsFullscreenVideo={ false }
+                    allowFileAccess={ true }
+                    javaScriptEnabled={ true }
+                    // mixedContentMode={ 'always' }
+                    // androidHardwareAccelerationDisabled={ true }
+                    // androidLayerType={ 'hardware' }
+                    // startInLoadingState
+                    // useWebKit={ true }
+                    // scalesPageToFit={ true }
+                    // allowFileAccessFromFileURLs={ true }
+                    // allowsBackForwardNavigationGestures={ true }
+                    // allowUniversalAccessFromFileURLs={ true }
+                    // allowsLinkPreview={ true }
+                    // injectedJavaScriptForMainFrameOnly={ false }
+                    // javaScriptCanOpenWindowsAutomatically={ true }
+                    // javaScriptEnabledAndroid={true}
+                    // domStorageEnabled={ true }
+                    // pointerEvents={ 'box-only' }
+                />
+            </RX.View>
         );
     }
-
-    private onLoadData = (loadInfo: OnLoadData) => {
-
-        console.log('***********************1')
-        console.log(loadInfo)
-        console.log(this.videoPlayer)
-
-        if (this.props.setDimensions) {
-            // const videoElement = e.target as HTMLVideoElement;
-            this.props.setDimensions(200, 200);
-        }
-    };
 }
