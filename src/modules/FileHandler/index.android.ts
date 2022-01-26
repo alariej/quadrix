@@ -10,6 +10,9 @@ import { FileObject } from '../../models/FileObject';
 import { PermissionsAndroid, PermissionStatus } from 'react-native';
 import ImageSizeLocal from '../ImageSizeLocal';
 import Exif from 'react-native-exif';
+import { Video } from 'react-native-compressor';
+import { compressingVideo, uploadingFile } from '../../translations';
+import UiStore from '../../stores/UiStore';
 
 class FileHandler {
 
@@ -280,6 +283,37 @@ class FileHandler {
                         file.uri = resizedImage.uri;
                     }
                 }
+            }
+        } else if (file.type.includes('video')) {
+
+            const isGranted = await this.requestReadStoragePermission();
+            if (!isGranted) { return Promise.reject(); }
+
+            const compressionProgress = (progress: number) => {
+                fetchProgress(compressingVideo[UiStore.getLanguage()], progress);
+            };
+
+            const response = await Video.compress(
+                file.uri,
+                {
+                    compressionMethod: 'auto',
+                    maxSize: 1024,
+                    minimumFileSizeForCompress: 8,
+                },
+                compressionProgress)
+                .catch(_err => null);
+
+            if (response) {
+
+                let uri = response;
+                if (!response.includes('file:///')) {
+                    uri = response?.replace('file://', 'file:///');
+                }
+
+                const stat = await ReactNativeBlobUtil.fs.stat(uri).catch(_err => null);
+
+                file.uri = uri!;
+                file.size = stat?.size;
             }
         }
 
