@@ -13,6 +13,7 @@ import Exif from 'react-native-exif';
 import { Video } from 'react-native-compressor';
 import { compressingVideo, uploadingFile } from '../../translations';
 import UiStore from '../../stores/UiStore';
+import { FileSystem } from 'react-native-file-access';
 
 class FileHandler {
 
@@ -114,18 +115,18 @@ class FileHandler {
                 return Promise.reject();
             });
 
-        const fileName = message.content.body;
-        const homePath = ReactNativeBlobUtil.fs.dirs.DownloadDir;
-        const homeFilePath = homePath + '/' + fileName;
+        const fileName = message.content.body?.replace(/\s/g, '');
 
-        await ReactNativeBlobUtil.fs.cp(cachedFilePath, homeFilePath)
+        // uses the Android MediaStore API
+        FileSystem.cpExternal(cachedFilePath, fileName!, 'downloads')
+            .then(_response => {
+                onSuccess(true, fileName);
+                return Promise.resolve();
+            })
             .catch(_error => {
                 onSuccess(false);
                 return Promise.reject();
             });
-
-        onSuccess(true, fileName);
-        return Promise.resolve();
     }
 
     public openFileExplorer(onNoAppFound: () => void): void {

@@ -27,7 +27,6 @@
     android:roundIcon="@mipmap/ic_launcher_round"
     android:allowBackup="true"
     android:theme="@style/AppTheme"
-    android:requestLegacyExternalStorage="true"
   >
     <meta-data
       android:name="com.google.firebase.messaging.default_notification_icon"
