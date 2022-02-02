@@ -54,6 +54,7 @@ export const OPAQUE_BACKGROUND = 'rgba(0, 0, 0, 0.7)';
 export const OPAQUE_LIGHT_BACKGROUND = 'rgba(0, 0, 0, 0.3)';
 export const OPAQUE_DARK_BACKGROUND = 'rgba(0, 0, 0, 0.85)';
 export const OPAQUE_DUMMY_BACKGROUND = 'rgba(0, 0, 0, 0.0)';
+export const OPAQUE_WHITE_BACKGROUND = 'rgba(255, 255, 255, 0.2)';
 export const TRANSPARENT_BACKGROUND = 'transparent';
 export const TILE_BACKGROUND = 'whitesmoke';
 export const TILE_BACKGROUND_OWN = '#d6f5d6';

@@ -6,6 +6,8 @@ import { MessageEvent } from '../models/MessageEvent';
 import { SPACING, BUTTON_ROUND_WIDTH, PAGE_MARGIN, BORDER_RADIUS } from '../ui';
 import UiStore from '../stores/UiStore';
 import VideoPlayer from '../modules/VideoPlayer';
+import FullScreenVideo from './FullScreenVideo';
+
 const styles = {
     container: RX.Styles.createViewStyle({
         flex: 1,
@@ -45,11 +47,33 @@ export default class VideoMessage extends RX.Component<VideoMessageProps, RX.Sta
         }
     }
 
+    private showFullScreenVideo = (event: RX.Types.SyntheticEvent) => {
+
+        event.stopPropagation();
+
+        RX.UserInterface.dismissKeyboard();
+
+        let imageRatio = 1;
+        if (this.props.message.content.info!.w && this.props.message.content.info!.h) {
+            imageRatio = this.props.message.content.info!.w / this.props.message.content.info!.h;
+        }
+
+        const fullScreenVideo = (
+            <FullScreenVideo
+                url={ this.url }
+                imageRatio={ imageRatio }
+            />
+        );
+
+        RX.Modal.show(fullScreenVideo, 'fullscreenvideo');
+    }
+
     public render(): JSX.Element | null {
 
         return (
             <RX.View
                 style={ [styles.container, this.heightStyle] }
+                onPress={ this.showFullScreenVideo }
                 onLongPress={ () => this.props.showContextDialog() }
                 onContextMenu={ () => this.props.showContextDialog() }
                 disableTouchOpacityAnimation={ true }
