@@ -23,7 +23,6 @@ interface VideoPlayerState {
 export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPlayerState> {
 
     private html: string;
-    private webView: WebView | undefined;
 
     constructor(props: VideoPlayerProps) {
         super(props);
@@ -69,8 +68,6 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
             `;
     }
 
-    // <button style="position:absolute;height:80px;width:80px;margin:8px onclick="alert('hello')">Press</button>
-
     private onMessage = (message: WebViewMessageEvent) => {
 
         const dimensions = JSON.parse(message.nativeEvent.data) as { height: number, width: number };
@@ -83,30 +80,11 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
         }
     }
 
-    private onPressView = () => {
-
-        const togglePlay =
-            `
-            videoPlayer.requestFullscreen().catch(error => alert(error.message));
-            if (videoPlayer.paused || videoPlayer.ended) {
-                videoPlayer.play();
-            } else {
-                videoPlayer.pause();
-            }
-            `;
-
-        this.webView?.injectJavaScript(togglePlay);
-    }
-
     public render(): JSX.Element {
 
         return (
-            <RX.View
-                style={ [styles.container, { height: this.state.height }] }
-                // onPress={ this.onPressView }
-            >
+            <RX.View style={ [styles.container, { height: this.state.height }] }>
                 <WebView
-                    ref={ component => this.webView = component! }
                     scrollEnabled={ false }
                     originWhitelist={ ['*'] }
                     source={{
@@ -118,21 +96,6 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
                     allowsFullscreenVideo={ false }
                     allowFileAccess={ true }
                     javaScriptEnabled={ true }
-                    // mixedContentMode={ 'always' }
-                    // androidHardwareAccelerationDisabled={ true }
-                    // androidLayerType={ 'hardware' }
-                    // startInLoadingState
-                    // useWebKit={ true }
-                    // scalesPageToFit={ true }
-                    // allowFileAccessFromFileURLs={ true }
-                    // allowsBackForwardNavigationGestures={ true }
-                    // allowUniversalAccessFromFileURLs={ true }
-                    // allowsLinkPreview={ true }
-                    // injectedJavaScriptForMainFrameOnly={ false }
-                    // javaScriptCanOpenWindowsAutomatically={ true }
-                    // javaScriptEnabledAndroid={true}
-                    // domStorageEnabled={ true }
-                    // pointerEvents={ 'box-only' }
                 />
             </RX.View>
         );
