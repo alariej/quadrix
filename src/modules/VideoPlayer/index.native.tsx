@@ -1,18 +1,18 @@
 import React from 'react';
 import RX from 'reactxp';
 import { WebView, WebViewMessageEvent } from 'react-native-webview';
-import { BORDER_RADIUS, DIALOG_WIDTH, SPACING } from '../../ui';
+import { DIALOG_WIDTH, SPACING } from '../../ui';
 
 const styles = {
     container: RX.Styles.createViewStyle({
         flex: 1,
         overflow: 'hidden',
-        borderRadius: BORDER_RADIUS - 2,
     }),
 }
 
 interface VideoPlayerProps {
     uri: string;
+    autoplay: boolean;
     setDimensions?: (videoHeight: number, videoWidth: number) => void;
 }
 
@@ -30,6 +30,8 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
 
         this.state = { height: undefined };
 
+        const autoplay = props.autoplay ? "autoplay" : undefined;
+
         this.html =
             `
             <!DOCTYPE html>
@@ -38,7 +40,7 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
                     <meta charset="utf-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
                 </head>
-                <body style="height: 100%; width: 100%; display: flex; padding: 0px; margin: 0px; backgroundColor: 'orange'">
+                <body style="height: 100%; width: 100%; display: flex; padding: 0px; margin: 0px">
                     <script type="text/javascript">
                         let videoPlayer;
                         const onLoadedMetadata = (height, width) => {
@@ -53,10 +55,12 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
                     </script>
                     <video
                         id="videoPlayer"
+                        style="background-color: black"
                         src="${ props.uri }#t=0.001"
                         onloadedmetadata="onLoadedMetadata(this.videoHeight, this.videoWidth)"
                         height="100%"
                         width="100%"
+                        ${ autoplay! }
                         controls
                         muted
                     />

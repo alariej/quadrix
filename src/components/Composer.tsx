@@ -20,7 +20,7 @@ import { FileObject } from '../models/FileObject';
 import { TemporaryMessage } from '../models/MessageEvent';
 import AppFont from '../modules/AppFont';
 import VideoPlayer from '../modules/VideoPlayer';
-import ProgressDialog from '../modules/ProgressDialog/index.native';
+import ProgressDialog from '../modules/ProgressDialog';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -96,6 +96,12 @@ const styles = {
         backgroundColor: MODAL_CONTENT_BACKGROUND,
         borderRadius: BORDER_RADIUS,
     }),
+    containerVideo: RX.Styles.createViewStyle({
+        flex: 1,
+        overflow: 'hidden',
+        borderRadius: BORDER_RADIUS - 2,
+    }),
+
     image: RX.Styles.createImageStyle({
         flex: 1,
         borderRadius: BORDER_RADIUS - 2,
@@ -495,11 +501,14 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                 }
 
                 content = (
-                    <RX.View style={ styles.containerContent } >
-                        <VideoPlayer
-                            uri={ file.uri }
-                            setDimensions={ setDimensions }
-                        />
+                    <RX.View style={ styles.containerContent }>
+                        <RX.View style={ styles.containerVideo }>
+                            <VideoPlayer
+                                uri={ file.uri }
+                                autoplay={ false }
+                                setDimensions={ setDimensions }
+                            />
+                        </RX.View>
                     </RX.View>
                 );
 
