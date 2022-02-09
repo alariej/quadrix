@@ -12,6 +12,7 @@ const styles = {
 
 interface VideoPlayerProps {
     uri: string;
+    mimeType: string;
     autoplay: boolean;
     setDimensions?: (videoHeight: number, videoWidth: number) => void;
 }
@@ -29,7 +30,7 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
 
         this.state = { height: undefined };
 
-        const autoplay = props.autoplay ? "autoplay" : undefined;
+        const autoplay = props.autoplay ? 'autoplay' : undefined;
 
         this.html =
             `
@@ -39,9 +40,22 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
                     <meta charset="utf-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
                 </head>
+                <style>
+                    *:focus {
+                        outline: 0;
+                        box-shadow: none;
+                    }
+                    .videoControls
+                        :is(media-play-button, media-mute-button, media-time-display) {
+                            opacity: 0.4;
+                            height: 32px;
+                            padding: 6px;
+                            background-color: black;
+                        }
+                </style>
                 <body style="height: 100%; width: 100%; display: flex; padding: 0px; margin: 0px">
+                    <script type="module" src="https://cdn.jsdelivr.net/npm/media-chrome/dist/index.min.js"></script>
                     <script type="text/javascript">
-                        let videoPlayer;
                         const onLoadedMetadata = (height, width) => {
                             const dimensions = {
                                 height: height,
@@ -49,20 +63,31 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
                             }
                             const dimensions_ = JSON.stringify(dimensions);
                             window.ReactNativeWebView.postMessage(dimensions_);
-                            videoPlayer = document.getElementById("videoPlayer");
                         };
                     </script>
-                    <video
-                        id="videoPlayer"
-                        style="background-color: black"
-                        src="${ props.uri }#t=0.001"
-                        onloadedmetadata="onLoadedMetadata(this.videoHeight, this.videoWidth)"
-                        height="100%"
-                        width="100%"
-                        ${ autoplay! }
-                        controls
-                        muted
-                    />
+                    <media-controller autohide="-1" style="height: 100%; width: 100%">
+                        <video
+                            slot="media"
+                            style="background-color: white"
+                            onloadedmetadata="onLoadedMetadata(this.videoHeight, this.videoWidth)"
+                            height="100%"
+                            width="100%"
+                            ${ autoplay! }
+                            disablepictureinpicture
+                            muted
+                            playsinline
+                            webkit-playsinline
+                        >
+                            <source src="${ props.uri }#t=0.001" type="${ props.mimeType }">
+                        </video>
+                        <div style="display: flex; align-self: stretch; justify-content: center;">
+                            <media-control-bar class="videoControls">
+                                <media-play-button></media-play-button>
+                                <media-mute-button></media-mute-button>
+                                <media-time-display show-duration></media-time-display>
+                            </media-control-bar>
+                        </div>
+                    </media-controller>
                 </body>
             </html>
             `;
@@ -70,9 +95,8 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
 
     private onMessage = (message: WebViewMessageEvent) => {
 
-        const dimensions = JSON.parse(message.nativeEvent.data) as { height: number, width: number };
-
         if (this.props.setDimensions) {
+            const dimensions = JSON.parse(message.nativeEvent.data) as { height: number, width: number };
             this.setState({
                 height: (dimensions.height * (DIALOG_WIDTH - 2 * SPACING) / dimensions.width),
             });
