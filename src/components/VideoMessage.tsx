@@ -61,6 +61,7 @@ export default class VideoMessage extends RX.Component<VideoMessageProps, RX.Sta
         const fullScreenVideo = (
             <FullScreenVideo
                 url={ this.url }
+                mimeType={ this.props.message.content.info?.mimetype || 'video/mp4' }
                 imageRatio={ imageRatio }
             />
         );
@@ -82,7 +83,11 @@ export default class VideoMessage extends RX.Component<VideoMessageProps, RX.Sta
                     style={ styles.videoContainer }
                     blockPointerEvents={ true }
                 >
-                    <VideoPlayer uri={ this.url } autoplay={ false }/>
+                    <VideoPlayer
+                        uri={ this.url }
+                        mimeType={ this.props.message.content.info?.mimetype || 'video/mp4' }
+                        autoplay={ false }
+                    />
                 </RX.View>
             </RX.View>
         );

@@ -308,6 +308,7 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
                     <RX.View style={ styles.containerContent } >
                         <VideoPlayer
                             uri={ this.props.sharedContent.uri }
+                            mimeType={ this.props.sharedContent.mimeType || 'video/mp4' }
                             autoplay={ false }
                             setDimensions={ setDimensions }
                         />

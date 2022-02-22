@@ -29,6 +29,7 @@ const styles = {
 
 interface FullScreenVideoProps {
     url: string;
+    mimeType: string;
     imageRatio: number;
 }
 
@@ -103,8 +104,11 @@ export default class FullScreenVideo extends RX.Component<FullScreenVideoProps, 
         return (
             <RX.View style={ [styles.modalView, this.alignStyle] }>
                 <RX.View style={{ height: this.appHeight, width: this.appWidth }}>
-                    <VideoPlayer uri={ this.props.url } autoplay={ true }/>
-                </RX.View>
+                    <VideoPlayer
+                        uri={ this.props.url }
+                        mimeType={ this.props.mimeType || 'video/mp4' }
+                        autoplay={ true }
+                    />
                 { closeButton }
             </RX.View>
         )

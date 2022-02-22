@@ -505,6 +505,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                         <RX.View style={ styles.containerVideo }>
                             <VideoPlayer
                                 uri={ file.uri }
+                                mimeType={ file.type || 'video/mp4' }
                                 autoplay={ false }
                                 setDimensions={ setDimensions }
                             />

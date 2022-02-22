@@ -7,6 +7,7 @@ const video: React.CSSProperties = {
 
 interface VideoPlayerProps {
     uri: string;
+    mimeType: string;
     autoplay: boolean;
     setDimensions?: (videoHeight: number, videoWidth: number) => void;
 }
