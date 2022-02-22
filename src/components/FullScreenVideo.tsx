@@ -3,8 +3,7 @@ import RX from 'reactxp';
 import ScreenOrientation from '../modules/ScreenOrientation';
 import VideoPlayer from '../modules/VideoPlayer';
 import UiStore from '../stores/UiStore';
-import { LOGO_BACKGROUND, OBJECT_MARGIN, OPAQUE_DARK_BACKGROUND, OPAQUE_WHITE_BACKGROUND } from '../ui';
-import IconSvg, { SvgFile } from './IconSvg';
+import { OPAQUE_DARK_BACKGROUND, TRANSPARENT_BACKGROUND } from '../ui';
 
 const styles = {
     modalView: RX.Styles.createViewStyle({
@@ -15,14 +14,11 @@ const styles = {
     }),
     closeButton: RX.Styles.createButtonStyle({
         position: 'absolute',
-        top: OBJECT_MARGIN,
-        right: OBJECT_MARGIN,
-        width: 32,
-        height: 32,
-        borderRadius: 32 / 2,
-        backgroundColor: OPAQUE_WHITE_BACKGROUND,
-        justifyContent: 'center',
-        alignItems: 'center',
+        top: -200,
+        bottom: 50,
+        left: 0,
+        right: 0,
+        backgroundColor: TRANSPARENT_BACKGROUND,
         cursor: 'pointer',
     }),
 }
@@ -52,7 +48,7 @@ export default class FullScreenVideo extends RX.Component<FullScreenVideoProps, 
             this.alignStyle = RX.Styles.createViewStyle({
                 justifyContent: 'center',
             }, false);
-        } else if (screenImageRatio > 1 && screenImageRatio < 1.10) {
+        } else if (screenImageRatio > 1 && screenImageRatio < 1.10 && UiStore.getPlatform() !== 'android') {
             this.appWidth = appLayout.screenWidth;
             this.appHeight = appLayout.screenWidth / props.imageRatio;
             this.alignStyle = RX.Styles.createViewStyle({
@@ -78,27 +74,13 @@ export default class FullScreenVideo extends RX.Component<FullScreenVideoProps, 
 
     public render(): JSX.Element | null {
 
-        const isWeb = UiStore.getPlatform() === 'web';
-
-        const rotateStyle = RX.Styles.createViewStyle({
-            transform: [{ rotate: '45deg' }],
-        }, false);
-
         const closeButton = (
             <RX.Button
-                style={ [styles.closeButton, isWeb ? rotateStyle : undefined] }
+                style={ styles.closeButton }
                 onPress={ this.onPressCloseButton }
                 disableTouchOpacityAnimation={ true }
                 activeOpacity={ 1 }
-            >
-                <IconSvg
-                    source= { require('../resources/svg/plus.json') as SvgFile }
-                    style={ !isWeb ? rotateStyle : undefined }
-                    fillColor={ LOGO_BACKGROUND }
-                    height={ 16 }
-                    width={ 16 }
-                />
-            </RX.Button>
+            />
         );
 
         return (
@@ -109,7 +91,8 @@ export default class FullScreenVideo extends RX.Component<FullScreenVideoProps, 
                         mimeType={ this.props.mimeType || 'video/mp4' }
                         autoplay={ true }
                     />
-                { closeButton }
+                    { closeButton }
+                </RX.View>
             </RX.View>
         )
     }
