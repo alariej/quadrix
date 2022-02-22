@@ -54,7 +54,7 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
                         }
                 </style>
                 <body style="height: 100%; width: 100%; display: flex; padding: 0px; margin: 0px">
-                    <script type="module" src="https://cdn.jsdelivr.net/npm/media-chrome/dist/index.min.js"></script>
+                    <script type="module" src="https://cdn.jsdelivr.net/npm/media-chrome@0.5.0/dist/index.min.js"></script>
                     <script type="text/javascript">
                         const onLoadedMetadata = (height, width) => {
                             const dimensions = {
