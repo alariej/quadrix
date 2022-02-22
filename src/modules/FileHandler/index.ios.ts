@@ -9,8 +9,9 @@ import ImageResizer, { Response as ImageResizerResponse, ResizeFormat } from "re
 import { FileObject } from '../../models/FileObject';
 import ImageSizeLocal from '../ImageSizeLocal';
 import * as ImagePicker from 'react-native-image-picker';
-import { uploadingFile } from '../../translations';
+import { compressingVideo, uploadingFile } from '../../translations';
 import UiStore from '../../stores/UiStore';
+import { Video } from 'react-native-compressor';
 
 class FileHandler {
 
@@ -113,7 +114,7 @@ class FileHandler {
     }
 
     public viewFile(message: MessageEvent, fetchProgress: (progress: number) => void,
-        onSuccess: (success: boolean) => void, onNoAppFound: () => void): void {
+        onSuccess: (success: boolean) => void, _onNoAppFound: () => void): void {
 
         this.cacheFile(message, fetchProgress)
             .then(response => {
@@ -121,10 +122,15 @@ class FileHandler {
                 onSuccess(true);
 
                 setTimeout(() => {
+
+                    // submit PR to react-native-blob-util?
+                    ReactNativeBlobUtil.ios.openDocument(response);
+                    /*
                     ReactNativeBlobUtil.ios.openDocument(response)
                         .catch(_error => {
                             onNoAppFound();
                         })
+                    */
                 }, 250);
             })
             .catch(_error => onSuccess(false) );
@@ -212,10 +218,31 @@ class FileHandler {
             ).catch(_error => null);
 
             if (resizedImage) {
-                file.imageHeight = resizedImage.height;
-                file.imageWidth = resizedImage.width;
-                file.size = resizedImage.size;
                 file.uri = resizedImage.path;
+            }
+        } else if (file.type.includes('video')) {
+
+            const compressionProgress = (progress: number) => {
+                fetchProgress(compressingVideo[UiStore.getLanguage()], progress);
+            };
+
+            const response = await Video.compress(
+                file.uri,
+                {
+                    compressionMethod: 'auto',
+                    maxSize: 1024,
+                    minimumFileSizeForCompress: 5,
+                },
+                compressionProgress
+            )
+                .catch(_err => null);
+
+            if (response) {
+
+                const stat = await ReactNativeBlobUtil.fs.stat(response.replace('file://', '')).catch(_err => null);
+
+                file.uri = response;
+                file.size = stat?.size;
             }
         }
 
