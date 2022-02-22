@@ -30,6 +30,8 @@
 				<integer>1</integer>
 				<key>NSExtensionActivationSupportsImageWithMaxCount</key>
 				<integer>1</integer>
+				<key>NSExtensionActivationSupportsMovieWithMaxCount</key>
+				<integer>1</integer>
 				<key>NSExtensionActivationSupportsText</key>
 				<true/>
 				<key>NSExtensionActivationSupportsWebURLWithMaxCount</key>
@@ -38,6 +40,7 @@
 			<key>PHSupportedMediaTypes</key>
 			<array>
 				<string>Image</string>
+				<string>Video</string>
 			</array>
 		</dict>
 		<key>NSExtensionMainStoryboard</key>

@@ -6,6 +6,7 @@ class ShareViewController: SLComposeServiceViewController {
 
 	var sharedContent: [sharedContentType] = []
 	let typeImage = kUTTypeImage as String
+	let typeMovie = kUTTypeMovie as String
 	let typeText = kUTTypeText as String
 	let typeUrl = kUTTypeURL as String
 	let typeFile = kUTTypeFileURL as String;
@@ -26,6 +27,8 @@ class ShareViewController: SLComposeServiceViewController {
 				for (index, attachment) in (attachments).enumerated() {
 					if attachment.hasItemConformingToTypeIdentifier(typeImage) {
 						handleMedia(content: content, attachment: attachment, mediaType: typeImage, index: index)
+					} else if attachment.hasItemConformingToTypeIdentifier(typeMovie) {
+						handleMedia(content: content, attachment: attachment, mediaType: typeMovie, index: index)
 					} else if attachment.hasItemConformingToTypeIdentifier(typeFile) {
 						handleMedia(content: content, attachment: attachment, mediaType: typeFile, index: index)
 					} else if attachment.hasItemConformingToTypeIdentifier(typeUrl) {
