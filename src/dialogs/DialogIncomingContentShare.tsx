@@ -15,9 +15,9 @@ import DataStore from '../stores/DataStore';
 import { MessageEventContentInfo_, MessageEventContent_ } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
 import ImageSizeLocal from '../modules/ImageSizeLocal';
-import SpinnerUtils from '../utils/SpinnerUtils';
 import AppFont from '../modules/AppFont';
 import VideoPlayer from '../modules/VideoPlayer';
+import ProgressDialog from '../modules/ProgressDialog';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -60,6 +60,8 @@ interface DialogIncomingContentShareProps {
 
 interface DialogIncomingContentShareState {
     imageRatio: number;
+    showProgress: boolean;
+    progressValue: number;
 }
 
 export default class DialogIncomingContentShare extends RX.Component<DialogIncomingContentShareProps, DialogIncomingContentShareState> {
@@ -70,6 +72,7 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
     private language: Languages = 'en';
     private videoHeight: number | undefined;
     private videoWidth: number | undefined;
+    private progressText = '';
 
     constructor(props: DialogIncomingContentShareProps) {
         super(props);
@@ -84,7 +87,7 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
             this.contentType = 'm.video';
         }
 
-        this.state = { imageRatio: 1 }
+        this.state = { imageRatio: 1, showProgress: false, progressValue: 0 }
 
         this.language = UiStore.getLanguage();
     }
@@ -103,10 +106,6 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
     }
 
     private shareContent = async () => {
-
-        RX.Modal.dismiss('dialogIncomingContentShare');
-
-        SpinnerUtils.showModalSpinner('forwardmessagespinner');
 
         const showError = (tempId: string, errorMessage: string) => {
 
@@ -184,7 +183,8 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
             const tempId = 'media' + Date.now();
 
             const fetchProgress = (_text: string, _progress: number) => {
-                // not used yet
+                this.progressText = _text;
+                this.setState({ progressValue: _progress });
             }
 
             const content = {
@@ -202,6 +202,8 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
 
             this.props.showTempForwardedMessage(this.props.roomId, message, tempId);
 
+            this.setState({ showProgress: true });
+
             const file: FileObject = {
                 uri: this.props.sharedContent.uri,
                 name: this.props.sharedContent.fileName!,
@@ -213,6 +215,14 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
 
             FileHandler.uploadFile(ApiClient.credentials, file, fetchProgress, true)
                 .then(fileUri => {
+
+                    this.setState({
+                        showProgress: false,
+                        progressValue: 0,
+                    });
+                    this.progressText = '';
+
+                    RX.Modal.dismiss('dialogIncomingContentShare');
 
                     if (fileUri) {
                         const messageType = EventUtils.messageMediaType(file.type);
@@ -252,6 +262,7 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
 
                         ApiClient.sendMessage(this.props.roomId, messageContent, tempId)
                             .catch(() => {
+                                RX.Modal.dismiss('dialogIncomingContentShare');
                                 showError(tempId, messageCouldNotBeSent[this.language]);
                             });
 
@@ -260,6 +271,7 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
                     }
                 })
                 .catch(_error => {
+                    RX.Modal.dismiss('dialogIncomingContentShare');
                     showError(tempId, fileCouldNotUpload[this.language])
                 });
         }
@@ -269,9 +281,17 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
 
         const newestRoomEvent = DataStore.getNewRoomEvents(this.props.roomId)[0];
 
-        let content: ReactElement;
+        let progressDialog: ReactElement | undefined = undefined;
+        let content: ReactElement | undefined = undefined;
 
-        if (this.contentType === 'm.image') {
+        if (this.state.showProgress) {
+            progressDialog = (
+                <ProgressDialog
+                    text={ this.progressText }
+                    value={ this.state.progressValue }
+                />
+            )
+        } else if (this.contentType === 'm.image') {
 
             const heightStyle = RX.Styles.createViewStyle({
                 height: (DIALOG_WIDTH - 2 * SPACING) * this.state.imageRatio,
@@ -361,22 +381,26 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
 
         const roomType = DataStore.getRoomType(this.props.roomId);
 
-        const shareDialog = (
-            <DialogContainer
-                content={ content }
-                confirmButton={ true }
-                confirmButtonText={ roomType === 'notepad' ? pressLoad[this.language] : pressSend[this.language] }
-                cancelButton={ true }
-                cancelButtonText={ cancel[this.language] }
-                onConfirm={ this.shareContent }
-                onCancel={ () => RX.Modal.dismissAll() }
-                backgroundColorContent={ TRANSPARENT_BACKGROUND }
-            />
-        )
+        let shareDialog: ReactElement | undefined;
+        if (!this.state.showProgress) {
+            shareDialog = (
+                <DialogContainer
+                    content={ content! }
+                    confirmButton={ true }
+                    confirmButtonText={ roomType === 'notepad' ? pressLoad[this.language] : pressSend[this.language] }
+                    cancelButton={ true }
+                    cancelButtonText={ cancel[this.language] }
+                    onConfirm={ this.shareContent }
+                    onCancel={ () => RX.Modal.dismissAll() }
+                    backgroundColorContent={ TRANSPARENT_BACKGROUND }
+                />
+            )
+        }
 
         return (
             <RX.View style={ styles.modalScreen }>
                 { shareDialog }
+                { progressDialog }
             </RX.View>
         );
     }
