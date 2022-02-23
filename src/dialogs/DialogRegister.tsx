@@ -450,7 +450,7 @@ export default class DialogRegister extends RX.Component<DialogRegisterProps, Di
                 style={ styles.spinnerContainer }
                 blockPointerEvents={ !this.state.showSpinner }
             >
-                <Spinner isVisible={ this.state.showSpinner ? true : false } />
+                <Spinner isVisible={ this.state.showSpinner } />
             </RX.View>
         );
 

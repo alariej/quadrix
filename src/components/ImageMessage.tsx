@@ -134,7 +134,7 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
                 style={ styles.spinnerContainer }
                 blockPointerEvents={ !this.state.showSpinner }
             >
-                <Spinner isVisible={ this.state.showSpinner ? true : false } />
+                <Spinner isVisible={ this.state.showSpinner } />
             </RX.View>
         );
 

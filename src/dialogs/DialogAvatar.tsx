@@ -287,7 +287,7 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
                 style={ styles.spinnerContainer }
                 blockPointerEvents={ !this.state.showSpinner }
             >
-                <Spinner isVisible={ this.state.showSpinner ? true : false } />
+                <Spinner isVisible={ this.state.showSpinner } />
             </RX.View>
         );
 
