@@ -3,7 +3,7 @@ import RX from 'reactxp';
 import DialogContainer from '../modules/DialogContainer';
 import ApiClient from '../matrix/ApiClient';
 import { MessageEvent } from '../models/MessageEvent';
-import FileHandler from '../modules/FileHandler';
+import FileHandler, { UploadResponse } from '../modules/FileHandler';
 import { DIALOG_WIDTH, SPACING, BUTTON_MODAL_TEXT, FONT_LARGE, BORDER_RADIUS, TRANSPARENT_BACKGROUND,
     MODAL_CONTENT_BACKGROUND } from '../ui';
 import UiStore from '../stores/UiStore';
@@ -214,7 +214,7 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
             }
 
             FileHandler.uploadFile(ApiClient.credentials, file, fetchProgress, true)
-                .then(response => {
+                .then((response: UploadResponse) => {
 
                     this.setState({
                         showProgress: false,

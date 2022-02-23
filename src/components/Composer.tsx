@@ -4,7 +4,7 @@ import { APP_ID } from '../appconfig';
 import { EMOJI_TEXT, INPUT_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, BUTTON_ROUND_WIDTH, LOGO_BACKGROUND,
     BUTTON_COMPOSER_WIDTH, OPAQUE_BACKGROUND, COMPOSER_BORDER, DIALOG_WIDTH, MODAL_CONTENT_BACKGROUND, FONT_EMOJI_LARGE,
     BUTTON_HEIGHT, OBJECT_MARGIN, TILE_BACKGROUND } from '../ui';
-import FileHandler from '../modules/FileHandler';
+import FileHandler, { UploadResponse } from '../modules/FileHandler';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
 import { ComponentBase } from 'resub';
@@ -384,7 +384,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
         this.setState({ showProgress: true });
 
         FileHandler.uploadFile(ApiClient.credentials, file, fetchProgress)
-            .then(response => {
+            .then((response: UploadResponse) => {
 
                 this.setState({
                     showProgress: false,
