@@ -15,6 +15,8 @@ class SpinnerUtils {
 
     public dismissModalSpinner = (id: string) => {
 
+        if (!this.modalTimer[id]) { return }
+
         const d = new Date();
         const t = d.getTime() - this.modalTimer[id].getTime();
 
