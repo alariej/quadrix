@@ -363,15 +363,15 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
             // not used yet
         }
 
-        const fileUri = await FileHandler.uploadFile(ApiClient.credentials, this.avatarFile, fetchProgress)
+        const response = await FileHandler.uploadFile(ApiClient.credentials, this.avatarFile, fetchProgress)
             .catch(error => { return Promise.reject(error) });
 
-        if (!fileUri) { return Promise.reject('No URI found') }
+        if (!response.uri) { return Promise.reject('No URI found') }
 
-        await ApiClient.setProfileAvatarUrl(ApiClient.credentials.userIdFull, fileUri)
+        await ApiClient.setProfileAvatarUrl(ApiClient.credentials.userIdFull, response.uri)
             .catch(error => { return Promise.reject(error) });
 
-        this.avatarUrl = EventUtils.mxcToHttp(fileUri, ApiClient.credentials.homeServer);
+        this.avatarUrl = EventUtils.mxcToHttp(response.uri, ApiClient.credentials.homeServer);
 
         this.avatarFile = undefined;
 
