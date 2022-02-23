@@ -241,7 +241,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 
             RX.Modal.show(<DialogContainer content={ text } modalId={ 'errordialog' }/>, 'errordialog');
 
-            this.props.showTempForwardedMessage!(this.props.roomId, undefined, '');
+            this.props.showTempForwardedMessage!(roomId, undefined, '');
         }
 
         if (this.props.event.content.msgtype === 'm.text') {
@@ -275,7 +275,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                 url: this.props.event.content.url,
             }
 
-            ApiClient.sendMessage(this.props.roomId, messageContent, tempId)
+            ApiClient.sendMessage(roomId, messageContent, tempId)
                 .catch(_error => {
                     showError();
                 });
