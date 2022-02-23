@@ -15,7 +15,7 @@ import { compressingVideo, uploadingFile } from '../../translations';
 import UiStore from '../../stores/UiStore';
 import { FileSystem } from 'react-native-file-access';
 
-interface UploadResponse {
+export interface UploadResponse {
     uri: string;
     fileName: string | undefined;
     fileSize: number | undefined;

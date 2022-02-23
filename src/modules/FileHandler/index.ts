@@ -21,7 +21,7 @@ declare global {
     }
 }
 
-interface UploadResponse {
+export interface UploadResponse {
     uri: string;
     fileName: string | undefined;
     fileSize: number | undefined;
