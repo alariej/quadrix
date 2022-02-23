@@ -21,6 +21,13 @@ declare global {
     }
 }
 
+interface UploadResponse {
+    uri: string;
+    fileName: string | undefined;
+    fileSize: number | undefined;
+    mimeType: string | undefined
+}
+
 class FileHandler {
 
     public cacheAppFolder = '';
@@ -254,7 +261,7 @@ class FileHandler {
     }
 
     public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (text: string, progress: number) => void,
-        _isIntent = false): Promise<string> {
+        _isIntent = false): Promise<UploadResponse> {
 
         const axiosInstance = axios.create({
             baseURL: 'https://' + credentials.homeServer,
@@ -307,7 +314,15 @@ class FileHandler {
             .catch(error => { return Promise.reject(error) });
 
         if (response.status === 200) {
-            return Promise.resolve(response.data.content_uri);
+
+            const uploadResponse = {
+                uri: response.data.content_uri,
+                fileName: undefined,
+                fileSize: undefined,
+                mimeType: undefined
+            }
+
+            return Promise.resolve(uploadResponse);
         } else {
             return Promise.reject(response);
         }

@@ -384,7 +384,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
         this.setState({ showProgress: true });
 
         FileHandler.uploadFile(ApiClient.credentials, file, fetchProgress)
-            .then(fileUri => {
+            .then(response => {
 
                 this.setState({
                     showProgress: false,
@@ -392,7 +392,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                 });
                 this.progressText = '';
 
-                if (fileUri) {
+                if (response.uri) {
 
                     const messageType = EventUtils.messageMediaType(file.type);
                     let mediaHeight: number | undefined;
@@ -418,15 +418,15 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     const messageContentInfo: MessageEventContentInfo_ = {
                         h: mediaHeight,
                         w: mediaWidth,
-                        size: file.size!,
-                        mimetype: file.type,
+                        size: response.fileSize || file.size!,
+                        mimetype: response.mimeType || file.type,
                     }
 
                     const messageContent: MessageEventContent_ = {
                         msgtype: messageType,
-                        body: file.name,
+                        body: response.fileName || file.name,
                         info: messageContentInfo,
-                        url: fileUri,
+                        url: response.uri,
                     }
 
                     ApiClient.sendMessage(this.props.roomId, messageContent, tempId)
@@ -679,7 +679,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
         RX.Popup.show(popupOptions, 'emojiPicker', 0);
     }
 
-    public render(): JSX.Element | null {
+    public render(): ReactElement | null {
 
         const disabledOpacity = 0.4;
 

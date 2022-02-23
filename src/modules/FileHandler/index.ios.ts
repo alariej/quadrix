@@ -13,6 +13,13 @@ import { compressingVideo, uploadingFile } from '../../translations';
 import UiStore from '../../stores/UiStore';
 import { Video } from 'react-native-compressor';
 
+interface UploadResponse {
+    uri: string;
+    fileName: string | undefined;
+    fileSize: number | undefined;
+    mimeType: string | undefined;
+}
+
 class FileHandler {
 
     public cacheAppFolder = '';
@@ -193,7 +200,11 @@ class FileHandler {
     }
 
     public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (text: string, progress: number) => void,
-        _isIntent = false): Promise<string> {
+        _isIntent = false): Promise<UploadResponse> {
+
+        let fileName: string | undefined;
+        let fileSize: number | undefined;
+        let mimeType: string | undefined;
 
         let resizedImage: ImageResizerResponse | null;
         if (file.type.includes('image')) {
@@ -242,7 +253,9 @@ class FileHandler {
                 const stat = await ReactNativeBlobUtil.fs.stat(response.replace('file://', '')).catch(_err => null);
 
                 file.uri = response;
-                file.size = stat?.size;
+                fileName = file.name.split('.')[0] + '.mp4';
+                fileSize = stat?.size;
+                mimeType = 'video/mp4';
             }
         }
 
@@ -266,7 +279,15 @@ class FileHandler {
 
         if (response.respInfo.status === 200) {
             const data = JSON.parse(response.data) as { content_uri: string };
-            return Promise.resolve(data.content_uri);
+
+            const uploadResponse = {
+                uri: data.content_uri,
+                fileName: fileName,
+                fileSize: fileSize,
+                mimeType: mimeType
+            }
+
+            return Promise.resolve(uploadResponse);
         } else {
             return Promise.reject(response);
         }

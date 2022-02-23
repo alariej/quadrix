@@ -214,7 +214,7 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
             }
 
             FileHandler.uploadFile(ApiClient.credentials, file, fetchProgress, true)
-                .then(fileUri => {
+                .then(response => {
 
                     this.setState({
                         showProgress: false,
@@ -224,7 +224,7 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
 
                     RX.Modal.dismiss('dialogIncomingContentShare');
 
-                    if (fileUri) {
+                    if (response.uri) {
                         const messageType = EventUtils.messageMediaType(file.type);
                         let mediaHeight: number | undefined;
                         let mediaWidth: number | undefined;
@@ -249,15 +249,15 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
                         const messageContentInfo: MessageEventContentInfo_ = {
                             h: mediaHeight,
                             w: mediaWidth,
-                            size: file.size!,
-                            mimetype: file.type,
+                            size: response.fileSize || file.size!,
+                            mimetype: response.mimeType || file.type,
                         }
 
                         const messageContent: MessageEventContent_ = {
                             msgtype: messageType,
-                            body: file.name,
+                            body: response.fileName || file.name,
                             info: messageContentInfo,
-                            url: fileUri,
+                            url: response.uri,
                         }
 
                         ApiClient.sendMessage(this.props.roomId, messageContent, tempId)
@@ -277,7 +277,7 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
         }
     }
 
-    public render(): JSX.Element | null {
+    public render(): ReactElement | null {
 
         const newestRoomEvent = DataStore.getNewRoomEvents(this.props.roomId)[0];
 
