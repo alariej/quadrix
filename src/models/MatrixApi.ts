@@ -83,18 +83,20 @@ export interface MessageEvent_ {
     _redacted?: boolean,
 }
 
+export interface ThumbnailInfo_ {
+    mimetype: string,
+    size: number,
+    h: number,
+    w: number
+}
+
 export interface MessageEventContentInfo_ {
     mimetype?: string,
     size?: number,
     h?: number,
     w?: number,
     thumbnail_url?: string,
-    thumbnail_info?: {
-        mimetype?: string,
-        size?: number,
-        h?: number,
-        w?: number
-    },
+    thumbnail_info?: ThumbnailInfo_,
 }
 
 export interface MessageEventContent_ {
