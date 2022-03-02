@@ -60,7 +60,7 @@ class ShareViewController: SLComposeServiceViewController {
 			var filePath: URL?
 			var isCopied: Bool = false
 
-			let cachePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.ios.share.extension")!
+			let cachePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.chat.quadrix.ios")!
 
 			// NSLog("cachePath \(cachePath)")
 
