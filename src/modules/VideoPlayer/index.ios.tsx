@@ -119,6 +119,8 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
 
         if (!this.isLocalUri) { return; }
 
+        const mimeType = this.props.mimeType === 'video/*' ? 'video/mp4' : this.props.mimeType;
+
         const videoPathTemp = ReactNativeBlobUtil.fs.dirs.CacheDir + '/temp.xyz';
 
         const tempExists = await ReactNativeBlobUtil.fs.exists(videoPathTemp).catch(_err => null);
@@ -175,7 +177,7 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
                             playsinline
                             webkit-playsinline
                         >
-                            <source src="${ videoPathTemp }#t=0.001" type="${ this.props.mimeType }">
+                            <source src="${ videoPathTemp }#t=0.001" type="${ mimeType }">
                         </video>
                         <div style="display: flex; align-self: stretch; justify-content: center;">
                             <media-control-bar class="videoControls">
