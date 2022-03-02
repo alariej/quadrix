@@ -12,13 +12,8 @@ import * as ImagePicker from 'react-native-image-picker';
 import { compressingVideo, uploadingFile } from '../../translations';
 import UiStore from '../../stores/UiStore';
 import { Video } from 'react-native-compressor';
-
-export interface UploadResponse {
-    uri: string;
-    fileName: string | undefined;
-    fileSize: number | undefined;
-    mimeType: string | undefined;
-}
+import { ThumbnailInfo, UploadFileInfo } from '../../models/UploadFileInfo';
+import { createThumbnail } from 'react-native-create-thumbnail';
 
 class FileHandler {
 
@@ -200,11 +195,15 @@ class FileHandler {
     }
 
     public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (text: string, progress: number) => void,
-        _isIntent = false): Promise<UploadResponse> {
+        _isIntent = false): Promise<UploadFileInfo> {
+
+        const url = 'https://' + credentials.homeServer + PREFIX_UPLOAD;
 
         let fileName: string | undefined;
         let fileSize: number | undefined;
         let mimeType: string | undefined;
+        let thumbnailUrl: string | undefined;
+        let thumbnailInfo: ThumbnailInfo | undefined;
 
         let resizedImage: ImageResizerResponse | null;
         if (file.type.includes('image')) {
@@ -237,29 +236,57 @@ class FileHandler {
                 fetchProgress(compressingVideo[UiStore.getLanguage()], progress);
             };
 
-            const response = await Video.compress(
+            const compressUri = await Video.compress(
                 file.uri,
                 {
                     compressionMethod: 'auto',
                     maxSize: 1024,
                     minimumFileSizeForCompress: 5,
                 },
-                compressionProgress
+                compressionProgress,
             )
                 .catch(_err => null);
 
-            if (response) {
+            if (compressUri) {
 
-                const stat = await ReactNativeBlobUtil.fs.stat(response.replace('file://', '')).catch(_err => null);
+                const stat = await ReactNativeBlobUtil.fs.stat(compressUri.replace('file://', '')).catch(_err => null);
 
-                file.uri = response;
+                file.uri = compressUri;
                 fileName = file.name.split('.')[0] + '.mp4';
                 fileSize = stat?.size;
                 mimeType = 'video/mp4';
             }
-        }
 
-        const url = 'https://' + credentials.homeServer + PREFIX_UPLOAD;
+            const thumbnail = await createThumbnail({ url: file.uri }).catch();
+
+            if (thumbnail) {
+                thumbnailInfo = {
+                    mimeType: thumbnail.mime,
+                    fileSize: thumbnail.size,
+                    height: thumbnail.height,
+                    width: thumbnail.width,
+                }
+
+                const fetchPost: { respInfo: { status: number }, data: string } = await ReactNativeBlobUtil.fetch('POST', url, {
+
+                    Authorization: 'Bearer ' + credentials.accessToken,
+                    'Content-Type': 'application/octet-stream',
+
+                }, ReactNativeBlobUtil.wrap(thumbnail.path))
+                    .uploadProgress({ interval: 100 }, (_written, _total) => {
+                        // not used in this case
+                    })
+                    .catch(error => { return Promise.reject(error) })
+                    .finally(() => {
+                        ReactNativeBlobUtil.fs.unlink(thumbnailUrl!).catch(_error => null);
+                    });
+
+                if (fetchPost.respInfo.status === 200) {
+                    const data = JSON.parse(fetchPost.data) as { content_uri: string };
+                    thumbnailUrl = data.content_uri;
+                }
+            }
+        }
 
         const response: { respInfo: { status: number }, data: string} = await ReactNativeBlobUtil.fetch('POST', url, {
 
@@ -280,14 +307,16 @@ class FileHandler {
         if (response.respInfo.status === 200) {
             const data = JSON.parse(response.data) as { content_uri: string };
 
-            const uploadResponse = {
+            const uploadFileInfo: UploadFileInfo = {
                 uri: data.content_uri,
                 fileName: fileName,
                 fileSize: fileSize,
-                mimeType: mimeType
+                mimeType: mimeType,
+                thumbnailUrl: thumbnailUrl,
+                thumbnailInfo: thumbnailInfo
             }
 
-            return Promise.resolve(uploadResponse);
+            return Promise.resolve(uploadFileInfo);
         } else {
             return Promise.reject(response);
         }

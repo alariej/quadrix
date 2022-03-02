@@ -4,7 +4,7 @@ import { APP_ID } from '../appconfig';
 import { EMOJI_TEXT, INPUT_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, BUTTON_ROUND_WIDTH, LOGO_BACKGROUND,
     BUTTON_COMPOSER_WIDTH, OPAQUE_BACKGROUND, COMPOSER_BORDER, DIALOG_WIDTH, MODAL_CONTENT_BACKGROUND, FONT_EMOJI_LARGE,
     BUTTON_HEIGHT, OBJECT_MARGIN, TILE_BACKGROUND } from '../ui';
-import FileHandler, { UploadResponse } from '../modules/FileHandler';
+import FileHandler from '../modules/FileHandler';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
 import { ComponentBase } from 'resub';
@@ -15,12 +15,13 @@ import { messageCouldNotBeSent, cancel, wrote, sending, clickHereOrPressShftEnte
 import IconSvg, { SvgFile } from './IconSvg';
 import EmojiPicker from './EmojiPicker';
 import EventUtils from '../utils/EventUtils';
-import { MessageEventContentInfo_, MessageEventContent_, RoomType } from '../models/MatrixApi';
+import { MessageEventContentInfo_, MessageEventContent_, RoomType, ThumbnailInfo_ } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
 import { TemporaryMessage } from '../models/MessageEvent';
 import AppFont from '../modules/AppFont';
 import VideoPlayer from '../modules/VideoPlayer';
 import ProgressDialog from '../modules/ProgressDialog';
+import { UploadFileInfo } from '../models/UploadFileInfo';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -384,7 +385,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
         this.setState({ showProgress: true });
 
         FileHandler.uploadFile(ApiClient.credentials, file, fetchProgress)
-            .then((response: UploadResponse) => {
+            .then((response: UploadFileInfo) => {
 
                 this.setState({
                     showProgress: false,
@@ -415,11 +416,23 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                             break;
                     }
 
+                    let thumbnailInfo: ThumbnailInfo_ | undefined;
+                    if (response.thumbnailInfo) {
+                        thumbnailInfo = {
+                            mimetype: response.thumbnailInfo.mimeType,
+                            size: response.thumbnailInfo.fileSize,
+                            h: response.thumbnailInfo.height,
+                            w: response.thumbnailInfo.width,
+                        }
+                    }
+
                     const messageContentInfo: MessageEventContentInfo_ = {
                         h: mediaHeight,
                         w: mediaWidth,
                         size: response.fileSize || file.size!,
                         mimetype: response.mimeType || file.type,
+                        thumbnail_url: response.thumbnailUrl || undefined,
+                        thumbnail_info: thumbnailInfo || undefined,
                     }
 
                     const messageContent: MessageEventContent_ = {

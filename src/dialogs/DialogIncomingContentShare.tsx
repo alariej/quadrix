@@ -3,7 +3,7 @@ import RX from 'reactxp';
 import DialogContainer from '../modules/DialogContainer';
 import ApiClient from '../matrix/ApiClient';
 import { MessageEvent } from '../models/MessageEvent';
-import FileHandler, { UploadResponse } from '../modules/FileHandler';
+import FileHandler from '../modules/FileHandler';
 import { DIALOG_WIDTH, SPACING, BUTTON_MODAL_TEXT, FONT_LARGE, BORDER_RADIUS, TRANSPARENT_BACKGROUND,
     MODAL_CONTENT_BACKGROUND } from '../ui';
 import UiStore from '../stores/UiStore';
@@ -12,12 +12,13 @@ import EventUtils from '../utils/EventUtils';
 import RoomTile from '../components/RoomTile';
 import { SharedContent } from '../models/SharedContent';
 import DataStore from '../stores/DataStore';
-import { MessageEventContentInfo_, MessageEventContent_ } from '../models/MatrixApi';
+import { MessageEventContentInfo_, MessageEventContent_, ThumbnailInfo_ } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
 import ImageSizeLocal from '../modules/ImageSizeLocal';
 import AppFont from '../modules/AppFont';
 import VideoPlayer from '../modules/VideoPlayer';
 import ProgressDialog from '../modules/ProgressDialog';
+import { UploadFileInfo } from '../models/UploadFileInfo';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -214,7 +215,7 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
             }
 
             FileHandler.uploadFile(ApiClient.credentials, file, fetchProgress, true)
-                .then((response: UploadResponse) => {
+                .then((response: UploadFileInfo) => {
 
                     this.setState({
                         showProgress: false,
@@ -246,11 +247,23 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
                                 break;
                         }
 
+                        let thumbnailInfo: ThumbnailInfo_ | undefined;
+                        if (response.thumbnailInfo) {
+                            thumbnailInfo = {
+                                mimetype: response.thumbnailInfo.mimeType,
+                                size: response.thumbnailInfo.fileSize,
+                                h: response.thumbnailInfo.height,
+                                w: response.thumbnailInfo.width,
+                            }
+                        }
+
                         const messageContentInfo: MessageEventContentInfo_ = {
                             h: mediaHeight,
                             w: mediaWidth,
                             size: response.fileSize || file.size!,
                             mimetype: response.mimeType || file.type,
+                            thumbnail_url: response.thumbnailUrl || undefined,
+                            thumbnail_info: thumbnailInfo || undefined,
                         }
 
                         const messageContent: MessageEventContent_ = {
@@ -261,8 +274,7 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
                         }
 
                         ApiClient.sendMessage(this.props.roomId, messageContent, tempId)
-                            .catch(() => {
-                                RX.Modal.dismiss('dialogIncomingContentShare');
+                            .catch(_error => {
                                 showError(tempId, messageCouldNotBeSent[this.language]);
                             });
 

@@ -12,6 +12,8 @@ import path from 'path';
 import fs from 'fs';
 import { FileObject } from '../../models/FileObject';
 import ImageSizeLocal from '../ImageSizeLocal';
+import { ThumbnailInfo, UploadFileInfo } from '../../models/UploadFileInfo';
+import VideoThumbnail from '../VideoThumbnail';
 
 declare global {
     interface Window {
@@ -19,13 +21,6 @@ declare global {
         require(module: 'path'): typeof path;
         require(module: 'fs'): typeof fs;
     }
-}
-
-export interface UploadResponse {
-    uri: string;
-    fileName: string | undefined;
-    fileSize: number | undefined;
-    mimeType: string | undefined
 }
 
 class FileHandler {
@@ -261,7 +256,13 @@ class FileHandler {
     }
 
     public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (text: string, progress: number) => void,
-        _isIntent = false): Promise<UploadResponse> {
+        _isIntent = false): Promise<UploadFileInfo> {
+
+        let fileName: string | undefined;
+        let fileSize: number | undefined;
+        let mimeType: string | undefined;
+        let thumbnailUrl: string | undefined;
+        let thumbnailInfo: ThumbnailInfo | undefined;
 
         const axiosInstance = axios.create({
             baseURL: 'https://' + credentials.homeServer,
@@ -307,6 +308,23 @@ class FileHandler {
             }
 
             resizedImage = await resizeImage(blob).catch(_error => null);
+
+        } else if (file.type.includes('video')) {
+
+            const thumbnail = await VideoThumbnail.getImage(file.uri).catch();
+
+            const fetchPost: { status: number, data: { content_uri: string } } = await axiosInstance
+                .post(PREFIX_UPLOAD, thumbnail.blob)
+                .catch(error => { return Promise.reject(error) });
+
+            thumbnailInfo = {
+                mimeType: thumbnail.blob.type,
+                fileSize: thumbnail.blob.size,
+                height: thumbnail.height,
+                width: thumbnail.width,
+            }
+
+            thumbnailUrl = fetchPost.data.content_uri;
         }
 
         const response: { status: number, data: { content_uri: string }} = await axiosInstance
@@ -315,14 +333,16 @@ class FileHandler {
 
         if (response.status === 200) {
 
-            const uploadResponse = {
+            const uploadFileInfo: UploadFileInfo = {
                 uri: response.data.content_uri,
-                fileName: undefined,
-                fileSize: undefined,
-                mimeType: undefined
+                fileName: fileName,
+                fileSize: fileSize,
+                mimeType: mimeType,
+                thumbnailUrl: thumbnailUrl,
+                thumbnailInfo: thumbnailInfo
             }
 
-            return Promise.resolve(uploadResponse);
+            return Promise.resolve(uploadFileInfo);
         } else {
             return Promise.reject(response);
         }
