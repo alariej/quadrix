@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { WebView, WebViewMessageEvent } from 'react-native-webview';
 import { DIALOG_WIDTH, SPACING } from '../../ui';
+import Spinner from '../../components/Spinner';
 
 const styles = {
     container: RX.Styles.createViewStyle({
         flex: 1,
         overflow: 'hidden',
+    }),
+    spinnerContainer: RX.Styles.createViewStyle({
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
     }),
 }
 
@@ -19,6 +29,7 @@ interface VideoPlayerProps {
 
 interface VideoPlayerState {
     height: number | undefined;
+    showSpinner: boolean;
 }
 
 export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPlayerState> {
@@ -28,7 +39,9 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
     constructor(props: VideoPlayerProps) {
         super(props);
 
-        this.state = { height: undefined };
+        const mimeType = props.mimeType === 'video/*' ? 'video/mp4' : props.mimeType;
+
+        this.state = { height: undefined, showSpinner: true };
 
         const autoplay = props.autoplay ? 'autoplay' : undefined;
 
@@ -78,7 +91,7 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
                             playsinline
                             webkit-playsinline
                         >
-                            <source src="${ props.uri }#t=0.001" type="${ props.mimeType }">
+                            <source src="${ props.uri }#t=0.001" type="${ mimeType }">
                         </video>
                         <div style="display: flex; align-self: stretch; justify-content: center;">
                             <media-control-bar class="videoControls">
@@ -95,6 +108,8 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
 
     private onMessage = (message: WebViewMessageEvent) => {
 
+        this.setState({ showSpinner: false })
+
         if (this.props.setDimensions) {
             const dimensions = JSON.parse(message.nativeEvent.data) as { height: number, width: number };
             this.setState({
@@ -106,8 +121,17 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
 
     public render(): JSX.Element {
 
+        let spinner: ReactElement | undefined;
+        if (this.state.showSpinner) {
+            spinner = (
+                <RX.View style={ styles.spinnerContainer }>
+                    <Spinner isVisible={ true }  />
+                </RX.View>
+            );
+        }
+
         return (
-            <RX.View style={ [styles.container, { height: this.state.height }] }>
+            <RX.View style={ [styles.container, { height: this.state.height || 320 }] }>
                 <WebView
                     scrollEnabled={ false }
                     originWhitelist={ ['*'] }
@@ -121,6 +145,7 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
                     allowFileAccess={ true }
                     javaScriptEnabled={ true }
                 />
+                { spinner }
             </RX.View>
         );
     }
