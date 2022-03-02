@@ -29,7 +29,7 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, RX.State
 
         return (
             <video
-                src={ this.props.uri }
+                src={ this.props.uri + '#t=0.001' }
                 style={ video }
                 controls={ true }
                 muted={ true }
