@@ -5,13 +5,12 @@ import { ViewOnLayoutEvent } from 'reactxp/dist/common/Types';
 import { Languages } from '../translations';
 import { Locale as LocaleType } from 'date-fns';
 import { enUS, de, fr } from 'date-fns/locale';
-import { APP_BACKGROUND, PAGE_WIDTH_DEFAULT, PAGE_WIDE_PADDING } from '../ui';
+import { PAGE_WIDTH_DEFAULT, PAGE_WIDE_PADDING } from '../ui';
 
 const UnknownAccessToken = 'UnknownAccessToken';
 const OfflineTrigger = 'OfflineTrigger';
 const JitsiActiveTrigger = 'JitsiActiveTrigger';
 const JitsiMaximisedTrigger = 'JitsiMaximisedTrigger';
-const ColorTrigger = 'ColorTrigger';
 const SelectedRoomTrigger = 'SelectedRoomTrigger';
 const LayoutTrigger = 'LayoutTrigger';
 type DeviceType = 'mobile' | 'desktop';
@@ -30,7 +29,6 @@ export type Layout = {
 class UiStore extends StoreBase {
 
     public OfflineTrigger = OfflineTrigger;
-    public ColorTrigger = ColorTrigger;
     public LayoutTrigger = LayoutTrigger;
 
     private offline = false;
@@ -43,7 +41,6 @@ class UiStore extends StoreBase {
     private isJitsiActive = false;
     private isJitsiMaximised = false;
     private appLayout: Layout | undefined;
-    private appColor = APP_BACKGROUND[0];
     private selectedRoom = '';
 
     public setUnknownAccessToken(isUnknown: boolean) {
@@ -121,9 +118,9 @@ class UiStore extends StoreBase {
         }
     }
 
-    public async setLocale() {
+    public async setLocale(): Promise<void> {
 
-        const locale = await Locale.getLocale();
+        const locale = await Locale.getLocale().catch();
         const language = locale.slice(0, 2);
 
         switch (language) {
@@ -206,24 +203,6 @@ class UiStore extends StoreBase {
     public getAppLayout_(): Layout {
 
         return this.appLayout!;
-    }
-
-    public setAppColor(color: string) {
-
-        this.appColor = color;
-        RX.Storage.setItem('appColor', color).catch(_error => null);
-        this.trigger(ColorTrigger);
-    }
-
-    @autoSubscribeWithKey(ColorTrigger)
-    public getAppColor(): string {
-
-        return this.appColor;
-    }
-
-    public getAppColorFromStorage(): Promise<string | undefined> {
-
-        return RX.Storage.getItem('appColor');
     }
 
     public setSelectedRoom(roomId: string) {

@@ -48,7 +48,6 @@ interface RoomListState {
     totalUnreadCount: number;
     syncComplete: boolean;
     offline: boolean;
-    appColor: string;
 }
 
 export default class RoomList extends ComponentBase<RoomListProps, RoomListState> {
@@ -63,8 +62,6 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
         if (initState) {
             partialState.showArrowButton = false;
         }
-
-        partialState.appColor = UiStore.getAppColor();
 
         partialState.syncComplete = DataStore.getSyncComplete();
 

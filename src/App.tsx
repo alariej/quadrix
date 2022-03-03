@@ -14,12 +14,12 @@ import RXNetInfo from 'reactxp-netinfo';
 const styles = {
     container: RX.Styles.createViewStyle({
         flex: 1,
+        backgroundColor: APP_BACKGROUND,
     }),
 };
 
 interface AppState {
     startPage: ReactElement | undefined;
-    backgroundColor: string;
 }
 
 interface AppProps {
@@ -29,7 +29,6 @@ interface AppProps {
 export class App extends ComponentBase<AppProps, AppState> {
 
     private sharedContent = '';
-    private appColorSubscription: number;
 
     constructor(props: AppProps) {
         super(props);
@@ -42,7 +41,7 @@ export class App extends ComponentBase<AppProps, AppState> {
 
         RX.UserInterface.useCustomScrollbars(true);
         RX.StatusBar.setTranslucent(false);
-        RX.StatusBar.setBarStyle('light-content', true);
+        RX.StatusBar.setBarStyle('dark-content', true);
         RX.International.allowRTL(false);
 
         UiStore.setPlatform();
@@ -67,7 +66,6 @@ export class App extends ComponentBase<AppProps, AppState> {
                 .catch(_error => null);
         }
 
-        this.appColorSubscription = UiStore.subscribe(this.changeAppColor, UiStore.ColorTrigger);
         this.sharedContent = props.sharedContent || '';
 
         if (UiStore.getIsElectron() || ['android', 'ios'].includes(UiStore.getPlatform())) {
@@ -75,20 +73,10 @@ export class App extends ComponentBase<AppProps, AppState> {
         }
     }
 
-    private changeAppColor = () => {
-
-        const appColor = UiStore.getAppColor();
-        this.setState({ backgroundColor: appColor });
-        RX.StatusBar.setBackgroundColor(appColor, true);
-    }
-
     public async componentDidMount(): Promise<void> {
         super.componentDidMount();
 
-        const backgroundColor = await UiStore.getAppColorFromStorage() || APP_BACKGROUND[0];
-        this.setState({ backgroundColor: backgroundColor });
-        UiStore.setAppColor(backgroundColor);
-        RX.StatusBar.setBackgroundColor(backgroundColor, true);
+        RX.StatusBar.setBackgroundColor(APP_BACKGROUND, true);
 
         const credentials = await ApiClient.getStoredCredentials();
         credentials ? this.showMain() : this.showLogin();
@@ -117,7 +105,6 @@ export class App extends ComponentBase<AppProps, AppState> {
     public componentWillUnmount(): void {
         super.componentWillUnmount();
 
-        UiStore.unsubscribe(this.appColorSubscription);
         RXNetInfo.connectivityChangedEvent.unsubscribe(_isConnected => null);
     }
 
@@ -161,7 +148,7 @@ export class App extends ComponentBase<AppProps, AppState> {
 
         return (
             <RX.View
-                style={ [styles.container, { backgroundColor: this.state.backgroundColor }] }
+                style={ styles.container }
                 onLayout={ this.setLayout }
                 useSafeInsets={ true }
             >

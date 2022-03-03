@@ -2,7 +2,7 @@ import React from 'react';
 import RX from 'reactxp';
 import DataStore from '../stores/DataStore';
 import RoomTile from '../components/RoomTile';
-import { HEADER_TEXT, OPAQUE_BACKGROUND, BORDER_RADIUS, TILE_WIDTH, SPACING, TILE_HEIGHT, FONT_LARGE } from '../ui';
+import { HEADER_TEXT, OPAQUE_BACKGROUND, BORDER_RADIUS, TILE_WIDTH, SPACING, TILE_HEIGHT, FONT_LARGE, APP_BACKGROUND } from '../ui';
 import UiStore from '../stores/UiStore';
 import AppFont from '../modules/AppFont';
 
@@ -24,6 +24,7 @@ const styles = {
         width: TILE_WIDTH,
         marginBottom: SPACING,
         padding: SPACING,
+        backgroundColor: APP_BACKGROUND,
     }),
     labelText: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
@@ -68,7 +69,7 @@ export default class DialogRoomPicker extends RX.Component<DialogRoomPickerProps
             >
 
                 <RX.View
-                    style={ [styles.label, { backgroundColor: UiStore.getAppColor() }] }
+                    style={ styles.label }
                     onPress={ (event: RX.Types.SyntheticEvent) => event.stopPropagation() }
                     disableTouchOpacityAnimation={ true }
                     activeOpacity={ 1 }

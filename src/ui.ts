@@ -42,14 +42,7 @@ export const FONT_EMOJI_LARGE = 26;
 // colours
 
 export const LOGO_BACKGROUND = 'limegreen';
-export const APP_BACKGROUND = [
-    '#333333',
-    'black',
-    '#661B0E',
-    '#0C330C',
-    '#111D33',
-    '#4D0328',
-];
+export const APP_BACKGROUND = '#f2f2f2';
 export const OPAQUE_BACKGROUND = 'rgba(0, 0, 0, 0.7)';
 export const OPAQUE_LIGHT_BACKGROUND = 'rgba(0, 0, 0, 0.3)';
 export const OPAQUE_DARK_BACKGROUND = 'rgba(0, 0, 0, 0.85)';

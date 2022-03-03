@@ -123,7 +123,6 @@ interface RoomChatState {
     showLoadingButton: boolean;
     showNewMessageButton: boolean;
     offline: boolean;
-    appColor: string;
 }
 
 interface RoomChatProps extends RX.CommonProps {
@@ -164,7 +163,6 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
         const partialState: Partial<RoomChatState> = {};
 
         partialState.offline =  UiStore.getOffline();
-        partialState.appColor = UiStore.getAppColor();
 
         if (initState || this.props.roomId !== nextProps.roomId) {
 

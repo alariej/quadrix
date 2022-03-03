@@ -571,7 +571,6 @@ class ApiClient {
     public async clearStorage() {
 
         await RX.Storage.clear();
-        await RX.Storage.setItem('appColor', UiStore.getAppColor());
 
         if (UiStore.getIsElectron()) {
             const { webFrame } = window.require('electron');

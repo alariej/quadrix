@@ -107,7 +107,6 @@ interface RoomTileState {
     contactPhase: RoomPhase | undefined,
     contactId: string,
     type: RoomType;
-    appColor: string;
     isSelected: boolean;
     isShaded: boolean;
     isJitsiMaximised: boolean;
@@ -166,7 +165,6 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
             type: roomSummary.type!,
             isSelected: selectedRoom === this.props.roomId,
             isShaded: (selectedRoom && selectedRoom !== this.props.roomId) as boolean,
-            appColor: UiStore.getAppColor(),
             isJitsiMaximised: UiStore.getJitsiMaximised(),
         };
     }

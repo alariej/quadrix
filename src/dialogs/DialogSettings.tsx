@@ -3,7 +3,7 @@ import RX from 'reactxp';
 import { INPUT_BORDER, MODAL_CONTENT_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, FONT_NORMAL, CONTAINER_PADDING,
     BUTTON_HEIGHT, TRANSPARENT_BACKGROUND, MODAL_CONTENT_BACKGROUND, BUTTON_ROUND_BACKGROUND,
     PLACEHOLDER_TEXT, AVATAR_BACKGROUND, BUTTON_MODAL_TEXT, AVATAR_MEDIUM_WIDTH, CHECKBOX_BACKGROUND, DIALOG_WIDTH,
-    APP_BACKGROUND, TILE_MESSAGE_TEXT, BUTTON_SHORT_WIDTH, BUTTON_DISABLED_TEXT, BUTTON_MODAL_BACKGROUND,
+    TILE_MESSAGE_TEXT, BUTTON_SHORT_WIDTH, BUTTON_DISABLED_TEXT, BUTTON_MODAL_BACKGROUND,
     OPAQUE_BACKGROUND, JITSI_BORDER, AVATAR_FOREGROUND} from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
@@ -185,7 +185,6 @@ interface DialogSettingsState {
     confirmDisabled: boolean;
     showSpinner: boolean;
     offline: boolean;
-    appColor: string;
     showFileTypePicker: boolean;
 }
 
@@ -255,8 +254,6 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
                     RX.Modal.show(<DialogContainer content={ text } modalId={ 'errordialog' }/>, 'errordialog');
                 }
             });
-
-        this.setState({ appColor: UiStore.getAppColor() });
 
         if (__DEV__) {
 
@@ -590,12 +587,6 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
         this.setConfirmDisabled();
     }
 
-    private selectAppColor = (color: string) => {
-
-        this.setState({ appColor: color });
-        UiStore.setAppColor(color);
-    }
-
     private onPressUserId = () => {
 
         this.nClicks++;
@@ -650,28 +641,6 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
                     animated={ true }
                 />
             )
-        }
-
-        const colorButtonArray: ReactElement[] = [];
-
-        for (let i = 0; i < 6; i++) {
-            const colorButton = (
-                <RX.Button
-                    key={ 'button' + i }
-                    style={ [styles.colorButton, { backgroundColor: APP_BACKGROUND[i] }] }
-                    onPress={ () => this.selectAppColor(APP_BACKGROUND[i]) }
-                    disableTouchOpacityAnimation={ true }
-                    activeOpacity={ 1 }
-                >
-                    <RX.View style={ styles.containerIcon }>
-                        <RX.Text allowFontScaling={ false } style={ [styles.checkboxText, { color: 'white' }] }>
-                            { this.state.appColor === APP_BACKGROUND[i] ? '✓' : '' }
-                        </RX.Text>
-                    </RX.View>
-                </RX.Button>
-            )
-
-            colorButtonArray.push(colorButton);
         }
 
         let zoomPanel: ReactElement | undefined;
@@ -817,10 +786,6 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
             <RX.View style={ styles.contentContainer }>
 
                 { zoomPanel }
-
-                <RX.View style={ styles.buttonsContainer }>
-                    { colorButtonArray }
-                </RX.View>
 
                 <RX.View style={ styles.settingsContainer }>
 
