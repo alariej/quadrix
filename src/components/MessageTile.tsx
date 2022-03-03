@@ -25,6 +25,7 @@ const styles = {
         borderRadius: BORDER_RADIUS,
         marginBottom: SPACING,
         padding: SPACING,
+        overflow: 'visible'
     }),
     containerMessage: RX.Styles.createViewStyle({
         overflow: 'visible',
