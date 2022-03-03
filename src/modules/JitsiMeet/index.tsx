@@ -3,7 +3,7 @@ import RX from 'reactxp';
 import { JITSI_SERVER_URL } from '../../appconfig';
 import IconSvg, { SvgFile } from '../../components/IconSvg';
 import ApiClient from '../../matrix/ApiClient';
-import { JITSI_BORDER, PAGE_MARGIN, TRANSPARENT_BACKGROUND, OPAQUE_BACKGROUND, BUTTON_ROUND_WIDTH, SPACING, LOGO_BACKGROUND,
+import { JITSI_BORDER, PAGE_MARGIN, TRANSPARENT_BACKGROUND, OPAQUE_BACKGROUND, BUTTON_ROUND_WIDTH, SPACING, BUTTON_FILL,
     BORDER_RADIUS, BUTTON_JITSI_BACKGROUND, APP_BACKGROUND, TILE_HEIGHT } from '../../ui';
 
 const styles = {
@@ -247,7 +247,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                     <RX.View style={ styles.containerIcon }>
                         <IconSvg
                             source= { require('../../resources/svg/arrow_down.json') as SvgFile }
-                            fillColor={ LOGO_BACKGROUND }
+                            fillColor={ BUTTON_FILL }
                             height={ 16 }
                             width={ 16 }
                         />

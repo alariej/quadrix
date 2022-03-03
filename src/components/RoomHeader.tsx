@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { HEADER_TEXT, BUTTON_ROUND_WIDTH, BORDER_RADIUS, HEADER_HEIGHT,
     SPACING, FONT_NORMAL, FONT_LARGE, AVATAR_SMALL_WIDTH, ICON_REDUCTION_FACTOR, BUTTON_UNREAD_TEXT, BUTTON_UNREAD_BACKGROUND, FONT_SMALL,
-    LOGO_BACKGROUND, AVATAR_BACKGROUND, TRANSPARENT_BACKGROUND, HEADER_STATUS, AVATAR_FOREGROUND } from '../ui';
+    BUTTON_FILL, AVATAR_BACKGROUND, TRANSPARENT_BACKGROUND, HEADER_STATUS, AVATAR_FOREGROUND } from '../ui';
 import { ComponentBase } from 'resub';
 import DataStore from '../stores/DataStore';
 import EventUtils from '../utils/EventUtils';
@@ -482,13 +482,13 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
                         style={ styles.roundButton }
                         onPress={ this.onPressHomeButton }
                         disableTouchOpacityAnimation={ false }
-                        underlayColor={ LOGO_BACKGROUND }
+                        underlayColor={ BUTTON_FILL }
                         activeOpacity={ 0.8 }
                     >
                         <RX.View style={ styles.containerIcon }>
                             <IconSvg
                                 source= { require('../resources/svg/home.json') as SvgFile }
-                                fillColor={ LOGO_BACKGROUND }
+                                fillColor={ BUTTON_FILL }
                                 height={ BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR }
                                 width={ BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR }
                             />

@@ -12,7 +12,7 @@ import {
     FONT_NORMAL,
     SPACING,
     FONT_LARGE,
-    LOGO_BACKGROUND,
+    BUTTON_FILL,
     MESSAGE_HEIGHT_DEFAULT,
     DARK_BACKGROUND,
     OBJECT_MARGIN,
@@ -639,7 +639,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
         if (this.state.showArrowButton) {
 
-            const iconColor = this.state.showNewMessageButton ? BUTTON_UNREAD_BACKGROUND : LOGO_BACKGROUND;
+            const iconColor = this.state.showNewMessageButton ? BUTTON_UNREAD_BACKGROUND : BUTTON_FILL;
 
             arrowButton = (
                 <RX.Button
@@ -675,7 +675,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
                     <IconSvg
                         source= { require('../resources/svg/more.json') as SvgFile }
                         style={{ opacity: 0.9 }}
-                        fillColor={ LOGO_BACKGROUND }
+                        fillColor={ BUTTON_FILL }
                         height={ 24 }
                         width={ 24 }
                     />

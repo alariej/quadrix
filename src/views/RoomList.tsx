@@ -3,7 +3,7 @@ import RX from 'reactxp';
 import { ComponentBase } from 'resub';
 import DataStore from '../stores/DataStore';
 import RoomTile from '../components/RoomTile';
-import { BUTTON_ROUND_WIDTH, BUTTON_UNREAD_BACKGROUND, HEADER_HEIGHT, LOGO_BACKGROUND, OPAQUE_DUMMY_BACKGROUND,
+import { BUTTON_ROUND_WIDTH, BUTTON_UNREAD_BACKGROUND, HEADER_HEIGHT, BUTTON_FILL, OPAQUE_DUMMY_BACKGROUND,
     SPACING, TILE_HEIGHT, TRANSPARENT_BACKGROUND } from '../ui';
 import RoomListHeader from '../components/RoomListHeader';
 import { VirtualListView, VirtualListViewItemInfo, VirtualListViewCellRenderDetails } from 'reactxp-virtuallistview';
@@ -149,7 +149,7 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
 
         if (this.state.showArrowButton) {
 
-            const iconColor = this.state.totalUnreadCount ? BUTTON_UNREAD_BACKGROUND : LOGO_BACKGROUND;
+            const iconColor = this.state.totalUnreadCount ? BUTTON_UNREAD_BACKGROUND : BUTTON_FILL;
 
             arrowButton = (
                 <RX.Button
