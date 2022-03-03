@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { TILE_BACKGROUND, BUTTON_UNREAD_TEXT, BUTTON_UNREAD_BACKGROUND, TILE_SYSTEM_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, FONT_NORMAL,
-    AVATAR_SMALL_WIDTH, TILE_HEIGHT, TRANSPARENT_BACKGROUND, ICON_INFO_FILL, TILE_MESSAGE_TEXT, AVATAR_FOREGROUND }
+    AVATAR_SMALL_WIDTH, TILE_HEIGHT, TRANSPARENT_BACKGROUND, ICON_INFO_FILL, TILE_MESSAGE_TEXT, AVATAR_FOREGROUND, APP_BACKGROUND }
     from '../ui';
 import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
@@ -393,7 +393,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
                     right: 0,
                     top: 0,
                     bottom: 0,
-                    backgroundColor: this.state.appColor,
+                    backgroundColor: APP_BACKGROUND,
                     opacity: 0.5,
                     borderRadius: BORDER_RADIUS,
                 }}/>
