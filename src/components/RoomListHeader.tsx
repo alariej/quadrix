@@ -3,7 +3,8 @@ import RX from 'reactxp';
 import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
 import { HEADER_TEXT, MODAL_CONTENT_TEXT, LINK_TEXT, HEADER_HEIGHT, FONT_NORMAL,
-    BUTTON_ROUND_WIDTH, FONT_LARGE, BORDER_RADIUS, SPACING, ICON_REDUCTION_FACTOR, LOGO_BACKGROUND, TRANSPARENT_BACKGROUND } from '../ui';
+    BUTTON_ROUND_WIDTH, FONT_LARGE, BORDER_RADIUS, SPACING, ICON_REDUCTION_FACTOR, BUTTON_FILL, TRANSPARENT_BACKGROUND,
+    LOGO_BACKGROUND } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogNewRoom from '../dialogs/DialogNewRoom';
 import DialogContainer from '../modules/DialogContainer';
@@ -270,7 +271,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
                     style={ styles.roundButton }
                     onPress={ () => this.state.isJitsiMaximised ? null : this.onPressNewChat() }
                     disableTouchOpacityAnimation={ false }
-                    underlayColor={ LOGO_BACKGROUND }
+                    underlayColor={ BUTTON_FILL }
                     activeOpacity={ 0.8 }
                     disabled={ this.state.offline }
                     disabledOpacity={ 0.15 }
@@ -278,7 +279,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
                     <RX.View style={ styles.containerIcon }>
                         <IconSvg
                             source= { require('../resources/svg/plus.json') as SvgFile }
-                            fillColor={ LOGO_BACKGROUND }
+                            fillColor={ BUTTON_FILL }
                             height={ BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR }
                             width={ BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR }
                         />
@@ -288,7 +289,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
                     style={ styles.roundButton }
                     onPress={ () => this.state.isJitsiMaximised ? null : this.onPressSettings() }
                     disableTouchOpacityAnimation={ false }
-                    underlayColor={ LOGO_BACKGROUND }
+                    underlayColor={ BUTTON_FILL }
                     activeOpacity={ 0.8 }
                     disabled={ this.state.offline }
                     disabledOpacity={ 0.15 }
@@ -296,7 +297,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
                     <RX.View style={ styles.containerIcon }>
                         <IconSvg
                             source= { require('../resources/svg/settings.json') as SvgFile }
-                            fillColor={ LOGO_BACKGROUND }
+                            fillColor={ BUTTON_FILL }
                             height={ BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR }
                             width={ BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR }
                         />
@@ -306,14 +307,14 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
                     style={ styles.roundButton }
                     onPress={ () => this.state.isJitsiMaximised ? null : this.onLogout() }
                     disableTouchOpacityAnimation={ false }
-                    underlayColor={ LOGO_BACKGROUND }
+                    underlayColor={ BUTTON_FILL }
                     activeOpacity={ 0.8 }
                 >
                     <RX.View style={ styles.containerIcon }>
                         <IconSvg
                             source= { require('../resources/svg/logout.json') as SvgFile }
                             style={ { marginBottom: 2 } }
-                            fillColor={ LOGO_BACKGROUND }
+                            fillColor={ BUTTON_FILL }
                             height={ BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR }
                             width={ BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR }
                         />
