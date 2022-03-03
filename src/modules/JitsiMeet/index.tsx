@@ -40,7 +40,7 @@ const styles = {
         borderWidth: 1,
         borderColor: JITSI_BORDER,
         overflow: 'hidden',
-        backgroundColor: APP_BACKGROUND[0],
+        backgroundColor: APP_BACKGROUND,
     }),
     jitsiContainerMinimized: RX.Styles.createViewStyle({
         width: 80,
