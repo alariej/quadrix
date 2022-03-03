@@ -36,6 +36,7 @@ const styles = {
     userName: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
+        fontWeight: '600',
         color: HEADER_TEXT,
     }),
     roundButton: RX.Styles.createViewStyle({
