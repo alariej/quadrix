@@ -26,7 +26,7 @@ import { UploadFileInfo } from '../models/UploadFileInfo';
 const styles = {
     container: RX.Styles.createViewStyle({
         flexDirection: 'row',
-        marginBottom: SPACING + 1,
+        marginBottom: SPACING,
         paddingBottom: SPACING,
         borderBottomWidth: 1,
         borderColor: COMPOSER_BORDER,
