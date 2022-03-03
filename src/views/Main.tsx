@@ -3,7 +3,7 @@ import RX, { Types } from 'reactxp';
 import RoomList from './RoomList';
 import Room from './Room';
 import { PAGE_MARGIN, MODAL_CONTENT_TEXT, FONT_LARGE, COMPOSER_BORDER,
-    PAGE_WIDE_PADDING, OBJECT_MARGIN, TRANSPARENT_BACKGROUND, HEADER_HEIGHT, TILE_WIDTH } from '../ui';
+    PAGE_WIDE_PADDING, OBJECT_MARGIN, TRANSPARENT_BACKGROUND, HEADER_HEIGHT, TILE_WIDTH, LARGE_LOGO_FOREGROUND } from '../ui';
 import DataStore from '../stores/DataStore';
 import { MessageEvent } from '../models/MessageEvent';
 import ApiClient from '../matrix/ApiClient';
@@ -56,7 +56,6 @@ const styles = {
         bottom: 0,
         right: 0,
         padding: OBJECT_MARGIN * 2,
-        opacity: 0.03,
         alignItems: 'center',
         justifyContent: 'center',
     }),
@@ -429,7 +428,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
                     source= { require('../resources/svg/logo.json') as SvgFile }
                     height={ TILE_WIDTH }
                     width={ TILE_WIDTH }
-                    fillColor={ 'white' }
+                    fillColor={ LARGE_LOGO_FOREGROUND }
                 />
             </RX.View>
         );
