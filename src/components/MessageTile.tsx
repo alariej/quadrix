@@ -266,6 +266,64 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
             }
         }
 
+        let cornerTriangle;
+
+        if (this.props.roomType === 'notepad') {
+            cornerTriangle = undefined;
+        } else if (isOwnMessage) {
+            cornerTriangle = (
+                <RX.View
+                    style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: -20,
+                        height: 20,
+                        width: 20 + BORDER_RADIUS - 1,
+                        overflow: 'hidden',
+                    }}
+                >
+                    <RX.View
+                        style={{
+                            position: 'absolute',
+                            bottom: -26,
+                            left: -118 / 2,
+                            height: 100,
+                            width: 100,
+                            borderRadius: 100 / 2,
+                            borderWidth: 20,
+                            borderColor: TILE_BACKGROUND_OWN,
+                        }}
+                    />
+                </RX.View>
+            )
+        } else {
+            cornerTriangle = (
+                <RX.View
+                    style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        right: -20,
+                        height: 20,
+                        width: 20 + BORDER_RADIUS - 1,
+                        overflow: 'hidden',
+                    }}
+                >
+                    <RX.View
+                        style={{
+                            position: 'absolute',
+                            bottom: -26,
+                            right: -118 / 2,
+                            height: 100,
+                            width: 100,
+                            borderRadius: 100 / 2,
+                            borderWidth: 20,
+                            borderColor: TILE_BACKGROUND,
+                        }}
+                    />
+                </RX.View>
+            )
+        }
+
         let messageWrapper;
 
         if (UiStore.getPlatform() === 'web' && UiStore.getDevice() === 'mobile') {
@@ -283,6 +341,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                         { footer }
                         { readMarker }
                     </RX.View>
+                    { cornerTriangle }
                 </RX.GestureView>
             );
 
@@ -304,6 +363,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                         { footer }
                         { readMarker }
                     </RX.View>
+                    { cornerTriangle }
                 </RX.View>
             );
         }
