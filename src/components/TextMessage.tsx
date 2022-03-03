@@ -12,6 +12,7 @@ import AppFont from '../modules/AppFont';
 const styles = {
     containerMessage: RX.Styles.createViewStyle({
         flexDirection: 'column',
+        paddingLeft: SPACING,
         overflow: 'visible'
     }),
     containerText: RX.Styles.createTextStyle({
