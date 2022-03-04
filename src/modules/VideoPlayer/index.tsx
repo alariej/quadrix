@@ -2,7 +2,10 @@ import React from 'react';
 import RX from 'reactxp';
 
 const video: React.CSSProperties = {
-    flex: 1,
+    height: '100%',
+    width: '100%',
+    padding: '0px',
+    margin: '0px'
 }
 
 interface VideoPlayerProps {
@@ -34,6 +37,7 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, RX.State
                 controls={ true }
                 muted={ true }
                 autoPlay={ this.props.autoplay }
+                disablePictureInPicture={ true }
                 onLoadedMetadata={ this.onLoadedMetadata }
             />
         );
