@@ -82,7 +82,7 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
                     <media-controller autohide="-1" style="height: 100%; width: 100%">
                         <video
                             slot="media"
-                            style="background-color: transparent"
+                            style="background-color: black"
                             onloadedmetadata="onLoadedMetadata(this.videoHeight, this.videoWidth)"
                             height="100%"
                             width="100%"
