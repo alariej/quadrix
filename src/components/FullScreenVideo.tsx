@@ -10,6 +10,7 @@ const styles = {
         flex: 1,
         alignSelf: 'stretch',
         alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: OPAQUE_DARK_BACKGROUND,
     }),
     closeButton: RX.Styles.createButtonStyle({
@@ -33,34 +34,14 @@ export default class FullScreenVideo extends RX.Component<FullScreenVideoProps, 
 
     private appHeight: number;
     private appWidth: number;
-    private alignStyle: RX.Types.ViewStyleRuleSet;
 
     constructor(props: FullScreenVideoProps) {
         super(props);
 
         const appLayout = UiStore.getAppLayout_();
-        const screenRatio = appLayout.screenWidth / appLayout.screenHeight;
-        const screenImageRatio = screenRatio / props.imageRatio;
 
-        if (screenImageRatio <= 1) {
-            this.appWidth = appLayout.screenWidth;
-            this.appHeight = appLayout.screenWidth / props.imageRatio;
-            this.alignStyle = RX.Styles.createViewStyle({
-                justifyContent: 'center',
-            }, false);
-        } else if (screenImageRatio > 1 && screenImageRatio < 1.10 && UiStore.getPlatform() !== 'android') {
-            this.appWidth = appLayout.screenWidth;
-            this.appHeight = appLayout.screenWidth / props.imageRatio;
-            this.alignStyle = RX.Styles.createViewStyle({
-                justifyContent: 'flex-end',
-            }, false);
-        } else {
-            this.appWidth = appLayout.screenHeight * props.imageRatio;
-            this.appHeight = appLayout.screenHeight;
-            this.alignStyle = RX.Styles.createViewStyle({
-                justifyContent: 'center',
-            }, false);
-        }
+        this.appWidth = appLayout.screenWidth;
+        this.appHeight = appLayout.screenHeight;
 
         ScreenOrientation.hideStatusBar(true);
     }
@@ -84,8 +65,8 @@ export default class FullScreenVideo extends RX.Component<FullScreenVideoProps, 
         );
 
         return (
-            <RX.View style={ [styles.modalView, this.alignStyle] }>
-                <RX.View style={{ height: this.appHeight, width: this.appWidth }}>
+            <RX.View style={ styles.modalView }>
+                <RX.View style={{ flex: 1, height: this.appHeight, width: this.appWidth }}>
                     <VideoPlayer
                         uri={ this.props.url }
                         mimeType={ this.props.mimeType || 'video/mp4' }
