@@ -40,8 +40,6 @@ export class App extends ComponentBase<AppProps, AppState> {
             .catch(_error => null);
 
         RX.UserInterface.useCustomScrollbars(true);
-        RX.StatusBar.setTranslucent(false);
-        RX.StatusBar.setBarStyle('dark-content', true);
         RX.International.allowRTL(false);
 
         UiStore.setPlatform();
@@ -75,8 +73,6 @@ export class App extends ComponentBase<AppProps, AppState> {
 
     public async componentDidMount(): Promise<void> {
         super.componentDidMount();
-
-        RX.StatusBar.setBackgroundColor(APP_BACKGROUND, true);
 
         const credentials = await ApiClient.getStoredCredentials();
         credentials ? this.showMain() : this.showLogin();

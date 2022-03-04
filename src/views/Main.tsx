@@ -92,7 +92,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
         this.appOfflineSubscription = UiStore.subscribe(this.changeAppOffline, UiStore.OfflineTrigger);
 
         this.isOffline = UiStore.getOffline();
-        
+
         this.roomList = (
             <RoomList
                 showRoom={ this.showRoom }
@@ -255,8 +255,6 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
     private shareContent = (event: { url: string }) => {
 
-        RX.StatusBar.setBarStyle('dark-content', true);
-
         this.showRoomList();
         ShareHandlerIncoming.shareContent(event.url, this.showTempForwardedMessage);
     }
@@ -375,11 +373,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
     private closeJitsiMeet = () => {
 
         UiStore.setJitsiActive(false);
-        this.setState({ showJitsiMeet: false }, () => {
-            setTimeout(() => {
-                RX.StatusBar.setBarStyle('dark-content', true);
-            }, 2000);
-        });
+        this.setState({ showJitsiMeet: false });
     }
 
     public render(): JSX.Element | null {
