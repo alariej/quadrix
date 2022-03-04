@@ -73,16 +73,10 @@ export default class VideoMessage extends RX.Component<VideoMessageProps, RX.Sta
 
         RX.UserInterface.dismissKeyboard();
 
-        let imageRatio = 1;
-        if (this.props.message.content.info!.w && this.props.message.content.info!.h) {
-            imageRatio = this.props.message.content.info!.w / this.props.message.content.info!.h;
-        }
-
         const fullScreenVideo = (
             <FullScreenVideo
                 url={ this.url }
                 mimeType={ this.props.message.content.info?.mimetype || 'video/mp4' }
-                imageRatio={ imageRatio }
             />
         );
 
