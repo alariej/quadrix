@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as RX from 'reactxp';
+import { SPACING } from '../ui';
 
 interface SvgSpinnerProps {
     color: string;
@@ -51,15 +52,15 @@ export default class SvgSpinner extends RX.Component<SvgSpinnerProps, RX.Statele
                         borderRadius: this.props.size / 2,
                         borderWidth: this.props.size / 5,
                         borderColor: this.props.color,
+                        padding: SPACING,
                         alignItems: 'center',
                     }}
                 >
                     <RX.View
                         style={{
-                            height: (this.props.size - (2 * this.props.size / 5)) / 2 + (this.props.size / 10) / 2,
+                            height: (this.props.size - (2 * this.props.size / 5)) / 2 + (this.props.size / 10) / 2 - SPACING,
                             width: this.props.size / 10,
-                            borderBottomLeftRadius: this.props.size / 10,
-                            borderBottomRightRadius: this.props.size / 10,
+                            borderRadius: this.props.size / 10,
                             backgroundColor: this.props.color
                         }}
                     />
