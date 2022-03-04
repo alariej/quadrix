@@ -1,7 +1,8 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { TILE_BACKGROUND, BUTTON_UNREAD_TEXT, BUTTON_UNREAD_BACKGROUND, TILE_SYSTEM_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, FONT_NORMAL,
-    AVATAR_SMALL_WIDTH, TILE_HEIGHT, TRANSPARENT_BACKGROUND, ICON_INFO_FILL, TILE_MESSAGE_TEXT, AVATAR_FOREGROUND, APP_BACKGROUND }
+    AVATAR_SMALL_WIDTH, TILE_HEIGHT, TRANSPARENT_BACKGROUND, ICON_INFO_FILL, TILE_MESSAGE_TEXT, AVATAR_FOREGROUND, APP_BACKGROUND,
+    TILE_BACKGROUND_SELECTED }
     from '../ui';
 import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
@@ -394,7 +395,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
                     top: 0,
                     bottom: 0,
                     backgroundColor: APP_BACKGROUND,
-                    opacity: 0.5,
+                    opacity: 0.3,
                     borderRadius: BORDER_RADIUS,
                 }}/>
             )
@@ -405,7 +406,10 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
                 style={ styles.container }
             >
                 <RX.View
-                    style={ styles.containerTile }
+                    style={[
+                        styles.containerTile,
+                        { backgroundColor: this.state.isSelected ? TILE_BACKGROUND_SELECTED : TILE_BACKGROUND }
+                    ]}
                     onPress={ () => this.state.isJitsiMaximised ? null : this.props.onPressRoom!(this.props.roomId) }
                     disableTouchOpacityAnimation={ false }
                     activeOpacity={ 0.8 }
