@@ -255,6 +255,8 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
     private shareContent = (event: { url: string }) => {
 
+        RX.StatusBar.setBarStyle('dark-content', true);
+
         this.showRoomList();
         ShareHandlerIncoming.shareContent(event.url, this.showTempForwardedMessage);
     }
@@ -373,7 +375,11 @@ export default class Main extends ComponentBase<MainProps, MainState> {
     private closeJitsiMeet = () => {
 
         UiStore.setJitsiActive(false);
-        this.setState({ showJitsiMeet: false });
+        this.setState({ showJitsiMeet: false }, () => {
+            setTimeout(() => {
+                RX.StatusBar.setBarStyle('dark-content', true);
+            }, 2000);
+        });
     }
 
     public render(): JSX.Element | null {

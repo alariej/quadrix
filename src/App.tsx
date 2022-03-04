@@ -74,6 +74,8 @@ export class App extends ComponentBase<AppProps, AppState> {
     public async componentDidMount(): Promise<void> {
         super.componentDidMount();
 
+        RX.StatusBar.setBarStyle('dark-content', true);
+
         const credentials = await ApiClient.getStoredCredentials();
         credentials ? this.showMain() : this.showLogin();
 
