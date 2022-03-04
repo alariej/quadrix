@@ -1,6 +1,6 @@
 import React from 'react';
 import RX from 'reactxp';
-import { BUTTON_LONG_BACKGROUND, BUTTON_MODAL_BACKGROUND, BUTTON_LONG_TEXT, INPUT_BACKGROUND, HEADER_TEXT,
+import { BUTTON_LONG_BACKGROUND, BUTTON_LONG_TEXT, INPUT_BACKGROUND, HEADER_TEXT,
     MODAL_CONTENT_TEXT, BORDER_RADIUS, CONTAINER_PADDING, BUTTON_LONG_WIDTH, FONT_LARGE, SPACING, BUTTON_HEIGHT, LOGO_BACKGROUND,
     OBJECT_MARGIN, PLACEHOLDER_TEXT, TRANSPARENT_BACKGROUND, FONT_NORMAL } from '../ui';
 import ApiClient from '../matrix/ApiClient';
@@ -374,7 +374,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
             >
                 <IconSvg
                     source= { require('../resources/svg/menu.json') as SvgFile }
-                    fillColor={ BUTTON_MODAL_BACKGROUND }
+                    fillColor={ BUTTON_LONG_BACKGROUND }
                     height={ 17 }
                     width={ 4 }
                 />
