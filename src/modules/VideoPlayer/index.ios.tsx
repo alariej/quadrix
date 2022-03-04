@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { WebView, WebViewMessageEvent } from 'react-native-webview';
-import { DIALOG_WIDTH, SPACING } from '../../ui';
+import { DIALOG_WIDTH, OPAQUE_BACKGROUND, SPACING } from '../../ui';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 import { WebViewSource } from 'react-native-webview/lib/WebViewTypes';
 import Spinner from '../../components/Spinner';
@@ -19,6 +19,7 @@ const styles = {
         right: 0,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: OPAQUE_BACKGROUND
     }),
 }
 
@@ -89,7 +90,7 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
                         <media-controller autohide="-1" style="height: 100%; width: 100%">
                             <video
                                 slot="media"
-                                style="background-color: white"
+                                style="background-color: transparent"
                                 onloadedmetadata="onLoadedMetadata(this.videoHeight, this.videoWidth)"
                                 height="100%"
                                 width="100%"
@@ -167,7 +168,7 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
                     <media-controller autohide="-1" style="height: 100%; width: 100%">
                         <video
                             slot="media"
-                            style="background-color: white"
+                            style="background-color: transparent"
                             onloadedmetadata="onLoadedMetadata(this.videoHeight, this.videoWidth)"
                             height="100%"
                             width="100%"
