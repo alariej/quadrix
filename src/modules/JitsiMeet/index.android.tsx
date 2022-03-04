@@ -6,6 +6,7 @@ import { WebView, WebViewMessageEvent } from 'react-native-webview';
 import { JITSI_BORDER, PAGE_MARGIN, TRANSPARENT_BACKGROUND, OPAQUE_BACKGROUND, BUTTON_ROUND_WIDTH, SPACING, BUTTON_FILL,
     BORDER_RADIUS, BUTTON_JITSI_BACKGROUND, APP_BACKGROUND, TILE_HEIGHT } from '../../ui';
 import UiStore from '../../stores/UiStore';
+import ApiClient from '../../matrix/ApiClient';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -131,6 +132,9 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                             height: '100%',
                             width: '100%',
                             parentNode: undefined,
+                            userInfo: {
+                                displayName: "${ ApiClient.credentials.userId }",
+                            },
                             interfaceConfigOverwrite: {
                                 OPTIMAL_BROWSERS: [],
                                 MOBILE_APP_PROMO: false,
@@ -147,7 +151,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                                 FILM_STRIP_MAX_HEIGHT: 150,
                                 LOCAL_THUMBNAIL_RATIO: 1,
                                 REMOTE_THUMBNAIL_RATIO: 1,
-                                VIDEO_LAYOUT_FIT: 'height',
+                                VIDEO_LAYOUT_FIT: 'width',
                                 MAXIMUM_ZOOMING_COEFFICIENT: 1,
                                 VIDEO_QUALITY_LABEL_DISABLED: true,
                                 SHOW_CHROME_EXTENSION_BANNER: false,
