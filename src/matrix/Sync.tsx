@@ -170,6 +170,8 @@ class Sync {
         this.restClient.getSyncFiltered(syncToken, filter, timeout, false)
             .then(syncData => {
 
+                if (UiStore.getOffline()) { UiStore.setOffline(false) }
+
                 if (!this.syncStopped && (!syncToken || (syncToken === this.nextSyncToken))) {
 
                     if (!syncToken) {
@@ -186,6 +188,9 @@ class Sync {
                 }
             })
             .catch((error: ErrorResponse_) => {
+
+                UiStore.setOffline(true);
+                DataStore.setSyncComplete(true);
 
                 if (error.body && error.body.errcode && error.body.errcode === 'M_UNKNOWN_TOKEN') {
 
@@ -205,8 +210,6 @@ class Sync {
                         j++;
 
                         if (j > 3) {
-
-                            DataStore.setSyncComplete(true);
 
                             const text = (
                                 <RX.Text style={ styles.textDialog }>
