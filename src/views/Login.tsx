@@ -82,10 +82,10 @@ const styles = {
         fontSize: FONT_LARGE,
         margin: 12,
     }),
-    link: RX.Styles.createTextStyle({
+    terms: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
-        color: 'white',
+        color: HEADER_TEXT,
         textDecorationLine: 'underline',
         textAlign: 'center',
         padding: 12,
@@ -493,7 +493,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
                 </RX.View>
                 <RX.View>
                     <RX.Text
-                        style={ styles.link }
+                        style={ styles.terms }
                         onPress={ event => this.openUrl(TERMS_URL, event) }
                     >
                         { termsPrivacyLicense[this.language] }
