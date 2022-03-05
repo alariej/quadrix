@@ -14,7 +14,7 @@ import {
     FONT_LARGE,
     BUTTON_FILL,
     MESSAGE_HEIGHT_DEFAULT,
-    DARK_BACKGROUND,
+    LIGHT_BACKGROUND,
     OBJECT_MARGIN,
     TRANSPARENT_BACKGROUND,
     HEADER_STATUS
@@ -74,7 +74,7 @@ const styles = {
         width: BUTTON_LONG_WIDTH,
         height: BUTTON_HEIGHT,
         borderRadius: BUTTON_HEIGHT / 2,
-        backgroundColor: DARK_BACKGROUND,
+        backgroundColor: LIGHT_BACKGROUND,
         justifyContent: 'center',
         alignItems: 'center',
     }),

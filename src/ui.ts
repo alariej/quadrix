@@ -54,7 +54,6 @@ export const TILE_BACKGROUND_SELECTED = '#d9d9d9';
 export const TILE_MESSAGE_TEXT = '#1a1a1a';
 export const TILE_SYSTEM_TEXT = 'grey';
 export const LIGHT_BACKGROUND = 'grey';
-export const DARK_BACKGROUND = '#1a1a1a';
 export const LARGE_LOGO_FOREGROUND = 'rgba(0, 0, 0, 0.02)';
 export const BUTTON_FILL = '#0090FF';
 export const BUTTON_ROUND_BACKGROUND = 'white';
