@@ -179,6 +179,8 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
                     });
             }
 
+            RX.Modal.dismiss('dialogIncomingContentShare');
+
         } else {
 
             const tempId = 'media' + Date.now();
