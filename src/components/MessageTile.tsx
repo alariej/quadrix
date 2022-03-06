@@ -267,17 +267,16 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
             }
         }
 
-        let cornerTriangle;
+        let cornerPointer: ReactElement | undefined;
 
-        if (this.props.roomType === 'notepad') {
-            cornerTriangle = undefined;
-        } else if (isOwnMessage) {
-            cornerTriangle = (
+        if (['direct', 'group'].includes(this.props.roomType)) {
+            cornerPointer = (
                 <RX.View
                     style={{
                         position: 'absolute',
                         bottom: 0,
-                        left: -20,
+                        left: isOwnMessage ? -20 : undefined,
+                        right: isOwnMessage ? undefined : -20,
                         height: 20,
                         width: 20 + BORDER_RADIUS,
                         overflow: 'hidden',
@@ -287,38 +286,13 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                         style={{
                             position: 'absolute',
                             bottom: -28,
-                            left: -120 / 2,
+                            left: isOwnMessage ? -120 / 2 : undefined,
+                            right: isOwnMessage ? undefined : -120 / 2,
                             height: 100,
                             width: 100,
                             borderRadius: 100 / 2,
                             borderWidth: 20,
-                            borderColor: TILE_BACKGROUND_OWN,
-                        }}
-                    />
-                </RX.View>
-            )
-        } else {
-            cornerTriangle = (
-                <RX.View
-                    style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        right: -20,
-                        height: 20,
-                        width: 20 + BORDER_RADIUS,
-                        overflow: 'hidden',
-                    }}
-                >
-                    <RX.View
-                        style={{
-                            position: 'absolute',
-                            bottom: -28,
-                            right: -120 / 2,
-                            height: 100,
-                            width: 100,
-                            borderRadius: 100 / 2,
-                            borderWidth: 20,
-                            borderColor: TILE_BACKGROUND,
+                            borderColor: isOwnMessage ? TILE_BACKGROUND_OWN : TILE_BACKGROUND,
                         }}
                     />
                 </RX.View>
@@ -335,7 +309,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                     onLongPress={ this.showContextDialog }
                     onPan={ () => null }
                 >
-                    { cornerTriangle }
+                    { cornerPointer }
                     <RX.View style={ styles.containerMessage }>
                         { message }
                     </RX.View>
@@ -357,7 +331,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                     onContextMenu={ this.showContextDialog }
                     activeOpacity={ 1 }
                 >
-                    { cornerTriangle }
+                    { cornerPointer }
                     <RX.View style={ styles.containerMessage }>
                         { message }
                     </RX.View>
