@@ -279,15 +279,15 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                         bottom: 0,
                         left: -20,
                         height: 20,
-                        width: 20 + BORDER_RADIUS - 1,
+                        width: 20 + BORDER_RADIUS,
                         overflow: 'hidden',
                     }}
                 >
                     <RX.View
                         style={{
                             position: 'absolute',
-                            bottom: -26,
-                            left: -118 / 2,
+                            bottom: -28,
+                            left: -120 / 2,
                             height: 100,
                             width: 100,
                             borderRadius: 100 / 2,
@@ -305,15 +305,15 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                         bottom: 0,
                         right: -20,
                         height: 20,
-                        width: 20 + BORDER_RADIUS - 1,
+                        width: 20 + BORDER_RADIUS,
                         overflow: 'hidden',
                     }}
                 >
                     <RX.View
                         style={{
                             position: 'absolute',
-                            bottom: -26,
-                            right: -118 / 2,
+                            bottom: -28,
+                            right: -120 / 2,
                             height: 100,
                             width: 100,
                             borderRadius: 100 / 2,
@@ -335,6 +335,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                     onLongPress={ this.showContextDialog }
                     onPan={ () => null }
                 >
+                    { cornerTriangle }
                     <RX.View style={ styles.containerMessage }>
                         { message }
                     </RX.View>
@@ -342,7 +343,6 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                         { footer }
                         { readMarker }
                     </RX.View>
-                    { cornerTriangle }
                 </RX.GestureView>
             );
 
@@ -357,6 +357,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                     onContextMenu={ this.showContextDialog }
                     activeOpacity={ 1 }
                 >
+                    { cornerTriangle }
                     <RX.View style={ styles.containerMessage }>
                         { message }
                     </RX.View>
@@ -364,7 +365,6 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                         { footer }
                         { readMarker }
                     </RX.View>
-                    { cornerTriangle }
                 </RX.View>
             );
         }
