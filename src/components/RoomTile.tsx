@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { TILE_BACKGROUND, BUTTON_UNREAD_TEXT, BUTTON_UNREAD_BACKGROUND, TILE_SYSTEM_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, FONT_NORMAL,
-    AVATAR_SMALL_WIDTH, TILE_HEIGHT, TRANSPARENT_BACKGROUND, ICON_INFO_FILL, TILE_MESSAGE_TEXT, AVATAR_FOREGROUND, APP_BACKGROUND,
+    AVATAR_SMALL_WIDTH, TILE_HEIGHT, TRANSPARENT_BACKGROUND, ICON_INFO_FILL, TILE_MESSAGE_TEXT, AVATAR_FOREGROUND,
     TILE_BACKGROUND_SELECTED }
     from '../ui';
 import DataStore from '../stores/DataStore';
@@ -97,7 +97,6 @@ interface RoomTileProps extends RX.CommonProps {
     onPressRoom?: (roomId: string) => void;
     roomId: string;
     newestRoomEvent?: MessageEvent;
-    nonShadeable?: boolean;
 }
 
 interface RoomTileState {
@@ -109,7 +108,6 @@ interface RoomTileState {
     contactId: string,
     type: RoomType;
     isSelected: boolean;
-    isShaded: boolean;
     isJitsiMaximised: boolean;
 }
 
@@ -165,7 +163,6 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
             contactId: roomSummary.contactId!,
             type: roomSummary.type!,
             isSelected: selectedRoom === this.props.roomId,
-            isShaded: (selectedRoom && selectedRoom !== this.props.roomId) as boolean,
             isJitsiMaximised: UiStore.getJitsiMaximised(),
         };
     }
@@ -385,22 +382,6 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
             </RX.Text>
         );
 
-        let shade;
-        if (!this.props.nonShadeable && this.state.isShaded) {
-            shade = (
-                <RX.View style={{
-                    position: 'absolute',
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    backgroundColor: APP_BACKGROUND,
-                    opacity: 0.3,
-                    borderRadius: BORDER_RADIUS,
-                }}/>
-            )
-        }
-
         return (
             <RX.View
                 style={ styles.container }
@@ -430,7 +411,6 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
                         </RX.View>
                     </RX.View>
                     { unread }
-                    { shade }
                 </RX.View>
             </RX.View>
         );

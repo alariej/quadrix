@@ -57,7 +57,6 @@ export default class DialogRoomPicker extends RX.Component<DialogRoomPickerProps
                         roomId={ room.id }
                         onPressRoom={ this.props.onPressRoom }
                         newestRoomEvent={ room.newEvents[0] }
-                        nonShadeable={ true }
                     />
                 );
             });

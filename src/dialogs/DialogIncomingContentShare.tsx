@@ -325,7 +325,6 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
                         key={ this.props.roomId }
                         roomId={ this.props.roomId }
                         newestRoomEvent={ newestRoomEvent }
-                        nonShadeable={ true }
                     />
                 </RX.View>
             );
@@ -351,7 +350,6 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
                         key={ this.props.roomId }
                         roomId={ this.props.roomId }
                         newestRoomEvent={ newestRoomEvent }
-                        nonShadeable={ true }
                     />
                 </RX.View>
             );
@@ -369,7 +367,6 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
                         key={ this.props.roomId }
                         roomId={ this.props.roomId }
                         newestRoomEvent={ newestRoomEvent }
-                        nonShadeable={ true }
                     />
                 </RX.View>
             );
@@ -387,7 +384,6 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
                         key={ this.props.roomId }
                         roomId={ this.props.roomId }
                         newestRoomEvent={ newestRoomEvent }
-                        nonShadeable={ true }
                     />
                 </RX.View>
             );
