@@ -40,6 +40,6 @@
     "__DEV__": "off"
   },
   "settings": {
-    "react": { "version": "latest" }
+    "react": { "version": "detect" }
   }
 }
