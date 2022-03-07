@@ -106,7 +106,6 @@ class FileHandler {
     ): Promise<void> {
 
         const isGranted = await this.requestWriteStoragePermission();
-
         if(!isGranted) { onSuccess(false); return; }
 
         const fetchProgress = (_progress: number) => null;
@@ -140,8 +139,11 @@ class FileHandler {
             .catch(_error => onNoAppFound());
     }
 
-    public viewFile(message: MessageEvent, fetchProgress: (progress: number) => void,
-        onSuccess: (success: boolean) => void, onNoAppFound: () => void): void {
+    public async viewFile(message: MessageEvent, fetchProgress: (progress: number) => void,
+        onSuccess: (success: boolean) => void, onNoAppFound: () => void): Promise<void> {
+
+        const isGranted = await this.requestWriteStoragePermission();
+        if (!isGranted) { return Promise.reject() }
 
         const mimeType = message.content.info!.mimetype;
 
@@ -157,6 +159,9 @@ class FileHandler {
     }
 
     public async pickFile(onlyImages?: boolean): Promise<FileObject> {
+
+        const isGranted = await this.requestWriteStoragePermission();
+        if (!isGranted) { return Promise.reject() }
 
         const response = await DocumentPicker.pickSingle({
             type: [onlyImages ? DocumentPicker.types.images : DocumentPicker.types.allFiles],
