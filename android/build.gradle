@@ -42,8 +42,12 @@ allprojects {
             // Android JSC is installed from npm
             url("$rootDir/../node_modules/jsc-android/dist")
         }
+        mavenCentral {
+            content {
+                excludeGroup "com.facebook.react"
+            }
+        }
         google()
-        mavenCentral()
         maven { url 'https://www.jitpack.io' }
     }
 }
