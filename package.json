@@ -41,7 +41,7 @@
     "babel-loader": "8.2.3",
     "compression-webpack-plugin": "9.2.0",
     "cross-env": "7.0.3",
-    "electron": "17.1.0",
+    "electron": "17.1.1",
     "electron-builder": "22.14.13",
     "electron-packager": "15.4.0",
     "electron-packager-languages": "0.5.0",
@@ -59,8 +59,8 @@
     "webpack-merge": "5.8.0"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "1.15.14",
-    "@react-native-community/netinfo": "7.1.7",
+    "@react-native-async-storage/async-storage": "1.16.1",
+    "@react-native-community/netinfo": "8.1.0",
     "@react-native-firebase/app": "14.5.1",
     "@react-native-firebase/messaging": "14.5.1",
     "axios": "0.26.0",
@@ -80,7 +80,7 @@
     "react-native-image-picker": "4.7.3",
     "react-native-image-resizer": "1.4.5",
     "react-native-share": "7.3.6",
-    "react-native-svg": "12.2.0",
+    "react-native-svg": "12.3.0",
     "react-native-webview": "11.17.2",
     "reactxp": "github:alariej/reactxp",
     "reactxp-imagesvg": "github:alariej/reactxp-imagesvg",
