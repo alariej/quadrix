@@ -209,14 +209,18 @@ android {
     }
 }
 
-def hermesPath = "../../node_modules/hermes-engine/android/";
-
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    debugImplementation jscFlavor
-    releaseImplementation files(hermesPath + "hermes-release.aar")
+
+    if (enableHermes) {
+        def hermesPath = "../../node_modules/hermes-engine/android/";
+        debugImplementation files(hermesPath + "hermes-debug.aar")
+        releaseImplementation files(hermesPath + "hermes-release.aar")
+    } else {
+        implementation jscFlavor
+    }
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
