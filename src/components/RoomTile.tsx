@@ -8,7 +8,8 @@ import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
 import EventUtils from '../utils/EventUtils';
 import ApiClient from '../matrix/ApiClient';
-import { invitationWaiting, archived, invitationNotYetAccepted, encryptedMessage, jitsiStartedShort, image, video } from '../translations';
+import { invitationWaiting, archived, invitationNotYetAccepted, encryptedMessage, jitsiStartedShort, image, video, yesterdayWord,
+    Languages } from '../translations';
 import UiStore from '../stores/UiStore';
 import IconSvg, { SvgFile } from './IconSvg';
 import { StyleRuleSet, TextStyle } from 'reactxp/dist/common/Types';
@@ -16,6 +17,7 @@ import { RoomPhase, RoomType } from '../models/MatrixApi';
 import { MessageEvent } from '../models/MessageEvent';
 import AppFont from '../modules/AppFont';
 import CachedImage from '../modules/CachedImage';
+import { format, isSameWeek, isToday, isYesterday, Locale } from 'date-fns';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -88,6 +90,13 @@ const styles = {
         backgroundColor: BUTTON_UNREAD_BACKGROUND,
         fontSize: FONT_LARGE,
         color: BUTTON_UNREAD_TEXT,
+        textAlign: 'center',
+        marginLeft: 2 * SPACING,
+    }),
+    messageTime: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
+        fontSize: FONT_NORMAL,
+        color: TILE_SYSTEM_TEXT,
         textAlign: 'center',
         marginLeft: 2 * SPACING,
     }),
@@ -172,12 +181,31 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
         if (!this.state.type) { return null; }
 
         let unread: ReactElement | undefined;
+        let messageTime: ReactElement | undefined;
         if (this.state.unreadCount !== undefined && this.state.unreadCount > 0) {
             unread = (
                 <RX.Text allowFontScaling={ false } style={ [styles.unreadNumber, this.unreadTextStyle] }>
                     { this.state.unreadCount > 9 ? '9+' : this.state.unreadCount }
                 </RX.Text>
             );
+        } else if (this.props.newestRoomEvent?.time) {
+
+            let messageTimeString: string;
+            if (isToday(this.props.newestRoomEvent.time)) {
+                messageTimeString = format(this.props.newestRoomEvent.time, 'HH:mm');
+            } else if (isYesterday(this.props.newestRoomEvent.time)) {
+                messageTimeString = yesterdayWord[this.language];
+            } else if (isSameWeek(new Date(), this.props.newestRoomEvent.time)){
+                messageTimeString = format(this.props.newestRoomEvent.time, 'EEEE', { locale: this.locale });
+            } else {
+                messageTimeString = format(this.props.newestRoomEvent.time, 'd MMM', { locale: this.locale });
+            }
+
+            messageTime = (
+                <RX.Text allowFontScaling={ false } style={ styles.messageTime }>
+                    { messageTimeString }
+                </RX.Text>
+            )
         }
 
         const avatarIsUrl = this.state.avatarUrl && this.state.avatarUrl.includes('https');
@@ -408,6 +436,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
                         <RX.View style={ styles.containerNewestMessage }>
                             { messageTypeIcon }
                             { messageRender }
+                            { messageTime }
                         </RX.View>
                     </RX.View>
                     { unread }
