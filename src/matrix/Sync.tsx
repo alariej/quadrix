@@ -189,7 +189,6 @@ class Sync {
             })
             .catch((error: ErrorResponse_) => {
 
-                UiStore.setOffline(true);
                 DataStore.setSyncComplete(true);
 
                 if (error.body && error.body.errcode && error.body.errcode === 'M_UNKNOWN_TOKEN') {
@@ -198,7 +197,7 @@ class Sync {
                 }
 
                 // timeout with no new info on some servers
-                if (error.statusCode === 504) {
+                if (error.statusCode === 504 || error.statusCode === 0) {
 
                     this.incrementalSync(syncToken, syncTimeout);
 
