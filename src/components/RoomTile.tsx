@@ -124,6 +124,8 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 
     private alias = '';
     private unreadTextStyle: StyleRuleSet<TextStyle> | undefined;
+    private language: Languages;
+    private locale: Locale;
 
     constructor(props: RoomTileProps) {
         super(props);
@@ -133,6 +135,9 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
                 lineHeight: 24,
             }, false);
         }
+
+        this.language = UiStore.getLanguage();
+        this.locale = UiStore.getLocale();
     }
 
     protected _buildState(_props: RoomTileProps, initState: boolean): RoomTileState | undefined {
@@ -264,7 +269,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
         let messageText: string | undefined;
 
         if (this.state.phase === 'invite') {
-            messageText = invitationWaiting[UiStore.getLanguage()];
+            messageText = invitationWaiting[this.language];
             messageTypeIcon = (
                 <IconSvg
                     source= { require('../resources/svg/info.json') as SvgFile }
@@ -275,7 +280,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
                 />
             );
         } else if (this.state.contactPhase === 'leave') {
-            messageText = archived[UiStore.getLanguage()];
+            messageText = archived[this.language];
             messageTypeIcon = (
                 <IconSvg
                     source= { require('../resources/svg/info.json') as SvgFile }
@@ -286,7 +291,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
                 />
             );
         } else if (this.state.contactPhase === 'invite') {
-            messageText = invitationNotYetAccepted[UiStore.getLanguage()];
+            messageText = invitationNotYetAccepted[this.language];
             messageTypeIcon = (
                 <IconSvg
                     source= { require('../resources/svg/info.json') as SvgFile }
@@ -314,7 +319,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
                     );
                 } else if (this.props.newestRoomEvent.content.msgtype === 'm.image') {
 
-                    messageText = image[UiStore.getLanguage()];
+                    messageText = image[this.language];
 
                     messageTypeIcon = (
                         <IconSvg
@@ -327,7 +332,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
                     );
                 } else if (this.props.newestRoomEvent.content.msgtype === 'm.video') {
 
-                    messageText = video[UiStore.getLanguage()];
+                    messageText = video[this.language];
 
                     messageTypeIcon = (
                         <IconSvg
@@ -342,7 +347,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 
                     if (this.props.newestRoomEvent.content.jitsi_started) {
 
-                        messageText = jitsiStartedShort[UiStore.getLanguage()];
+                        messageText = jitsiStartedShort[this.language];
 
                         messageTypeIcon = (
                             <IconSvg
@@ -372,7 +377,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 
             } else if (this.props.newestRoomEvent.type === 'm.room.encrypted') {
 
-                messageText = encryptedMessage[UiStore.getLanguage()];
+                messageText = encryptedMessage[this.language];
                 messageTypeIcon = (
                     <IconSvg
                         source= { require('../resources/svg/info.json') as SvgFile }
