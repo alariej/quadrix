@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
-import { HEADER_TEXT, MODAL_CONTENT_TEXT, LINK_TEXT, HEADER_HEIGHT, FONT_NORMAL,
+import { TILE_SYSTEM_TEXT, MODAL_CONTENT_TEXT, LINK_TEXT, HEADER_HEIGHT, FONT_NORMAL,
     BUTTON_ROUND_WIDTH, FONT_LARGE, BORDER_RADIUS, SPACING, ICON_REDUCTION_FACTOR, BUTTON_FILL, TRANSPARENT_BACKGROUND,
     LOGO_BACKGROUND } from '../ui';
 import ApiClient from '../matrix/ApiClient';
@@ -37,8 +37,7 @@ const styles = {
     userName: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
-        fontWeight: '600',
-        color: HEADER_TEXT,
+        color: TILE_SYSTEM_TEXT,
     }),
     roundButton: RX.Styles.createViewStyle({
         borderRadius: BUTTON_ROUND_WIDTH / 2,
@@ -194,7 +193,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
                     width={ 24 * 347.48401 / 89.798973 }
                     fillColor={ LOGO_BACKGROUND }
                 />
-                <RX.Text 
+                <RX.Text
                     allowFontScaling={ false }
                     style={ styles.textVersion }
                 >
@@ -242,7 +241,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
                 <RX.View style={ styles.connectedContainer }>
                     <IconSvg
                         source= { require('../resources/svg/nosignal.json') as SvgFile }
-                        fillColor={ HEADER_TEXT }
+                        fillColor={ TILE_SYSTEM_TEXT }
                         height={ 14 }
                         width={ 14 }
                     />
