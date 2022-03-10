@@ -5,13 +5,12 @@ import { Credentials } from '../../models/Credentials';
 import { MessageEvent } from '../../models/MessageEvent';
 import EventUtils from '../../utils/EventUtils';
 import ApiClient from '../../matrix/ApiClient';
-import ImageResizer, { Response as ImageResizerResponse, ResizeFormat } from "react-native-image-resizer";
 import { FileObject } from '../../models/FileObject';
 import ImageSizeLocal from '../ImageSizeLocal';
 import * as ImagePicker from 'react-native-image-picker';
 import { compressingVideo, uploadingFile } from '../../translations';
 import UiStore from '../../stores/UiStore';
-import { Video } from 'react-native-compressor';
+import { Video, Image } from 'react-native-compressor';
 import { ThumbnailInfo, UploadFileInfo } from '../../models/UploadFileInfo';
 import { createThumbnail } from 'react-native-create-thumbnail';
 
@@ -205,30 +204,15 @@ class FileHandler {
         let thumbnailUrl: string | undefined;
         let thumbnailInfo: ThumbnailInfo | undefined;
 
-        let resizedImage: ImageResizerResponse | null;
+        let compressedUri: string | null
         if (file.type.includes('image')) {
 
-            let compressFormat: ResizeFormat | undefined;
-            if (file.type.toLowerCase().includes('png') || file.name.toLowerCase().includes('.png')) {
-                compressFormat = 'PNG';
-            } else {
-                compressFormat = 'JPEG';
-            }
+            compressedUri = await Image.compress(file.uri, {
+                compressionMethod: 'auto',
+            });
 
-            resizedImage = await ImageResizer.createResizedImage(
-                file.uri,
-                1280,
-                1280,
-                compressFormat,
-                90,
-                0,
-                undefined,
-                false,
-                { mode: 'contain', onlyScaleDown: true }
-            ).catch(_error => null);
-
-            if (resizedImage) {
-                file.uri = resizedImage.path;
+            if (compressedUri) {
+                file.uri = compressedUri;
             }
         } else if (file.type.includes('video')) {
 
@@ -236,7 +220,7 @@ class FileHandler {
                 fetchProgress(compressingVideo[UiStore.getLanguage()], progress);
             };
 
-            const compressUri = await Video.compress(
+            compressedUri = await Video.compress(
                 file.uri,
                 {
                     compressionMethod: 'auto',
@@ -247,11 +231,11 @@ class FileHandler {
             )
                 .catch(_err => null);
 
-            if (compressUri) {
+            if (compressedUri) {
 
-                const stat = await ReactNativeBlobUtil.fs.stat(compressUri.replace('file://', '')).catch(_err => null);
+                const stat = await ReactNativeBlobUtil.fs.stat(compressedUri.replace('file://', '')).catch(_err => null);
 
-                file.uri = compressUri;
+                file.uri = compressedUri;
                 fileName = file.name.split('.')[0] + '.mp4';
                 fileSize = stat?.size;
                 mimeType = 'video/mp4';
@@ -299,8 +283,8 @@ class FileHandler {
             })
             .catch(error => { return Promise.reject(error) })
             .finally(() => {
-                if (resizedImage && resizedImage.uri) {
-                    ReactNativeBlobUtil.fs.unlink(resizedImage.uri).catch(_error => null);
+                if (compressedUri) {
+                    ReactNativeBlobUtil.fs.unlink(compressedUri).catch(_error => null);
                 }
             });
 

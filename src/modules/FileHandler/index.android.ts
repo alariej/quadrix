@@ -5,12 +5,10 @@ import { Credentials } from '../../models/Credentials';
 import { MessageEvent } from '../../models/MessageEvent';
 import EventUtils from '../../utils/EventUtils';
 import ApiClient from '../../matrix/ApiClient';
-import ImageResizer, { Response as ImageResizerResponse, ResizeFormat } from 'react-native-image-resizer';
 import { FileObject } from '../../models/FileObject';
 import { PermissionsAndroid, PermissionStatus } from 'react-native';
 import ImageSizeLocal from '../ImageSizeLocal';
-import Exif from 'react-native-exif';
-import { Video } from 'react-native-compressor';
+import { Video, Image } from 'react-native-compressor';
 import { compressingVideo, uploadingFile } from '../../translations';
 import UiStore from '../../stores/UiStore';
 import { FileSystem } from 'react-native-file-access';
@@ -199,7 +197,7 @@ class FileHandler {
     }
 
     public async uploadFile(credentials: Credentials, file: FileObject, fetchProgress: (text: string, progress: number) => void,
-        isIntent = false): Promise<UploadFileInfo> {
+        _isIntent = false): Promise<UploadFileInfo> {
 
         const url = 'https://' + credentials.homeServer + PREFIX_UPLOAD;
 
@@ -209,96 +207,15 @@ class FileHandler {
         let thumbnailUrl: string | undefined;
         let thumbnailInfo: ThumbnailInfo | undefined;
 
-        let resizedImage: ImageResizerResponse | null;
+        let compressedUri: string | null
         if (file.type.includes('image')) {
 
-            let rotation = 0;
+            compressedUri = await Image.compress(file.uri, {
+                compressionMethod: 'auto',
+            });
 
-            if (!isIntent) {
-
-                const isGranted = await this.requestReadStoragePermission();
-                if(!isGranted) { return Promise.reject(); }
-
-                const exif = await Exif.getExif(file.uri).catch(_error => null);
-
-                if (exif && exif.Orientation) {
-                    switch (exif.Orientation) {
-                        case 1:
-                            rotation = 0;
-                            break;
-
-                        case 3:
-                            rotation = 180;
-                            break;
-
-                        case 6:
-                            rotation = 90;
-                            break;
-
-                        case 8:
-                            rotation = 270;
-                            break;
-
-                        default:
-                            rotation = 0;
-                            break;
-                    }
-                }
-            }
-
-            let compressFormat: ResizeFormat | undefined;
-            if (file.type.toLowerCase().includes('png') || file.name.toLowerCase().includes('.png')) {
-                compressFormat = 'PNG';
-            } else {
-                compressFormat = 'JPEG';
-            }
-
-            resizedImage = await ImageResizer.createResizedImage(
-                file.uri,
-                1280,
-                1280,
-                compressFormat,
-                90,
-                rotation,
-                undefined,
-                false,
-                { mode: 'contain', onlyScaleDown: true }
-            ).catch(_error => null);
-
-            if (resizedImage) {
-
-                file.uri = resizedImage.uri;
-
-                const ratio1 = file.imageHeight! / file.imageWidth!;
-                const ratio2 = resizedImage.height / resizedImage.width;
-                // console.log(file);
-                // console.log(resizedImage);
-                // console.log(ratio1);
-                // console.log(ratio2);
-                // console.log(Math.abs(ratio1 - ratio2));
-
-                if (Math.abs(ratio1 - ratio2) > 0.1 && ratio1 !== 1) {
-
-                    // some android phones still get here (Samsung S20)
-                    // desperately rotate by an additional 90 degrees
-                    // console.log('WRONG IMAGE ROTATION');
-
-                    resizedImage = await ImageResizer.createResizedImage(
-                        file.uri,
-                        1280,
-                        1280,
-                        compressFormat,
-                        90,
-                        rotation + 90,
-                        undefined,
-                        false,
-                        { mode: 'contain', onlyScaleDown: true }
-                    ).catch(_error => null);
-
-                    if (resizedImage) {
-                        file.uri = resizedImage.uri;
-                    }
-                }
+            if (compressedUri) {
+                file.uri = compressedUri;
             }
         } else if (file.type.includes('video')) {
 
@@ -309,7 +226,7 @@ class FileHandler {
                 fetchProgress(compressingVideo[UiStore.getLanguage()], progress);
             };
 
-            const compressUri = await Video.compress(
+            compressedUri = await Video.compress(
                 file.uri,
                 {
                     compressionMethod: 'auto',
@@ -320,11 +237,11 @@ class FileHandler {
             )
                 .catch(_err => null);
 
-            if (compressUri) {
+            if (compressedUri) {
 
-                let uri = compressUri;
-                if (!compressUri.includes('file:///')) {
-                    uri = compressUri?.replace('file://', 'file:///');
+                let uri = compressedUri;
+                if (!compressedUri.includes('file:///')) {
+                    uri = compressedUri?.replace('file://', 'file:///');
                 }
 
                 const stat = await ReactNativeBlobUtil.fs.stat(uri).catch(_err => null);
@@ -377,8 +294,8 @@ class FileHandler {
             })
             .catch(error => { return Promise.reject(error) })
             .finally(() => {
-                if (resizedImage && resizedImage.uri) {
-                    ReactNativeBlobUtil.fs.unlink(resizedImage.uri).catch(_error => null);
+                if (compressedUri) {
+                    ReactNativeBlobUtil.fs.unlink(compressedUri).catch(_error => null);
                 }
             });
 
