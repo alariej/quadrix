@@ -50,7 +50,7 @@ export default class SvgSpinner extends RX.Component<SvgSpinnerProps, RX.Statele
                         height: this.props.size,
                         width: this.props.size,
                         borderRadius: this.props.size / 2,
-                        borderWidth: this.props.size / 5,
+                        borderWidth: this.props.size / 6,
                         borderColor: this.props.color,
                         padding: SPACING,
                         alignItems: 'center',
@@ -58,9 +58,9 @@ export default class SvgSpinner extends RX.Component<SvgSpinnerProps, RX.Statele
                 >
                     <RX.View
                         style={{
-                            height: (this.props.size - (2 * this.props.size / 5)) / 2 + (this.props.size / 10) / 2 - SPACING,
-                            width: this.props.size / 10,
-                            borderRadius: this.props.size / 10,
+                            height: (this.props.size - (2 * this.props.size / 6)) / 2 + (this.props.size / 6) / 2 - SPACING,
+                            width: this.props.size / 6,
+                            borderRadius: this.props.size / 6,
                             backgroundColor: this.props.color
                         }}
                     />
