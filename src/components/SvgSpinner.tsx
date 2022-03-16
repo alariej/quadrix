@@ -58,9 +58,9 @@ export default class SvgSpinner extends RX.Component<SvgSpinnerProps, RX.Statele
                 >
                     <RX.View
                         style={{
-                            height: (this.props.size - (2 * this.props.size / 6)) / 2 + (this.props.size / 6) / 2 - SPACING,
+                            height: this.props.size / 2 - this.props.size / 12 - SPACING,
                             width: this.props.size / 6,
-                            borderRadius: this.props.size / 6,
+                            borderRadius: this.props.size / 12,
                             backgroundColor: this.props.color
                         }}
                     />
