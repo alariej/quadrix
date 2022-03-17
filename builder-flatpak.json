@@ -1,0 +1,40 @@
+{
+    "appId": "chat.quadrix",
+    "productName": "quadrix",
+    "linux": {
+        "category": "Internet",
+        "target": [
+            "flatpak"
+        ],
+        "icon": "src/resources/logos/logo256.png"
+    },
+    "flatpak": {
+        "base": "io.atom.electron.BaseApp",
+        "baseVersion": "stable",
+        "runtime": "org.freedesktop.Platform",
+        "runtimeVersion": "1.4",
+        "sdk": "org.freedesktop.Sdk",
+        "finishArgs": [
+            "--share=ipc",
+            "--socket=x11",
+            "--socket=pulseaudio",
+            "--filesystem=home",
+            "--share=network",
+            "--device=dri"
+        ],
+        "files": [
+            [ "src/resources/logos", "/share/" ],
+            [ "dist/web", "/share/quadrix" ]
+        ],
+        "symlinks": [
+            [ "/share/quadrix/quadrix", "/bin/quadrix" ]
+        ]
+    },
+    "files": [
+        "dist-web/**/*",
+        "electron-main.js"
+    ],
+    "directories": {
+        "output": "dist/"
+    }
+}
