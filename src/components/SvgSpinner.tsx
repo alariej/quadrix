@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as RX from 'reactxp';
-import { SPACING } from '../ui';
 
 interface SvgSpinnerProps {
     color: string;
@@ -44,7 +43,7 @@ export default class SvgSpinner extends RX.Component<SvgSpinnerProps, RX.Statele
     public render(): JSX.Element | null {
 
         return (
-            <RX.Animated.View style={ this.animatedStyle }>
+            <RX.Animated.View style={ [this.animatedStyle, { overflow: 'visible' }] }>
                 <RX.View
                     style={{
                         height: this.props.size,
@@ -52,16 +51,28 @@ export default class SvgSpinner extends RX.Component<SvgSpinnerProps, RX.Statele
                         borderRadius: this.props.size / 2,
                         borderWidth: this.props.size / 6,
                         borderColor: this.props.color,
-                        padding: SPACING,
+                        // padding: SPACING,
                         alignItems: 'center',
+                        justifyContent: 'flex-start',
+                        overflow: 'visible'
                     }}
                 >
                     <RX.View
                         style={{
-                            height: this.props.size / 2 - this.props.size / 12 - SPACING,
+                            height: this.props.size / 6,
                             width: this.props.size / 6,
-                            borderRadius: this.props.size / 12,
-                            backgroundColor: this.props.color
+                            marginTop: - this.props.size / 6,
+                            backgroundColor: 'black',
+                            opacity: 0.3,
+                        }}
+                    />
+                    <RX.View
+                        style={{
+                            height: this.props.size / 6,
+                            width: this.props.size / 6,
+                            marginTop: this.props.size - 2 * this.props.size / 6,
+                            backgroundColor: 'black',
+                            opacity: 0.3,
                         }}
                     />
                 </RX.View>
