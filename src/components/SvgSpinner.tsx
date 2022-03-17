@@ -66,6 +66,7 @@ export default class SvgSpinner extends RX.Component<SvgSpinnerProps, RX.Statele
                         borderRadius: this.props.size / 2,
                         borderWidth: ringWidth,
                         borderColor: this.props.color,
+                        opacity: 0.7
                     }}
                 />
                 <RX.View
@@ -78,7 +79,7 @@ export default class SvgSpinner extends RX.Component<SvgSpinnerProps, RX.Statele
                         borderRadius: this.props.size / 2,
                         borderWidth: ringWidth,
                         borderColor: BUTTON_FILL,
-                        opacity: 0.5
+                        opacity: 0.4
                     }}
                 />
             </RX.Animated.View>
