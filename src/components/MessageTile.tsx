@@ -34,6 +34,7 @@ const styles = {
         flexDirection: 'row',
         marginTop: 8,
         height: 16,
+        overflow: 'visible'
     }),
     footer: RX.Styles.createViewStyle({
         flex: 1,
@@ -54,11 +55,13 @@ const styles = {
     }),
     containerMarker: RX.Styles.createViewStyle({
         flex: 1,
+        overflow: 'visible'
     }),
     spinner: RX.Styles.createViewStyle({
         flex: 1,
         alignSelf: 'flex-end',
-        marginRight: SPACING
+        marginRight: SPACING,
+        overflow: 'visible'
     }),
     containerText: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,

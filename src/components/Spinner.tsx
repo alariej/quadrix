@@ -63,7 +63,7 @@ export default class Spinner extends RX.Component<SpinnerProps, SpinnerState> {
 
     public render(): JSX.Element | null {
 
-        const size = !this.props.size || this.props.size === 'large' ? 48 : 16;
+        const size = !this.props.size || this.props.size === 'large' ? 48 : 14;
 
         let spinner: ReactElement | null;
         if (this.state.isVisible) {
@@ -76,7 +76,7 @@ export default class Spinner extends RX.Component<SpinnerProps, SpinnerState> {
         }
 
         return (
-            <RX.View>
+            <RX.View style={{ overflow: 'visible' }}>
                 { spinner! }
             </RX.View>
         )

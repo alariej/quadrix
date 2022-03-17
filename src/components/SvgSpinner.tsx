@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as RX from 'reactxp';
+import { BUTTON_FILL } from '../ui';
 
 interface SvgSpinnerProps {
     color: string;
@@ -42,40 +43,44 @@ export default class SvgSpinner extends RX.Component<SvgSpinnerProps, RX.Statele
 
     public render(): JSX.Element | null {
 
+        const ringWidth = this.props.size / 5;
+        const baseRingOffset = this.props.size / 8;
+        const blueRingOffest = baseRingOffset + this.props.size / 6;
+
         return (
-            <RX.Animated.View style={ [this.animatedStyle, { overflow: 'visible' }] }>
+            <RX.Animated.View style={[
+                this.animatedStyle,
+                {
+                    height: this.props.size + blueRingOffest,
+                    width: this.props.size + blueRingOffest,
+                    overflow: 'visible'
+                }
+            ]}>
                 <RX.View
                     style={{
+                        position: 'absolute',
+                        top: baseRingOffset,
+                        left: blueRingOffest / 2,
                         height: this.props.size,
                         width: this.props.size,
                         borderRadius: this.props.size / 2,
-                        borderWidth: this.props.size / 6,
+                        borderWidth: ringWidth,
                         borderColor: this.props.color,
-                        // padding: SPACING,
-                        alignItems: 'center',
-                        justifyContent: 'flex-start',
-                        overflow: 'visible'
                     }}
-                >
-                    <RX.View
-                        style={{
-                            height: this.props.size / 6,
-                            width: this.props.size / 6,
-                            marginTop: - this.props.size / 6,
-                            backgroundColor: 'black',
-                            opacity: 0.3,
-                        }}
-                    />
-                    <RX.View
-                        style={{
-                            height: this.props.size / 6,
-                            width: this.props.size / 6,
-                            marginTop: this.props.size - 2 * this.props.size / 6,
-                            backgroundColor: 'black',
-                            opacity: 0.3,
-                        }}
-                    />
-                </RX.View>
+                />
+                <RX.View
+                    style={{
+                        position: 'absolute',
+                        top: blueRingOffest,
+                        left: blueRingOffest / 2,
+                        height: this.props.size,
+                        width: this.props.size,
+                        borderRadius: this.props.size / 2,
+                        borderWidth: ringWidth,
+                        borderColor: BUTTON_FILL,
+                        opacity: 0.5
+                    }}
+                />
             </RX.Animated.View>
         )
     }
