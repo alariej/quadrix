@@ -3,7 +3,8 @@ import RX, { Types } from 'reactxp';
 import RoomList from './RoomList';
 import Room from './Room';
 import { PAGE_MARGIN, MODAL_CONTENT_TEXT, FONT_LARGE, COMPOSER_BORDER,
-    PAGE_WIDE_PADDING, OBJECT_MARGIN, TRANSPARENT_BACKGROUND, HEADER_HEIGHT, TILE_WIDTH, LARGE_LOGO_FOREGROUND } from '../ui';
+    PAGE_WIDE_PADDING, OBJECT_MARGIN, TRANSPARENT_BACKGROUND, HEADER_HEIGHT, TILE_WIDTH, LARGE_LOGO_FOREGROUND,
+    STATUSBAR_BACKGROUND } from '../ui';
 import DataStore from '../stores/DataStore';
 import { MessageEvent } from '../models/MessageEvent';
 import ApiClient from '../matrix/ApiClient';
@@ -255,6 +256,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
     private shareContent = (event: { url: string }) => {
 
+        RX.StatusBar.setBackgroundColor(STATUSBAR_BACKGROUND, true)
         RX.StatusBar.setBarStyle('dark-content', true);
 
         this.showRoomList();
@@ -377,6 +379,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
         UiStore.setJitsiActive(false);
         this.setState({ showJitsiMeet: false }, () => {
             setTimeout(() => {
+                RX.StatusBar.setBackgroundColor(STATUSBAR_BACKGROUND, true)
                 RX.StatusBar.setBarStyle('dark-content', true);
             }, 2000);
         });

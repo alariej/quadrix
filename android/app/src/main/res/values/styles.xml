@@ -2,5 +2,6 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/theme</item>
         <item name="android:forceDarkAllowed">false</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 </resources>
