@@ -141,8 +141,8 @@ android {
         applicationId "chat.quadrix.android"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 32
-        versionName "0.6.4"
+        versionCode 33
+        versionName "0.6.5"
         ndk {
             abiFilters "armeabi-v7a","arm64-v8a","x86","x86_64"
         }
