@@ -2,18 +2,18 @@ import * as React from 'react';
 import * as RX from 'reactxp';
 import { BUTTON_FILL } from '../ui';
 
-interface SvgSpinnerProps {
+interface AnimatedSpinnerProps {
     color: string;
     size: number;
 }
 
-export default class SvgSpinner extends RX.Component<SvgSpinnerProps, RX.Stateless> {
+export default class AnimatedSpinner extends RX.Component<AnimatedSpinnerProps, RX.Stateless> {
 
     private animatedValue: RX.Animated.Value;
     private animatedStyle: RX.Types.AnimatedViewStyleRuleSet;
     private animatedLoop: RX.Types.Animated.LoopConfig;
 
-    constructor(props: SvgSpinnerProps) {
+    constructor(props: AnimatedSpinnerProps) {
         super(props);
 
         this.animatedValue = RX.Animated.createValue(0);

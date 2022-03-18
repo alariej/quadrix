@@ -2,7 +2,7 @@ import React from 'react';
 import RX from 'reactxp';
 import { LOGO_BACKGROUND, MIN_MS } from '../ui';
 import { ReactElement } from 'react';
-import SvgSpinner from '../components/SvgSpinner';
+import AnimatedSpinner from '../components/AnimatedSpinner';
 
 interface SpinnerProps {
     color?: string;
@@ -68,7 +68,7 @@ export default class Spinner extends RX.Component<SpinnerProps, SpinnerState> {
         let spinner: ReactElement | null;
         if (this.state.isVisible) {
             spinner = (
-                <SvgSpinner
+                <AnimatedSpinner
                     color={ this.props.color || LOGO_BACKGROUND }
                     size={ size }
                 />
