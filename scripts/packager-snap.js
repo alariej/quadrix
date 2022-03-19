@@ -1,0 +1,25 @@
+/* eslint-disable */
+const packager = require('electron-packager');
+const setLanguages = require('electron-packager-languages');
+const package = require('../package.json');
+
+const options = {
+    dir: './',
+    appBundleId: 'chat.quadrix',
+    out: './dist-snap',
+    platform: 'linux',
+    arch: 'arm64', // x64, arm64, armv7l
+    overwrite: true,
+    icon: './src/resources/logos/logo256.png',
+    appVersion: package.version,
+    prune: true,
+    derefSymlinks: false,
+    ignore: ['^\/(?!(dist-web|electron-main\.js|package\.json))'],
+};
+
+packager(options)
+    .then(path => console.log('Snap package available at ' + path))
+    .catch((error) => {
+        console.error(error);
+        process.exit(1);
+    });

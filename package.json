@@ -16,7 +16,7 @@
     "build:web": "cross-env platform=web webpack --config=web/webpack/prod.js --progress --mode=production",
     "start:electron": "electron .",
     "build:snap": "electron-builder --linux snap --config builder-snap.json",
-    "build:snap:arm32": "electron-builder --linux snap --armv7l --config builder-snap.json",
+    "build:snap:arm64": "node ./scripts/packager-snap.js",
     "build:deb": "electron-builder --linux deb --config builder-snap.json",
     "build:mas": "node ./scripts/packager-mas.js",
     "sign:mas:dev": "electron-osx-sign dist-mac/quadrix.chat-mas-x64/quadrix.chat.app --identity='Apple Development' --provisioning-profile=macos_alarie_dev.provisionprofile --entitlements=macos/entitlements.mas.plist --type=development",
