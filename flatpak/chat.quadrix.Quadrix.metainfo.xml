@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-    <id>chat.quadrix.flatpak</id>
+    <id>chat.quadrix.Quadrix</id>
     <launchable type="desktop-id">quadrix.desktop</launchable>
     <metadata_license>CC0-1.0</metadata_license>
     <project_license>GPL-3.0-or-later</project_license>
-
     <name>quadrix</name>
-
     <categories>
         <category>Internet</category>
     </categories>
-
-    <summary>Minimal, simple, multi-platform chat app for the Matrix protocol</summary>
-
+    <summary>Minimal, simple, multi-platform messaging client for the Matrix protocol</summary>
     <description>
       <p>- No data collection whatsoever</p>
       <p>- Completely free, no ads</p>
@@ -24,11 +20,8 @@
       <p>- Unique top-down messaging feed</p>
       <p>- Ideally used with a private Matrix homeserver (https://matrix.org/docs/guides/installing-synapse)</p>
       <p>- Open source on github (https://github.com/alariej/quadrix)</p>
-
     </description>
-
     <developer_name>Jean-François Alarie</developer_name>
-
     <releases>
       <release version="0.6.5" date="2022-03-20">
         <description>
@@ -36,20 +29,18 @@
         </description>
       </release>
     </releases>
-
     <screenshots>
-      <screenshot type="default"><image type="source">https://dashboard.snapcraft.io/site_media/appmedia/2022/03/Screenshot_2022-03-13_15-15-20.png</image></screenshot>
+      <screenshot><image type="source">https://dashboard.snapcraft.io/site_media/appmedia/2022/03/Screenshot_2022-03-13_15-15-20.png</image></screenshot>
       <screenshot><image type="source">https://dashboard.snapcraft.io/site_media/appmedia/2022/03/Screenshot_2022-03-13_15-22-11.png</image></screenshot>
       <screenshot><image type="source">https://dashboard.snapcraft.io/site_media/appmedia/2022/03/Screenshot_2022-03-13_15-22-55.png</image></screenshot>
       <screenshot><image type="source">https://dashboard.snapcraft.io/site_media/appmedia/2022/03/Screenshot_2022-03-13_15-24-29.png</image></screenshot>
     </screenshots>
-
-    <content_rating type="oars-1.1" />
-
+    <content_rating type="oars-1.1">
+      <content_attribute id="social-chat">intense</content_attribute>
+    </content_rating>
     <metadata>
         <value key="GnomeSoftware::popular-background">https://dashboard.snapcraft.io/site_media/appmedia/2022/03/Screenshot_2022-03-13_15-22-11.png</value>
     </metadata>
-
     <url type="homepage">https://quadrix.chat</url>
     <url type="bugtracker">https://github.com/alariej/quadrix/issues</url>
     <url type="faq">https://github.com/alariej/quadrix</url>
