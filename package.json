@@ -24,6 +24,7 @@
     "build:pkg": "electron-osx-flat dist-mac/quadrix.chat-mas-x64/quadrix.chat.app --identity='3rd Party Mac Developer Installer' --verbose",
     "build:appx": "electron-builder --win appx --config builder-win.json",
     "build:exe": "electron-builder --win nsis --config builder-win.json",
+    "build:flat": "electron-builder",
     "lint": "eslint --config .eslintrc --ext .ts,.tsx src"
   },
   "devDependencies": {

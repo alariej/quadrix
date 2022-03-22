@@ -75,3 +75,5 @@ macos_alarie.provisionprofile
 macos_alarie_dev.provisionprofile
 ios/Podfile.lock
 .vscode/settings.json
+flatpak/.flatpak-builder/*
+flatpak/generated-sources.json
