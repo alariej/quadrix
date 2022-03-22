@@ -2,13 +2,13 @@
 
 - Minimal, simple, multi-platform chat app for the [Matrix](https://github.com/matrix-org/) protocol
 - No data collection whatsoever
-- Does not support [E2EE](https://en.wikipedia.org/wiki/End-to-end_encryption)
-- No customization (almost), no widgets, no bots, no phone calls
+- Does not support end-to-end encryption (E2EE)
+- No customization, no widgets, no bots, no phone calls
 - Integrated video-conferencing with [Jitsi Meet](https://github.com/jitsi/jitsi-meet/)
 - Programmed with [ReactXP](https://github.com/Microsoft/reactxp)
 - React Native apps for Android and iOS
 - Electron apps for Windows, MacOS, and Linux (amd64, arm64, armhf)
-- Web app (unstable, glitchy UI, for testing only) at [app.quadrix.chat](https://app.quadrix.chat)
+- Web app (unstable, for testing only, but works in desktop and mobile browsers) at [app.quadrix.chat](https://app.quadrix.chat)
 - Push notifications on mobile devices with Firebase Cloud Messaging
 - Unique top-down messaging feed
 
