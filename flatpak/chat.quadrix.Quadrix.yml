@@ -1,6 +1,3 @@
-# run from flatpak folder
-# flatpak-builder build chat.quadrix.Quadrix.yml --install --force-clean --user
-
 app-id: chat.quadrix.Quadrix
 branch: stable
 runtime: org.freedesktop.Platform
@@ -18,7 +15,7 @@ finish-args:
   - --socket=fallback-x11
   - --socket=pulseaudio
   - --share=network
-  - --device=dri
+  - --device=all
   - --filesystem=xdg-documents
   - --filesystem=xdg-download
 build-options:
@@ -38,9 +35,6 @@ modules:
         npm_config_offline: 'true'
     subdir: main
     sources:
-      # - type: archive
-      #   url: https://github.com/alariej/quadrix/archive/master.tar.gz
-      #   sha256: 51d33ad16e209ecad49538a614d420823fdd62884a98035ae829ee5c17394a33
       - type: dir
         path: ..
         dest: main
@@ -48,7 +42,7 @@ modules:
       - type: file
         path: chat.quadrix.Quadrix.metainfo.xml
       - type: file
-        path: quadrix.desktop
+        path: chat.quadrix.Quadrix.desktop
       - type: file
         path: chat.quadrix.Quadrix.svg
       - type: file
@@ -58,14 +52,14 @@ modules:
         commands:
           - zypak-wrapper.sh /app/main/quadrix "$@"
     build-commands:
-      # - jq '.build.linux.target="dir"' <<<$(<package.json) > package.json
-      # - npm install --offline
+      - npm install --offline
       - |
         . ../flatpak-node/electron-builder-arch-args.sh
         npm run build:flat -- $ELECTRON_BUILDER_ARCH_ARGS  --linux --dir
       - cp -a dist/linux*unpacked /app/main
       - install -Dm755 -t /app/bin/ ../run.sh
-      - install -D -m644 -t /app/share/applications ../quadrix.desktop
+      - install -D -m644 -t /app/share/applications ../chat.quadrix.Quadrix.desktop
       - install -D -m644 -t /app/share/icons/hicolor/128x128/apps ../chat.quadrix.Quadrix.png
       - install -D -m644 -t /app/share/icons/hicolor/scalable/apps ../chat.quadrix.Quadrix.svg
       - install -D -m644 -t /app/share/metainfo ../chat.quadrix.Quadrix.metainfo.xml
+      
