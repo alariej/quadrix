@@ -335,6 +335,12 @@ export const open: Translation = {
     fr: 'Ouvrir',
 }
 
+export const details: Translation = {
+    en: 'Details',
+    de: 'Details',
+    fr: 'Details',
+}
+
 export const share: Translation = {
     en: 'Share',
     de: 'Teilen ',

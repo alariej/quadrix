@@ -14,7 +14,7 @@ import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
 import { forward, reply, forwardTo, messageCouldNotBeSent, noApplicationWasFound, open, save, share, fileCouldNotAccess, fileHasBeenSaved,
     fileHasBeenSavedAndroid, fileCouldNotBeSaved, Languages, report, messageHasBeenReported, cancel,
-    doYouReallyWantToReport, pressOKToForward1, pressOKToForward2, toFolder, close, noFileExplorerWasFound} from '../translations';
+    doYouReallyWantToReport, pressOKToForward1, pressOKToForward2, toFolder, close, noFileExplorerWasFound, details} from '../translations';
 import FileHandler from '../modules/FileHandler';
 import ShareHandlerOutgoing from '../modules/ShareHandlerOutgoing';
 import { ErrorResponse_, MessageEventContentInfo_, MessageEventContent_, RoomType } from '../models/MatrixApi';
@@ -109,6 +109,7 @@ interface DialogMessageTileState {
     offline: boolean;
     showSpinner: boolean;
     showConfirmationDialog: boolean;
+    withSenderDetails: boolean;
 }
 
 export default class DialogMessageTile extends ComponentBase<DialogMessageTileProps, DialogMessageTileState> {
@@ -143,6 +144,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
         if (initState) {
             partialState.showConfirmationDialog = false;
             partialState.showSpinner = false;
+            partialState.withSenderDetails = false;
         }
 
         partialState.offline = UiStore.getOffline();
@@ -280,6 +282,12 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                     showError();
                 });
         }
+    }
+    private viewDetails = (event: RX.Types.SyntheticEvent) => {
+
+        event.stopPropagation();
+
+        this.setState({ withSenderDetails: true });
     }
 
     private viewFile = (event: RX.Types.SyntheticEvent) => {
@@ -537,6 +545,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
     public render(): JSX.Element | null {
 
         let contextMenu: ReactElement | undefined;
+        let detailsButton: ReactElement | undefined;
         let openButton: ReactElement | undefined;
         let saveAsButton: ReactElement | undefined;
         let shareButton: ReactElement | undefined;
@@ -546,9 +555,28 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
         let reportButton: ReactElement | undefined;
         let n;
 
-        if (!this.state.showConfirmationDialog && !this.state.showSpinner) {
+        if (!this.state.showConfirmationDialog && !this.state.showSpinner && !this.state.withSenderDetails) {
 
             n = 1;
+            if (['community', 'group'].includes(this.props.roomType) && ApiClient.credentials.userIdFull !== this.props.event.senderId) {
+                n++;
+                detailsButton = (
+                    <RX.Button
+                        style={ styles.buttonDialog }
+                        onPress={ event => this.viewDetails(event) }
+                        disableTouchOpacityAnimation={ true }
+                        activeOpacity={ 1 }
+                    >
+                        <RX.Text
+                            allowFontScaling={ false }
+                            style={ [styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined] }
+                        >
+                            { details[this.language] }
+                        </RX.Text>
+                    </RX.Button>
+                )
+            }
+
             if (this.isMedia && (this.isElectron || this.isMobile)) {
                 n++;
                 openButton = (
@@ -680,6 +708,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 
             contextMenu = (
                 <RX.Animated.View style={ [this.animatedStyle, styles.buttonContainer, { top: pos }] }>
+                    { detailsButton }
                     { openButton }
                     { saveAsButton }
                     { shareButton }
@@ -726,6 +755,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                         roomType={ this.props.roomType }
                         readMarkerType={ this.props.readMarkerType }
                         isRedacted={ false }
+                        withSenderDetails={ this.state.withSenderDetails }
                     />
                     <RX.View
                         style={ [

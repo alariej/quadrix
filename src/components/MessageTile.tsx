@@ -16,6 +16,7 @@ import { RoomType } from '../models/MatrixApi';
 import Spinner from './Spinner';
 import AppFont from '../modules/AppFont';
 import VideoMessage from './VideoMessage';
+import DataStore from '../stores/DataStore';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -33,13 +34,16 @@ const styles = {
     containerFooter: RX.Styles.createViewStyle({
         flexDirection: 'row',
         marginTop: 8,
-        height: 16,
         overflow: 'visible'
     }),
     footer: RX.Styles.createViewStyle({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
+    }),
+    footerDetails: RX.Styles.createViewStyle({
+        flex: 1,
+        flexDirection: 'column',
     }),
     footerSenderId: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
@@ -81,6 +85,7 @@ interface MessageTileProps {
     showTempForwardedMessage?: (roomId: string, message?: MessageEvent, tempId?: string) => void;
     canPress?: boolean;
     isRedacted: boolean;
+    withSenderDetails?: boolean | undefined;
 }
 
 export default class MessageTile extends RX.Component<MessageTileProps, RX.Stateless> {
@@ -91,7 +96,8 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
     public shouldComponentUpdate(nextProps: MessageTileProps): boolean {
 
         return this.props.readMarkerType !== nextProps.readMarkerType ||
-            this.props.isRedacted !== nextProps.isRedacted;
+            this.props.isRedacted !== nextProps.isRedacted ||
+            this.props.withSenderDetails !== nextProps.withSenderDetails;
     }
 
     private showContextDialog = () => {
@@ -198,7 +204,9 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
         const marginMin = (BUTTON_ROUND_WIDTH + SPACING);
         let marginText = 0;
 
-        if (messageType === 'text' && this.props.roomType !== 'notepad' && !this.props.event.content.url_preview) {
+        if (messageType === 'text' && this.props.roomType !== 'notepad' && !this.props.event.content.url_preview
+            && !this.props.withSenderDetails)
+        {
             const marginMax = 192;
             const margin = Math.min(marginMax, (48 - this.props.event.content.body!.length) * FONT_LARGE / 2);
             marginText = Math.max(marginMin, margin);
@@ -213,7 +221,9 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
         const timestamp = format(this.props.event.time, 'HH:mm');
 
         let footer: ReactElement;
-        if (this.props.roomType !== 'direct' && ApiClient.credentials.userIdFull !== this.props.event.senderId) {
+        if (this.props.roomType !== 'direct' && ApiClient.credentials.userIdFull !== this.props.event.senderId
+            && !this.props.withSenderDetails)
+        {
             footer = (
                 <RX.View style={ styles.footer } title={ this.props.event.senderId + ' - ' + timestamp }>
                     <RX.Text allowFontScaling={ false } style={ styles.footerSenderId } numberOfLines={ 1 }>
@@ -224,6 +234,33 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                     </RX.Text>
                 </RX.View>
             );
+        } else if (this.props.withSenderDetails) {
+
+            const roomSummary = DataStore.getRoomSummary(this.props.roomId);
+
+            let senderName: ReactElement | undefined;
+            if (roomSummary.members[this.props.event.senderId]) {
+                senderName = (
+                    <RX.Text allowFontScaling={ false } style={ styles.footerSenderId }>
+                        { roomSummary.members[this.props.event.senderId].name }
+                    </RX.Text>
+                )
+            }
+
+            const dateStamp = format(this.props.event.time, 'd MMMM yyyy', { locale: UiStore.getLocale() });
+
+            footer = (
+                <RX.View style={ styles.footerDetails }>
+                    { senderName }
+                    <RX.Text allowFontScaling={ false } style={ styles.footerSenderId }>
+                        { this.props.event.senderId }
+                    </RX.Text>
+                    <RX.Text allowFontScaling={ false } style={ styles.footerTimestamp }>
+                        {  dateStamp + ' - ' + timestamp }
+                    </RX.Text>
+                </RX.View>
+            );
+
         } else {
             footer = (
                 <RX.Text allowFontScaling={ false } style={ styles.footerTimestamp }>
@@ -316,7 +353,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                     <RX.View style={ styles.containerMessage }>
                         { message }
                     </RX.View>
-                    <RX.View style={ styles.containerFooter }>
+                    <RX.View style={ [styles.containerFooter, { height: this.props.withSenderDetails ? undefined : 16 }] }>
                         { footer }
                         { readMarker }
                     </RX.View>
@@ -338,7 +375,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                     <RX.View style={ styles.containerMessage }>
                         { message }
                     </RX.View>
-                    <RX.View style={ styles.containerFooter }>
+                    <RX.View style={ [styles.containerFooter, { height: this.props.withSenderDetails ? undefined : 16 }] }>
                         { footer }
                         { readMarker }
                     </RX.View>
