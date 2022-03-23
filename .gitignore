@@ -60,7 +60,6 @@ ios/Pods/
 .vscode/.react/debuggerWorker.js
 .vscode/.react/index.bundle
 .vscode/.react/index.map
-package-lock.json
 ios/quadrix.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
 
 # google-services
