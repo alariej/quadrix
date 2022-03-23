@@ -174,7 +174,7 @@ export const search: Translation = {
 }
 
 export const communityName: Translation = {
-    en: 'Public group name or alias (optional)',
+    en: 'Public group name / alias (optional)',
     de: 'Name / Alias der Gruppe (optional)',
     fr: 'Nom / alias du groupe (facultatif)',
 }
