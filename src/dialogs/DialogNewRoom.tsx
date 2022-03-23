@@ -98,7 +98,7 @@ export default class DialogNewRoom extends RX.Component<DialogNewRoomProps, RX.S
 
         let joinCommunityButton: ReactElement | null;
 
-        if ((!UiStore.getIsElectron() && UiStore.getPlatform() === 'web' && UiStore.getDevice() === 'desktop') ||
+        if ((!UiStore.getIsElectron() && UiStore.getPlatform() === 'web') ||
             (UiStore.getIsElectron() && UiStore.getDesktopOS() === 'Linux')
         ) {
             joinCommunityButton = (
