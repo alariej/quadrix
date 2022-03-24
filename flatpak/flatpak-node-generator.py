@@ -720,8 +720,18 @@ class ManifestGenerator(ContextManager['ManifestGenerator']):
                                           only_arches=only_arches)
 
     def add_data_source(self, data: Union[str, bytes], destination: Path) -> None:
-        quoted = urllib.parse.quote(data, safe='')
-        source = {'type': 'file', 'url': 'data:' + quoted}
+        if isinstance(data, bytes):
+            source = {
+                'type': 'inline',
+                'contents': base64.b64encode(data).decode('ascii'),
+                'base64': True,
+            }
+        else:
+            assert isinstance(data, str)
+            source = {
+                'type': 'inline',
+                'contents': data,
+            }
         self._add_source_with_destination(source, destination, is_dir=False)
 
     def add_git_source(self,
@@ -1427,10 +1437,6 @@ class NpmModuleProvider(ModuleProvider):
 
     async def generate_package(self, package: Package) -> None:
         self.all_lockfiles.add(package.lockfile)
-
-        if package.version.startswith('file:'):
-            return
-
         source = package.source
 
         assert not isinstance(source, ResolvedSource)
