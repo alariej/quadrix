@@ -4,9 +4,6 @@
 
 __license__ = 'MIT'
 
-# run from flatpak folder
-# python3 flatpak-node-generator.py npm --no-requests-cache --electron-node-headers --xdg-layout ../package-lock.json
-
 from typing import *  # pyright: reportWildcardImportFromLibrary=false
 # Explictly import these.
 from typing import cast, IO
