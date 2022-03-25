@@ -4,8 +4,6 @@ runtime-version: '21.08'
 sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp
 base-version: '21.08'
-sdk-extensions:
-  - org.freedesktop.Sdk.Extension.node16
 command: run.sh
 separate-locales: false
 finish-args:
@@ -18,26 +16,19 @@ finish-args:
   - --filesystem=xdg-download
   - --filesystem=xdg-pictures
   - --filesystem=xdg-videos
-build-options:
-  append-path: /usr/lib/sdk/node16/bin
-  env:
-    NPM_CONFIG_LOGLEVEL: info
 modules:
   - name: quadrix
     buildsystem: simple
-    build-options:
-      env:
-        XDG_CACHE_HOME: /run/build/quadrix/flatpak-node/cache
-        npm_config_cache: /run/build/quadrix/flatpak-node/npm-cache
-        npm_config_nodedir: /usr/lib/sdk/node16
-        npm_config_offline: 'true'
-    subdir: main
     sources:
-      - type: archive
-        url: https://github.com/alariej/quadrix/archive/master.tar.gz
-        sha256: a4d17c66f10e32675ad1a7f8607cc28cae70fb5877baa0fc32633ce1b7d0812c
-        dest: main
-      - generated-sources.json
+      - type: file
+        url: https://quadrix.chat/releases/deb/amd64/quadrix_0.6.5_amd64.deb
+        sha256: c58b6bdb04dc84e35eb5d3f80a34d188729ed827e9486bf804b1781cf17b2975
+        x-checker-data:
+          type: debian-repo
+          package-name: quadrix
+          root: https://quadrix.chat/releases/deb/amd64
+          dist: xenial
+          component: main
       - type: file
         path: chat.quadrix.Quadrix.metainfo.xml
       - type: file
@@ -47,21 +38,13 @@ modules:
       - type: script
         dest-filename: run.sh
         commands:
-          - zypak-wrapper.sh /app/main/quadrix "$@"
+          - zypak-wrapper.sh /app/Quadrix/quadrix "$@"
     build-commands:
-      # - jq '.build.linux.target="dir"' <<<$(<package.json) > package.json
-      - npm install --offline
-      - npm run build:web
-
-      - mv package.json temp.json
-      - jq -r '.main |= "electron-main.js"' temp.json > package.json
-      - rm temp.json
-
-      - |
-        . ../flatpak-node/electron-builder-arch-args.sh
-        npm run build:flat -- $ELECTRON_BUILDER_ARCH_ARGS  --linux --dir
-      - cp -a dist/linux*unpacked /app/main
-      - install -Dm755 -t /app/bin/ ../run.sh
-      - install -D -m644 -t /app/share/applications ../chat.quadrix.Quadrix.desktop
-      - install -D -m644 -t /app/share/icons/hicolor/scalable/apps ../chat.quadrix.Quadrix.svg
-      - install -D -m644 -t /app/share/metainfo ../chat.quadrix.Quadrix.metainfo.xml
+      - ar x quadrix_*.deb
+      - rm quadrix_*.deb
+      - tar xf data.tar.xz
+      - mv opt/* "/app/Quadrix"
+      - install -Dm0755 -t /app/bin/ run.sh
+      - install -Dm0644 chat.quadrix.Quadrix.desktop /app/share/applications/chat.quadrix.Quadrix.desktop
+      - install -Dm0644 chat.quadrix.Quadrix.metainfo.xml /app/share/metainfo/chat.quadrix.Quadrix.metainfo.xml
+      - install -Dm0644 chat.quadrix.Quadrix.svg /app/share/icons/chat.quadrix.Quadrix.svg
