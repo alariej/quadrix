@@ -39,6 +39,9 @@
     <a href="https://snapcraft.io/quadrix">
         <img alt="Get it from the Snap Store" src="https://snapcraft.io/static/images/badges/en/snap-store-black.svg" height=48>
     </a>
+    <a href="https://flathub.org/apps/details/chat.quadrix.Quadrix">
+        <img alt="Download On FLATHUB" src="https://flathub.org/assets/badges/flathub-badge-en.png" height=48>
+    </a>
 </p>
 
 ## Installation:
