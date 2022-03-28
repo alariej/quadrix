@@ -268,6 +268,8 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                 w: this.props.event.content.info!.w,
                 size: this.props.event.content.info!.size,
                 mimetype: this.props.event.content.info!.mimetype,
+                thumbnail_info: this.props.event.content.info!.thumbnail_info,
+                thumbnail_url: this.props.event.content.info!.thumbnail_url
             }
 
             const messageContent: MessageEventContent_ = {
