@@ -100,7 +100,7 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
                                 playsinline
                                 webkit-playsinline
                             >
-                                <source src="${ props.uri }#t=0.001" type="${ mimeType }">
+                                <source src="${ props.uri }#t=0.001" type="${ mimeType }"/>
                             </video>
                             <div style="display: flex; align-self: stretch; justify-content: center;">
                                 <media-control-bar class="videoControls">
