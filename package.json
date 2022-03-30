@@ -87,10 +87,5 @@
     "reactxp-virtuallistview": "github:alariej/reactxp-virtuallistview",
     "resub": "github:alariej/ReSub",
     "simplerestclients": "1.0.0"
-  },
-  "notes": {
-    "@react-native-async-storage/async-storage": "must be in project root + match version in reactxp",
-    "@react-native-community/netinfo": "must be in project root + match version in reactxp-netinfo",
-    "react-native-svg": "must be in project root + match version in reactxp-imagesvg"
   }
 }
