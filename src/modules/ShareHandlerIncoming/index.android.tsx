@@ -8,6 +8,7 @@ import UiStore from '../../stores/UiStore';
 import { SharedContent } from '../../models/SharedContent';
 import { MessageEvent } from '../../models/MessageEvent';
 import ReactNativeBlobUtil from 'react-native-blob-util';
+import { PermissionsAndroid, PermissionStatus } from 'react-native';
 
 class ShareHandlerIncoming {
 
@@ -32,14 +33,30 @@ class ShareHandlerIncoming {
         Linking.removeEventListener('url', shareContent);
     }
 
-    public shareContent(
+    private async requestReadStoragePermission(): Promise<boolean> {
+
+        const granted: PermissionStatus =
+            await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE)
+                .catch(_error => { return 'denied' })
+
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+    }
+
+    public async shareContent(
         sharedContent_: string,
         showTempForwardedMessage: (roomId: string, message: MessageEvent, tempId: string) => void)
-        : void {
+        : Promise<void> {
 
         const sharedContent = JSON.parse(sharedContent_) as SharedContent;
 
         RX.Modal.dismissAll();
+
+        if (!sharedContent.mimeType!.startsWith('text')) {
+            const isGranted = await this.requestReadStoragePermission();
+            if (!isGranted) {
+                return Promise.reject();
+            }
+        }
 
         // does not support multi-item-sharing yet
         const dialogRoomPicker = (
