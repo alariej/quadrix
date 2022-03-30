@@ -15,7 +15,7 @@
   <uses-permission android:name="android.permission.MICROPHONE" />
   <uses-permission android:name="android.permission.RECORD_AUDIO" />
   <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-<!-- 
+<!--
   <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 -->
   <uses-permission android:name="android.permission.READ_CALENDAR" tools:node="remove"/>
@@ -67,5 +67,10 @@
       <action android:name="android.intent.action.VIEW" />
       <data android:scheme="https" />
     </intent>
- </queries>
+  </queries>
+  <!-- 
+  <queries>
+    <package android:name="com.google.android.youtube" />
+  </queries>
+  -->
 </manifest>
