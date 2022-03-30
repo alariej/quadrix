@@ -76,3 +76,4 @@ ios/Podfile.lock
 .vscode/settings.json
 flatpak/.flatpak-builder/*
 flatpak/generated-sources.json
+package-lock.json
