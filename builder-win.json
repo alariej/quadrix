@@ -1,5 +1,5 @@
 {
-    "appId": "chat.quadrix",
+    "appId": "chat.quadrix.win",
     "productName": "quadrix",
     "win": {
         "icon": "dist-assets/resources/logo256.ico",
@@ -19,11 +19,15 @@
         "identityName": "33173Jean-FranoisAlarie.quadrix.chat",
         "publisher": "CN=94B202A2-3313-4FB8-BAF4-74D869799490",
         "publisherDisplayName": "Jean-François Alarie",
-        "languages": "EN-US"
+        "artifactName": "quadrix-${version}-${arch}.${ext}"
     },
     "files": [
-        "dist-web/**/*",
-        "electron-main.js"
+        "!**/android/*",
+        "!**/ios/*",
+        "!**/macos/*",
+        "!**/snap/*",
+        "!**/scripts/*",
+        "!**/node_modules/*"
     ],
     "directories": {
         "buildResources": "dist-assets/",
