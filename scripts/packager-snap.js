@@ -6,7 +6,7 @@ const package = require('../package.json');
 const options = {
     dir: './',
     appBundleId: 'chat.quadrix',
-    out: './dist-snap',
+    out: './dist',
     platform: 'linux',
     arch: 'arm64', // x64, arm64, armv7l
     overwrite: true,

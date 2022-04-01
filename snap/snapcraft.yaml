@@ -11,11 +11,11 @@ parts:
       mkdir -p "$SNAPCRAFT_PART_INSTALL/data-dir/themes" mkdir -p "$SNAPCRAFT_PART_INSTALL/data-dir/icons" mkdir -p "$SNAPCRAFT_PART_INSTALL/data-dir/sounds" mkdir $SNAPCRAFT_PART_INSTALL/gnome-platform
   app-files:
     plugin: dump
-    source: dist-snap/quadrix.chat-linux-arm64
+    source: dist/quadrix.chat-linux-arm64
     organize:
       '*': app/
     stage:
-      - '-dist-snap/quadrix.chat-linux-arm64/chrome-sandbox'
+      - '-dist/quadrix.chat-linux-arm64/chrome-sandbox'
       - '-LICENSES.chromium.html'
   app:
     plugin: nil
