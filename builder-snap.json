@@ -30,8 +30,12 @@
 		]
 	},
 	"files": [
-		"dist-web/**/*",
-		"electron-main.js"
+		"!android/*",
+		"!ios/*",
+		"!macos/*",
+		"!snap/*",
+		"!scripts/*",
+		"!node_modules/*"
 	],
 	"directories": {
 		"output": "dist/"

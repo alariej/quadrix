@@ -22,12 +22,12 @@
         "artifactName": "quadrix-${version}-${arch}.${ext}"
     },
     "files": [
-        "!**/android/*",
-        "!**/ios/*",
-        "!**/macos/*",
-        "!**/snap/*",
-        "!**/scripts/*",
-        "!**/node_modules/*"
+        "!android/*",
+        "!ios/*",
+        "!macos/*",
+        "!snap/*",
+        "!scripts/*",
+        "!node_modules/*"
     ],
     "directories": {
         "buildResources": "dist-assets/",
