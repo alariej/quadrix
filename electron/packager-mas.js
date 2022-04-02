@@ -17,6 +17,7 @@ const options = {
     ignore: ['^\/(?!(resources|electron-main\.js|package\.json))'],
     extendInfo: './macos/custom.plist',
     extraResource: [
+        '../dist-web',
         './macos/de.lproj',
         './macos/en.lproj',
         './macos/fr.lproj'
