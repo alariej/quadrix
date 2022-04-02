@@ -6,15 +6,15 @@ const package = require('../package.json');
 const options = {
     dir: './',
     appBundleId: 'chat.quadrix.mac',
-    out: './dist-mac',
+    out: './dist',
     platform: 'mas',
     arch: 'x64',
     overwrite: true,
-    icon: './macos/resources/icon.icns',
+    icon: './resources/icon.icns',
     appVersion: package.version,
     prune: true,
     derefSymlinks: false,
-    ignore: ['^\/(?!(dist-web|macos|electron-main-mac\.js|package\.json))'],
+    ignore: ['^\/(?!(macos|resources|electron-main\.js))'],
     extendInfo: './macos/custom.plist',
     extraResource: [
         './macos/de.lproj',

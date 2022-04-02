@@ -77,3 +77,4 @@ ios/Podfile.lock
 flatpak/.flatpak-builder/*
 flatpak/generated-sources.json
 package-lock.json
+electron/dist/*

@@ -7,7 +7,7 @@
 			"snap",
 			"deb"
 		],
-		"icon": "macos/resources/icon.icns"
+		"icon": "resources/icon.icns"
 	},
 	"snap": {
 		"summary": "Minimal, simple, multi-platform chat app for the Matrix protocol",
@@ -30,12 +30,10 @@
 		]
 	},
 	"files": [
-		"!android/*",
-		"!ios/*",
-		"!macos/*",
-		"!snap/*",
-		"!scripts/*",
-		"!node_modules/*"
+		"!*",
+		"!**/*",
+		"electron-main.js",
+		"resources/*"
 	],
 	"directories": {
 		"output": "dist/"

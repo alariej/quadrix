@@ -5,10 +5,29 @@
 const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron');
 const path = require('path');
 
+let logoFile;
+switch (process.platform) {
+    case 'darwin':
+        logoFile = 'icon.icns';
+        break;
+    case 'win32':
+        logoFile = 'logo.ico';
+        break;
+    case 'linux':
+        logoFile = 'logo.png';
+        break;
+    default:
+        logoFile = 'logo.png';
+        break;
+}
+
 let mainWindow;
 
-const additionalData = { myKey: 'chat.quadrix.electron' }
-const hasLock = app.requestSingleInstanceLock(additionalData)
+let hasLock = true;
+if (process.platform !== 'darwin') {
+    const additionalData = { myKey: 'chat.quadrix.electron' };
+    hasLock = app.requestSingleInstanceLock(additionalData);
+}
 
 if (!hasLock) {
 
@@ -26,12 +45,10 @@ if (!hasLock) {
             frame: true,
             movable: true,
             backgroundColor: '#fff',
-            icon: path.join(__dirname, 'dist-web', 'resources', 'images', 'logo.png'), // linux
-            // icon: path.join(__dirname, 'dist-web', 'resources', 'images', 'logo.ico'), // windows
-            // icon: path.join(__dirname, 'dist-web', 'resources', 'images', 'logo.icns'), // mac
+            icon: path.join(__dirname, 'resources', logoFile),
             webPreferences: {
-                nodeIntegration: true, // not used in electron v12
-                contextIsolation: false, // required in electron v12
+                nodeIntegration: true, // not used in electron v12+
+                contextIsolation: false, // required in electron v12+
                 enableRemoteModule: true,
             }
         });
@@ -86,7 +103,7 @@ if (!hasLock) {
             ]
         };
 
-        mainWindow.loadFile('dist-web/index.html').catch(_error => null);
+        mainWindow.loadFile('../dist-web/index.html').catch(_error => null);
         // mainWindow.loadURL('http://localhost:9999').catch(_error => null);
         // mainWindow.webContents.openDevTools()
 

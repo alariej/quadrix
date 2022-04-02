@@ -1,0 +1,28 @@
+{
+    "name": "quadrix",
+    "productName": "quadrix.chat",
+    "private": true,
+    "main": "electron-main.js",
+    "version": "0.6.7",
+    "description": "Minimal, simple, multi-platform chat app for the Matrix protocol",
+    "author": "Jean-François Alarie <alariej@quadrix.chat>",
+    "homepage": "https://quadrix.chat",
+    "scripts": {
+        "start:electron": "electron .",
+        "build:snap": "electron-builder --linux snap --config builder-linux.json",
+        "build:snap:arm64": "node packager-snap.js",
+        "build:deb": "electron-builder --linux deb --config builder-linux.json",
+        "build:mas": "node packager-mas.js",
+        "sign:mas:dev": "electron-osx-sign dist/quadrix.chat-mas-x64/quadrix.chat.app --identity='Apple Development' --provisioning-profile=macos_alarie_dev.provisionprofile --entitlements=macos/entitlements.mas.plist --type=development",
+        "sign:mas:prod": "electron-osx-sign dist/quadrix.chat-mas-x64/quadrix.chat.app --identity='Apple Distribution' --provisioning-profile=macos_alarie.provisionprofile --entitlements=macos/entitlements.mas.plist --type=distribution",
+        "build:pkg": "electron-osx-flat dist/quadrix.chat-mas-x64/quadrix.chat.app --identity='3rd Party Mac Developer Installer' --verbose",
+        "build:appx": "electron-builder --win appx --config builder-win.json",
+        "build:exe": "electron-builder --win nsis --config builder-win.json"
+    },
+    "devDependencies": {
+        "electron": "17.3.0",
+        "electron-builder": "22.14.13",
+        "electron-packager": "15.4.0",
+        "electron-packager-languages": "0.5.0"
+    }
+}
