@@ -146,7 +146,7 @@ plugs:
     target: $SNAP/data-dir/sounds
     default-provider: gtk-common-themes
 name: quadrix
-version: 0.6.7
+version: 0.6.8
 title: quadrix
 summary: Minimal, simple, multi-platform chat app for the Matrix protocol
 description: Minimal, simple, multi-platform chat app for the Matrix protocol
