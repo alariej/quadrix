@@ -53,8 +53,9 @@ yarn-error.log
 
 # Web dist
 #
-dist-*
-dist/*
+electron/build*
+electron/dist*
+
 ios/Pods/
 .vscode/launch.json
 .vscode/.react/debuggerWorker.js
@@ -77,4 +78,3 @@ ios/Podfile.lock
 flatpak/.flatpak-builder/*
 flatpak/generated-sources.json
 package-lock.json
-electron/dist/*
