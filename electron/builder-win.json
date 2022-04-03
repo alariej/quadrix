@@ -22,12 +22,11 @@
         "artifactName": "quadrix-${version}-${arch}.${ext}"
     },
     "files": [
-        "!android/*",
-        "!ios/*",
-        "!macos/*",
-        "!snap/*",
-        "!scripts/*",
-        "!node_modules/*"
+		"!*",
+		"!**/*",
+		"electron-main.js",
+		"resources/*",
+        "build-web/*"
     ],
     "directories": {
         "buildResources": "resources/",
