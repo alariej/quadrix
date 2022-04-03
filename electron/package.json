@@ -1,5 +1,5 @@
 {
-    "name": "quadrix",
+    "name": "quadrix-desktop",
     "productName": "quadrix.chat",
     "private": true,
     "main": "electron-main.js",
