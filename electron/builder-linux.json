@@ -33,7 +33,8 @@
 		"!*",
 		"!**/*",
 		"electron-main.js",
-		"resources/*"
+		"resources/*",
+        "build-web/*"
 	],
 	"directories": {
 		"output": "dist/"
