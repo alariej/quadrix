@@ -3,9 +3,8 @@ import RX from 'reactxp';
 import EventUtils from '../utils/EventUtils';
 import ApiClient from '../matrix/ApiClient';
 import { MessageEvent } from '../models/MessageEvent';
-import { SPACING, BUTTON_ROUND_WIDTH, PAGE_MARGIN, BORDER_RADIUS, TILE_BACKGROUND } from '../ui';
+import { SPACING, BUTTON_ROUND_WIDTH, PAGE_MARGIN, BORDER_RADIUS, TILE_BACKGROUND, STATUSBAR_BACKGROUND } from '../ui';
 import UiStore from '../stores/UiStore';
-import VideoPlayer from '../modules/VideoPlayer';
 import FullScreenVideo from './FullScreenVideo';
 import CachedImage from '../modules/CachedImage';
 import IconSvg, { SvgFile } from './IconSvg';
@@ -112,11 +111,16 @@ export default class VideoMessage extends RX.Component<VideoMessageProps, RX.Sta
             )
         } else {
             video = (
-                <VideoPlayer
-                    uri={ this.url }
-                    mimeType={ this.props.message.content.info?.mimetype || 'video/mp4' }
-                    autoplay={ false }
-                />
+                <RX.View style={ [styles.imageContainer, { backgroundColor: STATUSBAR_BACKGROUND }] }>
+                    <RX.View style={ styles.playIcon }>
+                        <IconSvg
+                            source={ require('../resources/svg/send.json') as SvgFile }
+                            fillColor={ TILE_BACKGROUND }
+                            height={ 72 }
+                            width={ 72 }
+                        />
+                    </RX.View>
+                </RX.View>
             )
         }
 
