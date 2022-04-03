@@ -5,7 +5,7 @@ const webpack = require('webpack');
 const path = require('path');
 
 const ROOT_PATH = path.join(__dirname, '..', '..');
-const DIST_PATH = path.join(ROOT_PATH, 'dist-web');
+const DIST_PATH = path.join(ROOT_PATH, 'electron/build-web');
 const APP_PATH = path.join(ROOT_PATH, 'src');
 const WEB_PATH = path.join(ROOT_PATH, 'web');
 const TS_CONFIG_PATH = path.join(ROOT_PATH, 'tsconfig.json');

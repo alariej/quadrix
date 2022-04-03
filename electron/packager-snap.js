@@ -14,7 +14,7 @@ const options = {
     appVersion: package.version,
     prune: true,
     derefSymlinks: false,
-    ignore: ['^\/(?!(dist-web|electron-main\.js|package\.json))'],
+    ignore: ['^\/(?!(build-web|electron-main\.js|package\.json))'],
 };
 
 packager(options)

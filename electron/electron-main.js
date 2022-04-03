@@ -103,7 +103,7 @@ if (!hasLock) {
             ]
         };
 
-        mainWindow.loadFile('../dist-web/index.html').catch(_error => null);
+        mainWindow.loadFile('build-web/index.html').catch(_error => null);
         // mainWindow.loadURL('http://localhost:9999').catch(_error => null);
         // mainWindow.webContents.openDevTools()
 
