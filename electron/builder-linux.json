@@ -2,7 +2,7 @@
 	"appId": "chat.quadrix.linux",
 	"productName": "quadrix",
 	"linux": {
-		"category": "Internet",
+		"category": "GNOME;GTK;Network;InstantMessaging",
 		"target": [
 			"snap",
 			"deb"
