@@ -2,7 +2,7 @@
     "appId": "chat.quadrix.win",
     "productName": "quadrix",
     "win": {
-        "icon": "resources/logo256.ico",
+        "icon": "resources/win/icon256.ico",
         "target": [
             "nsis",
             "appx"
@@ -10,7 +10,7 @@
     },
     "nsis": {
         "createStartMenuShortcut": true,
-        "installerIcon": "resources/logo256.ico"
+        "installerIcon": "resources/win/icon256.ico"
     },
     "appx": {
         "applicationId": "quadrix.chat",
@@ -25,11 +25,12 @@
 		"!*",
 		"!**/*",
 		"electron-main.js",
-		"resources/*",
         "build-web/*"
     ],
+    "extraResources": [
+        "resources/win/icon256.ico"
+    ],
     "directories": {
-        "buildResources": "resources/",
-        "output": "dist/"
+        "output": "dist"
     }
 }

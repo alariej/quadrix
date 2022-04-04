@@ -7,13 +7,13 @@
 			"snap",
 			"deb"
 		],
-		"icon": "resources/icon.icns"
+		"icon": "resources/linux/icon.icns"
 	},
 	"snap": {
 		"summary": "Minimal, simple, multi-platform chat app for the Matrix protocol",
 		"confinement": "strict",
 		"grade": "stable",
-		"plugs": [			
+		"plugs": [
 			"desktop",
 			"desktop-legacy",
 			"home",
@@ -33,10 +33,12 @@
 		"!*",
 		"!**/*",
 		"electron-main.js",
-		"resources/*",
         "build-web/*"
 	],
+	"extraResources": [
+		"resources/linux/icon.icns"
+	],
 	"directories": {
-		"output": "dist/"
+		"output": "dist"
 	}
 }

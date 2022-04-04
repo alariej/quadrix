@@ -10,11 +10,14 @@ const options = {
     platform: 'linux',
     arch: 'arm64', // x64, arm64, armv7l
     overwrite: true,
-    icon: './src/resources/logos/logo256.png',
+    icon: './resources/linux/icon256.png',
     appVersion: package.version,
     prune: true,
     derefSymlinks: false,
     ignore: ['^\/(?!(build-web|electron-main\.js|package\.json))'],
+    extraResource: [
+        './resources/linux/icon256.png'
+    ],
 };
 
 packager(options)

@@ -10,13 +10,14 @@ const options = {
     platform: 'mas',
     arch: 'x64',
     overwrite: true,
-    icon: './resources/icon.icns',
+    icon: './resources/mac/icon.icns',
     appVersion: package.version,
     prune: true,
     derefSymlinks: false,
-    ignore: ['^\/(?!(build-web|resources|electron-main\.js|package\.json))'],
+    ignore: ['^\/(?!(build-web|electron-main\.js|package\.json))'],
     extendInfo: './macos/custom.plist',
     extraResource: [
+        './resources/mac/icon.icns',
         './macos/de.lproj',
         './macos/en.lproj',
         './macos/fr.lproj'
