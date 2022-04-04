@@ -5,19 +5,19 @@
 const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron');
 const path = require('path');
 
-let logoFile;
+let iconFile;
 switch (process.platform) {
     case 'darwin':
-        logoFile = 'icon.icns';
+        iconFile = 'icon.icns';
         break;
     case 'win32':
-        logoFile = 'logo.ico';
+        iconFile = 'icon.ico';
         break;
     case 'linux':
-        logoFile = 'logo.png';
+        iconFile = 'icon.png';
         break;
     default:
-        logoFile = 'logo.png';
+        iconFile = 'icon.png';
         break;
 }
 
@@ -45,7 +45,7 @@ if (!hasLock) {
             frame: true,
             movable: true,
             backgroundColor: '#fff',
-            icon: path.join(__dirname, 'resources', logoFile),
+            icon: path.join(__dirname, 'build-web', iconFile),
             webPreferences: {
                 nodeIntegration: true, // not used in electron v12+
                 contextIsolation: false, // required in electron v12+
