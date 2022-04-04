@@ -20,7 +20,7 @@
         "build:exe": "electron-builder --win nsis --config builder-win.json"
     },
     "devDependencies": {
-        "electron": "17.3.0",
+        "electron": "17.3.1",
         "electron-builder": "22.14.13",
         "electron-packager": "15.4.0",
         "electron-packager-languages": "0.5.0"
