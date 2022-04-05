@@ -1,6 +1,6 @@
 # ![quadrix](https://quadrix.chat/quadrix_name.png)
 
-- Minimal, simple, multi-platform chat app for the [Matrix](https://github.com/matrix-org/) protocol
+- Minimal, simple, multi-platform chat client for the [Matrix](https://github.com/matrix-org/) protocol
 - No data collection whatsoever
 - Does not support end-to-end encryption (E2EE)
 - No customization, no widgets, no bots, no phone calls

@@ -148,8 +148,8 @@ plugs:
 name: quadrix
 version: 0.6.8
 title: quadrix
-summary: Minimal, simple, multi-platform chat app for the Matrix protocol
-description: Minimal, simple, multi-platform chat app for the Matrix protocol
+summary: Minimal, simple, multi-platform chat client for the Matrix protocol
+description: Minimal, simple, multi-platform chat client for the Matrix protocol
 architectures:
   - arm64
 apps:
