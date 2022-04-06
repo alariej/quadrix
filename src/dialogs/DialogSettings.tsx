@@ -691,7 +691,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
         }
 
         let emailSettings: ReactElement | undefined;
-        if (this.emailAddress && this.platform !== 'android') {
+        if (this.emailAddress) {
             emailSettings = (
                 <RX.View style={ [styles.settingsContainer, { marginTop: SPACING }] }>
 
