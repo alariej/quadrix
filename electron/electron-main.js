@@ -38,7 +38,7 @@ if (!hasLock) {
     const createWindow = () => {
 
         mainWindow = new BrowserWindow({
-            width: 1024,
+            width: 1224,
             height: 720,
             autoHideMenuBar: true,
             resizable: false,
@@ -103,9 +103,47 @@ if (!hasLock) {
             ]
         };
 
-        mainWindow.loadFile('build-web/index.html').catch(_error => null);
-        // mainWindow.loadURL('http://localhost:9999').catch(_error => null);
-        // mainWindow.webContents.openDevTools()
+        // mainWindow.loadFile('build-web/index.html').catch(_error => null);
+        mainWindow.loadURL('http://localhost:9999').catch(_error => null);
+        mainWindow.webContents.openDevTools()
+
+
+        // linux: hide/show never fire, blur/focus fire too often, blur/restore not enough
+
+
+        mainWindow.on('blur', _event => {
+            console.log('*********************blur')
+            // mainWindow.webContents.send('appIsHidden')
+        });
+
+        mainWindow.on('focus', _event => {
+            console.log('*********************focus')
+            // mainWindow.webContents.send('appIsShown')
+        });
+
+        mainWindow.on('hide', _event => {
+            console.log('*********************hide')
+        });
+
+        mainWindow.on('show', _event => {
+            console.log('*********************show')
+        });
+
+        mainWindow.on('restore', _event => {
+            console.log('*********************restore')
+        });
+
+        mainWindow.on('responsive', _event => {
+            console.log('*********************responsive')
+        });
+
+        mainWindow.on('unresponsive', _event => {
+            console.log('*********************unresponsive')
+        });
+
+        mainWindow.on('sheet-begin', _event => {
+            console.log('*********************sheet-begin')
+        });
 
         mainWindow.on('close', event => {
             event.preventDefault();

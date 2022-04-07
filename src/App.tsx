@@ -7,9 +7,10 @@ import UiStore from './stores/UiStore';
 import DataStore from './stores/DataStore';
 import { ViewOnLayoutEvent } from 'reactxp/dist/common/Types';
 import { ComponentBase } from 'resub';
-import { APP_BACKGROUND, STATUSBAR_BACKGROUND } from './ui';
+import { APP_BACKGROUND, STATUSBAR_BACKGROUND, TRANSPARENT_BACKGROUND } from './ui';
 import FileHandler from './modules/FileHandler';
 import RXNetInfo from 'reactxp-netinfo';
+import SpinnerUtils from './utils/SpinnerUtils';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -91,6 +92,8 @@ export class App extends ComponentBase<AppProps, AppState> {
             const storeElectronData = () => {
                 ApiClient.storeAppData()
                     .then(_response => {
+                        ipcRenderer.removeListener('appIsHidden', stopSync);
+                        ipcRenderer.removeListener('appIsShown', startSync);
                         ipcRenderer.removeListener('storeDataAndCloseApp', storeElectronData);
                         ipcRenderer.send('closeApp');
                     })
@@ -98,6 +101,29 @@ export class App extends ComponentBase<AppProps, AppState> {
             }
 
             ipcRenderer.on('storeDataAndCloseApp', storeElectronData);
+
+            const stopSync = () => {
+                ApiClient.stopSync();
+                ApiClient.storeAppData().catch(_error => null);
+            }
+
+            ipcRenderer.on('appIsHidden', stopSync);
+
+            const startSync = () => {
+                if (ApiClient.isSyncStopped() && !UiStore.getOffline()) {
+
+                    DataStore.setSyncComplete(false);
+
+                    if (!RX.Modal.isDisplayed()) {
+                        SpinnerUtils.showModalSpinner('syncspinner', TRANSPARENT_BACKGROUND);
+                    }
+
+                    const nextSyncToken = ApiClient.getNextSyncToken();
+                    ApiClient.startSync(nextSyncToken);
+                }
+            }
+
+            ipcRenderer.on('appIsShown', startSync);
         }
     }
 

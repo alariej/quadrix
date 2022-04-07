@@ -208,12 +208,18 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
     private activationChanged = (activationState: Types.AppActivationState) => {
 
+        // if (UiStore.getIsElectron()) { return }
+
         if (activationState !== Types.AppActivationState.Active) {
+
+            console.log('*********************inactive')
 
             ApiClient.stopSync();
             ApiClient.storeAppData().catch(_error => null);
 
         } else {
+
+            console.log('*********************active')
 
             if (ApiClient.isSyncStopped() && !this.isOffline) {
 
