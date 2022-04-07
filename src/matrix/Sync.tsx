@@ -79,13 +79,13 @@ const filter: SyncFilter_ = {
 };
 
 let i = 0;
-let j = 0;
 
 class Sync {
 
     private restClient!: RestClient;
     private nextSyncToken = '';
     private syncStopped = false;
+    private serverOffline = false;
 
     public start = (syncToken: string, accessToken: string, server: string) => {
 
@@ -109,7 +109,14 @@ class Sync {
                     this.incrementalSync('', 1000);
                 })
                 .catch((_error) => {
-                    RX.Alert.show('Sync Error', 'Hmmm, you might need to kill and restart the app :-(');
+
+                    const text = (
+                        <RX.Text style={ styles.textDialog }>
+                            { syncError[UiStore.getLanguage()] }
+                        </RX.Text>
+                    );
+
+                    RX.Modal.show(<DialogContainer content={ text }/>, 'errordialog');
                 });
         }
     }
@@ -163,7 +170,7 @@ class Sync {
 
     private incrementalSync = (syncToken: string, timeout: number) => {
 
-        if (this.syncStopped) { return; }
+        if (this.syncStopped && !this.serverOffline ) { return; }
 
         i = i + 1;
 
@@ -171,6 +178,7 @@ class Sync {
             .then(syncData => {
 
                 if (UiStore.getOffline()) { UiStore.setOffline(false) }
+                this.serverOffline = false;
 
                 if (!this.syncStopped && (!syncToken || (syncToken === this.nextSyncToken))) {
 
@@ -189,41 +197,18 @@ class Sync {
             })
             .catch((error: ErrorResponse_) => {
 
+                UiStore.setOffline(true);
+                this.serverOffline = true;
+
                 DataStore.setSyncComplete(true);
 
-                if (error.body && error.body.errcode && error.body.errcode === 'M_UNKNOWN_TOKEN') {
-
+                if (error?.body?.errcode === 'M_UNKNOWN_TOKEN') {
                     UiStore.setUnknownAccessToken(true);
                 }
 
-                // timeout with no new info on some servers
-                if (error.statusCode === 504 || error.statusCode === 0) {
-
+                setTimeout(() => {
                     this.incrementalSync(syncToken, syncTimeout);
-
-                } else {
-
-                    const syncComplete = DataStore.getSyncComplete();
-                    if (!syncComplete) {
-
-                        j++;
-
-                        if (j > 3) {
-
-                            const text = (
-                                <RX.Text style={ styles.textDialog }>
-                                    { syncError[UiStore.getLanguage()] }
-                                </RX.Text>
-                            );
-
-                            RX.Modal.show(<DialogContainer content={ text }/>, 'errordialog');
-                        }
-                    }
-
-                    setTimeout(() => {
-                        this.incrementalSync(syncToken, syncTimeout);
-                    }, 10000);
-                }
+                }, 15000);
             });
     }
 
