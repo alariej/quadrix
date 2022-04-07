@@ -4,10 +4,10 @@ export const APP_VERSION = packageJson.version;
 
 // matrix prefixes
 
-export const PREFIX_REST = '/_matrix/client/r0/';
-export const PREFIX_MEDIA = '/_matrix/media/r0/';
-export const PREFIX_DOWNLOAD = '/_matrix/media/r0/download/';
-export const PREFIX_UPLOAD = '/_matrix/media/r0/upload';
+export const PREFIX_REST = '/_matrix/client/v3/';
+export const PREFIX_MEDIA = '/_matrix/media/v3/';
+export const PREFIX_DOWNLOAD = '/_matrix/media/v3/download/';
+export const PREFIX_UPLOAD = '/_matrix/media/v3/upload';
 
 // app info
 
