@@ -21,7 +21,7 @@ interface RoomState {
     roomPhase: RoomPhase;
     roomType: RoomType;
     roomActive: boolean;
-    replyMessage: TemporaryMessage | undefined;
+    replyMessage: MessageEvent | undefined;
 }
 
 interface RoomProps extends RX.CommonProps {
@@ -69,7 +69,7 @@ export default class Room extends ComponentBase<RoomProps, RoomState> {
         });
     }
 
-    private setReplyMessage = (message: TemporaryMessage) => {
+    private setReplyMessage = (message: MessageEvent) => {
 
         this.setState({ replyMessage: message });
     }

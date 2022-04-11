@@ -10,18 +10,19 @@ import DialogContainer from '../modules/DialogContainer';
 import { ComponentBase } from 'resub';
 import UiStore from '../stores/UiStore';
 import { StyleRuleSet, TextStyle } from 'reactxp/dist/common/Types';
-import { messageCouldNotBeSent, cancel, wrote, sending, clickHereOrPressShftEnter, pressOKJitsi, jitsiStartedExternal,
+import { messageCouldNotBeSent, cancel, sending, clickHereOrPressShftEnter, pressOKJitsi, jitsiStartedExternal,
     jitsiStartedInternal, fileCouldNotUpload, pressSend, pressLoad, Languages } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
 import EmojiPicker from './EmojiPicker';
 import EventUtils from '../utils/EventUtils';
 import { MessageEventContentInfo_, MessageEventContent_, RoomType, ThumbnailInfo_ } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
-import { TemporaryMessage } from '../models/MessageEvent';
+import { MessageEvent, TemporaryMessage } from '../models/MessageEvent';
 import AppFont from '../modules/AppFont';
 import VideoPlayer from '../modules/VideoPlayer';
 import ProgressDialog from '../modules/ProgressDialog';
 import { UploadFileInfo } from '../models/UploadFileInfo';
+import ReplyMessage from './ReplyMessage';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -31,13 +32,18 @@ const styles = {
         borderBottomWidth: 1,
         borderColor: COMPOSER_BORDER,
     }),
-    textInput: RX.Styles.createTextStyle({
-        fontFamily: AppFont.fontFamily,
+    textInputContainer: RX.Styles.createViewStyle({
         flex: 1,
-        fontSize: FONT_LARGE,
         borderRadius: BORDER_RADIUS,
         marginLeft: SPACING / 2,
         marginRight: SPACING / 2,
+        backgroundColor: TILE_BACKGROUND,
+    }),
+    textInput: RX.Styles.createTextStyle({
+        flex: 1,
+        fontFamily: AppFont.fontFamily,
+        fontSize: FONT_LARGE,
+        borderRadius: BORDER_RADIUS,
         backgroundColor: TILE_BACKGROUND,
         lineHeight: FONT_LARGE + 4,
         paddingHorizontal: SPACING,
@@ -115,7 +121,7 @@ interface ComposerProps extends RX.CommonProps {
     roomId: string;
     roomType: RoomType;
     showTempSentMessage: (message: TemporaryMessage) => void;
-    replyMessage: TemporaryMessage;
+    replyMessage: MessageEvent;
     showJitsiMeet: (id: string) => void;
     roomActive: boolean;
 }
@@ -127,6 +133,7 @@ interface ComposerState {
     sendDisabled: boolean;
     showProgress: boolean;
     progressValue: number;
+    showReplyMessage: boolean;
 }
 
 export default class Composer extends ComponentBase<ComposerProps, ComposerState> {
@@ -157,6 +164,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
     private videoHeight: number | undefined;
     private videoWidth: number | undefined;
     private progressText = '';
+    private replyMessage: MessageEvent | undefined;
 
     constructor(props: ComposerProps) {
         super(props);
@@ -185,26 +193,19 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
             partialState.sendDisabled = false;
             partialState.showProgress = false;
+            partialState.showReplyMessage = false;
             this.getTextInputFromStorage(nextProps.roomId);
 
         } else if (this.props.roomId !== nextProps.roomId) {
 
             this.setTextInputToStorage(this.props.roomId);
             this.getTextInputFromStorage(nextProps.roomId);
+            partialState.showReplyMessage = false;
 
         } else if (nextProps.replyMessage && (!this.props.replyMessage || (nextProps.replyMessage !== this.props.replyMessage))) {
 
-            const separator = '········································\n';
-            const separatorIndex = nextProps.replyMessage.body.lastIndexOf(separator);
-            const replyBody = nextProps.replyMessage.body.substring(separatorIndex > -1 ? separatorIndex + separator.length : 0);
-            const replyMessage =
-                nextProps.replyMessage.senderId + ' ' + wrote[this.language] + ':\n'
-                + replyBody + '\n'
-                + separator;
-
-            partialState.textInput = replyMessage;
-            this.textInput = replyMessage;
-            this.textInputComponent!.focus();
+            this.replyMessage = nextProps.replyMessage;
+            partialState.showReplyMessage = true;
         }
 
         partialState.offline = UiStore.getOffline();
@@ -221,6 +222,10 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                 <EmojiPicker emojiArray={ this.getEmojiArray() } />
             </RX.View>
         );
+
+        if (this.state.showReplyMessage) {
+            this.textInputComponent?.focus();
+        }
     }
 
     public componentWillUnmount(): void {
@@ -311,51 +316,63 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
             RX.Modal.show(<DialogContainer content={ text }/>, 'errordialog');
         }
 
+        let messageContent: MessageEventContent_ = {
+            msgtype: 'm.text',
+        }
+
         const linkifyElement = EventUtils.getOnlyUrl(textInput);
-
         if (linkifyElement) {
-
-            let urlMessageContent: MessageEventContent_ = {
-                msgtype: 'm.text',
-                body: textInput,
-            }
 
             const previewData = await EventUtils.getLinkPreview(linkifyElement);
 
             if (previewData) {
-                urlMessageContent = {
-                    ...urlMessageContent,
-                    url_preview: previewData,
+                messageContent.url_preview = previewData;
+            }
+        }
+
+        if (this.state.showReplyMessage) {
+
+            const strippedReplyMessage = EventUtils.stripReplyMessage(this.replyMessage!.content.body || '');
+
+            const codeReplyMessage = (body: string): string => {
+                return body.replace(/^(.*)$/mg, '> $&');
+            }
+            const codedReplyMessage = codeReplyMessage(strippedReplyMessage);
+
+            const fallback = codedReplyMessage.replace('> ', '> <' + this.replyMessage!.senderId + '> ') + '\n\n';
+
+            messageContent = {
+                ...messageContent,
+                body: fallback + textInput,
+                'm.relates_to': {
+                    'm.in_reply_to': {
+                        event_id: this.replyMessage!.eventId,
+                    }
                 }
             }
 
-            ApiClient.sendMessage(this.props.roomId, urlMessageContent, tempId)
+        } else {
+            messageContent.body = textInput;
+        }
+
+        setTimeout(() => {
+
+            ApiClient.sendMessage(this.props.roomId, messageContent, tempId)
                 .then((_response) => {
-                    this.setState({ sendDisabled: false });
+                    this.setState({
+                        sendDisabled: false,
+                        showReplyMessage: false
+                    });
                 })
                 .catch(_error => {
+                    this.setState({
+                        sendDisabled: false,
+                        showReplyMessage: false
+                    });
                     showError();
                 });
 
-        } else {
-
-            setTimeout(() => {
-
-                const messageContent = {
-                    msgtype: 'm.text',
-                    body: textInput,
-                }
-
-                ApiClient.sendMessage(this.props.roomId, messageContent, tempId)
-                    .then((_response) => {
-                        this.setState({ sendDisabled: false });
-                    })
-                    .catch(_error => {
-                        showError();
-                    });
-
-            }, 250);
-        }
+        }, 250);
     }
 
     private onPressAttachmentButton = async () => {
@@ -389,6 +406,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
                 this.setState({
                     showProgress: false,
+                    showReplyMessage: false,
                     progressValue: 0,
                 });
                 this.progressText = '';
@@ -464,6 +482,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
                 this.setState({
                     showProgress: false,
+                    showReplyMessage: false,
                     progressValue: 0,
                 });
                 this.progressText = '';
@@ -692,6 +711,10 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
         RX.Popup.show(popupOptions, 'emojiPicker', 0);
     }
 
+    private onCancelReply = () => {
+        this.setState({ showReplyMessage: false });
+    }
+
     public render(): ReactElement | null {
 
         const disabledOpacity = 0.4;
@@ -702,6 +725,18 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                 <ProgressDialog
                     text={ this.progressText }
                     value={ this.state.progressValue }
+                />
+            )
+        }
+
+        let replyMessage: ReactElement | undefined;
+        if (this.state.showReplyMessage) {
+
+            replyMessage = (
+                <ReplyMessage
+                    replyEvent={ this.replyMessage! }
+                    roomId={ this.props.roomId }
+                    onCancelButton={ this.onCancelReply }
                 />
             )
         }
@@ -761,23 +796,28 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                         style={ { marginRight: 3 }}
                     />
                 </RX.Button>
-                <RX.TextInput
-                    style={ [styles.textInput, this.textInputStyle] }
-                    ref={ component => this.textInputComponent = component! }
-                    onKeyPress={ this.onKeyPress }
-                    onChangeText={ textInput => this.textInput = textInput }
-                    value={ this.state.textInput }
-                    editable={ this.props.roomActive || false }
-                    keyboardType={ 'default' }
-                    disableFullscreenUI={ true }
-                    allowFontScaling={ false }
-                    autoCapitalize={ 'sentences' }
-                    autoCorrect={ true }
-                    autoFocus={ false }
-                    spellCheck={ true }
-                    multiline={ true }
-                    onSelectionChange={ this.onSelectionChange }
-                />
+                <RX.View style={ styles.textInputContainer }>
+
+                    { replyMessage }
+
+                    <RX.TextInput
+                        style={ [styles.textInput, this.textInputStyle] }
+                        ref={ component => this.textInputComponent = component! }
+                        onKeyPress={ this.onKeyPress }
+                        onChangeText={ textInput => this.textInput = textInput }
+                        value={ this.state.textInput }
+                        editable={ this.props.roomActive || false }
+                        keyboardType={ 'default' }
+                        disableFullscreenUI={ true }
+                        allowFontScaling={ false }
+                        autoCapitalize={ 'sentences' }
+                        autoCorrect={ true }
+                        autoFocus={ false }
+                        spellCheck={ true }
+                        multiline={ true }
+                        onSelectionChange={ this.onSelectionChange }
+                    />
+                </RX.View>
                 <RX.Button
                     style={ styles.buttonSend }
                     title={ clickHereOrPressShftEnter[this.language] }

@@ -129,7 +129,7 @@ interface RoomChatProps extends RX.CommonProps {
     roomId: string;
     roomType: RoomType;
     tempSentMessage: TemporaryMessage;
-    setReplyMessage: (message: TemporaryMessage) => void;
+    setReplyMessage: (message: MessageEvent) => void;
     showTempForwardedMessage: (roomId: string, message: MessageEvent, tempId: string) => void;
     tempForwardedMessage: { message: MessageEvent, tempId: string }
 }

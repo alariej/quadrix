@@ -123,6 +123,14 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
         const messageRenderArray: Array<ReactElement> = [];
         let renderContent: ReactElement;
 
+        let messageBody: string;
+        const replyEventId = this.props.message.content['m.relates_to']?.['m.in_reply_to']?.event_id;
+        if (replyEventId) {
+            messageBody = EventUtils.stripReplyMessage(this.props.message.content.body!)
+        } else {
+            messageBody = this.props.message.content.body!;
+        }
+
         if (this.props.message.content.url_preview) {
 
             const linkifyElement: LinkifyElement = {
@@ -176,14 +184,14 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 
             renderContent = urlPreview;
 
-        } else if (EventUtils.isAllEmojis(this.props.message.content.body!)) {
+        } else if (EventUtils.isAllEmojis(messageBody)) {
 
             renderContent = (
                 <RX.Text
                     style={ styles.allEmojis }
                     selectable={ isSelectable }
                 >
-                    { this.props.message.content.body! }
+                    { messageBody }
                 </RX.Text>
             );
 
@@ -200,7 +208,7 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 
             } else {
 
-                bodyText = this.props.message.content.body!;
+                bodyText = messageBody;
             }
 
             if (bodyText) {

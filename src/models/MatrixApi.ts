@@ -105,6 +105,9 @@ export interface MessageEventContent_ {
     info?: MessageEventContentInfo_,
     url?: string,
     membership?: RoomPhase,
+    'm.relates_to'?: {
+        'm.in_reply_to'?: { [event_id: string]: string }
+    },
     name?: string,
     alias?: string,
     join_rule?: string,

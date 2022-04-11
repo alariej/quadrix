@@ -6,7 +6,7 @@ import ImageMessage from './ImageMessage';
 import FileMessage from './FileMessage';
 import TextMessage from './TextMessage';
 import ApiClient from '../matrix/ApiClient';
-import { MessageEvent, TemporaryMessage } from '../models/MessageEvent';
+import { MessageEvent } from '../models/MessageEvent';
 import DialogMessageTile from '../dialogs/DialogMessageTile';
 import { encryptedMessage, messageDeleted } from '../translations';
 import UiStore from '../stores/UiStore';
@@ -17,6 +17,7 @@ import Spinner from './Spinner';
 import AppFont from '../modules/AppFont';
 import VideoMessage from './VideoMessage';
 import DataStore from '../stores/DataStore';
+import ReplyMessage from './ReplyMessage';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -81,7 +82,7 @@ interface MessageTileProps {
     event: MessageEvent;
     roomType: RoomType;
     readMarkerType?: string;
-    setReplyMessage?: (message: TemporaryMessage) => void;
+    setReplyMessage: (message: MessageEvent) => void;
     showTempForwardedMessage?: (roomId: string, message?: MessageEvent, tempId?: string) => void;
     canPress?: boolean;
     isRedacted: boolean;
@@ -129,6 +130,22 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 
         let message;
         let messageType: string;
+
+        const replyEventId = this.props.event.content['m.relates_to']?.['m.in_reply_to']?.event_id;
+        let replyMessage: ReactElement | undefined;
+        if (replyEventId) {
+
+            const roomEvents = DataStore.getAllRoomEvents(this.props.roomId);
+            const eventIndex = roomEvents.findIndex((event: MessageEvent) => event.eventId === replyEventId);
+            const replyEvent = roomEvents[eventIndex];
+
+            replyMessage = (
+                <ReplyMessage
+                    replyEvent={ replyEvent }
+                    roomId={ this.props.roomId }
+                />
+            )
+        }
 
         if (this.props.isRedacted) {
 
@@ -351,6 +368,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                 >
                     { cornerPointer }
                     <RX.View style={ styles.containerMessage }>
+                        { replyMessage }
                         { message }
                     </RX.View>
                     <RX.View style={ [styles.containerFooter, { height: this.props.withSenderDetails ? undefined : 16 }] }>
@@ -373,6 +391,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                 >
                     { cornerPointer }
                     <RX.View style={ styles.containerMessage }>
+                        { replyMessage }
                         { message }
                     </RX.View>
                     <RX.View style={ [styles.containerFooter, { height: this.props.withSenderDetails ? undefined : 16 }] }>

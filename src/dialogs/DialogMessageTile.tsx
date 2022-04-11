@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
-import { MessageEvent, TemporaryMessage } from '../models/MessageEvent';
+import { MessageEvent } from '../models/MessageEvent';
 import { ComponentBase } from 'resub';
 import UiStore from '../stores/UiStore';
 import MessageTile from '../components/MessageTile';
@@ -99,7 +99,7 @@ interface DialogMessageTileProps extends RX.CommonProps {
     event: MessageEvent;
     roomType: RoomType;
     readMarkerType?: string;
-    setReplyMessage?: (message: TemporaryMessage) => void;
+    setReplyMessage: (message: MessageEvent | undefined) => void;
     showTempForwardedMessage?: (roomId: string, message?: MessageEvent, tempId?: string) => void;
     layout: LayoutInfo;
     marginStyle: RX.Types.ViewStyleRuleSet;
@@ -134,6 +134,8 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
         this.animatedStyle = RX.Styles.createAnimatedViewStyle({
             transform: [{ scale: this.animatedValue }]
         });
+
+        props.setReplyMessage(undefined);
     }
 
     protected _buildState(_nextProps: DialogMessageTileProps, initState: boolean, _prevState: DialogMessageTileState)
@@ -167,15 +169,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 
         RX.Modal.dismissAll();
 
-        // HACK: need to have a dynamic element (time)
-        // for the state change to trigger a re-render
-        const replyMessage: TemporaryMessage = {
-            time: Date.now(),
-            senderId: this.props.event.senderId,
-            body: this.props.event.content.body!,
-        }
-
-        this.props.setReplyMessage!(replyMessage);
+        this.props.setReplyMessage(this.props.event);
     }
 
     private showRoomList = (event: RX.Types.SyntheticEvent) => {
@@ -758,6 +752,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                         readMarkerType={ this.props.readMarkerType }
                         isRedacted={ false }
                         withSenderDetails={ this.state.withSenderDetails }
+                        setReplyMessage={ () => null }
                     />
                     <RX.View
                         style={ [

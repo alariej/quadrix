@@ -235,6 +235,14 @@ class EventUtils {
             return 'm.file';
         }
     }
+
+    public stripReplyMessage = (body: string): string => {
+        return body.replace(/^>\s(.*)$[\r\n]+/mg, '');
+    }
+
+    public flattenString = (text: string): string => {
+        return text.replace(/[\r\n]/mg, '  ');
+    }
 }
 
 export default new EventUtils();
