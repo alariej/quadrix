@@ -361,17 +361,8 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 
                     } else {
 
-                        // check for last carriage return, used among other things in reply-to messages
-                        const lastCR = this.props.newestRoomEvent.content.body.lastIndexOf('\n');
-
-                        if (lastCR > 0) {
-
-                            messageText = this.props.newestRoomEvent.content.body.substr(lastCR + 1);
-
-                        } else {
-
-                            messageText = this.props.newestRoomEvent.content.body;
-                        }
+                        const stripped = EventUtils.stripReplyMessage(this.props.newestRoomEvent.content.body);
+                        messageText = EventUtils.flattenString(stripped);
                     }
                 }
 
