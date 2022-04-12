@@ -25,19 +25,18 @@ const styles = {
         color: TILE_SYSTEM_TEXT,
         fontWeight: 'bold',
         fontStyle: 'italic',
+        marginRight: SPACING
     }),
     textReplyMessage: RX.Styles.createTextStyle({
         flex: 1,
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         color: TILE_SYSTEM_TEXT,
-        marginLeft: SPACING
     }),
     replyImageContainer: RX.Styles.createViewStyle({
         flex: 1,
         height: 32,
         alignItems: 'flex-start',
-        marginLeft: SPACING
     }),
     replyImage: RX.Styles.createImageStyle({
         flex: 1,
@@ -67,10 +66,25 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
 
     private getUserDisplayName = (userId: string): string => {
         const roomSummary = DataStore.getRoomSummary(this.props.roomId);
-        return roomSummary.members[userId].name || userId.split('@')[1].split(':')[0];
+        if (roomSummary.type === 'community') {
+            return userId;
+        } else {
+            return roomSummary.members[userId]?.name || userId.split('@')[1].split(':')[0];
+        }
     }
 
     public render(): ReactElement | null {
+
+        const userName = (
+            <RX.Text
+                style={ styles.textReplySender }
+                selectable={ true }
+                numberOfLines={ 1 }
+            >
+                { this.getUserDisplayName(this.props.replyEvent.senderId).substring(0, 20)
+                    .concat(this.props.replyEvent.senderId.length > 20 ? '...' : '') }
+            </RX.Text>
+        );
 
         let replyContent: ReactElement;
         if (this.props.replyEvent.content.msgtype === 'm.image') {
@@ -104,7 +118,11 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
                 );
             } else {
                 replyContent = (
-                    <RX.Text style={ styles.textReplyMessage } numberOfLines={ 1 } >
+                    <RX.Text
+                        style={ styles.textReplyMessage }
+                        numberOfLines={ this.props.onCancelButton ? 1 : undefined }
+                        selectable={ true }
+                    >
                         { this.props.replyEvent.content.body! }
                     </RX.Text>
                 );
@@ -114,7 +132,12 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
             const stripped = EventUtils.stripReplyMessage(this.props.replyEvent.content.body!);
             const strippedFlattened = EventUtils.flattenString(stripped);
             replyContent = (
-                <RX.Text style={ styles.textReplyMessage } numberOfLines={ 1 } >
+                <RX.Text
+                    style={ styles.textReplyMessage }
+                    numberOfLines={ this.props.onCancelButton ? 1 : undefined }
+                    selectable={ true }
+                >
+                    { userName }
                     { strippedFlattened }
                 </RX.Text>
             );
@@ -141,9 +164,7 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
 
         return (
             <RX.View style={ styles.replyContainer }>
-                <RX.Text style={ styles.textReplySender }>
-                    { this.getUserDisplayName(this.props.replyEvent.senderId) }
-                </RX.Text>
+                { ['m.image', 'm.video'].includes(this.props.replyEvent.content.msgtype!) ? userName : undefined }
                 { replyContent }
                 { cancelButton }
             </RX.View>

@@ -467,6 +467,26 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
         if (['m.room.message', 'm.room.encrypted'].includes(cellRender.item.event.type)) {
 
+            const replyEventId = cellRender.item.event.content['m.relates_to']?.['m.in_reply_to']?.event_id;
+            let replyEvent: MessageEvent | undefined;
+            if (replyEventId) {
+                const eventIndex = this.eventListItems.findIndex((item: EventListItemInfo) => item.event.eventId === replyEventId);
+                replyEvent = this.eventListItems[eventIndex]?.event;
+                if (!replyEvent) {
+                    const fallback = EventUtils.getReplyFallback(cellRender.item.event.content.body!);
+                    replyEvent = {
+                        eventId: replyEventId,
+                        content: {
+                            body: fallback.message,
+                            msgtype: 'm.text'
+                        },
+                        type: 'm.message',
+                        time: 0,
+                        senderId: fallback.senderName,
+                    }
+                }
+            }
+
             MessageWrapper = (
                 <RX.View
                     style={ styles.containerWrapper }
@@ -481,6 +501,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
                         event={ cellRender.item.event }
                         roomType={ this.props.roomType }
                         readMarkerType={ cellRender.item.readMarkerType }
+                        replyMessage={ replyEvent }
                         setReplyMessage={ this.props.setReplyMessage }
                         showTempForwardedMessage={ this.props.showTempForwardedMessage }
                         canPress={ true }

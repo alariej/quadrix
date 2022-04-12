@@ -164,7 +164,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
     private videoHeight: number | undefined;
     private videoWidth: number | undefined;
     private progressText = '';
-    private replyMessage: MessageEvent | undefined;
+    private replyEvent: MessageEvent | undefined;
 
     constructor(props: ComposerProps) {
         super(props);
@@ -204,7 +204,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
         } else if (nextProps.replyMessage && (!this.props.replyMessage || (nextProps.replyMessage !== this.props.replyMessage))) {
 
-            this.replyMessage = nextProps.replyMessage;
+            this.replyEvent = nextProps.replyMessage;
             partialState.showReplyMessage = true;
         }
 
@@ -332,21 +332,21 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
         if (this.state.showReplyMessage) {
 
-            const strippedReplyMessage = EventUtils.stripReplyMessage(this.replyMessage!.content.body || '');
+            const strippedReplyMessage = EventUtils.stripReplyMessage(this.replyEvent!.content.body || '');
 
             const codeReplyMessage = (body: string): string => {
                 return body.replace(/^(.*)$/mg, '> $&');
             }
             const codedReplyMessage = codeReplyMessage(strippedReplyMessage);
 
-            const fallback = codedReplyMessage.replace('> ', '> <' + this.replyMessage!.senderId + '> ') + '\n\n';
+            const fallback = codedReplyMessage.replace('> ', '> <' + this.replyEvent!.senderId + '> ') + '\n\n';
 
             messageContent = {
                 ...messageContent,
                 body: fallback + textInput,
                 'm.relates_to': {
                     'm.in_reply_to': {
-                        event_id: this.replyMessage!.eventId,
+                        event_id: this.replyEvent!.eventId,
                     }
                 }
             }
@@ -734,7 +734,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
             replyMessage = (
                 <ReplyMessage
-                    replyEvent={ this.replyMessage! }
+                    replyEvent={ this.replyEvent! }
                     roomId={ this.props.roomId }
                     onCancelButton={ this.onCancelReply }
                 />

@@ -82,6 +82,7 @@ interface MessageTileProps {
     event: MessageEvent;
     roomType: RoomType;
     readMarkerType?: string;
+    replyMessage?: MessageEvent;
     setReplyMessage: (message: MessageEvent) => void;
     showTempForwardedMessage?: (roomId: string, message?: MessageEvent, tempId?: string) => void;
     canPress?: boolean;
@@ -131,17 +132,11 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
         let message;
         let messageType: string;
 
-        const replyEventId = this.props.event.content['m.relates_to']?.['m.in_reply_to']?.event_id;
         let replyMessage: ReactElement | undefined;
-        if (replyEventId) {
-
-            const roomEvents = DataStore.getAllRoomEvents(this.props.roomId);
-            const eventIndex = roomEvents.findIndex((event: MessageEvent) => event.eventId === replyEventId);
-            const replyEvent = roomEvents[eventIndex];
-
+        if (this.props.replyMessage) {
             replyMessage = (
                 <ReplyMessage
-                    replyEvent={ replyEvent }
+                    replyEvent={ this.props.replyMessage }
                     roomId={ this.props.roomId }
                 />
             )

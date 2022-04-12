@@ -237,11 +237,28 @@ class EventUtils {
     }
 
     public stripReplyMessage = (body: string): string => {
+
+        if (!body) { return '' }
+
         return body.replace(/^>\s(.*)$[\r\n]+/mg, '');
     }
 
     public flattenString = (text: string): string => {
+
+        if (!text) { return '' }
+
         return text.replace(/[\r\n]/mg, '  ');
+    }
+
+    public getReplyFallback = (body: string): { senderName: string, message: string } => {
+
+        if (!body) { return { senderName: 'N/A', message: 'N/A' } }
+
+        const senderName = body.match(/(?<=<)(.*?)(?=>)/g);
+        const message1 = body.replace(/<(.*?)>\s/g, '');
+        const message2 = message1.match(/(?<=^>\s)(.*)/mg);
+
+        return { senderName: senderName ? senderName[0] : 'N/A', message: message2?.join('  ') || 'N/A' };
     }
 }
 
