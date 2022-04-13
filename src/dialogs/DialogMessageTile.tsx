@@ -99,6 +99,7 @@ interface DialogMessageTileProps extends RX.CommonProps {
     event: MessageEvent;
     roomType: RoomType;
     readMarkerType?: string;
+    replyMessage?: MessageEvent;
     setReplyMessage: (message: MessageEvent | undefined) => void;
     showTempForwardedMessage?: (roomId: string, message?: MessageEvent, tempId?: string) => void;
     layout: LayoutInfo;
@@ -749,6 +750,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
                         roomId={ this.props.roomId }
                         event={ this.props.event }
                         roomType={ this.props.roomType }
+                        replyMessage={ this.props.replyMessage }
                         readMarkerType={ this.props.readMarkerType }
                         isRedacted={ false }
                         withSenderDetails={ this.state.withSenderDetails }

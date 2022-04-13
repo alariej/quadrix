@@ -116,6 +116,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                         layout={ layout }
                         roomType={ this.props.roomType }
                         readMarkerType={ this.props.readMarkerType }
+                        replyMessage={ this.props.replyMessage }
                         setReplyMessage={ this.props.setReplyMessage }
                         showTempForwardedMessage={ this.props.showTempForwardedMessage }
                         marginStyle={ this.marginStyle }
