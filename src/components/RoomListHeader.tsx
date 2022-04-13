@@ -4,7 +4,7 @@ import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
 import { TILE_SYSTEM_TEXT, MODAL_CONTENT_TEXT, LINK_TEXT, HEADER_HEIGHT, FONT_NORMAL,
     BUTTON_ROUND_WIDTH, FONT_LARGE, BORDER_RADIUS, SPACING, ICON_REDUCTION_FACTOR, BUTTON_FILL, TRANSPARENT_BACKGROUND,
-    LOGO_BACKGROUND } from '../ui';
+    LOGO_BACKGROUND, PLACEHOLDER_TEXT } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogNewRoom from '../dialogs/DialogNewRoom';
 import DialogContainer from '../modules/DialogContainer';
@@ -37,7 +37,7 @@ const styles = {
     userName: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
-        color: TILE_SYSTEM_TEXT,
+        color: PLACEHOLDER_TEXT,
     }),
     roundButton: RX.Styles.createViewStyle({
         borderRadius: BUTTON_ROUND_WIDTH / 2,
