@@ -26,6 +26,7 @@ const styles = {
         fontSize: FONT_LARGE,
         color: TILE_MESSAGE_TEXT,
         lineHeight: FONT_LARGE + 4,
+        overflow: 'visible'
     }),
     allEmojis: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
@@ -187,11 +188,22 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
         } else if (EventUtils.isAllEmojis(messageBody)) {
 
             renderContent = (
-                <RX.Text
-                    style={ styles.allEmojis }
-                    selectable={ isSelectable }
-                >
-                    { messageBody }
+                <RX.Text style={ styles.containerText }>
+                    <RX.Text style={ styles.allEmojis } selectable={ isSelectable }>
+                        { messageBody }
+                    </RX.Text>
+                </RX.Text>
+            );
+
+        } else if (this.props.message.content.jitsi_started) {
+
+            const language = UiStore.getLanguage();
+
+            renderContent = (
+                <RX.Text style={ styles.containerText }>
+                    <RX.Text style={ styles.text }>
+                        { jitsiStartedInternal[language] }
+                    </RX.Text>
                 </RX.Text>
             );
 
@@ -200,23 +212,11 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
             let linkifyArray: LinkifyElement[] = [];
             let textArray: string[] = [];
 
-            let bodyText = '';
-            if (this.props.message.content.jitsi_started) {
-
-                const language = UiStore.getLanguage();
-                bodyText = jitsiStartedInternal[language];
-
-            } else {
-
-                bodyText = messageBody;
-            }
-
-            if (bodyText) {
-
-                linkifyArray = linkify.find(bodyText);
-            }
+            linkifyArray = linkify.find(messageBody);
 
             if (linkifyArray.length > 0) {
+
+                let bodyText = messageBody;
 
                 linkifyArray.map((linkifyElement, i) => {
 
@@ -306,16 +306,14 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
                         style={ styles.text }
                         selectable={ isSelectable }
                     >
-                        { bodyText }
+                        { messageBody }
                     </RX.Text>
                 );
                 messageRenderArray.push(text);
             }
 
             renderContent = (
-                <RX.Text
-                    style={ styles.containerText}
-                >
+                <RX.Text style={ styles.containerText}>
                     { messageRenderArray }
                 </RX.Text>
             );
