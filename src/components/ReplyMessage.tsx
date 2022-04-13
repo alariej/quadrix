@@ -5,6 +5,8 @@ import { MessageEvent } from '../models/MessageEvent';
 import AppFont from '../modules/AppFont';
 import CachedImage from '../modules/CachedImage';
 import DataStore from '../stores/DataStore';
+import UiStore from '../stores/UiStore';
+import { jitsiStartedInternal } from '../translations';
 import { BORDER_RADIUS, BUTTON_FILL, COMPOSER_BORDER, FONT_NORMAL, SPACING, TILE_BACKGROUND, TILE_SYSTEM_TEXT } from '../ui';
 import EventUtils from '../utils/EventUtils';
 import IconSvg, { SvgFile } from './IconSvg';
@@ -17,6 +19,7 @@ const styles = {
         padding: SPACING,
         borderRadius: BORDER_RADIUS,
         borderBottomWidth: 1,
+        marginBottom: SPACING,
         borderColor: COMPOSER_BORDER
     }),
     textReplySender: RX.Styles.createTextStyle({
@@ -25,7 +28,6 @@ const styles = {
         color: TILE_SYSTEM_TEXT,
         fontWeight: 'bold',
         fontStyle: 'italic',
-        marginRight: SPACING
     }),
     textReplyMessage: RX.Styles.createTextStyle({
         flex: 1,
@@ -52,6 +54,8 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         marginLeft: SPACING,
+    }),
+    cancelIcon: RX.Styles.createViewStyle({
         transform: [{ rotate: '45deg' }],
     }),
 }
@@ -82,7 +86,7 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
                 numberOfLines={ 1 }
             >
                 { this.getUserDisplayName(this.props.replyEvent.senderId).substring(0, 20)
-                    .concat(this.props.replyEvent.senderId.length > 20 ? '...' : '') }
+                    .concat(this.props.replyEvent.senderId.length > 20 ? '...' : '') + '  ' }
             </RX.Text>
         );
 
@@ -128,6 +132,21 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
                 );
             }
 
+        } else if (this.props.replyEvent.content.jitsi_started) {
+
+            const language = UiStore.getLanguage();
+
+            replyContent = (
+                <RX.Text
+                    style={ styles.textReplyMessage }
+                    numberOfLines={ 1 }
+                    selectable={ true }
+                >
+                    { userName }
+                    { jitsiStartedInternal[language] }
+                </RX.Text>
+            );
+
         } else {
             const stripped = EventUtils.stripReplyMessage(this.props.replyEvent.content.body!);
             const strippedFlattened = EventUtils.flattenString(stripped);
@@ -154,6 +173,7 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
                 >
                     <IconSvg
                         source= { require('../resources/svg/plus.json') as SvgFile }
+                        style={ styles.cancelIcon }
                         fillColor={ TILE_BACKGROUND }
                         height={ 12 }
                         width={ 12 }
