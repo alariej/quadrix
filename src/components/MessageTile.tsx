@@ -220,8 +220,12 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
         if (messageType === 'text' && this.props.roomType !== 'notepad' && !this.props.event.content.url_preview
             && !this.props.withSenderDetails)
         {
+
+            const lengthBody = this.props.event.content.body?.length || 0;
+            const lengthReply = ((this.props.replyMessage?.content?.body?.length || -24) + 24) * FONT_NORMAL / FONT_LARGE;
+
             const marginMax = 192;
-            const margin = Math.min(marginMax, (48 - this.props.event.content.body!.length) * FONT_LARGE / 2);
+            const margin = Math.min(marginMax, (48 - Math.max(lengthBody, lengthReply)) * FONT_LARGE / 2);
             marginText = Math.max(marginMin, margin);
         }
 
