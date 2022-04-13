@@ -42,7 +42,7 @@ export default class AnimatedSpinner extends RX.Component<AnimatedSpinnerProps, 
 
     public render(): JSX.Element | null {
 
-        const ringWidth = this.props.size / 5;
+        const ringWidth = this.props.size / 6;
 
         return (
             <RX.Animated.View style={[
