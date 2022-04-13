@@ -10,6 +10,7 @@
     "scripts": {
         "start:electron": "electron .",
         "build:snap": "electron-builder --linux snap --config builder-linux.json",
+        "build:snap:armhf": "electron-builder --linux snap --armv7l --config builder-linux.json",
         "build:snap:arm64": "node packager-snap.js",
         "build:deb": "electron-builder --linux deb --config builder-linux.json",
         "build:mas": "node packager-mas.js",
