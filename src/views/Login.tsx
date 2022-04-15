@@ -200,7 +200,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
                 server = this.server.trim();
             }
 
-            ApiClient.login(user, this.password, server)
+            ApiClient.login(user, this.password, StringUtils.cleanServerName(server))
                 .then(_response => {
 
                     SpinnerUtils.dismissModalSpinner('loginspinner');
@@ -251,7 +251,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
                         showMainPage={ this.props.showMainPage }
                         showRegistrationError={ this.showRegistrationError }
                         userId={ this.userId }
-                        server={ this.server }
+                        server={ StringUtils.cleanServerName(this.server) }
                         password={ this.password }
                     />
                 );
