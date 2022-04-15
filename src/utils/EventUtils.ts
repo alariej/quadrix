@@ -254,11 +254,10 @@ class EventUtils {
 
         if (!body) { return { senderName: 'N/A', message: 'N/A' } }
 
-        const senderName = body.match(/(?<=<)(.*?)(?=>)/g);
-        const message1 = body.replace(/<(.*?)>\s/g, '');
-        const message2 = message1.match(/(?<=^>\s)(.*)/mg);
+        const senderName = body.match(/<.*>/g);
+        const message = body.replace(/<.*>\s/g, '').match(/(^>\s)(.*)/mg)?.join('  ').replace(/>\s/g, '');
 
-        return { senderName: senderName ? senderName[0] : 'N/A', message: message2?.join('  ') || 'N/A' };
+        return { senderName: senderName ? senderName[0].replace(/<|>/g, '') : 'N/A', message: message || 'N/A' };
     }
 }
 

@@ -5,7 +5,7 @@ const package = require('../package.json');
 
 const options = {
     dir: './',
-    appBundleId: 'chat.quadrix.mas',
+    appBundleId: 'chat.quadrix.mac',
     out: './dist',
     platform: 'mas',
     arch: 'x64',
