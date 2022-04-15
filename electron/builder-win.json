@@ -25,12 +25,11 @@
 		"!*",
 		"!**/*",
 		"electron-main.js",
-        "build-web/*"
-    ],
-    "extraResources": [
+        "build-web/*",
         "resources/win/icon256.ico"
     ],
     "directories": {
+        "buildResources": "resources/win",
         "output": "dist"
     }
 }
