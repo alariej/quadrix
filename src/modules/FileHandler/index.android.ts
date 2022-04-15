@@ -3,7 +3,6 @@ import DocumentPicker from 'react-native-document-picker';
 import { PREFIX_UPLOAD } from '../../appconfig';
 import { Credentials } from '../../models/Credentials';
 import { MessageEvent } from '../../models/MessageEvent';
-import EventUtils from '../../utils/EventUtils';
 import ApiClient from '../../matrix/ApiClient';
 import { FileObject } from '../../models/FileObject';
 import { PermissionsAndroid, PermissionStatus } from 'react-native';
@@ -14,6 +13,7 @@ import UiStore from '../../stores/UiStore';
 import { FileSystem } from 'react-native-file-access';
 import { ThumbnailInfo, UploadFileInfo } from '../../models/UploadFileInfo';
 import { createThumbnail } from 'react-native-create-thumbnail';
+import StringUtils from '../../utils/StringUtils';
 
 class FileHandler {
 
@@ -64,7 +64,7 @@ class FileHandler {
 
     private async downloadFile(message: MessageEvent, filePath: string, fetchProgress: (progress: number) => void): Promise<void> {
 
-        const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
+        const url = StringUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
 
         await ReactNativeBlobUtil.config({
             overwrite: true,
@@ -84,7 +84,7 @@ class FileHandler {
 
     private async cacheFile(message: MessageEvent, fetchProgress: (progress: number) => void): Promise<string> {
 
-        const cachedFileName = EventUtils.getCachedFileName(message, ApiClient.credentials.homeServer);
+        const cachedFileName = StringUtils.getCachedFileName(message, ApiClient.credentials.homeServer);
         const cachedFilePath = this.cacheAppFolder + '/' + cachedFileName;
 
         const alreadyCached = await ReactNativeBlobUtil.fs.exists(cachedFilePath);

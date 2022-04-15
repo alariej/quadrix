@@ -36,6 +36,7 @@ import IconSvg, { SvgFile } from './IconSvg';
 import { differenceInDays, format, isSameYear, isToday, isYesterday, Locale } from 'date-fns';
 import Spinner from './Spinner';
 import AppFont from '../modules/AppFont';
+import StringUtils from '../utils/StringUtils';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -473,7 +474,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
                 const eventIndex = this.eventListItems.findIndex((item: EventListItemInfo) => item.event.eventId === replyEventId);
                 replyEvent = this.eventListItems[eventIndex]?.event;
                 if (!replyEvent) {
-                    const fallback = EventUtils.getReplyFallback(cellRender.item.event.content.body!);
+                    const fallback = StringUtils.getReplyFallback(cellRender.item.event.content.body!);
                     replyEvent = {
                         eventId: replyEventId,
                         content: {

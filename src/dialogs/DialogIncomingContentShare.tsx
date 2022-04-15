@@ -8,7 +8,6 @@ import { DIALOG_WIDTH, SPACING, BUTTON_MODAL_TEXT, FONT_LARGE, BORDER_RADIUS, TR
     MODAL_CONTENT_BACKGROUND } from '../ui';
 import UiStore from '../stores/UiStore';
 import { messageCouldNotBeSent, cancel, pressSend, fileCouldNotUpload, pressLoad, Languages } from '../translations';
-import EventUtils from '../utils/EventUtils';
 import RoomTile from '../components/RoomTile';
 import { SharedContent } from '../models/SharedContent';
 import DataStore from '../stores/DataStore';
@@ -19,6 +18,7 @@ import AppFont from '../modules/AppFont';
 import VideoPlayer from '../modules/VideoPlayer';
 import ProgressDialog from '../modules/ProgressDialog';
 import { UploadFileInfo } from '../models/UploadFileInfo';
+import StringUtils from '../utils/StringUtils';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -148,7 +148,7 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
 
             this.props.showTempForwardedMessage(this.props.roomId, message, tempId);
 
-            const linkifyElement = EventUtils.getOnlyUrl(this.props.sharedContent.uri);
+            const linkifyElement = StringUtils.getOnlyUrl(this.props.sharedContent.uri);
 
             if (linkifyElement) {
 
@@ -157,7 +157,7 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
                     body: this.props.sharedContent.uri,
                 }
 
-                const previewData = await EventUtils.getLinkPreview(linkifyElement);
+                const previewData = await StringUtils.getLinkPreview(linkifyElement);
 
                 if (previewData) {
                     urlMessageContent = {
@@ -228,7 +228,7 @@ export default class DialogIncomingContentShare extends RX.Component<DialogIncom
                     RX.Modal.dismiss('dialogIncomingContentShare');
 
                     if (response.uri) {
-                        const messageType = EventUtils.messageMediaType(file.type);
+                        const messageType = StringUtils.messageMediaType(file.type);
                         let mediaHeight: number | undefined;
                         let mediaWidth: number | undefined;
 

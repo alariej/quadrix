@@ -6,8 +6,8 @@ import UiStore from '../stores/UiStore';
 import * as linkify from 'linkifyjs';
 import { jitsiStartedInternal } from '../translations';
 import { LinkifyElement } from '../models/LinkifyElement';
-import EventUtils from '../utils/EventUtils';
 import AppFont from '../modules/AppFont';
+import StringUtils from '../utils/StringUtils';
 
 const styles = {
     containerMessage: RX.Styles.createViewStyle({
@@ -88,7 +88,7 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
             value: '',
         }
 
-        EventUtils.getLinkPreview(linkifyElement)
+        StringUtils.getLinkPreview(linkifyElement)
             .then(response => {
                 this.setState({ previewUrl: response?.image_url });
             })
@@ -127,7 +127,7 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
         let messageBody: string;
         const replyEventId = this.props.message.content['m.relates_to']?.['m.in_reply_to']?.event_id;
         if (replyEventId) {
-            messageBody = EventUtils.stripReplyMessage(this.props.message.content.body!)
+            messageBody = StringUtils.stripReplyMessage(this.props.message.content.body!)
         } else {
             messageBody = this.props.message.content.body!;
         }
@@ -185,7 +185,7 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 
             renderContent = urlPreview;
 
-        } else if (EventUtils.isAllEmojis(messageBody)) {
+        } else if (StringUtils.isAllEmojis(messageBody)) {
 
             renderContent = (
                 <RX.Text style={ styles.containerText }>

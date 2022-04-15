@@ -7,7 +7,6 @@ import { INPUT_BORDER, MODAL_CONTENT_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, F
     OPAQUE_BACKGROUND, JITSI_BORDER, AVATAR_FOREGROUND} from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
-import EventUtils from '../utils/EventUtils';
 import { ComponentBase } from 'resub';
 import UiStore from '../stores/UiStore';
 import FileHandler from '../modules/FileHandler';
@@ -21,6 +20,7 @@ import Pushers from '../modules/Pushers';
 import Spinner from '../components/Spinner';
 import AppFont from '../modules/AppFont';
 import CachedImage from '../modules/CachedImage';
+import StringUtils from '../utils/StringUtils';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -306,7 +306,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
             this.displayName = response.displayname;
         }
 
-        this.avatarUrl = EventUtils.mxcToHttp(response.avatar_url, ApiClient.credentials.homeServer);
+        this.avatarUrl = StringUtils.mxcToHttp(response.avatar_url, ApiClient.credentials.homeServer);
         this.displayNameRemote = response.displayname;
 
         return Promise.resolve();
@@ -368,7 +368,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
         await ApiClient.setProfileAvatarUrl(ApiClient.credentials.userIdFull, response.uri)
             .catch(error => { return Promise.reject(error) });
 
-        this.avatarUrl = EventUtils.mxcToHttp(response.uri, ApiClient.credentials.homeServer);
+        this.avatarUrl = StringUtils.mxcToHttp(response.uri, ApiClient.credentials.homeServer);
 
         this.avatarFile = undefined;
 

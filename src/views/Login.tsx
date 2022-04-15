@@ -12,9 +12,9 @@ import { haveAnAccount, noAccount, register, login, userPassword, repeatPassword
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { ErrorResponse_ } from '../models/MatrixApi';
 import { TERMS_URL } from '../appconfig';
-import EventUtils from '../utils/EventUtils';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import AppFont from '../modules/AppFont';
+import StringUtils from '../utils/StringUtils';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -138,7 +138,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 
                 if (lastUserId) {
 
-                    const userId = EventUtils.parseUserId(lastUserId);
+                    const userId = StringUtils.parseUserId(lastUserId);
 
                     this.userId = userId.user;
                     this.server = userId.server;
@@ -190,7 +190,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 
             if (!this.state.loginExpanded) {
 
-                const userId = EventUtils.parseUserId(this.userId);
+                const userId = StringUtils.parseUserId(this.userId);
 
                 user = userId.user;
                 server = userId.server;
@@ -296,7 +296,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 
         if (this.userId && !this.state.loginExpanded) {
 
-            const userId = EventUtils.parseUserId(this.userId);
+            const userId = StringUtils.parseUserId(this.userId);
 
             this.userId = userId.user;
             this.server = userId.server;

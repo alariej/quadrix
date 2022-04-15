@@ -1,10 +1,10 @@
 import Share from 'react-native-share';
 import { MessageEvent } from '../../models/MessageEvent';
 import ReactNativeBlobUtil from 'react-native-blob-util'
-import EventUtils from '../../utils/EventUtils';
 import ApiClient from '../../matrix/ApiClient';
 import { shareWith } from '../../translations';
 import UiStore from '../../stores/UiStore';
+import StringUtils from '../../utils/StringUtils';
 
 class ShareHandlerOutgoing {
 
@@ -26,7 +26,7 @@ class ShareHandlerOutgoing {
 
         } else {
 
-            const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
+            const url = StringUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
             const fileName = message.content.body;
 
             ReactNativeBlobUtil.config({

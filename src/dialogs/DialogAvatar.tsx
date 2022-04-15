@@ -10,13 +10,13 @@ import { ComponentBase } from 'resub';
 import { BUTTON_MODAL_TEXT, FONT_LARGE, BORDER_RADIUS, INPUT_BORDER, OBJECT_MARGIN, BUTTON_LONG_WIDTH, CONTAINER_PADDING,
     BUTTON_HEIGHT, AVATAR_BACKGROUND, AVATAR_LARGE_WIDTH, BUTTON_SHORT_WIDTH, BUTTON_MODAL_BACKGROUND, SPACING,
     OPAQUE_BACKGROUND, BUTTON_DISABLED_TEXT, DIALOG_WIDTH, AVATAR_FOREGROUND} from '../ui';
-import EventUtils from '../utils/EventUtils';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { ErrorResponse_, RoomPhase, RoomType, StateEventContent_ } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
 import Spinner from '../components/Spinner';
 import AppFont from '../modules/AppFont';
 import CachedImage from '../modules/CachedImage';
+import StringUtils from '../utils/StringUtils';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -266,7 +266,7 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
 
         await ApiClient.sendStateEvent(this.props.roomId, 'm.room.avatar', content, '').catch(error => { return Promise.reject(error) });
 
-        this.avatarUrl = EventUtils.mxcToHttp(response.uri, ApiClient.credentials.homeServer);
+        this.avatarUrl = StringUtils.mxcToHttp(response.uri, ApiClient.credentials.homeServer);
 
         this.avatarFile = undefined;
 

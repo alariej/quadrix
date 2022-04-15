@@ -2,7 +2,6 @@ import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { User } from '../models/User';
 import DataStore from '../stores/DataStore';
-import EventUtils from '../utils/EventUtils';
 import ApiClient from '../matrix/ApiClient';
 import { TILE_BACKGROUND, BUTTON_LONG_TEXT, TILE_SYSTEM_TEXT, BORDER_RADIUS, SPACING, FONT_NORMAL, FONT_LARGE,
     FONT_SMALL, TILE_HEIGHT, AVATAR_SMALL_WIDTH, LIGHT_BACKGROUND, TILE_MESSAGE_TEXT, AVATAR_FOREGROUND } from '../ui';
@@ -11,6 +10,7 @@ import { invited, left, admin } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
 import AppFont from '../modules/AppFont';
 import CachedImage from '../modules/CachedImage';
+import StringUtils from '../utils/StringUtils';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -92,7 +92,7 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
 
     public render(): JSX.Element | null {
 
-        const avatarUrl = EventUtils.mxcToHttp(this.props.user.avatarUrl!, ApiClient.credentials.homeServer);
+        const avatarUrl = StringUtils.mxcToHttp(this.props.user.avatarUrl!, ApiClient.credentials.homeServer);
 
         const avatarIsUrl = avatarUrl && avatarUrl.includes('https');
 

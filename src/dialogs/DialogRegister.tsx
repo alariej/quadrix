@@ -9,10 +9,10 @@ import UiStore from '../stores/UiStore';
 import { userIdInUse, cancel, errorRegistration, registrationNotSupported, confirmationEmail, firstClickLink, serverRequiresEmail,
     yourEmailAddress, clientSideConfNotSupported, emailAlreadyUsed, Languages } from '../translations';
 import DialogContainer from '../modules/DialogContainer';
-import EventUtils from '../utils/EventUtils';
 import { EmailTokenResponse_, ErrorRegisterResponse_, LoginResponse_, RegisterStageType } from '../models/MatrixApi';
 import Spinner from '../components/Spinner';
 import AppFont from '../modules/AppFont';
+import StringUtils from '../utils/StringUtils';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -357,7 +357,7 @@ export default class DialogRegister extends RX.Component<DialogRegisterProps, Di
             showSpinner: true,
         });
 
-        const clientSecret = EventUtils.getRandomString(12);
+        const clientSecret = StringUtils.getRandomString(12);
         const sendAttempt = 1;
 
         ApiClient.requestEmailToken(this.props.server, clientSecret, this.emailAddress, sendAttempt)

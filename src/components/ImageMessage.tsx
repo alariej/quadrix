@@ -1,6 +1,6 @@
 import React from 'react';
 import RX from 'reactxp';
-import EventUtils from '../utils/EventUtils';
+import StringUtils from '../utils/StringUtils';
 import ApiClient from '../matrix/ApiClient';
 import { MessageEvent } from '../models/MessageEvent';
 import FullScreenImage from './FullScreenImage';
@@ -56,7 +56,7 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 
         if (props.message.content.info!.thumbnail_url) {
 
-            this.url = EventUtils.mxcToHttp(this.props.message.content.info!.thumbnail_url!, ApiClient.credentials.homeServer);
+            this.url = StringUtils.mxcToHttp(this.props.message.content.info!.thumbnail_url!, ApiClient.credentials.homeServer);
 
             if (props.message.content.info!.thumbnail_info!.w && props.message.content.info!.thumbnail_info!.h) {
                 this.heightStyle = RX.Styles.createViewStyle({
@@ -68,11 +68,11 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
                 }, false);
             }
 
-            this.urlFull = EventUtils.mxcToHttp(props.message.content.url!, ApiClient.credentials.homeServer);
+            this.urlFull = StringUtils.mxcToHttp(props.message.content.url!, ApiClient.credentials.homeServer);
 
         } else {
 
-            this.url = EventUtils.mxcToHttp(props.message.content.url!, ApiClient.credentials.homeServer);
+            this.url = StringUtils.mxcToHttp(props.message.content.url!, ApiClient.credentials.homeServer);
 
             if (props.message.content.info!.w && props.message.content.info!.h) {
                 this.heightStyle = RX.Styles.createViewStyle({

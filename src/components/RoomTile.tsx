@@ -18,6 +18,7 @@ import { MessageEvent } from '../models/MessageEvent';
 import AppFont from '../modules/AppFont';
 import CachedImage from '../modules/CachedImage';
 import { format, isSameWeek, isToday, isYesterday, Locale } from 'date-fns';
+import StringUtils from '../utils/StringUtils';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -169,7 +170,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
         }
 
         return {
-            avatarUrl: EventUtils.mxcToHttp(avatarUrl!, ApiClient.credentials.homeServer),
+            avatarUrl: StringUtils.mxcToHttp(avatarUrl!, ApiClient.credentials.homeServer),
             name: name!,
             unreadCount: roomSummary.unreadCount,
             phase: roomSummary.phase,
@@ -361,8 +362,8 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 
                     } else {
 
-                        const stripped = EventUtils.stripReplyMessage(this.props.newestRoomEvent.content.body);
-                        messageText = EventUtils.flattenString(stripped);
+                        const stripped = StringUtils.stripReplyMessage(this.props.newestRoomEvent.content.body);
+                        messageText = StringUtils.flattenString(stripped);
                     }
                 }
 

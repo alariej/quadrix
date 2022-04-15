@@ -5,7 +5,6 @@ import { HEADER_TEXT, BUTTON_ROUND_WIDTH, BORDER_RADIUS, HEADER_HEIGHT,
     BUTTON_FILL, AVATAR_BACKGROUND, TRANSPARENT_BACKGROUND, HEADER_STATUS, AVATAR_FOREGROUND } from '../ui';
 import { ComponentBase } from 'resub';
 import DataStore from '../stores/DataStore';
-import EventUtils from '../utils/EventUtils';
 import { User } from '../models/User';
 import ApiClient from '../matrix/ApiClient';
 import DialogAvatar from '../dialogs/DialogAvatar';
@@ -21,6 +20,7 @@ import AppFont from '../modules/AppFont';
 import UserPresence from './UserPresence';
 import FileHandler from '../modules/FileHandler';
 import CachedImage from '../modules/CachedImage';
+import StringUtils from '../utils/StringUtils';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -189,7 +189,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
             avatarUrl = this.roomSummary.avatarUrl;
         }
 
-        partialState.avatarUrl = EventUtils.mxcToHttp(avatarUrl!, ApiClient.credentials.homeServer);
+        partialState.avatarUrl = StringUtils.mxcToHttp(avatarUrl!, ApiClient.credentials.homeServer);
         partialState.name = name;
         partialState.type = this.roomSummary.type;
         partialState.phase = this.roomSummary.phase;

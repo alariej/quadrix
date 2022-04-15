@@ -14,7 +14,7 @@ import { messageCouldNotBeSent, cancel, sending, clickHereOrPressShftEnter, pres
     jitsiStartedInternal, fileCouldNotUpload, pressSend, pressLoad, Languages } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
 import EmojiPicker from './EmojiPicker';
-import EventUtils from '../utils/EventUtils';
+import StringUtils from '../utils/StringUtils';
 import { MessageEventContentInfo_, MessageEventContent_, RoomType, ThumbnailInfo_ } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
 import { MessageEvent, TemporaryMessage } from '../models/MessageEvent';
@@ -320,10 +320,10 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
             msgtype: 'm.text',
         }
 
-        const linkifyElement = EventUtils.getOnlyUrl(textInput);
+        const linkifyElement = StringUtils.getOnlyUrl(textInput);
         if (linkifyElement) {
 
-            const previewData = await EventUtils.getLinkPreview(linkifyElement);
+            const previewData = await StringUtils.getLinkPreview(linkifyElement);
 
             if (previewData) {
                 messageContent.url_preview = previewData;
@@ -332,7 +332,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
         if (this.state.showReplyMessage) {
 
-            const strippedReplyMessage = EventUtils.stripReplyMessage(this.replyEvent!.content.body || '');
+            const strippedReplyMessage = StringUtils.stripReplyMessage(this.replyEvent!.content.body || '');
 
             const codeReplyMessage = (body: string): string => {
                 return body.replace(/^(.*)$/mg, '> $&');
@@ -413,7 +413,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
                 if (response.uri) {
 
-                    const messageType = EventUtils.messageMediaType(file.type);
+                    const messageType = StringUtils.messageMediaType(file.type);
                     let mediaHeight: number | undefined;
                     let mediaWidth: number | undefined;
 

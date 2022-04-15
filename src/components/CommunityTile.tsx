@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
-import EventUtils from '../utils/EventUtils';
 import ApiClient from '../matrix/ApiClient';
 import { TILE_BACKGROUND, TILE_SYSTEM_TEXT, BORDER_RADIUS, AVATAR_WIDTH, FONT_LARGE, FONT_NORMAL, TILE_WIDTH, SPACING,
     TILE_HEIGHT_COMMUNITY, AVATAR_FOREGROUND } from '../ui';
@@ -9,6 +8,7 @@ import { alias, topic, members } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
 import { PublicRoom_ } from '../models/MatrixApi';
 import AppFont from '../modules/AppFont';
+import StringUtils from '../utils/StringUtils';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -78,7 +78,7 @@ export default class CommunityTile extends RX.Component<CommunityTileProps, RX.S
 
     public render(): JSX.Element | null {
 
-        const avatarUrl = EventUtils.mxcToHttp(this.props.roomResponse.avatar_url, ApiClient.credentials.homeServer);
+        const avatarUrl = StringUtils.mxcToHttp(this.props.roomResponse.avatar_url, ApiClient.credentials.homeServer);
 
         const avatarIsUrl = avatarUrl && avatarUrl.includes('https');
 

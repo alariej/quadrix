@@ -8,7 +8,7 @@ import DataStore from '../stores/DataStore';
 import UiStore from '../stores/UiStore';
 import { jitsiStartedInternal } from '../translations';
 import { BORDER_RADIUS, BUTTON_FILL, COMPOSER_BORDER, FONT_NORMAL, SPACING, TILE_BACKGROUND, TILE_SYSTEM_TEXT } from '../ui';
-import EventUtils from '../utils/EventUtils';
+import StringUtils from '../utils/StringUtils';
 import IconSvg, { SvgFile } from './IconSvg';
 
 const styles = {
@@ -92,7 +92,7 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
 
         let replyContent: ReactElement;
         if (this.props.replyEvent.content.msgtype === 'm.image') {
-            const source = EventUtils.mxcToHttp(this.props.replyEvent.content.url!, ApiClient.credentials.homeServer);
+            const source = StringUtils.mxcToHttp(this.props.replyEvent.content.url!, ApiClient.credentials.homeServer);
             replyContent = (
                 <RX.View style={ styles.replyImageContainer }>
                     <CachedImage
@@ -114,7 +114,7 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
                         <CachedImage
                             resizeMode={ 'cover' }
                             style={ styles.replyImage }
-                            source={ EventUtils.mxcToHttp(thumbnailUrl, ApiClient.credentials.homeServer) }
+                            source={ StringUtils.mxcToHttp(thumbnailUrl, ApiClient.credentials.homeServer) }
                             mimeType={ this.props.replyEvent.content.info?.mimetype }
                             animated={ false }
                         />
@@ -148,8 +148,8 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
             );
 
         } else {
-            const stripped = EventUtils.stripReplyMessage(this.props.replyEvent.content.body!);
-            const strippedFlattened = EventUtils.flattenString(stripped);
+            const stripped = StringUtils.stripReplyMessage(this.props.replyEvent.content.body!);
+            const strippedFlattened = StringUtils.flattenString(stripped);
             replyContent = (
                 <RX.Text
                     style={ styles.textReplyMessage }

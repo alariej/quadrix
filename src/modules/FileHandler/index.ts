@@ -3,7 +3,6 @@ import { PREFIX_UPLOAD, APP_NAME } from '../../appconfig';
 import axios from 'axios';
 import UiStore from '../../stores/UiStore';
 import { save, uploadingFile } from '../../translations';
-import EventUtils from '../../utils/EventUtils';
 import ApiClient from '../../matrix/ApiClient';
 import { MessageEvent } from '../../models/MessageEvent';
 import Resizer from 'react-image-file-resizer';
@@ -14,6 +13,7 @@ import { FileObject } from '../../models/FileObject';
 import ImageSizeLocal from '../ImageSizeLocal';
 import { ThumbnailInfo, UploadFileInfo } from '../../models/UploadFileInfo';
 import VideoThumbnail from '../VideoThumbnail';
+import StringUtils from '../../utils/StringUtils';
 
 declare global {
     interface Window {
@@ -67,7 +67,7 @@ class FileHandler {
     // electron only
     private async downloadFile(message: MessageEvent, filePath: string, fetchProgress: (progress: number) => void): Promise<void> {
 
-        const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
+        const url = StringUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
 
         const response = await axios.request({
             url: url,
@@ -92,7 +92,7 @@ class FileHandler {
     // electron only
     private async cacheFile(message: MessageEvent, fetchProgress: (progress: number) => void): Promise<string> {
 
-        const cachedFileName = EventUtils.getCachedFileName(message, ApiClient.credentials.homeServer);
+        const cachedFileName = StringUtils.getCachedFileName(message, ApiClient.credentials.homeServer);
         const path = window.require('path');
         const cachedFilePath = path.join(this.cacheAppFolder, cachedFileName);
         const fs = window.require('fs');
@@ -175,7 +175,7 @@ class FileHandler {
 
         } else {
 
-            const url = EventUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
+            const url = StringUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
             const fileName = message.content.body;
             const mimeType = message.content.info!.mimetype;
 

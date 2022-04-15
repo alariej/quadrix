@@ -21,7 +21,7 @@ import { ErrorResponse_, MessageEventContentInfo_, MessageEventContent_, RoomTyp
 import SpinnerUtils from '../utils/SpinnerUtils';
 import Spinner from '../components/Spinner';
 import AppFont from '../modules/AppFont';
-import EventUtils from '../utils/EventUtils';
+import StringUtils from '../utils/StringUtils';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -268,7 +268,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
             }
 
             const messageContent: MessageEventContent_ = {
-                msgtype: EventUtils.messageMediaType(this.props.event.content.info!.mimetype!),
+                msgtype: StringUtils.messageMediaType(this.props.event.content.info!.mimetype!),
                 body: this.props.event.content.body,
                 info: messageContentInfo,
                 url: this.props.event.content.url,
