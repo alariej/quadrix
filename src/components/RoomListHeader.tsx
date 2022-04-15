@@ -4,7 +4,7 @@ import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
 import { TILE_SYSTEM_TEXT, MODAL_CONTENT_TEXT, LINK_TEXT, HEADER_HEIGHT, FONT_NORMAL,
     BUTTON_ROUND_WIDTH, FONT_LARGE, BORDER_RADIUS, SPACING, ICON_REDUCTION_FACTOR, BUTTON_FILL, TRANSPARENT_BACKGROUND,
-    LOGO_BACKGROUND, PLACEHOLDER_TEXT } from '../ui';
+    LOGO_BACKGROUND, HEADER_TEXT } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogNewRoom from '../dialogs/DialogNewRoom';
 import DialogContainer from '../modules/DialogContainer';
@@ -31,13 +31,14 @@ const styles = {
         backgroundColor: TRANSPARENT_BACKGROUND
     }),
     userNameContainer: RX.Styles.createViewStyle({
-        flexDirection: 'row',
-        justifyContent: 'center',
+        // not used
     }),
     userName: RX.Styles.createTextStyle({
+        flex: 1,
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
-        color: PLACEHOLDER_TEXT,
+        textAlign: 'center',
+        color: HEADER_TEXT,
     }),
     roundButton: RX.Styles.createViewStyle({
         borderRadius: BUTTON_ROUND_WIDTH / 2,
@@ -261,8 +262,8 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
                     { disconnected! }
 
                     <RX.View style={ styles.userNameContainer }>
-                        <RX.Text allowFontScaling={ false } numberOfLines={ 1 } style={ styles.userName }>
-                            { ApiClient.credentials.userIdFull }
+                        <RX.Text allowFontScaling={ false } style={ styles.userName }>
+                            { '[ ' + ApiClient.credentials.userIdFull + ' ]' }
                         </RX.Text>
                     </RX.View>
                 </RX.View>
