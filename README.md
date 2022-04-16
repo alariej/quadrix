@@ -14,7 +14,7 @@
 
 ## Use cases:
 
-- Private homeserver owners looking to get their non-tech friends + family to chat on Matrix
+- Private homeserver owners looking to get their non-tech friends & family to chat on Matrix
 - Matrix users participating in unencrypted public rooms only
 - Small organizations looking for a simple, self-hosted, open-source instant messaging solution
 
@@ -44,6 +44,40 @@
     </a>
 </p>
 
+## Matrix Protocol Implementation:
+
+- &check; Room directory
+- &cross; Room tag showing
+- &cross; Room tag editing
+- &cross; Search joined rooms
+- &check; Room user list
+- &check; Display room description
+- &cross; Edit room description
+- &cross; Highlights
+- &cross; Pushrules
+- &check; Send read markers
+- &check; Display read markers
+- &check; Sending invites
+- &check; Accepting invites
+- &cross; Typing notification
+- &cross; E2EE
+- &check; Replies
+- &check; Attachment uploading
+- &check; Attachment downloading
+- &cross; Send stickers
+- &cross; Send formatted messages markdown
+- &cross; Rich Text editor for formatted messages
+- &cross; Display formatted messages
+- &cross; Redacting
+- &cross; Multiple Matrix accounts
+- &check; New user registration
+- &cross; VoIP
+- &cross; Reactions
+- &cross; Message editing
+- &cross; Room upgrades
+- &cross; Localizations
+- &cross; SSO Support
+
 ## Installation:
 For all platforms:
 - `npm install`
@@ -63,7 +97,7 @@ Additionally for iOS:
 
 Please report issues, problems, crashes, bugs, etc. in the [Issues](https://github.com/alariej/quadrix/issues) section of this repository.
 
-## Terms / Privacy / License
+## Terms / Privacy / License:
 
 quadrix is provided without warranty of any kind. In no event shall the copyright holder be liable for any claim, damages or other liability arising from the use of this software.
 
