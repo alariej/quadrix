@@ -119,6 +119,8 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 
     public render(): JSX.Element | null {
 
+        if (!this.props.message.content.body) { return null }
+
         const isSelectable = UiStore.getPlatform() === 'web' && UiStore.getDevice() === 'desktop';
 
         const messageRenderArray: Array<ReactElement> = [];
@@ -127,7 +129,7 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
         let messageBody: string;
         const replyEventId = this.props.message.content['m.relates_to']?.['m.in_reply_to']?.event_id;
         if (replyEventId) {
-            messageBody = StringUtils.stripReplyMessage(this.props.message.content.body!)
+            messageBody = StringUtils.stripReplyMessage(this.props.message.content.body)
         } else {
             messageBody = this.props.message.content.body!;
         }
