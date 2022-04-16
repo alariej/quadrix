@@ -79,10 +79,12 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
 
     public render(): ReactElement | null {
 
+        const isSelectable = UiStore.getPlatform() === 'web' && UiStore.getDevice() === 'desktop';
+
         const userName = (
             <RX.Text
                 style={ styles.textReplySender }
-                selectable={ true }
+                selectable={ isSelectable }
                 numberOfLines={ 1 }
             >
                 { this.getUserDisplayName(this.props.replyEvent.senderId).substring(0, 20)
@@ -125,7 +127,7 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
                     <RX.Text
                         style={ styles.textReplyMessage }
                         numberOfLines={ this.props.onCancelButton ? 1 : undefined }
-                        selectable={ true }
+                        selectable={ isSelectable }
                     >
                         { this.props.replyEvent.content.body! }
                     </RX.Text>
@@ -140,7 +142,7 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
                 <RX.Text
                     style={ styles.textReplyMessage }
                     numberOfLines={ 1 }
-                    selectable={ true }
+                    selectable={ isSelectable }
                 >
                     { userName }
                     { jitsiStartedInternal[language] }
@@ -154,7 +156,7 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
                 <RX.Text
                     style={ styles.textReplyMessage }
                     numberOfLines={ this.props.onCancelButton ? 1 : undefined }
-                    selectable={ true }
+                    selectable={ isSelectable }
                 >
                     { userName }
                     { strippedFlattened }
