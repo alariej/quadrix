@@ -468,22 +468,30 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
         if (['m.room.message', 'm.room.encrypted'].includes(cellRender.item.event.type)) {
 
-            const replyEventId = cellRender.item.event.content['m.relates_to']?.['m.in_reply_to']?.event_id;
             let replyEvent: MessageEvent | undefined;
+
+            const replyEventId = cellRender.item.event.content['m.relates_to']?.['m.in_reply_to']?.event_id;
+
             if (replyEventId) {
+
                 const eventIndex = this.eventListItems.findIndex((item: EventListItemInfo) => item.event.eventId === replyEventId);
                 replyEvent = this.eventListItems[eventIndex]?.event;
+
                 if (!replyEvent) {
+
                     const fallback = StringUtils.getReplyFallback(cellRender.item.event.content.body!);
-                    replyEvent = {
-                        eventId: replyEventId,
-                        content: {
-                            body: fallback.message,
-                            msgtype: 'm.text'
-                        },
-                        type: 'm.message',
-                        time: 0,
-                        senderId: fallback.senderName,
+
+                    if (fallback.senderId && fallback.message) {
+                        replyEvent = {
+                            eventId: replyEventId,
+                            content: {
+                                body: fallback.message,
+                                msgtype: 'm.text'
+                            },
+                            type: 'm.message',
+                            time: 0,
+                            senderId: fallback.senderId,
+                        }
                     }
                 }
             }

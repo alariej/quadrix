@@ -119,17 +119,26 @@ class StringUtils {
         return text.replace(/[\r\n]/mg, '  ');
     }
 
-    public getReplyFallback = (body: string): { senderName: string, message: string } => {
+    public getReplyFallback = (body: string): { senderId: string | undefined, message: string | undefined } => {
 
-        if (!body) { return { senderName: 'N/A', message: 'N/A' } }
+        if (!body) { return { senderId: undefined, message: undefined } }
 
-        const senderName = (body.match(/<.*>/g) || '')[0].replace(/<|>/g, '');
-        const message = body.replace(/<.*>\s/g, '').match(/(^>\s)(.*)/mg)?.join('  ').replace(/>\s/g, '');
+        let senderId: string | undefined;
+        let message: string | undefined;
 
-        return { senderName: senderName || 'N/A', message: message || 'N/A' };
+        try {
+            senderId = (body.match(/<.*>/g) || '')[0].replace(/<|>/g, '');
+            message = body.replace(/<.*>\s/g, '').match(/(^>\s)(.*)/mg)?.join('  ').replace(/>\s/g, '');
+        } catch (error) {
+            // do nothing
+        }
+
+        return { senderId: senderId, message: message };
     }
 
     public cleanServerName = (serverName: string): string => {
+
+        if (!serverName) { return ''}
 
         return serverName.replace(/^https?:\/\//g, '');
     }
