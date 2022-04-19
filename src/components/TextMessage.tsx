@@ -175,7 +175,7 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
                         { this.props.message.content.url_preview.title }
                     </RX.Text>
                     <RX.Text
-                        style={ [styles.link, { marginTop: 6 }] }
+                        style={ [styles.link, { marginTop: 6, maxWidth: width }] }
                         onPress={ event => this.launchLinkApp(event, linkifyElement) }
                         onContextMenu={ () => this.props.showContextDialog() }
                         numberOfLines={ UiStore.getPlatform() === 'web' ? 1 : 2 }
