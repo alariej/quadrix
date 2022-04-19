@@ -15,9 +15,9 @@ const styles = {
         overflow: 'visible'
     }),
     containerText: RX.Styles.createTextStyle({
-        fontFamily: AppFont.fontFamily,
         flex: 1,
-        paddingLeft: SPACING,
+        fontFamily: AppFont.fontFamily,
+        paddingHorizontal: SPACING,
         overflow: 'visible',
         wordBreak: 'break-word',
     }),
