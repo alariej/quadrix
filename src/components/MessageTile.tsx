@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { TILE_BACKGROUND, FOOTER_TEXT, BORDER_RADIUS, SPACING, FONT_NORMAL, TILE_SYSTEM_TEXT, BUTTON_ROUND_WIDTH,
-    TRANSPARENT_BACKGROUND, MARKER_READ_FILL, MARKER_SENT_FILL, FONT_LARGE, TILE_BACKGROUND_OWN } from '../ui';
+    TRANSPARENT_BACKGROUND, MARKER_READ_FILL, MARKER_SENT_FILL, TILE_BACKGROUND_OWN } from '../ui';
 import ImageMessage from './ImageMessage';
 import FileMessage from './FileMessage';
 import TextMessage from './TextMessage';
@@ -27,9 +27,11 @@ const styles = {
         borderRadius: BORDER_RADIUS,
         marginBottom: SPACING,
         padding: SPACING,
+        minWidth: 84,
         overflow: 'visible'
     }),
     containerMessage: RX.Styles.createViewStyle({
+        flex: 1,
         overflow: 'visible',
     }),
     containerFooter: RX.Styles.createViewStyle({
@@ -93,7 +95,7 @@ interface MessageTileProps {
 export default class MessageTile extends RX.Component<MessageTileProps, RX.Stateless> {
 
     private mainTile: RX.View | undefined;
-    private marginStyle: RX.Types.ViewStyleRuleSet;
+    private tileStyle: RX.Types.ViewStyleRuleSet;
 
     public shouldComponentUpdate(nextProps: MessageTileProps): boolean {
 
@@ -119,7 +121,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                         replyMessage={ this.props.replyMessage }
                         setReplyMessage={ this.props.setReplyMessage }
                         showTempForwardedMessage={ this.props.showTempForwardedMessage }
-                        marginStyle={ this.marginStyle }
+                        marginStyle={ this.tileStyle }
                     />
                 );
 
@@ -205,34 +207,36 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
             );
         }
 
+        const marginMin = (BUTTON_ROUND_WIDTH + SPACING);
         const isOwnMessage = this.props.event.senderId === ApiClient.credentials.userIdFull;
-        let marginFactor;
+
+        let marginLeft;
+        let marginRight;
+        let alignSelf: RX.Types.FlexboxParentStyle['alignSelf'];
+        let backgroundColor;
 
         if (this.props.roomType === 'notepad') {
-            marginFactor = 0.5;
+            marginLeft = marginMin / 2;
+            marginRight = marginMin / 2;
+            alignSelf = undefined;
+            backgroundColor = TILE_BACKGROUND;
+        } else if (messageType === 'media') {
+            marginLeft = isOwnMessage ? marginMin : 0;
+            marginRight = isOwnMessage ? 0 : marginMin;
+            alignSelf = undefined;
+            backgroundColor = isOwnMessage ? TILE_BACKGROUND_OWN : TILE_BACKGROUND;
         } else {
-            marginFactor = this.props.event.senderId === ApiClient.credentials.userIdFull ? 1 : 0;
+            marginLeft = isOwnMessage ? marginMin : 0;
+            marginRight = isOwnMessage ? 0 : marginMin;
+            alignSelf = isOwnMessage ? 'flex-end' : 'flex-start';
+            backgroundColor = isOwnMessage ? TILE_BACKGROUND_OWN : TILE_BACKGROUND;
         }
 
-        const marginMin = (BUTTON_ROUND_WIDTH + SPACING);
-        let marginText = 0;
-
-        if (messageType === 'text' && this.props.roomType !== 'notepad' && !this.props.event.content.url_preview
-            && !this.props.withSenderDetails)
-        {
-
-            const lengthBody = this.props.event.content.body?.length || 0;
-            const lengthReply = ((this.props.replyMessage?.content?.body?.length || -24) + 24) * FONT_NORMAL / FONT_LARGE;
-
-            const marginMax = 192;
-            const margin = Math.min(marginMax, (48 - Math.max(lengthBody, lengthReply)) * FONT_LARGE / 2);
-            marginText = Math.max(marginMin, margin);
-        }
-
-        this.marginStyle = RX.Styles.createViewStyle({
-            marginLeft: (marginText || marginMin) * marginFactor,
-            marginRight: (marginText || marginMin) * (1 - marginFactor),
-            backgroundColor: (isOwnMessage && this.props.roomType !== 'notepad') ? TILE_BACKGROUND_OWN : TILE_BACKGROUND,
+        this.tileStyle = RX.Styles.createViewStyle({
+            marginLeft: marginLeft,
+            marginRight: marginRight,
+            alignSelf: alignSelf,
+            backgroundColor: backgroundColor,
         }, false);
 
         const timestamp = format(this.props.event.time, 'HH:mm');
@@ -362,7 +366,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 
             messageWrapper = (
                 <RX.GestureView
-                    style={ [styles.containerTile, this.marginStyle] }
+                    style={ [styles.containerTile, this.tileStyle] }
                     onLongPress={ this.showContextDialog }
                     onPan={ () => null }
                 >
@@ -382,7 +386,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 
             messageWrapper = (
                 <RX.View
-                    style={ [styles.containerTile, this.marginStyle] }
+                    style={ [styles.containerTile, this.tileStyle] }
                     onPress={ () => RX.UserInterface.dismissKeyboard() }
                     onLongPress={ this.showContextDialog }
                     disableTouchOpacityAnimation={ true }
