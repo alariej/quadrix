@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
-const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain, dialog, screen } = require('electron');
 const path = require('path');
 
 let iconFile;
@@ -37,9 +37,12 @@ if (!hasLock) {
 
     const createWindow = () => {
 
+        const primaryDisplay = screen.getPrimaryDisplay()
+        const { width, height } = primaryDisplay.workAreaSize
+
         mainWindow = new BrowserWindow({
-            width: 1024,
-            height: 720,
+            width: Math.min(width, 1024),
+            height: Math.min(height, 720),
             autoHideMenuBar: true,
             resizable: false,
             frame: true,
