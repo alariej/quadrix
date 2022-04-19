@@ -34,25 +34,30 @@ const styles = {
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         color: TILE_SYSTEM_TEXT,
+        wordBreak: 'break-word'
     }),
     replyImageContainer: RX.Styles.createViewStyle({
-        flex: 1,
+        flexDirection: 'row',
         height: 32,
-        alignItems: 'flex-start',
+        alignItems: 'center',
     }),
     replyImage: RX.Styles.createImageStyle({
-        flex: 1,
         width: 32,
         height: 32,
         borderRadius: BORDER_RADIUS,
     }),
-    cancelReply: RX.Styles.createViewStyle({
+    containerButton: RX.Styles.createViewStyle({
+        flex: 1,
+        minWidth: 16
+    }),
+    cancelButton: RX.Styles.createViewStyle({
         width: 16,
         height: 16,
         borderRadius: 8,
         backgroundColor: BUTTON_FILL,
         justifyContent: 'center',
         alignItems: 'center',
+        alignSelf: 'flex-end',
         marginLeft: SPACING,
     }),
     cancelIcon: RX.Styles.createViewStyle({
@@ -81,14 +86,16 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
 
         const isSelectable = UiStore.getPlatform() === 'web' && UiStore.getDevice() === 'desktop';
 
+        const userDisplayName = this.getUserDisplayName(this.props.replyEvent.senderId);
+        const maxChar = this.props.onCancelButton ? 10 : 20;
+
         const userName = (
             <RX.Text
                 style={ styles.textReplySender }
                 selectable={ isSelectable }
                 numberOfLines={ 1 }
             >
-                { this.getUserDisplayName(this.props.replyEvent.senderId).substring(0, 20)
-                    .concat(this.props.replyEvent.senderId.length > 20 ? '...' : '') + '  ' }
+                { userDisplayName.substring(0, maxChar).concat(userDisplayName.length > maxChar ? '...' : '') + '  ' }
             </RX.Text>
         );
 
@@ -97,6 +104,7 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
             const source = StringUtils.mxcToHttp(this.props.replyEvent.content.url!, ApiClient.credentials.homeServer);
             replyContent = (
                 <RX.View style={ styles.replyImageContainer }>
+                    { userName }
                     <CachedImage
                         resizeMode={ 'cover' }
                         style={ styles.replyImage }
@@ -113,6 +121,7 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
             if (thumbnailUrl) {
                 replyContent = (
                     <RX.View style={ styles.replyImageContainer }>
+                        { userName }
                         <CachedImage
                             resizeMode={ 'cover' }
                             style={ styles.replyImage }
@@ -129,6 +138,7 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
                         numberOfLines={ this.props.onCancelButton ? 1 : undefined }
                         selectable={ isSelectable }
                     >
+                        { userName }
                         { this.props.replyEvent.content.body! }
                     </RX.Text>
                 );
@@ -141,7 +151,7 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
             replyContent = (
                 <RX.Text
                     style={ styles.textReplyMessage }
-                    numberOfLines={ 1 }
+                    numberOfLines={ this.props.onCancelButton ? 1 : undefined }
                     selectable={ isSelectable }
                 >
                     { userName }
@@ -167,26 +177,27 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
         let cancelButton: ReactElement | undefined;
         if (this.props.onCancelButton) {
             cancelButton = (
-                <RX.Button
-                    style={ styles.cancelReply }
-                    onPress={ this.props.onCancelButton }
-                    disableTouchOpacityAnimation={ true }
-                    activeOpacity={ 1 }
-                >
-                    <IconSvg
-                        source= { require('../resources/svg/plus.json') as SvgFile }
-                        style={ styles.cancelIcon }
-                        fillColor={ TILE_BACKGROUND }
-                        height={ 12 }
-                        width={ 12 }
-                    />
-                </RX.Button>
+                <RX.View style={ styles.containerButton }>
+                    <RX.Button
+                        style={ styles.cancelButton }
+                        onPress={ this.props.onCancelButton }
+                        disableTouchOpacityAnimation={ true }
+                        activeOpacity={ 1 }
+                    >
+                        <IconSvg
+                            source= { require('../resources/svg/plus.json') as SvgFile }
+                            style={ styles.cancelIcon }
+                            fillColor={ TILE_BACKGROUND }
+                            height={ 12 }
+                            width={ 12 }
+                        />
+                    </RX.Button>
+                </RX.View>
             )
         }
 
         return (
             <RX.View style={ styles.replyContainer }>
-                { ['m.image', 'm.video'].includes(this.props.replyEvent.content.msgtype!) ? userName : undefined }
                 { replyContent }
                 { cancelButton }
             </RX.View>
