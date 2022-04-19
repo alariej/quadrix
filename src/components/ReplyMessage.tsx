@@ -68,6 +68,7 @@ const styles = {
 interface ReplyMessageProps {
     replyEvent: MessageEvent;
     roomId: string;
+    onPress?: (eventId: string) => void;
     onCancelButton?: () => void;
 }
 
@@ -82,9 +83,14 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
         }
     }
 
-    public render(): ReactElement | null {
+    private onReplyPress = () => {
 
-        const isSelectable = UiStore.getPlatform() === 'web' && UiStore.getDevice() === 'desktop';
+        if (this.props.onCancelButton) { return }
+
+        this.props.onPress!(this.props.replyEvent.eventId);
+    }
+
+    public render(): ReactElement | null {
 
         const userDisplayName = this.getUserDisplayName(this.props.replyEvent.senderId);
         const maxChar = this.props.onCancelButton ? 10 : 20;
@@ -92,7 +98,6 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
         const userName = (
             <RX.Text
                 style={ styles.textReplySender }
-                selectable={ isSelectable }
                 numberOfLines={ 1 }
             >
                 { userDisplayName.substring(0, maxChar).concat(userDisplayName.length > maxChar ? '...' : '') + '  ' }
@@ -136,7 +141,6 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
                     <RX.Text
                         style={ styles.textReplyMessage }
                         numberOfLines={ this.props.onCancelButton ? 1 : undefined }
-                        selectable={ isSelectable }
                     >
                         { userName }
                         { this.props.replyEvent.content.body! }
@@ -152,7 +156,6 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
                 <RX.Text
                     style={ styles.textReplyMessage }
                     numberOfLines={ this.props.onCancelButton ? 1 : undefined }
-                    selectable={ isSelectable }
                 >
                     { userName }
                     { jitsiStartedInternal[language] }
@@ -166,7 +169,6 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
                 <RX.Text
                     style={ styles.textReplyMessage }
                     numberOfLines={ this.props.onCancelButton ? 1 : undefined }
-                    selectable={ isSelectable }
                 >
                     { userName }
                     { strippedFlattened }
@@ -197,7 +199,10 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
         }
 
         return (
-            <RX.View style={ styles.replyContainer }>
+            <RX.View
+                style={ [styles.replyContainer, { cursor: this.props.onCancelButton ? 'default' : 'pointer' }] }
+                onPress={ this.onReplyPress }
+            >
                 { replyContent }
                 { cancelButton }
             </RX.View>

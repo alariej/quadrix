@@ -86,6 +86,7 @@ interface MessageTileProps {
     readMarkerType?: string;
     replyMessage?: MessageEvent;
     setReplyMessage: (message: MessageEvent) => void;
+    onPressReply?: (eventId: string) => void;
     showTempForwardedMessage?: (roomId: string, message?: MessageEvent, tempId?: string) => void;
     canPress?: boolean;
     isRedacted: boolean;
@@ -141,6 +142,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
                 <ReplyMessage
                     replyEvent={ this.props.replyMessage }
                     roomId={ this.props.roomId }
+                    onPress={ this.props.onPressReply }
                 />
             )
         }

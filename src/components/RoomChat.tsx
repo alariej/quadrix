@@ -172,7 +172,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
             this.eventListItems = DataStore.getAllRoomEvents(nextProps.roomId).map((event) => {
 
                 const messageInfo: EventListItemInfo = {
-                    key: event.eventId + Math.random(),
+                    key: event.eventId,
                     height: MESSAGE_HEIGHT_DEFAULT,
                     template: 'event',
                     measureHeight: true,
@@ -340,7 +340,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
         const newEventListItems = newRoomEvents.map((event) => {
 
             const messageInfo: EventListItemInfo = {
-                key: event.tempId || (event.eventId + Math.random()),
+                key: event.tempId || (event.eventId),
                 height: MESSAGE_HEIGHT_DEFAULT,
                 template: 'event',
                 measureHeight: true,
@@ -426,12 +426,16 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
         this.eventListItems.some(item => {
             if (item.event.senderId !== ApiClient.credentials.userIdFull) {
-                // DataStore.setUnread(this.props.roomId, 0);
                 ApiClient.sendReadReceipt(this.props.roomId, item.event.eventId).catch(_error => null);
                 return true;
             }
             return false;
         });
+    }
+
+    private gotoMessage = (eventId: string) => {
+
+        this.virtualListView?.selectItemKey(eventId, true);
     }
 
     private renderItem = (cellRender: VirtualListViewCellRenderDetails<EventListItemInfo>): ReactElement => {
@@ -506,12 +510,12 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
                     { dateTile }
                     <MessageTile
                         roomId={ this.props.roomId }
-                        key={ cellRender.item.event.eventId }
                         event={ cellRender.item.event }
                         roomType={ this.props.roomType }
                         readMarkerType={ cellRender.item.readMarkerType }
                         replyMessage={ replyEvent }
                         setReplyMessage={ this.props.setReplyMessage }
+                        onPressReply={ this.gotoMessage }
                         showTempForwardedMessage={ this.props.showTempForwardedMessage }
                         canPress={ true }
                         isRedacted={ cellRender.item.isRedacted || false }
@@ -532,7 +536,6 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
                 >
                     { dateTile }
                     <SystemMessage
-                        key={ cellRender.item.event.eventId + Math.random() }
                         systemMessage={ systemMessage }
                     />
                 </RX.View>
@@ -609,7 +612,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
                 const olderEventListItems = response.events.map((event) => {
 
                     const messageInfo: EventListItemInfo = {
-                        key: event.eventId + Math.random(),
+                        key: event.eventId,
                         height: MESSAGE_HEIGHT_DEFAULT,
                         template: 'event',
                         measureHeight: true,
@@ -620,11 +623,6 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
                     return messageInfo;
                 });
-
-                // simplistic duplicate check
-                // if (olderEventListItems[0].event.eventId === this.eventListItems[this.eventListItems.length - 1].event.eventId) {
-                //     olderEventListItems.shift();
-                // }
 
                 this.eventListItems = this.eventListItems.concat(olderEventListItems);
 
