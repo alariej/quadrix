@@ -11,7 +11,6 @@ import CachedImage from '../modules/CachedImage';
 
 const styles = {
     containerMessage: RX.Styles.createViewStyle({
-        flexDirection: 'column',
         cursor: 'pointer',
     }),
     image: RX.Styles.createImageStyle({
