@@ -56,12 +56,13 @@
 - &cross; Highlights
 - &cross; Pushrules
 - &check; Send read markers
-- &check; Display read markers
-- &check; Sending invites
-- &check; Accepting invites
+- &check; Display read markers (only private rooms)
+- &check; Sending invites (only private rooms)
+- &check; Accepting invites (only private rooms)
 - &cross; Typing notification
 - &cross; E2EE
 - &check; Replies
+- &cross; Threads
 - &check; Attachment uploading
 - &check; Attachment downloading
 - &cross; Send stickers
@@ -71,7 +72,7 @@
 - &cross; Redacting
 - &cross; Multiple Matrix accounts
 - &check; New user registration
-- &cross; VoIP
+- &cross; VoIP (only videoconferencing with Jitsi Meet)
 - &cross; Reactions
 - &cross; Message editing
 - &cross; Room upgrades
