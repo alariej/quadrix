@@ -563,7 +563,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
         if (!this.state.showMoreButton && !this.state.showLoadingButton && distanceToBottom < 120) {
 
-            if (this.endToken && this.timelineLimited) {
+            if ((this.endToken && this.timelineLimited) || this.props.roomType === 'community') {
                 this.setState({ showMoreButton: true });
             }
 
