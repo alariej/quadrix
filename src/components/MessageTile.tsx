@@ -21,6 +21,7 @@ import ReplyMessage from './ReplyMessage';
 
 const styles = {
     container: RX.Styles.createViewStyle({
+        flex: 1,
         backgroundColor: TRANSPARENT_BACKGROUND,
     }),
     containerTile: RX.Styles.createViewStyle({
