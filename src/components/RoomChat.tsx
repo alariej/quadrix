@@ -93,8 +93,7 @@ const styles = {
         backgroundColor: OPAQUE_DUMMY_BACKGROUND,
     }),
     containerDate: RX.Styles.createViewStyle({
-        flexDirection: 'row',
-        justifyContent: 'center',
+        alignSelf: 'center',
         marginTop: OBJECT_MARGIN - SPACING,
         marginBottom: OBJECT_MARGIN,
     }),
