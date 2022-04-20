@@ -41,8 +41,8 @@ if (!hasLock) {
         const { width, height } = primaryDisplay.workAreaSize
 
         mainWindow = new BrowserWindow({
-            width: Math.min(width, 1024),
-            height: Math.min(height, 720),
+            width: width < height ? width : Math.min(width, 1024),
+            height: width < height ? height : Math.min(height, 720),
             autoHideMenuBar: true,
             resizable: false,
             frame: true,
