@@ -19,7 +19,7 @@ const styles = {
         fontFamily: AppFont.fontFamily,
         paddingHorizontal: SPACING,
         overflow: 'visible',
-        wordBreak: 'break-word',
+        wordBreak: 'break-word'
     }),
     text: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
@@ -40,7 +40,7 @@ const styles = {
         fontSize: FONT_LARGE,
         color: TILE_MESSAGE_TEXT,
         fontStyle: 'italic',
-        wordBreak: 'break-all',
+        wordBreak: 'break-all'
     }),
     link: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
@@ -48,7 +48,7 @@ const styles = {
         color: LINK_TEXT,
         textDecorationLine: 'underline',
         wordBreak: 'break-all',
-        cursor: 'pointer',
+        cursor: 'pointer'
     }),
     image: RX.Styles.createImageStyle({
         flex: 1,
@@ -56,7 +56,7 @@ const styles = {
     }),
     containerImage: RX.Styles.createViewStyle({
         flex: 1,
-        cursor: 'pointer',
+        cursor: 'pointer'
     }),
 };
 
@@ -144,17 +144,15 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 
             const width = (UiStore.getAppLayout_().pageWidth - 2 * PAGE_MARGIN) - (BUTTON_ROUND_WIDTH + SPACING) - 2 * SPACING;
 
-            const urlPreviewHeight =
-                width * this.props.message.content.url_preview.image_height! / (this.props.message.content.url_preview.image_width || 100);
+            let urlPreviewImage;
+            if (this.props.message.content.url_preview.image_url) {
 
-            const urlPreview = (
-                <RX.View
-                    onContextMenu={ () => this.props.showContextDialog() }
-                    onLongPress={ () => this.props.showContextDialog() }
-                    disableTouchOpacityAnimation={ true }
-                >
+                const urlPreviewHeight = width *
+                    this.props.message.content.url_preview.image_height! / (this.props.message.content.url_preview.image_width || 100);
+
+                urlPreviewImage = (
                     <RX.View
-                        style={ [styles.containerImage, { height: urlPreviewHeight }] }
+                        style={ [styles.containerImage, { height: urlPreviewHeight, width: width }] }
                         onPress={ event => this.launchLinkApp(event, linkifyElement) }
                         onContextMenu={ () => this.props.showContextDialog() }
                         onLongPress={ () => this.props.showContextDialog() }
@@ -168,14 +166,39 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
                             onError={ this.onPreviewImageFail }
                         />
                     </RX.View>
+                )
+            }
+
+            const urlPreview = (
+                <RX.View
+                    onContextMenu={ () => this.props.showContextDialog() }
+                    onLongPress={ () => this.props.showContextDialog() }
+                    disableTouchOpacityAnimation={ true }
+                >
+                    { urlPreviewImage }
                     <RX.Text
-                        style={ styles.text }
+                        style={ [
+                            styles.text,
+                            {
+                                marginTop: SPACING,
+                                paddingLeft: this.props.message.content.url_preview.image_url ? 0 : SPACING,
+                                paddingRight: this.props.message.content.url_preview.image_url ? 0 : SPACING,
+                            }
+                        ] }
                         selectable={ isSelectable }
                     >
                         { this.props.message.content.url_preview.title }
                     </RX.Text>
                     <RX.Text
-                        style={ [styles.link, { marginTop: 6, maxWidth: width }] }
+                        style={ [
+                            styles.link,
+                            {
+                                marginTop: SPACING * 2,
+                                paddingLeft: this.props.message.content.url_preview.image_url ? 0 : SPACING,
+                                paddingRight: this.props.message.content.url_preview.image_url ? 0 : SPACING,
+                                maxWidth: width
+                            }
+                        ] }
                         onPress={ event => this.launchLinkApp(event, linkifyElement) }
                         onContextMenu={ () => this.props.showContextDialog() }
                         numberOfLines={ UiStore.getPlatform() === 'web' ? 1 : 2 }
