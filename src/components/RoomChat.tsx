@@ -89,6 +89,7 @@ const styles = {
         right: OBJECT_MARGIN,
     }),
     containerWrapper: RX.Styles.createViewStyle({
+        flex: 1,
         backgroundColor: OPAQUE_DUMMY_BACKGROUND,
     }),
     containerDate: RX.Styles.createViewStyle({
