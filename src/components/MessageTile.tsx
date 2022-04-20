@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { TILE_BACKGROUND, FOOTER_TEXT, BORDER_RADIUS, SPACING, FONT_NORMAL, TILE_SYSTEM_TEXT, BUTTON_ROUND_WIDTH,
-    TRANSPARENT_BACKGROUND, MARKER_READ_FILL, MARKER_SENT_FILL, TILE_BACKGROUND_OWN } from '../ui';
+    TRANSPARENT_BACKGROUND, MARKER_READ_FILL, MARKER_SENT_FILL, TILE_BACKGROUND_OWN, PAGE_MARGIN } from '../ui';
 import ImageMessage from './ImageMessage';
 import FileMessage from './FileMessage';
 import TextMessage from './TextMessage';
@@ -22,6 +22,7 @@ import ReplyMessage from './ReplyMessage';
 const styles = {
     container: RX.Styles.createViewStyle({
         flex: 1,
+        overflow: 'visible',
         backgroundColor: TRANSPARENT_BACKGROUND,
     }),
     containerTile: RX.Styles.createViewStyle({
@@ -43,7 +44,6 @@ const styles = {
     footer: RX.Styles.createViewStyle({
         flex: 1,
         flexDirection: 'row',
-        alignItems: 'center',
     }),
     footerDetails: RX.Styles.createViewStyle({
         flex: 1,
@@ -60,6 +60,7 @@ const styles = {
         flexShrink: 0,
         fontSize: FONT_NORMAL,
         color: FOOTER_TEXT,
+        marginRight: SPACING,
     }),
     containerMarker: RX.Styles.createViewStyle({
         flex: 1,
@@ -238,22 +239,24 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
         this.tileStyle = RX.Styles.createViewStyle({
             marginLeft: marginLeft,
             marginRight: marginRight,
-            alignSelf: alignSelf,
+            alignSelf: this.props.withSenderDetails? undefined : alignSelf,
             backgroundColor: backgroundColor,
         }, false);
 
         const timestamp = format(this.props.event.time, 'HH:mm');
+
+        const width = (UiStore.getAppLayout_().pageWidth - 2 * PAGE_MARGIN) - (BUTTON_ROUND_WIDTH + SPACING) - 2 * SPACING;
 
         let footer: ReactElement;
         if (this.props.roomType !== 'direct' && ApiClient.credentials.userIdFull !== this.props.event.senderId
             && !this.props.withSenderDetails)
         {
             footer = (
-                <RX.View style={ styles.footer } title={ this.props.event.senderId + ' - ' + timestamp }>
+                <RX.View style={ [styles.footer, { maxWidth: width }] }>
                     <RX.Text allowFontScaling={ false } style={ styles.footerSenderId } numberOfLines={ 1 }>
                         { this.props.event.senderId }
                     </RX.Text>
-                    <RX.Text allowFontScaling={ false } style={ styles.footerTimestamp } numberOfLines={ 1 }>
+                    <RX.Text allowFontScaling={ false } style={ styles.footerTimestamp }>
                         {  ' - ' + timestamp }
                     </RX.Text>
                 </RX.View>
@@ -274,7 +277,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
             const dateStamp = format(this.props.event.time, 'd MMMM yyyy', { locale: UiStore.getLocale() });
 
             footer = (
-                <RX.View style={ styles.footerDetails }>
+                <RX.View style={ [styles.footerDetails, { maxWidth: width }] }>
                     { senderName }
                     <RX.Text allowFontScaling={ false } style={ styles.footerSenderId }>
                         { this.props.event.senderId }
