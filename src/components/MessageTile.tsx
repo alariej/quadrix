@@ -189,7 +189,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
             );
         } else if (this.props.event.content.msgtype === 'm.file') {
 
-            messageType = 'media';
+            messageType = 'file';
 
             message = (
                 <FileMessage
