@@ -263,7 +263,13 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 
                     <RX.View style={ styles.userNameContainer }>
                         <RX.Text allowFontScaling={ false } style={ styles.userName }>
-                            { '[ ' + ApiClient.credentials.userIdFull + ' ]' }
+                            <RX.Text style={{ fontWeight: 'bold' }}>
+                                { '[ '}
+                            </RX.Text>
+                            { ApiClient.credentials.userIdFull }
+                            <RX.Text style={{ fontWeight: 'bold' }}>
+                                { ' ]'}
+                            </RX.Text>
                         </RX.Text>
                     </RX.View>
                 </RX.View>
