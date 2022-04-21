@@ -51,7 +51,7 @@
 - [ ] Room tag editing
 - [ ] Search joined rooms
 - [x] Room user list
-- [x] Display room description
+- [x] Display room description (public rooms only)
 - [ ] Edit room description
 - [ ] Highlights
 - [ ] Pushrules
