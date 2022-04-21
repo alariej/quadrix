@@ -46,38 +46,38 @@
 
 ## Matrix Protocol Implementation:
 
-- &check; Room directory
-- &cross; Room tag showing
-- &cross; Room tag editing
-- &cross; Search joined rooms
-- &check; Room user list
-- &check; Display room description
-- &cross; Edit room description
-- &cross; Highlights
-- &cross; Pushrules
-- &check; Send read markers
-- &check; Display read markers (only private rooms)
-- &check; Sending invites (only private rooms)
-- &check; Accepting invites (only private rooms)
-- &cross; Typing notification
-- &cross; E2EE
-- &check; Replies
-- &cross; Threads
-- &check; Attachment uploading
-- &check; Attachment downloading
-- &cross; Send stickers
-- &cross; Send formatted messages markdown
-- &cross; Rich Text editor for formatted messages
-- &cross; Display formatted messages
-- &cross; Redacting
-- &cross; Multiple Matrix accounts
-- &check; New user registration
-- &cross; VoIP (only videoconferencing with Jitsi Meet)
-- &cross; Reactions
-- &cross; Message editing
-- &cross; Room upgrades
-- &cross; Localizations
-- &cross; SSO Support
+- ✅ Room directory
+- ❌ Room tag showing
+- ❌ Room tag editing
+- ❌ Search joined rooms
+- ✅ Room user list
+- ✅ Display room description
+- ❌ Edit room description
+- ❌ Highlights
+- ❌ Pushrules
+- ✅ Send read markers
+- ✅ Display read markers (private rooms only)
+- ✅ Sending invites (private rooms only)
+- ✅ Accepting invites (private rooms only)
+- ❌ Typing notification
+- ❌ E2EE
+- ✅ Replies
+- ❌ Threads
+- ✅ Attachment uploading
+- ✅ Attachment downloading
+- ❌ Send stickers
+- ❌ Send formatted messages markdown
+- ❌ Rich Text editor for formatted messages
+- ❌ Display formatted messages
+- ❌ Redacting
+- ❌ Multiple Matrix accounts
+- ✅ New user registration
+- ❌ VoIP
+- ❌ Reactions
+- ❌ Message editing
+- ❌ Room upgrades
+- ❌ Localizations
+- ❌ SSO Support
 
 ## Installation:
 For all platforms:
