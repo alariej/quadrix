@@ -807,15 +807,15 @@ export const rejectInvitation: Translation = {
 }
 
 export const hasInvitedYou: Translation = {
-    en_di: 'has invited you to join a private conversation.',
-    en_gr: 'has invited you to join a group conversation.',
-    en_co: 'has invited you to join a public group.',
-    de_di: 'hat Sie zu einem privaten Chat eingeladen.',
-    de_gr: 'hat Sie zu einem Gruppenchat eingeladen.',
-    de_co: 'hat Sie eingeladen, einer öffentlichen Gruppe beizutreten.',
-    fr_di: 'vous a invité à joindre une conversation privée.',
-    fr_gr: 'vous a invité à joindre une conversation de groupe.',
-    fr_co: 'vous a invité à joindre un groupe public.'
+    en_di: 'has invited you to join a private conversation',
+    en_gr: 'has invited you to join a group conversation',
+    en_co: 'has invited you to join a public group',
+    de_di: 'hat Sie zu einem privaten Chat eingeladen',
+    de_gr: 'hat Sie zu einem Gruppenchat eingeladen',
+    de_co: 'hat Sie eingeladen, einer öffentlichen Gruppe beizutreten',
+    fr_di: 'vous a invité à joindre une conversation privée',
+    fr_gr: 'vous a invité à joindre une conversation de groupe',
+    fr_co: 'vous a invité à joindre un groupe public'
 }
 
 export const haveAnAccount: Translation = {

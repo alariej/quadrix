@@ -1,8 +1,8 @@
 import React from 'react';
 import RX from 'reactxp';
 import DataStore from '../stores/DataStore';
-import { BUTTON_LONG_TEXT, BUTTON_LONG_BACKGROUND, BUTTON_LONG_WIDTH, FONT_LARGE, BUTTON_HEIGHT, SPACING,
-    BUTTON_MODAL_TEXT } from '../ui';
+import { BUTTON_LONG_TEXT, BUTTON_LONG_BACKGROUND, BUTTON_LONG_WIDTH, FONT_LARGE, BUTTON_HEIGHT,
+    BUTTON_MODAL_TEXT, TILE_MESSAGE_TEXT, OBJECT_MARGIN} from '../ui';
 import { User } from '../models/User';
 import ApiClient from '../matrix/ApiClient';
 import { ComponentBase } from 'resub';
@@ -17,37 +17,35 @@ const styles = {
     container: RX.Styles.createViewStyle({
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
     }),
     containerText: RX.Styles.createViewStyle({
-        margin: 36,
+        flex: 1,
+        margin: OBJECT_MARGIN,
     }),
     containerButtons: RX.Styles.createViewStyle({
+        flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
     }),
     button: RX.Styles.createViewStyle({
         borderRadius: BUTTON_HEIGHT / 2,
         width: BUTTON_LONG_WIDTH,
         height: BUTTON_HEIGHT,
         backgroundColor: BUTTON_LONG_BACKGROUND,
-        marginBottom: 36,
+        margin: OBJECT_MARGIN,
     }),
     buttonText: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
-        marginVertical: SPACING,
         textAlign: 'center',
         color: BUTTON_LONG_TEXT,
     }),
     text: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_LARGE,
-        marginVertical: SPACING,
         textAlign: 'center',
-        color: BUTTON_LONG_TEXT,
+        color: TILE_MESSAGE_TEXT,
     }),
-    textDialog: RX.Styles.createTextStyle({
+    errorDialog: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
         textAlign: 'center',
         color: BUTTON_MODAL_TEXT,
@@ -94,7 +92,7 @@ export default class InviteRoom extends ComponentBase<InviteRoomProps, InviteRoo
                 SpinnerUtils.dismissModalSpinner('invitespinner');
 
                 const text = (
-                    <RX.Text style={ styles.textDialog }>
+                    <RX.Text style={ styles.errorDialog }>
                         { error.body && error.body.error ? error.body.error : '[Unknown error]' }
                     </RX.Text>
                 );
@@ -121,7 +119,7 @@ export default class InviteRoom extends ComponentBase<InviteRoomProps, InviteRoo
                 SpinnerUtils.dismissModalSpinner('invitespinner');
 
                 const text = (
-                    <RX.Text style={ styles.textDialog }>
+                    <RX.Text style={ styles.errorDialog }>
                         { error.body && error.body.error ? error.body.error : '[Unknown error]' }
                     </RX.Text>
                 );
@@ -139,12 +137,24 @@ export default class InviteRoom extends ComponentBase<InviteRoomProps, InviteRoo
                 <RX.View>
                     <RX.View style={ styles.containerText }>
                         <RX.Text style={ styles.text }>
-                            {
-                                this.inviteSender.name + ' (' +
-                                this.inviteSender.id + ') ' +
-                                hasInvitedYou[language + '_' +
-                                this.roomType.substr(0, 2)]
-                            }
+                            <RX.Text style={ styles.text }>
+                                { this.inviteSender.name }
+                            </RX.Text>
+                            <RX.Text style={ styles.text }>
+                                { '  [' }
+                            </RX.Text>
+                            <RX.Text style={[styles.text, { fontWeight: 'bold' }]}>
+                                { this.inviteSender.id }
+                            </RX.Text>
+                            <RX.Text style={ styles.text }>
+                                { ']  ' }
+                            </RX.Text>
+                            <RX.Text style={ styles.text }>
+                                {
+                                    hasInvitedYou[language + '_' +
+                                    this.roomType.substr(0, 2)]
+                                }
+                            </RX.Text>
                         </RX.Text>
                     </RX.View>
                     <RX.View style={ styles.containerButtons }>
