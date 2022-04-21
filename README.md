@@ -47,37 +47,37 @@
 ## Matrix Protocol Implementation:
 
 - :heavy_check_mark: Room directory
-- :x: Room tag showing
+- :heavy_multiplication_x: Room tag showing
 - :heavy_multiplication_x: Room tag editing
-- ❌ Search joined rooms
-- ☑ Room user list
-- ✅ Display room description
-- ❌ Edit room description
-- ❌ Highlights
-- ❌ Pushrules
-- ✅ Send read markers
-- ✅ Display read markers (private rooms only)
-- ✅ Sending invites (private rooms only)
-- ✅ Accepting invites (private rooms only)
-- ❌ Typing notification
-- ❌ E2EE
-- ✅ Replies
-- ❌ Threads
-- ✅ Attachment uploading
-- ✅ Attachment downloading
-- ❌ Send stickers
-- ❌ Send formatted messages markdown
-- ❌ Rich Text editor for formatted messages
-- ❌ Display formatted messages
-- ❌ Redacting
-- ❌ Multiple Matrix accounts
-- ✅ New user registration
-- ❌ VoIP
-- ❌ Reactions
-- ❌ Message editing
-- ❌ Room upgrades
-- ❌ Localizations
-- ❌ SSO Support
+- :heavy_multiplication_x: Search joined rooms
+- :heavy_check_mark: Room user list
+- :heavy_check_mark: Display room description
+- :heavy_multiplication_x: Edit room description
+- :heavy_multiplication_x: Highlights
+- :heavy_multiplication_x: Pushrules
+- :heavy_check_mark: Send read markers
+- :heavy_check_mark: Display read markers (private rooms only)
+- :heavy_check_mark: Sending invites (private rooms only)
+- :heavy_check_mark: Accepting invites (private rooms only)
+- :heavy_multiplication_x: Typing notification
+- :heavy_multiplication_x: E2EE
+- :heavy_check_mark: Replies
+- :heavy_multiplication_x: Threads
+- :heavy_check_mark: Attachment uploading
+- :heavy_check_mark: Attachment downloading
+- :heavy_multiplication_x: Send stickers
+- :heavy_multiplication_x: Send formatted messages markdown
+- :heavy_multiplication_x: Rich Text editor for formatted messages
+- :heavy_multiplication_x: Display formatted messages
+- :heavy_multiplication_x: Redacting
+- :heavy_multiplication_x: Multiple Matrix accounts
+- :heavy_check_mark: New user registration
+- :heavy_multiplication_x: VoIP
+- :heavy_multiplication_x: Reactions
+- :heavy_multiplication_x: Message editing
+- :heavy_multiplication_x: Room upgrades
+- :heavy_multiplication_x: Localizations
+- :heavy_multiplication_x: SSO Support
 
 ## Installation:
 For all platforms:
