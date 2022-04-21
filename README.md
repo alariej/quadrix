@@ -46,11 +46,11 @@
 
 ## Matrix Protocol Implementation:
 
-- ✅ Room directory
-- ❌ Room tag showing
-- ❌ Room tag editing
+- :heavy_check_mark: Room directory
+- :x: Room tag showing
+- :heavy_multiplication_x: Room tag editing
 - ❌ Search joined rooms
-- ✅ Room user list
+- ☑ Room user list
 - ✅ Display room description
 - ❌ Edit room description
 - ❌ Highlights
