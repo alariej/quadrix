@@ -87,7 +87,10 @@ const styles = {
     label: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
+        color: PLACEHOLDER_TEXT,
         width: 96,
+        textAlign: 'right',
+        padding: SPACING,
     }),
     inputBox: RX.Styles.createTextInputStyle({
         fontFamily: AppFont.fontFamily,
