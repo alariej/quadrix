@@ -3,8 +3,8 @@ import RX from 'reactxp';
 import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
 import { TILE_SYSTEM_TEXT, MODAL_CONTENT_TEXT, LINK_TEXT, HEADER_HEIGHT, FONT_NORMAL,
-    BUTTON_ROUND_WIDTH, FONT_LARGE, BORDER_RADIUS, SPACING, ICON_REDUCTION_FACTOR, BUTTON_FILL, TRANSPARENT_BACKGROUND,
-    LOGO_BACKGROUND, HEADER_STATUS } from '../ui';
+    BUTTON_ROUND_WIDTH, FONT_LARGE, SPACING, ICON_REDUCTION_FACTOR, BUTTON_FILL, TRANSPARENT_BACKGROUND,
+    LOGO_BACKGROUND, HEADER_STATUS, PAGE_MARGIN } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogNewRoom from '../dialogs/DialogNewRoom';
 import DialogContainer from '../modules/DialogContainer';
@@ -26,18 +26,18 @@ const styles = {
     containerHeader: RX.Styles.createViewStyle({
         flex: 1,
         justifyContent: 'center',
-        borderRadius: BORDER_RADIUS,
         cursor: 'pointer',
         backgroundColor: TRANSPARENT_BACKGROUND
     }),
     userNameContainer: RX.Styles.createViewStyle({
-        // not used
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row'
     }),
     userName: RX.Styles.createTextStyle({
-        flex: 1,
+        textAlign: 'center',
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
-        textAlign: 'center',
         color: HEADER_STATUS,
     }),
     roundButton: RX.Styles.createViewStyle({
@@ -89,6 +89,28 @@ const styles = {
         textAlign: 'center',
         color: MODAL_CONTENT_TEXT,
         marginVertical: 12,
+    }),
+    bracketLeft: RX.Styles.createViewStyle({
+        height: 17,
+        width: 4,
+        borderColor: HEADER_STATUS,
+        opacity: 0.5,
+        borderLeftWidth: 1,
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        borderRightWidth: 0,
+        marginRight: SPACING,
+    }),
+    bracketRight: RX.Styles.createViewStyle({
+        height: 17,
+        width: 4,
+        borderColor: HEADER_STATUS,
+        opacity: 0.5,
+        borderLeftWidth: 0,
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        borderRightWidth: 1,
+        marginLeft: SPACING
     }),
 };
 
@@ -250,6 +272,8 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
             )
         }
 
+        const width = (UiStore.getAppLayout_().pageWidth - 2 * PAGE_MARGIN) - 3 * (BUTTON_ROUND_WIDTH + SPACING) - 2 * 4 - 2 * SPACING;
+
         return (
             <RX.View style={ styles.container }>
                 <RX.View
@@ -258,19 +282,17 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
                     disableTouchOpacityAnimation={ true }
                     activeOpacity={ 1 }
                 >
-
                     { disconnected! }
-
                     <RX.View style={ styles.userNameContainer }>
-                        <RX.Text allowFontScaling={ false } style={ styles.userName }>
-                            <RX.Text style={{ fontWeight: 'bold' }}>
-                                { '[ '}
-                            </RX.Text>
+                        <RX.View style={ styles.bracketLeft }/>
+                        <RX.Text
+                            style={ [styles.userName, { maxWidth: width }] }
+                            allowFontScaling={ false }
+                            numberOfLines={ 1 }
+                        >
                             { ApiClient.credentials.userIdFull }
-                            <RX.Text style={{ fontWeight: 'bold' }}>
-                                { ' ]'}
-                            </RX.Text>
                         </RX.Text>
+                        <RX.View style={ styles.bracketRight }/>
                     </RX.View>
                 </RX.View>
                 <RX.Button
