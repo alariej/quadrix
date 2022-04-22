@@ -323,7 +323,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
         const linkifyElement = StringUtils.getOnlyUrl(textInput);
         if (linkifyElement) {
 
-            const previewData = await StringUtils.getLinkPreview(linkifyElement);
+            const previewData = await StringUtils.getLinkPreview(linkifyElement).catch();
 
             if (previewData) {
                 messageContent.url_preview = previewData;
