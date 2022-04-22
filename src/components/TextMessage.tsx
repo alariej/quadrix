@@ -72,14 +72,6 @@ interface TextMessageState {
 
 export default class TextMessage extends RX.Component<TextMessageProps, TextMessageState> {
 
-    constructor(props: TextMessageProps) {
-        super(props);
-
-        this.state = {
-            previewUrl: props.message.content.url_preview?.image_url,
-        }
-    }
-
     private onPreviewImageFail = (_error: Error) => {
 
         const linkifyElement: LinkifyElement = {
@@ -161,7 +153,7 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
                         <RX.Image
                             resizeMode={ 'contain' }
                             style={ styles.image }
-                            source={ this.state.previewUrl! }
+                            source={ this.state?.previewUrl || this.props.message.content.url_preview?.image_url }
                             headers={ UiStore.getPlatform() === 'ios' ? { 'Cache-Control':'max-stale' } : undefined }
                             onError={ this.onPreviewImageFail }
                         />
