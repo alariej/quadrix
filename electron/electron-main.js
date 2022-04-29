@@ -179,10 +179,12 @@ if (!hasLock) {
                 }));
             }
 
-            menu.append(new MenuItem({
-                label: selectLanguage[appLanguage],
-                click: () => selectSpellLanguage()
-            }));
+            if (process.platform !== 'darwin') {
+                menu.append(new MenuItem({
+                    label: selectLanguage[appLanguage],
+                    click: () => selectSpellLanguage()
+                }));
+            }
 
             menu.append(new MenuItem({
                 label: spellcheckLabel || disableSpellcheck[appLanguage],
