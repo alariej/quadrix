@@ -201,7 +201,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
     private newPassword = '';
     private repeatNewPassword = '';
     private language: Languages;
-    private webFrame;
+    private webFrame: Electron.WebFrame | null;
     private zoomFactor = 1;
     private emailAddress = '';
     private emailNotifications = false;
@@ -566,21 +566,21 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
     private zoomIn = () => {
 
         this.zoomFactor = this.zoomFactor + 0.05;
-        this.webFrame!.setZoomFactor(this.zoomFactor); // eslint-disable-line
+        this.webFrame!.setZoomFactor(this.zoomFactor);
         ApiClient.storeZoomFactor(this.zoomFactor);
     }
 
     private zoomOut = () => {
 
         this.zoomFactor = this.zoomFactor - 0.05;
-        this.webFrame!.setZoomFactor(this.zoomFactor); // eslint-disable-line
+        this.webFrame!.setZoomFactor(this.zoomFactor);
         ApiClient.storeZoomFactor(this.zoomFactor);
     }
 
     private zoomReset = () => {
 
         this.zoomFactor = 1;
-        this.webFrame!.setZoomFactor(1); // eslint-disable-line
+        this.webFrame!.setZoomFactor(1);
         ApiClient.storeZoomFactor(this.zoomFactor);
     }
 
@@ -649,7 +649,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
         let zoomPanel: ReactElement | undefined;
         if (UiStore.getIsElectron()) {
 
-            this.zoomFactor = this.webFrame!.getZoomFactor(); // eslint-disable-line
+            this.zoomFactor = this.webFrame!.getZoomFactor();
 
             zoomPanel = (
                 <RX.View style={ styles.buttonsContainer }>
