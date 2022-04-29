@@ -811,9 +811,9 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                         disableFullscreenUI={ true }
                         allowFontScaling={ false }
                         autoCapitalize={ 'sentences' }
-                        autoCorrect={ true }
+                        autoCorrect={ this.isWeb ? undefined : true }
                         autoFocus={ false }
-                        spellCheck={ true }
+                        spellCheck={ this.isWeb ? undefined : true }
                         multiline={ true }
                         onSelectionChange={ this.onSelectionChange }
                     />

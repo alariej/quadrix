@@ -47,7 +47,7 @@ export class App extends ComponentBase<AppProps, AppState> {
         UiStore.setIsElectron();
         UiStore.setLocale().catch(_error => null);
 
-        if (UiStore.getPlatform() === 'web') {
+        if (UiStore.getPlatform() === 'web' && !UiStore.getIsElectron()) {
             window.oncontextmenu = () => {
                 return false;
             };
