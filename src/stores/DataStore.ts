@@ -1061,6 +1061,12 @@ class DataStore extends StoreBase {
         return Object.values(users).filter((user => (user.id && user.id !== ApiClient.credentials.userIdFull)));
     }
 
+    public getMemberName(roomId: string, userId: string): string {
+
+        const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
+        return this.roomSummaryList[roomIndex].members[userId]?.name || userId;
+    }
+
     public addMembers(roomId: string, members: { [id: string]: User }) {
 
         const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);

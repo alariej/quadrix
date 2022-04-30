@@ -251,10 +251,14 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
         if (this.props.roomType !== 'direct' && ApiClient.credentials.userIdFull !== this.props.event.senderId
             && !this.props.withSenderDetails)
         {
+            const senderInfo = this.props.roomType === 'group' ?
+                DataStore.getMemberName(this.props.roomId, this.props.event.senderId) :
+                this.props.event.senderId;
+
             footer = (
                 <RX.View style={ [styles.footer, { maxWidth: width }] }>
                     <RX.Text allowFontScaling={ false } style={ styles.footerSenderId } numberOfLines={ 1 }>
-                        { this.props.event.senderId }
+                        { senderInfo }
                     </RX.Text>
                     <RX.Text allowFontScaling={ false } style={ styles.footerTimestamp }>
                         {  ' - ' + timestamp }
@@ -263,13 +267,13 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
             );
         } else if (this.props.withSenderDetails) {
 
-            const roomSummary = DataStore.getRoomSummary(this.props.roomId);
+            const memberName = DataStore.getMemberName(this.props.roomId, this.props.event.senderId);
 
             let senderName: ReactElement | undefined;
-            if (roomSummary.members[this.props.event.senderId]) {
+            if (memberName !== this.props.event.senderId) {
                 senderName = (
                     <RX.Text allowFontScaling={ false } style={ styles.footerSenderId }>
-                        { roomSummary.members[this.props.event.senderId].name }
+                        { memberName }
                     </RX.Text>
                 )
             }
