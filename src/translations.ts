@@ -763,13 +763,13 @@ export const communityMembers = (membersCount: number, language: string): string
 
     switch (language) {
         case 'en':
-            return `Public group [${ membersCount } members]`;
+            return `Public group (${membersCount.toLocaleString()} members)`;
 
         case 'de':
-            return `Öffentliche Gruppe [${ membersCount } Mitglieder]`;
+            return `Öffentliche Gruppe (${membersCount.toLocaleString()} Mitglieder)`;
 
         case 'fr':
-            return `Groupe public [${ membersCount } membres]`;
+            return `Groupe public (${membersCount.toLocaleString()} membres)`;
 
         default:
             return '';
