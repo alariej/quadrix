@@ -138,7 +138,6 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
     private roomSummary!: RoomSummary;
     private language: Languages = 'en';
     private unreadTextStyle: StyleRuleSet<TextStyle> = undefined;
-    private isMounted_: boolean | undefined;
     private messageCount: { [id: string]: number } = {};
 
     constructor(props: RoomHeaderProps) {
@@ -166,10 +165,6 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 
         this.alias = this.roomSummary.alias!;
         this.joinMembersCount = this.roomSummary.joinMembersCount!;
-
-        if (this.roomSummary.type !== 'community' && (initState || this.props.roomId !== nextProps.roomId)) {
-            this.getRoomMembersFromServer(nextProps.roomId);
-        }
 
         if (this.roomSummary.type === 'group' && (initState || (this.props.roomId !== nextProps.roomId))) {
 
@@ -200,17 +195,6 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
         return partialState;
     }
 
-    public componentDidMount(): void {
-        super.componentDidMount();
-
-        this.isMounted_ = true;
-    }
-
-    public componentWillUnmount(): void {
-
-        this.isMounted_ = false;
-    }
-
     private doLogout = async () => {
 
         RX.Modal.dismissAll();
@@ -225,33 +209,6 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
         DataStore.clearRoomSummaryList();
 
         this.props.showLogin();
-    }
-
-    private getRoomMembersFromServer = (roomId: string) => {
-
-        ApiClient.getRoomMembers(roomId, false)
-            .then(members => {
-
-                const members_: { [id: string]: User } = {};
-                for (const member of Object.values(members)) {
-                    members_[member.id] = {
-                        ...member,
-                        powerLevel: this.roomSummary.members[member.id]?.powerLevel || undefined,
-                    }
-                }
-
-                DataStore.addMembers(roomId, members_);
-
-                if (this.isMounted_ && roomId === this.props.roomId) {
-                    this.forceUpdate();
-                }
-
-                if (RX.Modal.isDisplayed('dialogroomheader')) {
-                    RX.Modal.dismiss('dialogroomheader');
-                    this.onPressHeader();
-                }
-            })
-            .catch(_error => null);
     }
 
     private onPressHomeButton = () => {

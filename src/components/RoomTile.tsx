@@ -19,6 +19,8 @@ import AppFont from '../modules/AppFont';
 import CachedImage from '../modules/CachedImage';
 import { format, isSameWeek, isToday, isYesterday, Locale } from 'date-fns';
 import StringUtils from '../utils/StringUtils';
+import { RoomSummary } from '../models/RoomSummary';
+import { User } from '../models/User';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -141,7 +143,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
         this.locale = UiStore.getLocale();
     }
 
-    protected _buildState(_props: RoomTileProps, initState: boolean): RoomTileState | undefined {
+    protected _buildState(props: RoomTileProps, initState: boolean): RoomTileState | undefined {
 
         const roomSummary = DataStore.getRoomSummary(this.props.roomId);
 
@@ -169,6 +171,20 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
             avatarUrl = roomSummary.avatarUrl;
         }
 
+        if (initState && roomSummary.type !== 'community') {
+
+            const n = Object.keys(roomSummary.members).length;
+            const m = (roomSummary.joinMembersCount || 0) + (roomSummary.inviteMembersCount || 0);
+
+            const nameMissing = Object.keys(roomSummary.members).some(member => {
+                return roomSummary.members[member].name === undefined;
+            });
+
+            if (n !== m || nameMissing) {
+                this.getRoomMembersFromServer(props.roomId, roomSummary);
+            }
+        }
+
         return {
             avatarUrl: StringUtils.mxcToHttp(avatarUrl!, ApiClient.credentials.homeServer),
             name: name!,
@@ -180,6 +196,24 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
             isSelected: selectedRoom === this.props.roomId,
             isJitsiMaximised: UiStore.getJitsiMaximised(),
         };
+    }
+
+    private getRoomMembersFromServer = (roomId: string, roomSummary: RoomSummary) => {
+
+        ApiClient.getRoomMembers(roomId, false)
+            .then(members => {
+
+                const members_: { [id: string]: User } = {};
+                for (const member of Object.values(members)) {
+                    members_[member.id] = {
+                        ...member,
+                        powerLevel: roomSummary.members[member.id]?.powerLevel || undefined,
+                    }
+                }
+
+                DataStore.addMembers(roomId, members_);
+            })
+            .catch(_error => null);
     }
 
     public render(): JSX.Element | null {
