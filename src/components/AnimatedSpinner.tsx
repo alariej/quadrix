@@ -50,29 +50,18 @@ export default class AnimatedSpinner extends RX.Component<AnimatedSpinnerProps, 
                 {
                     height: this.props.size,
                     width: this.props.size,
-                    overflow: 'visible'
+                    borderRadius: this.props.size / 2,
+                    borderWidth: 1,
+                    borderColor: this.props.color,
+                    alignItems: 'center',
                 }
             ]}>
                 <RX.View
                     style={{
-                        position: 'absolute',
-                        height: this.props.size,
-                        width: this.props.size,
-                        borderRadius: this.props.size / 2,
-                        borderWidth: ringWidth,
-                        borderColor: this.props.color,
-                        opacity: 0.4
-                    }}
-                />
-                <RX.View
-                    style={{
-                        position: 'absolute',
-                        left: (this.props.size - ringWidth) / 2,
                         height: ringWidth,
                         width: ringWidth,
                         borderRadius: ringWidth / 2,
                         backgroundColor: this.props.color,
-                        opacity: 1
                     }}
                 />
             </RX.Animated.View>
