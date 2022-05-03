@@ -55,15 +55,12 @@ export default class VideoMessage extends RX.Component<VideoMessageProps, RX.Sta
 
         this.url = StringUtils.mxcToHttp(props.message.content.url!, ApiClient.credentials.homeServer);
 
-        if (props.message.content.info!.w && props.message.content.info!.h) {
-            this.heightStyle = RX.Styles.createViewStyle({
-                height: width * props.message.content.info!.h / props.message.content.info!.w,
-            }, false);
-        } else {
-            this.heightStyle = RX.Styles.createViewStyle({
-                height: undefined,
-            }, false);
-        }
+        const w = props.message.content.info?.thumbnail_info?.w || props.message.content.info?.w || 100;
+        const h = props.message.content.info?.thumbnail_info?.h || props.message.content.info?.h || 100;
+
+        this.heightStyle = RX.Styles.createViewStyle({
+            height: width * h / w,
+        }, false);
     }
 
     private showFullScreenVideo = (event: RX.Types.SyntheticEvent) => {
