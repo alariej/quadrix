@@ -1,6 +1,6 @@
 {
 	"appId": "chat.quadrix.linux",
-	"productName": "quadrix",
+	"productName": "Quadrix",
 	"linux": {
 		"category": "GNOME;GTK;Network;InstantMessaging",
 		"target": [
