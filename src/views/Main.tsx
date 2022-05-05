@@ -3,7 +3,7 @@ import RX, { Types } from 'reactxp';
 import RoomList from './RoomList';
 import Room from './Room';
 import { PAGE_MARGIN, MODAL_CONTENT_TEXT, FONT_LARGE, COMPOSER_BORDER,
-    PAGE_WIDE_PADDING, OBJECT_MARGIN, TRANSPARENT_BACKGROUND, HEADER_HEIGHT, TILE_WIDTH, LARGE_LOGO_FOREGROUND,
+    PAGE_WIDE_PADDING, OBJECT_MARGIN, TRANSPARENT_BACKGROUND, HEADER_HEIGHT,
     STATUSBAR_BACKGROUND } from '../ui';
 import DataStore from '../stores/DataStore';
 import { MessageEvent } from '../models/MessageEvent';
@@ -17,7 +17,6 @@ import { ComponentBase } from 'resub';
 import Pushers from '../modules/Pushers';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import AppFont from '../modules/AppFont';
-import IconSvg, { SvgFile } from '../components/IconSvg';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -418,23 +417,10 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
         let paddingLeft;
         let paddingRight;
-        let backgroundPadding = 0;
         if (this.state.layout.type === 'wide') {
             paddingLeft = <RX.View style={ styles.paddingLeft }/>;
             paddingRight = <RX.View style={ styles.paddingRight }/>;
-            backgroundPadding = PAGE_WIDE_PADDING * 2;
         }
-
-        const backgroundImage = (
-            <RX.View style={ [styles.background, { left: this.state.layout.pageWidth + backgroundPadding }] }>
-                <IconSvg
-                    source= { require('../resources/svg/logo.json') as SvgFile }
-                    height={ TILE_WIDTH }
-                    width={ TILE_WIDTH }
-                    fillColor={ LARGE_LOGO_FOREGROUND }
-                />
-            </RX.View>
-        );
 
         return (
             <RX.View style={{ flex: 1 }}>
@@ -450,7 +436,6 @@ export default class Main extends ComponentBase<MainProps, MainState> {
                     <RX.Animated.View
                         style={ [styles.containerAnimated, this.animatedStyle] }
                     >
-                        { backgroundImage }
                         { roomListPage }
                         { paddingLeft}
                         { paddingRight }
