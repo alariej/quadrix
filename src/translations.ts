@@ -1058,9 +1058,9 @@ export const batteryOptimizationTitle: Translation = {
 }
 
 export const batteryOptimizationText: Translation = {
-    en: 'To enable push notifications for new messages, please whitelist quadrix from the battery optimization settings',
-    de: 'Um Push-Benachrichtigungen für neue Nachrichten zu aktivieren, nehmen Sie quadrix in den Einstellungen zur Batterieoptimierung auf die Whitelist',
-    fr: 'Pour activer les notifications en mode "push" pour les nouveaux messages, veuillez mettre quadrix sur la whitelist dans les paramètres d\'optimisation de la batterie'
+    en: 'To enable push notifications for new messages, please whitelist ' + APP_NAME + ' from the battery optimization settings',
+    de: 'Um Push-Benachrichtigungen für neue Nachrichten zu aktivieren, nehmen Sie ' + APP_NAME + ' in den Einstellungen zur Batterieoptimierung auf die Whitelist',
+    fr: 'Pour activer les notifications en mode "push" pour les nouveaux messages, veuillez mettre ' + APP_NAME + ' sur la whitelist dans les paramètres d\'optimisation de la batterie'
 }
 
 export const doNotShowAgain: Translation = {
