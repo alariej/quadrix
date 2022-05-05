@@ -4,7 +4,7 @@ import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
 import { TILE_SYSTEM_TEXT, MODAL_CONTENT_TEXT, LINK_TEXT, HEADER_HEIGHT, FONT_NORMAL,
     BUTTON_ROUND_WIDTH, FONT_LARGE, SPACING, ICON_REDUCTION_FACTOR, BUTTON_FILL, TRANSPARENT_BACKGROUND,
-    LOGO_BACKGROUND, HEADER_STATUS, PAGE_MARGIN } from '../ui';
+    HEADER_STATUS, PAGE_MARGIN } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogNewRoom from '../dialogs/DialogNewRoom';
 import DialogContainer from '../modules/DialogContainer';
@@ -209,13 +209,6 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 
         const text = (
             <RX.View style={ styles.containerAbout }>
-                <IconSvg
-                    style={ styles.app_name }
-                    source= { require('../resources/svg/appname.json') as SvgFile }
-                    height={ 24 }
-                    width={ 24 * 347.48401 / 89.798973 }
-                    fillColor={ LOGO_BACKGROUND }
-                />
                 <RX.Text
                     allowFontScaling={ false }
                     style={ styles.textVersion }
