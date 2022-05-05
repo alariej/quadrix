@@ -1,7 +1,7 @@
 import React from 'react';
 import RX from 'reactxp';
 import { BUTTON_LONG_BACKGROUND, BUTTON_LONG_TEXT, INPUT_BACKGROUND, HEADER_TEXT,
-    MODAL_CONTENT_TEXT, BORDER_RADIUS, CONTAINER_PADDING, BUTTON_LONG_WIDTH, FONT_LARGE, SPACING, BUTTON_HEIGHT, LOGO_BACKGROUND,
+    MODAL_CONTENT_TEXT, BORDER_RADIUS, CONTAINER_PADDING, BUTTON_LONG_WIDTH, FONT_LARGE, SPACING, BUTTON_HEIGHT,
     OBJECT_MARGIN, PLACEHOLDER_TEXT, TRANSPARENT_BACKGROUND, FONT_NORMAL } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
@@ -15,6 +15,7 @@ import { TERMS_URL } from '../appconfig';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import AppFont from '../modules/AppFont';
 import StringUtils from '../utils/StringUtils';
+import logo from '../resources/png/logo_login.png'
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -25,13 +26,8 @@ const styles = {
         overflow: 'visible',
     }),
     logo: RX.Styles.createImageStyle({
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: 60,
-        height: 60,
-        borderRadius: 12,
+        flex: 1,
         marginBottom: 1.5 * OBJECT_MARGIN,
-        backgroundColor: LOGO_BACKGROUND,
     }),
     containerUserInput: RX.Styles.createViewStyle({
         overflow: 'visible',
@@ -422,11 +418,10 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
         const content = (
             <RX.View style={ styles.containerDialog }>
                 <RX.View style={ styles.logo }>
-                    <IconSvg
-                        source= { require('../resources/svg/logo.json') as SvgFile }
-                        height={ 32 }
-                        width={ 32 }
-                        fillColor={ 'white' }
+                    <RX.Image
+                        resizeMode={ 'contain' }
+                        style={{ width: 60, height: 60 }}
+                        source={ logo as string }
                     />
                 </RX.View>
                 <RX.View style={ styles.containerUserInput }>
