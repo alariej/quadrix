@@ -5,7 +5,7 @@ import RXImageSvg, { SvgPath as RXSvgPath } from 'reactxp-imagesvg';
 interface IconSvgProps {
     source: SvgFile;
     style?: RX.Types.StyleRuleSet<RX.Types.ViewStyle>;
-    fillColor: string;
+    fillColor: Array<string> | string;
     width: number;
     height: number;
 }
@@ -20,7 +20,7 @@ export default class IconSvg extends RX.Component<IconSvgProps, RX.Stateless> {
             const svgPath = (
                 <RXSvgPath
                     key={ i }
-                    fillColor={ this.props.fillColor }
+                    fillColor={ Array.isArray(this.props.fillColor) ? this.props.fillColor[i] : this.props.fillColor }
                     d={ path }
                 />
             );
