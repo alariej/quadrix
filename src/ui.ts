@@ -41,7 +41,7 @@ export const FONT_EMOJI_LARGE = 26;
 
 // colours
 
-export const LOGO_BACKGROUND = '#0090FF';
+export const LOGO_FILL = '#0090FF';
 export const APP_BACKGROUND = '#e6e6e6';
 export const STATUSBAR_BACKGROUND = 'lightgrey';
 export const OPAQUE_BACKGROUND = 'rgba(0, 0, 0, 0.7)';
@@ -55,8 +55,7 @@ export const TILE_BACKGROUND_SELECTED = '#d9d9d9';
 export const TILE_MESSAGE_TEXT = '#1a1a1a';
 export const TILE_SYSTEM_TEXT = 'grey';
 export const LIGHT_BACKGROUND = 'grey';
-export const LARGE_LOGO_FOREGROUND = 'rgba(0, 0, 0, 0.02)';
-export const BUTTON_FILL = '#0090FF';
+export const BUTTON_FILL = LOGO_FILL;
 export const BUTTON_ROUND_BACKGROUND = 'white';
 export const BUTTON_LONG_BACKGROUND = 'rgba(0, 0, 0, 0.5)';
 export const BUTTON_MODAL_BACKGROUND = 'white';

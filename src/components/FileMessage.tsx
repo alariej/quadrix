@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
-import { LINK_TEXT, MODAL_CONTENT_TEXT, FONT_LARGE, FONT_NORMAL, TILE_SYSTEM_TEXT, LOGO_BACKGROUND, ICON_INFO_FILL } from '../ui';
+import { LINK_TEXT, MODAL_CONTENT_TEXT, FONT_LARGE, FONT_NORMAL, TILE_SYSTEM_TEXT, LOGO_FILL, ICON_INFO_FILL } from '../ui';
 import FileHandler from '../modules/FileHandler';
 import { MessageEvent } from '../models/MessageEvent';
 import DialogContainer from '../modules/DialogContainer';
@@ -147,7 +147,7 @@ export default class FileMessage extends RX.Component<FileMessageProps, FileMess
             fileIcon = (
                 <RX.View style={ styles.progressContainer }>
                     <ProgressIndicator
-                        strokeColor={ LOGO_BACKGROUND }
+                        strokeColor={ LOGO_FILL }
                         size={ 16 }
                         progress={ this.state.progressValue % 1 }
                     />
