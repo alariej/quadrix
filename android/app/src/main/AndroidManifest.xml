@@ -30,7 +30,7 @@
   >
     <meta-data
       android:name="com.google.firebase.messaging.default_notification_icon"
-      android:resource="@drawable/ic_stat_name"
+      android:resource="@drawable/icon_white"
     />
     <activity
       android:name=".MainActivity"
@@ -69,7 +69,7 @@
       <data android:scheme="https" />
     </intent>
   </queries>
-  <!-- 
+  <!--
   <queries>
     <package android:name="com.google.android.youtube" />
   </queries>
