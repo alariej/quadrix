@@ -1,6 +1,6 @@
 # ![quadrix](https://quadrix.chat/logo84.png)
 
-## Quadrix:
+## Quadrix
 
 - Minimal, simple, multi-platform chat client for the [Matrix](https://github.com/matrix-org/) protocol
 - No data collection whatsoever
@@ -14,13 +14,13 @@
 - Push notifications on mobile devices with Firebase Cloud Messaging
 - Unique top-down messaging feed
 
-## Use cases:
+## Use cases
 
 - Private homeserver owners looking to get their non-tech friends & family to chat on Matrix
 - Matrix users participating in unencrypted public rooms only
 - Small organizations looking for a simple, self-hosted, open-source instant messaging solution
 
-## One code base, several platforms:
+## One code base, several platforms
 
 <p>
     <a href="https://apps.apple.com/us/app/quadrix-chat/id1576110553">
@@ -46,7 +46,7 @@
     </a>
 </p>
 
-## Matrix Protocol Implementation:
+## Matrix Protocol Implementation
 
 - [x] Room directory
 - [ ] Room tag showing
@@ -81,7 +81,7 @@
 - [ ] Localizations
 - [ ] SSO Support
 
-## Installation:
+## Installation
 For all platforms:
 - `npm install`
 
@@ -89,18 +89,18 @@ Additionally for iOS:
 - `cd ios`
 - `pod install`
 
-## Main Commands:
+## Main Commands
 
 - `npm run start:web` - starts Webpack and serves the web app on http://localhost:9999
 - `npm run start:rn-dev` - starts the React Native development server
 - `npm run start:android` - starts the Android version of the app and opens it in an emulator or connected device
 - `npm run start:ios` - starts the iOS version of the app and opens it in a simulator
 
-## Issues & Bugs:
+## Issues & Bugs
 
 Please report issues, problems, crashes, bugs, etc. in the [Issues](https://github.com/alariej/quadrix/issues) section of this repository.
 
-## Terms / Privacy / License:
+## Terms / Privacy / License
 
 Quadrix is provided without warranty of any kind. In no event shall the copyright holder be liable for any claim, damages or other liability arising from the use of this software.
 
@@ -112,7 +112,7 @@ Quadrix is released under the [GNU General Public License](https://www.gnu.org/l
 
 Copyright (c) 2022 Jean-François Alarie
 
-## Contact:
+## Contact
 
 - Matrix: @alariej:matrix.org
 - Matrix: #quadrix:matrix.org
