@@ -1,6 +1,6 @@
 import React from 'react';
 import RX from 'reactxp';
-import { LOGO_FILL, MIN_MS } from '../ui';
+import { BUTTON_UNREAD_BACKGROUND, MIN_MS } from '../ui';
 import { ReactElement } from 'react';
 import AnimatedSpinner from '../components/AnimatedSpinner';
 
@@ -69,14 +69,14 @@ export default class Spinner extends RX.Component<SpinnerProps, SpinnerState> {
         if (this.state.isVisible) {
             spinner = (
                 <AnimatedSpinner
-                    color={ this.props.color || LOGO_FILL }
+                    color={ this.props.color || BUTTON_UNREAD_BACKGROUND }
                     size={ size }
                 />
             )
         }
 
         return (
-            <RX.View style={{ overflow: 'visible' }}>
+            <RX.View>
                 { spinner! }
             </RX.View>
         )
