@@ -21,7 +21,8 @@ const buildConfig = (env, argv) => ({
     module: {
         rules: [
             { test: /\.jsx?$/, loader: 'eslint-webpack-plugin', include: APP_PATH, enforce: 'pre' },
-            { test: /\.tsx?$/, loader: 'babel-loader', include: APP_PATH }
+            { test: /\.tsx?$/, loader: 'babel-loader', include: APP_PATH },
+            { test: /\.(jpe?g|gif|png|svg|woff|ttf|wav|mp3)$/, loader: 'file-loader', include: APP_PATH }
         ],
     },
 
