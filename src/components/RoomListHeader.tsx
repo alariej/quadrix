@@ -16,6 +16,7 @@ import { APP_VERSION, APP_WEBSITE, TERMS_URL, GIT_REPO_URL } from '../appconfig'
 import Pushers from '../modules/Pushers';
 import AppFont from '../modules/AppFont';
 import FileHandler from '../modules/FileHandler';
+import logo from '../resources/png/logo.png'
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -111,6 +112,10 @@ const styles = {
         borderBottomWidth: 1,
         borderRightWidth: 1,
         marginLeft: SPACING
+    }),
+    logo: RX.Styles.createImageStyle({
+        flex: 1,
+        marginVertical: 12,
     }),
 };
 
@@ -209,6 +214,13 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 
         const text = (
             <RX.View style={ styles.containerAbout }>
+                <RX.View style={ styles.logo }>
+                    <RX.Image
+                        resizeMode={ 'contain' }
+                        style={{ width: 60, height: 60 }}
+                        source={ logo as string }
+                    />
+                </RX.View>
                 <RX.Text
                     allowFontScaling={ false }
                     style={ styles.textVersion }
