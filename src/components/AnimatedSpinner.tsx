@@ -45,27 +45,34 @@ export default class AnimatedSpinner extends RX.Component<AnimatedSpinnerProps, 
         const ringWidth = this.props.size / 4;
 
         return (
-            <RX.Animated.View style={[
-                this.animatedStyle,
-                {
-                    height: this.props.size,
-                    width: this.props.size,
-                    borderRadius: this.props.size / 2,
-                    borderWidth: 1,
-                    borderColor: this.props.color,
-                    alignItems: 'center',
-                }
-            ]}>
-                <RX.View
-                    style={{
-                        height: ringWidth,
-                        width: ringWidth,
-                        borderRadius: ringWidth / 2,
-                        backgroundColor: this.props.color,
-                        margin: -ringWidth / 2
-                    }}
-                />
-            </RX.Animated.View>
+            <RX.View style={{
+                height: this.props.size,
+                width: this.props.size,
+                borderRadius: this.props.size / 2,
+                overflow: 'hidden'
+            }}>
+                <RX.Animated.View style={[
+                    this.animatedStyle,
+                    {
+                        height: this.props.size,
+                        width: this.props.size,
+                        borderRadius: this.props.size / 2,
+                        borderWidth: 1,
+                        borderColor: this.props.color,
+                        alignItems: 'center',
+                    }
+                ]}>
+                    <RX.View
+                        style={{
+                            height: ringWidth,
+                            width: ringWidth,
+                            borderRadius: ringWidth / 2,
+                            backgroundColor: this.props.color,
+                            margin: -ringWidth / 2
+                        }}
+                    />
+                </RX.Animated.View>
+            </RX.View>
         )
     }
 }
