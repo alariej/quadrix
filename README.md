@@ -1,4 +1,4 @@
-# ![quadrix](https://quadrix.chat/logo84.png)
+# ![quadrix](https://quadrix.chat/logo.png)
 
 ## Quadrix
 
