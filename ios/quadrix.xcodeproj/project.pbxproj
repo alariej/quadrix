@@ -30,6 +30,7 @@
 		A977923E26565BFD009D2FE1 /* Launch.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A977923D26565BFD009D2FE1 /* Launch.xcassets */; };
 		A977923F26565BFD009D2FE1 /* Launch.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A977923D26565BFD009D2FE1 /* Launch.xcassets */; };
 		A98F90422623459F0074E4B9 /* Orientation.m in Sources */ = {isa = PBXBuildFile; fileRef = A98F90412623459F0074E4B9 /* Orientation.m */; };
+		A9B5EC76282951AD0059C328 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -363,6 +364,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A977923C26565A9B009D2FE1 /* LaunchScreen.storyboard in Resources */,
+				A9B5EC76282951AD0059C328 /* Images.xcassets in Resources */,
 				A93995CF25FBB9E6006AF4C9 /* ding.wav in Resources */,
 				A977923F26565BFD009D2FE1 /* Launch.xcassets in Resources */,
 				A93A19BA25F6C6FB009A1CF9 /* GoogleService-Info.plist in Resources */,
