@@ -39,7 +39,11 @@ const styles = {
         textAlign: 'center',
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
-        color: HEADER_STATUS,
+        fontStyle: 'italic',
+        color: 'white',
+        padding: 4,
+        borderRadius: 2,
+        backgroundColor: '#b3b3b3'
     }),
     roundButton: RX.Styles.createViewStyle({
         borderRadius: BUTTON_ROUND_WIDTH / 2,
@@ -289,7 +293,6 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
                 >
                     { disconnected! }
                     <RX.View style={ styles.userNameContainer }>
-                        <RX.View style={ styles.bracketLeft }/>
                         <RX.Text
                             style={ [styles.userName, { maxWidth: width }] }
                             allowFontScaling={ false }
@@ -297,7 +300,6 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
                         >
                             { ApiClient.credentials.userIdFull }
                         </RX.Text>
-                        <RX.View style={ styles.bracketRight }/>
                     </RX.View>
                 </RX.View>
                 <RX.Button
