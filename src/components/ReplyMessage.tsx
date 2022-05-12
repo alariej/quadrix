@@ -26,7 +26,6 @@ const styles = {
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         color: TILE_SYSTEM_TEXT,
-        fontWeight: 'bold',
         fontStyle: 'italic',
     }),
     textReplyMessage: RX.Styles.createTextStyle({
