@@ -48,7 +48,7 @@
 
 ## Matrix Protocol Implementation
 
-- [x] Room directory
+- [x] Room directory (Linux version only)
 - [ ] Room tag showing
 - [ ] Room tag editing
 - [ ] Search joined rooms
@@ -74,7 +74,7 @@
 - [ ] Redacting
 - [ ] Multiple Matrix accounts
 - [x] New user registration
-- [ ] VoIP
+- [x] VoIP (Jitsi Meet only)
 - [ ] Reactions
 - [ ] Message editing
 - [ ] Room upgrades
