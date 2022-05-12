@@ -40,10 +40,7 @@ const styles = {
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         fontStyle: 'italic',
-        color: 'white',
-        padding: 4,
-        borderRadius: 2,
-        backgroundColor: '#b3b3b3'
+        color: HEADER_STATUS,
     }),
     roundButton: RX.Styles.createViewStyle({
         borderRadius: BUTTON_ROUND_WIDTH / 2,
@@ -97,9 +94,9 @@ const styles = {
     }),
     bracketLeft: RX.Styles.createViewStyle({
         height: 17,
-        width: 4,
+        width: 5,
         borderColor: HEADER_STATUS,
-        opacity: 0.5,
+        opacity: 0.35,
         borderLeftWidth: 1,
         borderTopWidth: 1,
         borderBottomWidth: 1,
@@ -108,9 +105,9 @@ const styles = {
     }),
     bracketRight: RX.Styles.createViewStyle({
         height: 17,
-        width: 4,
+        width: 5,
         borderColor: HEADER_STATUS,
-        opacity: 0.5,
+        opacity: 0.35,
         borderLeftWidth: 0,
         borderTopWidth: 1,
         borderBottomWidth: 1,
@@ -293,6 +290,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
                 >
                     { disconnected! }
                     <RX.View style={ styles.userNameContainer }>
+                        <RX.View style={ styles.bracketLeft }/>
                         <RX.Text
                             style={ [styles.userName, { maxWidth: width }] }
                             allowFontScaling={ false }
@@ -300,6 +298,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
                         >
                             { ApiClient.credentials.userIdFull }
                         </RX.Text>
+                        <RX.View style={ styles.bracketRight }/>
                     </RX.View>
                 </RX.View>
                 <RX.Button
