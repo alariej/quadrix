@@ -297,7 +297,7 @@ export default class RestClient extends GenericRestClient {
 
         const data = {
             search_term: searchTerm,
-            limit: 10,
+            limit: 100,
         };
 
         return this.performApiPost<DirectorySearch_>('user_directory/search', data);

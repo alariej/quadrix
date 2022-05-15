@@ -26,7 +26,7 @@ const styles = {
         justifyContent: 'center',
     }),
     userListView: RX.Styles.createViewStyle({
-        alignSelf: 'center',
+        flexDirection: 'row',
     }),
     infoTile: RX.Styles.createViewStyle({
         flex: 1,
@@ -61,10 +61,11 @@ interface DialogNewDirectConversationProps {
 
 interface DialogNewDirectConversationState {
     userId: string | undefined;
-    userList: ReactElement | undefined;
+    userTiles: JSX.Element[] | undefined;
     infoTile: ReactElement | undefined;
     isSearch: boolean;
     isConfirmDisabled: boolean;
+    containerHeight: number;
 }
 
 export default class DialogNewDirectConversation extends RX.Component<DialogNewDirectConversationProps, DialogNewDirectConversationState> {
@@ -81,10 +82,11 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
 
         this.state = {
             userId: undefined,
-            userList: undefined,
+            userTiles: undefined,
             infoTile: undefined,
             isSearch: true,
             isConfirmDisabled: false,
+            containerHeight: UiStore.getAppLayout_().screenHeight,
         }
     }
 
@@ -110,23 +112,7 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
                     );
                 });
 
-            const userList = (
-                <RX.View
-                    style={ [
-                        styles.userListView,
-                        { height: Math.min(UiStore.getDevice() === 'mobile' ? 4 : 7, userTiles.length) * (TILE_HEIGHT + 1) }
-                    ] }
-                >
-                    <RX.ScrollView
-                        style={ { width: this.platform === 'web' ? DIALOG_WIDTH + 30 : DIALOG_WIDTH} }
-                        keyboardShouldPersistTaps={ 'always' }
-                    >
-                        { userTiles }
-                    </RX.ScrollView>
-                </RX.View>
-            );
-
-            this.setState({ userList: userList, infoTile: undefined });
+            this.setState({ userTiles: userTiles })
 
         } else {
 
@@ -204,28 +190,22 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
                             );
                         });
 
-                    const userList = (
-                        <RX.View
-                            style={ [
-                                styles.userListView,
-                                { height: Math.min(UiStore.getDevice() === 'mobile' ? 4 : 7, userTiles.length) * (TILE_HEIGHT + 1) }
-                            ] }
-                        >
-                            <RX.ScrollView
-                                style={ { width: this.platform === 'web' ? DIALOG_WIDTH + 30 : DIALOG_WIDTH } }
-                                keyboardShouldPersistTaps={ 'always' }
-                            >
-                                { userTiles }
-                            </RX.ScrollView>
-                        </RX.View>
-                    );
-
-                    this.setState({ userList: userList, infoTile: undefined, isSearch: true, isConfirmDisabled: false });
+                    this.setState({ userTiles: userTiles, infoTile: undefined, isSearch: true, isConfirmDisabled: false });
                 }
             })
             .catch(_error => {
 
-                this.setState({ isConfirmDisabled: false });
+                const infoTile = (
+                    <RX.View
+                        style={ styles.infoTile }
+                    >
+                        <RX.Text style={ styles.textDialog }>
+                            { noSearchResults[this.language] }
+                        </RX.Text>
+                    </RX.View>
+                );
+
+                this.setState({ infoTile: infoTile, isSearch: true, isConfirmDisabled: false });
             });
     }
 
@@ -336,6 +316,13 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
         this.setState({ isSearch: !(userId.user && userId.server) });
     }
 
+    private onChangedLayout = (event: RX.Types.ViewOnLayoutEvent) => {
+
+        if (this.state.containerHeight !== event.height) {
+            this.setState({ containerHeight: event.height });
+        }
+    }
+
     public render(): JSX.Element | null {
 
         const textInput = (
@@ -356,9 +343,25 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
             />
         );
 
+        const userList = (
+            <RX.View
+                style={ [
+                    styles.userListView,
+                    { maxHeight: this.state.containerHeight - 2 * BUTTON_HEIGHT - 4 * OBJECT_MARGIN }
+                ] }
+            >
+                <RX.ScrollView
+                    style={ { width: this.platform === 'web' ? DIALOG_WIDTH + 30 : DIALOG_WIDTH } }
+                    keyboardShouldPersistTaps={ 'always' }
+                >
+                    { this.state.userTiles }
+                </RX.ScrollView>
+            </RX.View>
+        );
+
         const content = (
             <RX.View style={ styles.container }>
-                { this.state.infoTile || this.state.userList }
+                { this.state.infoTile || userList }
                 { textInput }
             </RX.View>
         );
@@ -378,7 +381,10 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
         );
 
         return (
-            <RX.View style={ styles.modalScreen }>
+            <RX.View
+                style={ styles.modalScreen }
+                onLayout={ this.onChangedLayout }
+            >
                 { createConversationDialog }
             </RX.View>
         );
