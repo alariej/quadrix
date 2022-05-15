@@ -19,6 +19,7 @@ export const APP_WEBSITE = 'quadrix.chat';
 export const APP_WEBSITE_URL = 'https://quadrix.chat';
 export const GIT_REPO_URL = 'https://github.com/alariej/quadrix#readme';
 export const TERMS_URL = 'https://github.com/alariej/quadrix#terms--privacy--license';
+export const GITHUB_SPONSOR_URL = 'https://github.com/sponsors/alariej';
 
 // jitsi server
 

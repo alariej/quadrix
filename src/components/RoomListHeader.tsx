@@ -4,7 +4,7 @@ import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
 import { TILE_SYSTEM_TEXT, MODAL_CONTENT_TEXT, LINK_TEXT, HEADER_HEIGHT, FONT_NORMAL,
     BUTTON_ROUND_WIDTH, FONT_LARGE, SPACING, ICON_REDUCTION_FACTOR, BUTTON_FILL, TRANSPARENT_BACKGROUND,
-    HEADER_STATUS, PAGE_MARGIN } from '../ui';
+    HEADER_STATUS, PAGE_MARGIN, BORDER_RADIUS, OPAQUE_BACKGROUND } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogNewRoom from '../dialogs/DialogNewRoom';
 import DialogContainer from '../modules/DialogContainer';
@@ -12,7 +12,7 @@ import DialogSettings from '../dialogs/DialogSettings';
 import UiStore from '../stores/UiStore';
 import { pressOKToLogout, cancel, termsPrivacyLicense, Languages } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
-import { APP_VERSION, APP_WEBSITE, TERMS_URL, GIT_REPO_URL } from '../appconfig';
+import { APP_VERSION, APP_WEBSITE, TERMS_URL, GIT_REPO_URL, GITHUB_SPONSOR_URL } from '../appconfig';
 import Pushers from '../modules/Pushers';
 import AppFont from '../modules/AppFont';
 import FileHandler from '../modules/FileHandler';
@@ -118,6 +118,20 @@ const styles = {
         flex: 1,
         marginVertical: 12,
     }),
+    sponsorButton: RX.Styles.createViewStyle({
+        flex: 1,
+        height: 22,
+        marginVertical: 12,
+        paddingHorizontal: SPACING * 3,
+        borderRadius: 22 / 2,
+        backgroundColor: 'white',
+        shadowOffset: { width: 1, height: 1 },
+        shadowColor: OPAQUE_BACKGROUND,
+        shadowRadius: BORDER_RADIUS,
+        elevation: 2,
+        shadowOpacity: 1,
+        overflow: 'visible',
+    })
 };
 
 interface RoomListHeaderProps extends RX.CommonProps {
@@ -242,6 +256,14 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
                 >
                     { termsPrivacyLicense[this.language] }
                 </RX.Text>
+                <RX.Button
+                    style={ styles.sponsorButton }
+                    onPress={ event => this.openUrl(GITHUB_SPONSOR_URL, event) }
+                >
+                    <RX.Text>
+                        💙  Sponsor
+                    </RX.Text>
+                </RX.Button>
             </RX.View>
         );
 
