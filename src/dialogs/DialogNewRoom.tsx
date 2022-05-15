@@ -5,7 +5,7 @@ import DialogNewNotepad from './DialogNewNotepad';
 import DialogNewDirectConversation from './DialogNewDirectConversation';
 import DialogJoinCommunity from './DialogJoinCommunity';
 import { BUTTON_MODAL_BACKGROUND, BUTTON_MODAL_TEXT, OPAQUE_BACKGROUND, BORDER_RADIUS, DIALOG_WIDTH, SPACING,
-    AVATAR_SMALL_WIDTH, TILE_HEIGHT, FONT_LARGE, AVATAR_MARGIN, AVATAR_FOREGROUND } from '../ui';
+    AVATAR_SMALL_WIDTH, TILE_HEIGHT, FONT_LARGE, AVATAR_FOREGROUND, OBJECT_MARGIN } from '../ui';
 import UiStore from '../stores/UiStore';
 import { createNewConv, createNewGroup, joinPublicComm, createNewNote } from '../translations';
 import IconSvg, { SvgFile } from '../components/IconSvg';
@@ -33,7 +33,7 @@ const styles = {
         flex: 1,
         fontSize: FONT_LARGE,
         color: BUTTON_MODAL_TEXT,
-        paddingRight: SPACING,
+        marginRight: OBJECT_MARGIN,
     }),
     modalScreen: RX.Styles.createViewStyle({
         flex: 1,
@@ -47,7 +47,6 @@ const styles = {
         height: AVATAR_SMALL_WIDTH,
         width: AVATAR_SMALL_WIDTH,
         borderRadius: AVATAR_SMALL_WIDTH / 2,
-        marginRight: AVATAR_MARGIN,
     }),
 };
 
