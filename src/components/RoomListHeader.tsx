@@ -39,8 +39,8 @@ const styles = {
         textAlign: 'center',
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
-        fontStyle: 'italic',
         color: HEADER_STATUS,
+        paddingBottom: 3,
     }),
     roundButton: RX.Styles.createViewStyle({
         borderRadius: BUTTON_ROUND_WIDTH / 2,
@@ -93,8 +93,8 @@ const styles = {
         marginVertical: 12,
     }),
     bracketLeft: RX.Styles.createViewStyle({
-        height: 17,
-        width: 5,
+        height: 22,
+        width: 3,
         borderColor: HEADER_STATUS,
         opacity: 0.35,
         borderLeftWidth: 1,
@@ -104,8 +104,8 @@ const styles = {
         marginRight: SPACING,
     }),
     bracketRight: RX.Styles.createViewStyle({
-        height: 17,
-        width: 5,
+        height: 22,
+        width: 3,
         borderColor: HEADER_STATUS,
         opacity: 0.35,
         borderLeftWidth: 0,
