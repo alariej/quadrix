@@ -3,8 +3,8 @@ import RX from 'reactxp';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
 import CommunityTile from '../components/CommunityTile';
-import { MODAL_CONTENT_TEXT, OPAQUE_BACKGROUND, BORDER_RADIUS, TILE_WIDTH, SPACING, FONT_LARGE, TILE_HEIGHT_COMMUNITY, CONTAINER_PADDING,
-    BUTTON_HEIGHT, PLACEHOLDER_TEXT } from '../ui';
+import { MODAL_CONTENT_TEXT, OPAQUE_BACKGROUND, BORDER_RADIUS, TILE_WIDTH, SPACING, FONT_LARGE, CONTAINER_PADDING,
+    BUTTON_HEIGHT, PLACEHOLDER_TEXT, OBJECT_MARGIN } from '../ui';
 import { theSearchDidNotReturn, theSearchTakesTooLong, cancel, theSearchReturnedError, theCommunity, pressOKToJoin, search, communityName,
     serverName, waitSearch, Languages } from '../translations';
 import UiStore from '../stores/UiStore';
@@ -32,14 +32,14 @@ const styles = {
     modalScreenRoomList: RX.Styles.createViewStyle({
         flex: 1,
         alignSelf: 'stretch',
-        backgroundColor: OPAQUE_BACKGROUND,
         justifyContent: 'center',
+        backgroundColor: OPAQUE_BACKGROUND,
     }),
     modalView: RX.Styles.createViewStyle({
         alignSelf: 'center',
         justifyContent: 'center',
         width: TILE_WIDTH,
-        maxHeight: 360,
+        marginVertical: OBJECT_MARGIN,
     }),
     textDialog: RX.Styles.createTextStyle({
         fontFamily: AppFont.fontFamily,
@@ -200,11 +200,11 @@ export default class DialogJoinCommunity extends RX.Component<DialogJoinCommunit
         const roomList = (
             <RX.View
                 style={ styles.modalScreenRoomList }
-                onPress={() => RX.Modal.dismissAll() }
+                onPress={ () => this.showDialogJoinCommunity() }
                 disableTouchOpacityAnimation={ true }
             >
                 <RX.View
-                    style={ [styles.modalView, { height: roomTiles.length * (TILE_HEIGHT_COMMUNITY + SPACING) }] }
+                    style={ styles.modalView }
                     onPress={ (event: RX.Types.SyntheticEvent) => event.stopPropagation() }
                     disableTouchOpacityAnimation={ true }
                     activeOpacity={ 1 }
