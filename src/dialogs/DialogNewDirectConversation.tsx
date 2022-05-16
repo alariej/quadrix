@@ -4,7 +4,8 @@ import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
 import DataStore from '../stores/DataStore';
 import { MODAL_CONTENT_TEXT, BORDER_RADIUS, FONT_LARGE, TILE_HEIGHT, BUTTON_HEIGHT, INPUT_BACKGROUND, CONTAINER_PADDING,
-    PLACEHOLDER_TEXT, TRANSPARENT_BACKGROUND, DIALOG_WIDTH, TILE_BACKGROUND, OBJECT_MARGIN } from '../ui';
+    PLACEHOLDER_TEXT, DIALOG_WIDTH, TILE_BACKGROUND, OBJECT_MARGIN, BUTTON_MODAL_BACKGROUND, SPACING, BUTTON_MODAL_TEXT,
+    MODAL_DISABLED_TEXT, OPAQUE_BACKGROUND } from '../ui';
 import UiStore from '../stores/UiStore';
 import { inviteUser, cancel, userServer, errorNoConfirm, theUserId, doesntSeemToExist, warningNoSelfDirect,
     Languages, searchUser, tooManySearchResults, noSearchResults, enterSearch, searchInstruction } from '../translations';
@@ -14,24 +15,25 @@ import { PlatformType } from 'reactxp/dist/common/Types';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import AppFont from '../modules/AppFont';
 import StringUtils from '../utils/StringUtils';
+import KeyboardAwareView from '../modules/KeyboardAwareView';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
         flex: 1,
         alignSelf: 'stretch',
+        backgroundColor: OPAQUE_BACKGROUND
     }),
     container: RX.Styles.createViewStyle({
         flex: 1,
-        alignSelf: 'stretch',
         justifyContent: 'center',
+        marginTop: OBJECT_MARGIN,
+        width: DIALOG_WIDTH,
     }),
+
     userListView: RX.Styles.createViewStyle({
-        flexDirection: 'row',
+        flex: 1,
     }),
     infoTile: RX.Styles.createViewStyle({
-        flex: 1,
-        alignSelf: 'stretch',
-        marginBottom: 1,
         borderRadius: BORDER_RADIUS,
         backgroundColor: TILE_BACKGROUND,
         minHeight: TILE_HEIGHT
@@ -42,8 +44,7 @@ const styles = {
         paddingHorizontal: CONTAINER_PADDING,
         height: BUTTON_HEIGHT,
         borderRadius: BORDER_RADIUS,
-        marginTop: OBJECT_MARGIN - 1,
-        alignSelf: 'stretch',
+        marginTop: OBJECT_MARGIN,
         backgroundColor: INPUT_BACKGROUND,
     }),
     textDialog: RX.Styles.createTextStyle({
@@ -53,6 +54,23 @@ const styles = {
         fontSize: FONT_LARGE,
         margin: 12,
     }),
+    buttonContainer: RX.Styles.createViewStyle({
+        flexDirection: 'row',
+        marginVertical: OBJECT_MARGIN
+    }),
+    button: RX.Styles.createViewStyle({
+        width: DIALOG_WIDTH / 2 - OBJECT_MARGIN / 2,
+        height: BUTTON_HEIGHT,
+        borderRadius: BUTTON_HEIGHT / 2,
+        backgroundColor: BUTTON_MODAL_BACKGROUND,
+    }),
+    buttonText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
+        fontSize: FONT_LARGE,
+        marginVertical: SPACING,
+        textAlign: 'center',
+        color: BUTTON_MODAL_TEXT,
+    })
 };
 
 interface DialogNewDirectConversationProps {
@@ -65,7 +83,6 @@ interface DialogNewDirectConversationState {
     infoTile: ReactElement | undefined;
     isSearch: boolean;
     isConfirmDisabled: boolean;
-    containerHeight: number;
 }
 
 export default class DialogNewDirectConversation extends RX.Component<DialogNewDirectConversationProps, DialogNewDirectConversationState> {
@@ -86,7 +103,6 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
             infoTile: undefined,
             isSearch: true,
             isConfirmDisabled: false,
-            containerHeight: UiStore.getAppLayout_().screenHeight,
         }
     }
 
@@ -97,6 +113,7 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
         if (users.length > 0) {
 
             const userTiles = users
+                // .filter(user => user.id === '@dani:al4.re')
                 .sort((a, b) => (
                     a.id.localeCompare(b.id)
                 ))
@@ -316,13 +333,6 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
         this.setState({ isSearch: !(userId.user && userId.server) });
     }
 
-    private onChangedLayout = (event: RX.Types.ViewOnLayoutEvent) => {
-
-        if (this.state.containerHeight !== event.height) {
-            this.setState({ containerHeight: event.height });
-        }
-    }
-
     public render(): JSX.Element | null {
 
         const textInput = (
@@ -347,7 +357,7 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
             <RX.View
                 style={ [
                     styles.userListView,
-                    { maxHeight: this.state.containerHeight - 2 * BUTTON_HEIGHT - 4 * OBJECT_MARGIN }
+                    { maxHeight: TILE_HEIGHT * (this.state.userTiles?.length || 0) }
                 ] }
             >
                 <RX.ScrollView
@@ -359,34 +369,57 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
             </RX.View>
         );
 
+        let disabledStyle;
+        if (this.state.isConfirmDisabled) {
+            disabledStyle = RX.Styles.createTextStyle({
+                color: MODAL_DISABLED_TEXT,
+            }, false);
+        }
+
+        const buttons = (
+            <RX.View
+                style={ [
+                    styles.buttonContainer,
+                    { justifyContent: 'space-between' }
+                ] }
+            >
+                <RX.Button
+                    style={ styles.button }
+                    onPress={ this.state.isSearch ? this.searchOnServer : this.createNewDirect }
+                    disabledOpacity={ 1 }
+                    disableTouchOpacityAnimation={ true }
+                    disabled={ this.state.isConfirmDisabled }
+                    activeOpacity={ 1 }
+                >
+                    <RX.Text allowFontScaling={ false } style={ [styles.buttonText, disabledStyle] }>
+                        { this.state.isSearch ? searchUser[this.language] : inviteUser[this.language] }
+                    </RX.Text>
+                </RX.Button>
+
+                <RX.Button
+                    style={ styles.button }
+                    onPress={ () => RX.Modal.dismissAll() }
+                    disableTouchOpacityAnimation={ true }
+                    activeOpacity={ 1 }
+                >
+                    <RX.Text allowFontScaling={ false } style={ styles.buttonText }>
+                        { cancel[this.language] }
+                    </RX.Text>
+                </RX.Button>
+            </RX.View>
+
+        )
+
         const content = (
             <RX.View style={ styles.container }>
                 { this.state.infoTile || userList }
                 { textInput }
+                { buttons }
             </RX.View>
-        );
-
-        const createConversationDialog = (
-            <DialogContainer
-                content={ content }
-                confirmButton={ true }
-                confirmDisabled={ this.state.isConfirmDisabled }
-                confirmButtonText={ this.state.isSearch ? searchUser[this.language] : inviteUser[this.language] }
-                cancelButton={ true }
-                cancelButtonText={ cancel[this.language] }
-                onConfirm={ this.state.isSearch ? this.searchOnServer : this.createNewDirect }
-                onCancel={ () => RX.Modal.dismissAll() }
-                backgroundColorContent={ TRANSPARENT_BACKGROUND }
-            />
         );
 
         return (
-            <RX.View
-                style={ styles.modalScreen }
-                onLayout={ this.onChangedLayout }
-            >
-                { createConversationDialog }
-            </RX.View>
+            <KeyboardAwareView content={ content }/>
         );
     }
 }
