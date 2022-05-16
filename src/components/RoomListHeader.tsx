@@ -4,7 +4,7 @@ import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
 import { TILE_SYSTEM_TEXT, MODAL_CONTENT_TEXT, LINK_TEXT, HEADER_HEIGHT, FONT_NORMAL,
     BUTTON_ROUND_WIDTH, FONT_LARGE, SPACING, ICON_REDUCTION_FACTOR, BUTTON_FILL, TRANSPARENT_BACKGROUND,
-    HEADER_STATUS, PAGE_MARGIN, BORDER_RADIUS, OPAQUE_BACKGROUND } from '../ui';
+    HEADER_STATUS, PAGE_MARGIN, OPAQUE_BACKGROUND } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogNewRoom from '../dialogs/DialogNewRoom';
 import DialogContainer from '../modules/DialogContainer';
@@ -127,9 +127,9 @@ const styles = {
         backgroundColor: 'white',
         shadowOffset: { width: 1, height: 1 },
         shadowColor: OPAQUE_BACKGROUND,
-        shadowRadius: BORDER_RADIUS,
-        elevation: 2,
-        shadowOpacity: 1,
+        shadowRadius: 2,
+        // elevation: 2, // doesn't do anything on ios
+        shadowOpacity: 0.67,
         overflow: 'visible',
     })
 };
