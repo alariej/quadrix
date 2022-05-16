@@ -30,7 +30,7 @@ const styles = {
         justifyContent: 'center',
         width: TILE_WIDTH,
         minHeight: TILE_HEIGHT + 1,
-        maxHeight: 360,
+        maxHeight: 360, // TODO: make this dynamic
     }),
     button: RX.Styles.createViewStyle({
         borderRadius: BUTTON_HEIGHT / 2,

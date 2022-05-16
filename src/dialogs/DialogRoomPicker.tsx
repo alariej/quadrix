@@ -16,7 +16,7 @@ const styles = {
         alignSelf: 'center',
         justifyContent: 'center',
         width: TILE_WIDTH,
-        maxHeight: 360,
+        maxHeight: 360, // TODO: make this dynamic
     }),
     label: RX.Styles.createViewStyle({
         alignSelf: 'center',
