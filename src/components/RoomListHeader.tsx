@@ -128,7 +128,7 @@ const styles = {
         shadowOffset: { width: 1, height: 1 },
         shadowColor: OPAQUE_BACKGROUND,
         shadowRadius: 2,
-        // elevation: 2, // doesn't do anything on ios
+        elevation: 2,
         shadowOpacity: 0.67,
         overflow: 'visible',
     })
