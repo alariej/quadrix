@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { OPAQUE_BACKGROUND } from '../../ui';
 import { KeyboardAvoidingView } from 'react-native';
+import UiStore from '../../stores/UiStore';
 
 const styles = {
     modalScreen: RX.Styles.createViewStyle({
@@ -31,7 +32,7 @@ export default class KeyboardAwareView extends RX.Component<KeyboardAwareViewPro
                         flex: 1,
                         alignItems: 'center',
                     }}
-                    behavior={ 'padding' }
+                    behavior={ UiStore.getPlatform() === 'ios' ? 'padding' : undefined }
                 >
                     { this.props.content }
                 </KeyboardAvoidingView>
