@@ -357,7 +357,7 @@ export default class DialogNewDirectConversation extends RX.Component<DialogNewD
             <RX.View
                 style={ [
                     styles.userListView,
-                    { maxHeight: TILE_HEIGHT * (this.state.userTiles?.length || 0) }
+                    { maxHeight: (TILE_HEIGHT + 1) * (this.state.userTiles?.length || 0) }
                 ] }
             >
                 <RX.ScrollView
