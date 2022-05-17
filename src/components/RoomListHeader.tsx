@@ -40,7 +40,7 @@ const styles = {
         fontFamily: AppFont.fontFamily,
         fontSize: FONT_NORMAL,
         color: HEADER_STATUS,
-        paddingBottom: 1, // 3 android and web, 1 iphone, 1 chrome MacOS
+        paddingBottom: 1,
     }),
     roundButton: RX.Styles.createViewStyle({
         borderRadius: BUTTON_ROUND_WIDTH / 2,
