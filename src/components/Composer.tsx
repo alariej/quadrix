@@ -759,8 +759,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     <IconSvg
                         source= { require('../resources/svg/video.json') as SvgFile }
                         fillColor={ BUTTON_FILL }
-                        height={ 16 }
-                        width={ 16 }
+                        height={ 20 }
+                        width={ 20 }
                         style={ { marginLeft: 3 }}
                     />
                 </RX.Button>
@@ -775,8 +775,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     <IconSvg
                         source= { require('../resources/svg/plus.json') as SvgFile }
                         fillColor={ BUTTON_FILL }
-                        height={ 20 }
-                        width={ 20 }
+                        height={ 18 }
+                        width={ 18 }
                     />
                 </RX.Button>
                 <RX.Button
@@ -791,8 +791,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     <IconSvg
                         source= { require('../resources/svg/smiley.json') as SvgFile }
                         fillColor={ BUTTON_FILL }
-                        height={ 16 }
-                        width={ 16 }
+                        height={ 18 }
+                        width={ 18 }
                         style={ { marginRight: 3 }}
                     />
                 </RX.Button>
@@ -830,8 +830,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     <IconSvg
                         source= { require('../resources/svg/send.json') as SvgFile }
                         fillColor={ BUTTON_FILL }
-                        height={ 20 }
-                        width={ 20 }
+                        height={ 18 }
+                        width={ 18 }
                     />
                 </RX.Button>
                 { progressDialog }
