@@ -2,7 +2,7 @@ import React from 'react';
 import RX from 'reactxp';
 import { BUTTON_LONG_BACKGROUND, BUTTON_LONG_TEXT, INPUT_BACKGROUND, HEADER_TEXT,
     MODAL_CONTENT_TEXT, BORDER_RADIUS, CONTAINER_PADDING, BUTTON_LONG_WIDTH, FONT_LARGE, SPACING, BUTTON_HEIGHT,
-    OBJECT_MARGIN, PLACEHOLDER_TEXT, TRANSPARENT_BACKGROUND, FONT_NORMAL } from '../ui';
+    OBJECT_MARGIN, PLACEHOLDER_TEXT, TRANSPARENT_BACKGROUND, FONT_NORMAL, LOGO_FILL } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
 import DialogRegister from '../dialogs/DialogRegister';
@@ -15,7 +15,6 @@ import { TERMS_URL } from '../appconfig';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import AppFont from '../modules/AppFont';
 import StringUtils from '../utils/StringUtils';
-import logo from '../resources/png/logo.png'
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -418,10 +417,11 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
         const content = (
             <RX.View style={ styles.containerDialog }>
                 <RX.View style={ styles.logo }>
-                    <RX.Image
-                        resizeMode={ 'contain' }
-                        style={{ width: 60, height: 60 }}
-                        source={ logo as string }
+                    <IconSvg
+                        source= { require('../resources/svg/logo.json') as SvgFile }
+                        height={ 72 }
+                        width={ 72 }
+                        fillColor={ LOGO_FILL }
                     />
                 </RX.View>
                 <RX.View style={ styles.containerUserInput }>

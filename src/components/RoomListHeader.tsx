@@ -4,7 +4,7 @@ import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
 import { TILE_SYSTEM_TEXT, MODAL_CONTENT_TEXT, LINK_TEXT, HEADER_HEIGHT, FONT_NORMAL,
     BUTTON_ROUND_WIDTH, FONT_LARGE, SPACING, ICON_REDUCTION_FACTOR, BUTTON_FILL, TRANSPARENT_BACKGROUND,
-    HEADER_STATUS, PAGE_MARGIN, OPAQUE_BACKGROUND } from '../ui';
+    HEADER_STATUS, PAGE_MARGIN, OPAQUE_BACKGROUND, LOGO_FILL } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogNewRoom from '../dialogs/DialogNewRoom';
 import DialogContainer from '../modules/DialogContainer';
@@ -16,7 +16,6 @@ import { APP_VERSION, APP_WEBSITE, TERMS_URL, GIT_REPO_URL, GITHUB_SPONSOR_URL }
 import Pushers from '../modules/Pushers';
 import AppFont from '../modules/AppFont';
 import FileHandler from '../modules/FileHandler';
-import logo from '../resources/png/logo.png'
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -230,10 +229,11 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
         const text = (
             <RX.View style={ styles.containerAbout }>
                 <RX.View style={ styles.logo }>
-                    <RX.Image
-                        resizeMode={ 'contain' }
-                        style={{ width: 60, height: 60 }}
-                        source={ logo as string }
+                    <IconSvg
+                        source= { require('../resources/svg/logo.json') as SvgFile }
+                        height={ 52 }
+                        width={ 52 }
+                        fillColor={ LOGO_FILL }
                     />
                 </RX.View>
                 <RX.Text
