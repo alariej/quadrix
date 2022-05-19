@@ -4,8 +4,8 @@
     <item
         android:drawable="@color/theme_background"/>
     <item
-        android:width="48dp"
-        android:height="48dp"
+        android:width="64dp"
+        android:height="64dp"
         android:gravity="center"
-        android:drawable="@drawable/icon_white"/>
+        android:drawable="@drawable/icon_theme"/>
 </layer-list>

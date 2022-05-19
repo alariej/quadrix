@@ -30,7 +30,7 @@
   >
     <meta-data
       android:name="com.google.firebase.messaging.default_notification_icon"
-      android:resource="@drawable/icon_white"
+      android:resource="@drawable/icon_notification"
     />
     <activity
       android:name=".MainActivity"
