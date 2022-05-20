@@ -386,7 +386,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 
                         messageTypeIcon = (
                             <IconSvg
-                                source= { require('../resources/svg/video.json') as SvgFile }
+                                source= { require('../resources/svg/video_camera.json') as SvgFile }
                                 style={ { marginRight: SPACING } }
                                 fillColor={ ICON_INFO_FILL }
                                 height={ 16 }
