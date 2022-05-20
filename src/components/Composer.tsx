@@ -757,10 +757,10 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     activeOpacity={ 1 }
                 >
                     <IconSvg
-                        source= { require('../resources/svg/video.json') as SvgFile }
+                        source= { require('../resources/svg/video_camera_composer.json') as SvgFile }
                         fillColor={ BUTTON_FILL }
-                        height={ 20 }
-                        width={ 20 }
+                        height={ 17 }
+                        width={ 17 }
                         style={ { marginLeft: 3 }}
                     />
                 </RX.Button>
@@ -773,10 +773,10 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     activeOpacity={ 1 }
                 >
                     <IconSvg
-                        source= { require('../resources/svg/plus.json') as SvgFile }
+                        source= { require('../resources/svg/plus_composer.json') as SvgFile }
                         fillColor={ BUTTON_FILL }
-                        height={ 18 }
-                        width={ 18 }
+                        height={ 17 }
+                        width={ 17 }
                     />
                 </RX.Button>
                 <RX.Button
@@ -791,8 +791,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     <IconSvg
                         source= { require('../resources/svg/smiley.json') as SvgFile }
                         fillColor={ BUTTON_FILL }
-                        height={ 18 }
-                        width={ 18 }
+                        height={ 17 }
+                        width={ 17 }
                         style={ { marginRight: 3 }}
                     />
                 </RX.Button>
@@ -830,8 +830,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     <IconSvg
                         source= { require('../resources/svg/send.json') as SvgFile }
                         fillColor={ BUTTON_FILL }
-                        height={ 18 }
-                        width={ 18 }
+                        height={ 17 }
+                        width={ 17 }
                     />
                 </RX.Button>
                 { progressDialog }
