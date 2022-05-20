@@ -98,7 +98,7 @@ export default class VideoMessage extends RX.Component<VideoMessageProps, RX.Sta
                     />
                     <RX.View style={ styles.playIcon }>
                         <IconSvg
-                            source={ require('../resources/svg/send.json') as SvgFile }
+                            source={ require('../resources/svg/play.json') as SvgFile }
                             fillColor={ TILE_BACKGROUND }
                             height={ 72 }
                             width={ 72 }
@@ -111,7 +111,7 @@ export default class VideoMessage extends RX.Component<VideoMessageProps, RX.Sta
                 <RX.View style={ [styles.imageContainer, { backgroundColor: STATUSBAR_BACKGROUND }] }>
                     <RX.View style={ styles.playIcon }>
                         <IconSvg
-                            source={ require('../resources/svg/send.json') as SvgFile }
+                            source={ require('../resources/svg/play.json') as SvgFile }
                             fillColor={ TILE_BACKGROUND }
                             height={ 72 }
                             width={ 72 }
