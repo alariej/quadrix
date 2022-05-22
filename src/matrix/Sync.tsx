@@ -197,8 +197,10 @@ class Sync {
             })
             .catch((error: ErrorResponse_) => {
 
-                UiStore.setOffline(true);
-                this.serverOffline = true;
+                if (error.body) {
+                    UiStore.setOffline(true);
+                    this.serverOffline = true;
+                }
 
                 DataStore.setSyncComplete(true);
 
