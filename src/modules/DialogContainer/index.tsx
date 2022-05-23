@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { BUTTON_MODAL_TEXT, BUTTON_MODAL_BACKGROUND, MODAL_CONTENT_BACKGROUND, OPAQUE_BACKGROUND, MODAL_DISABLED_TEXT, BORDER_RADIUS,
-    BUTTON_HEIGHT, FONT_LARGE, DIALOG_WIDTH, SPACING, OBJECT_MARGIN } from '../../ui';
+    BUTTON_HEIGHT, FONT_LARGE, DIALOG_WIDTH, SPACING, OBJECT_MARGIN, BUTTON_DISABLED_TEXT } from '../../ui';
 import UiStore from '../../stores/UiStore';
 import { cancel } from '../../translations';
 import AppFont from '../../modules/AppFont';
@@ -130,9 +130,10 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
                     style={ styles.button }
                     onPress={ this.onConfirmButtonClick }
                     disabledOpacity={ 1 }
-                    disableTouchOpacityAnimation={ true }
+                    disableTouchOpacityAnimation={ false }
+                    underlayColor={ BUTTON_DISABLED_TEXT }
+                    activeOpacity={ 0.8 }
                     disabled={ this.props.confirmDisabled }
-                    activeOpacity={ 1 }
                 >
                     <RX.Text allowFontScaling={ false } style={ [styles.buttonText, disabledStyle] }>
                         { this.props.confirmButtonText || 'OK' }
@@ -147,8 +148,9 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
                 <RX.Button
                     style={ this.props.buttonStyle || styles.button }
                     onPress={ this.onCancelButtonClick }
-                    disableTouchOpacityAnimation={ true }
-                    activeOpacity={ 1 }
+                    disableTouchOpacityAnimation={ false }
+                    underlayColor={ BUTTON_DISABLED_TEXT }
+                    activeOpacity={ 0.8 }
                 >
                     <RX.Text allowFontScaling={ false } style={ this.props.buttonTextStyle || styles.buttonText }>
                         { this.props.cancelButtonText || cancel[UiStore.getLanguage()] }

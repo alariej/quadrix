@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { APP_ID } from '../appconfig';
-import { EMOJI_TEXT, INPUT_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, BUTTON_ROUND_WIDTH, BUTTON_FILL,
+import { EMOJI_TEXT, INPUT_TEXT, BORDER_RADIUS, SPACING, FONT_LARGE, BUTTON_FILL,
     BUTTON_COMPOSER_WIDTH, OPAQUE_BACKGROUND, COMPOSER_BORDER, DIALOG_WIDTH, MODAL_CONTENT_BACKGROUND, FONT_EMOJI_LARGE,
     BUTTON_HEIGHT, OBJECT_MARGIN, TILE_BACKGROUND } from '../ui';
 import FileHandler from '../modules/FileHandler';
@@ -51,14 +51,17 @@ const styles = {
         minHeight: BUTTON_COMPOSER_WIDTH,
     }),
     button: RX.Styles.createViewStyle({
+        borderRadius: BUTTON_COMPOSER_WIDTH / 2,
         width: BUTTON_COMPOSER_WIDTH,
         height: BUTTON_COMPOSER_WIDTH,
         justifyContent: 'center',
         alignItems: 'center',
     }),
     buttonSend: RX.Styles.createViewStyle({
-        width: BUTTON_ROUND_WIDTH + SPACING / 2,
+        borderRadius: BUTTON_COMPOSER_WIDTH / 2,
+        width: BUTTON_COMPOSER_WIDTH,
         height: BUTTON_COMPOSER_WIDTH,
+        marginRight: SPACING / 2,
         justifyContent: 'center',
         alignItems: 'center',
     }),
@@ -108,7 +111,6 @@ const styles = {
         overflow: 'hidden',
         borderRadius: BORDER_RADIUS - 2,
     }),
-
     image: RX.Styles.createImageStyle({
         flex: 1,
         borderRadius: BORDER_RADIUS - 2,
@@ -746,7 +748,9 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                 <RX.Button
                     style={ styles.button }
                     onPress={ this.startJitsiMeet }
-                    disableTouchOpacityAnimation={ true }
+                    disableTouchOpacityAnimation={ false }
+                    underlayColor={ BUTTON_FILL }
+                    activeOpacity={ 0.8 }
                     disabled={
                         this.state.offline
                         || this.state.jitsiActive
@@ -754,23 +758,22 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                         || !this.props.roomActive
                     }
                     disabledOpacity={ disabledOpacity }
-                    activeOpacity={ 1 }
                 >
                     <IconSvg
                         source= { require('../resources/svg/video_camera_composer.json') as SvgFile }
                         fillColor={ BUTTON_FILL }
                         height={ 17 }
                         width={ 17 }
-                        style={ { marginLeft: 3 }}
                     />
                 </RX.Button>
                 <RX.Button
                     style={ styles.button }
                     onPress={ this.onPressAttachmentButton }
-                    disableTouchOpacityAnimation={ true }
+                    disableTouchOpacityAnimation={ false }
+                    underlayColor={ BUTTON_FILL }
+                    activeOpacity={ 0.8 }
                     disabled={ this.state.offline || !this.props.roomActive }
                     disabledOpacity={ disabledOpacity }
-                    activeOpacity={ 1 }
                 >
                     <IconSvg
                         source= { require('../resources/svg/plus_composer.json') as SvgFile }
@@ -783,17 +786,17 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     style={ styles.button }
                     ref={ component => this.buttonComponent = component! }
                     onPressIn={ this.toggleEmojiPicker }
-                    disableTouchOpacityAnimation={ true }
+                    disableTouchOpacityAnimation={ false }
+                    underlayColor={ BUTTON_FILL }
+                    activeOpacity={ 0.8 }
                     disabled={ !this.props.roomActive }
                     disabledOpacity={ disabledOpacity }
-                    activeOpacity={ 1 }
                 >
                     <IconSvg
                         source= { require('../resources/svg/smiley.json') as SvgFile }
                         fillColor={ BUTTON_FILL }
                         height={ 17 }
                         width={ 17 }
-                        style={ { marginRight: 3 }}
                     />
                 </RX.Button>
                 <RX.View style={ styles.textInputContainer }>
@@ -822,10 +825,11 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
                     style={ styles.buttonSend }
                     title={ clickHereOrPressShftEnter[this.language] }
                     onPress={ this.onPressSendButton }
-                    disableTouchOpacityAnimation={ true }
+                    disableTouchOpacityAnimation={ false }
+                    underlayColor={ BUTTON_FILL }
+                    activeOpacity={ 0.8 }
                     disabled={ this.state.offline || !this.props.roomActive || this.state.sendDisabled }
                     disabledOpacity={ disabledOpacity }
-                    activeOpacity={ 1 }
                 >
                     <IconSvg
                         source= { require('../resources/svg/send.json') as SvgFile }

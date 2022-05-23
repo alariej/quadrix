@@ -23,6 +23,7 @@ const styles = {
         position: 'absolute',
         top: HEADER_HEIGHT + SPACING + 12,
         right: 12,
+        borderRadius: BUTTON_ROUND_WIDTH / 2,
         width: BUTTON_ROUND_WIDTH,
         height: BUTTON_ROUND_WIDTH,
         backgroundColor: TRANSPARENT_BACKGROUND,
@@ -155,8 +156,9 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
                 <RX.Button
                     style={ styles.arrowButton }
                     onPress={ this.onPressArrowButton }
-                    disableTouchOpacityAnimation={ true }
-                    activeOpacity={ 1 }
+                    disableTouchOpacityAnimation={ false }
+                    underlayColor={ iconColor }
+                    activeOpacity={ 0.8 }
                 >
                     <IconSvg
                         source= { require('../resources/svg/arrow.json') as SvgFile }

@@ -47,6 +47,7 @@ const styles = {
         position: 'absolute',
         top: 12,
         right: 12,
+        borderRadius: BUTTON_ROUND_WIDTH / 2,
         width: BUTTON_ROUND_WIDTH,
         height: BUTTON_ROUND_WIDTH,
         backgroundColor: TRANSPARENT_BACKGROUND,
@@ -58,6 +59,7 @@ const styles = {
         position: 'absolute',
         bottom: 12,
         right: 12,
+        borderRadius: BUTTON_ROUND_WIDTH / 2,
         width: BUTTON_ROUND_WIDTH,
         height: BUTTON_ROUND_WIDTH,
         backgroundColor: TRANSPARENT_BACKGROUND,
@@ -673,8 +675,9 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
                 <RX.Button
                     style={ styles.arrowButton }
                     onPress={ this.onPressArrowButton }
-                    disableTouchOpacityAnimation={ true }
-                    activeOpacity={ 1 }
+                    disableTouchOpacityAnimation={ false }
+                    underlayColor={ iconColor }
+                    activeOpacity={ 0.8 }
                 >
                     <IconSvg
                         source= { require('../resources/svg/arrow.json') as SvgFile }
@@ -695,8 +698,9 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
                 <RX.Button
                     style={ styles.moreButton }
                     onPress={ this.onPressMoreButton }
-                    disableTouchOpacityAnimation={ true }
-                    activeOpacity={ 1 }
+                    disableTouchOpacityAnimation={ false }
+                    underlayColor={ BUTTON_FILL }
+                    activeOpacity={ 0.8 }
                     disabled={ this.state.offline }
                     disabledOpacity={ 0.15 }
                 >
