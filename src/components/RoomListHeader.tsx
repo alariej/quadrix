@@ -4,7 +4,7 @@ import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
 import { TILE_SYSTEM_TEXT, MODAL_CONTENT_TEXT, LINK_TEXT, HEADER_HEIGHT, FONT_NORMAL,
     BUTTON_ROUND_WIDTH, FONT_LARGE, SPACING, ICON_REDUCTION_FACTOR, BUTTON_FILL, TRANSPARENT_BACKGROUND,
-    HEADER_STATUS, PAGE_MARGIN, OPAQUE_BACKGROUND, LOGO_FILL } from '../ui';
+    HEADER_STATUS, PAGE_MARGIN, LOGO_FILL, MODAL_CONTENT_BACKGROUND, OPAQUE_BACKGROUND } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogNewRoom from '../dialogs/DialogNewRoom';
 import DialogContainer from '../modules/DialogContainer';
@@ -123,10 +123,10 @@ const styles = {
         marginVertical: 12,
         paddingHorizontal: SPACING * 3,
         borderRadius: 22 / 2,
-        backgroundColor: 'white',
+        backgroundColor: MODAL_CONTENT_BACKGROUND,
         shadowOffset: { width: 1, height: 1 },
         shadowColor: OPAQUE_BACKGROUND,
-        shadowRadius: 2,
+        shadowRadius: 3,
         elevation: 2,
         shadowOpacity: 0.67,
         overflow: 'visible',
