@@ -47,6 +47,7 @@ export const APP_BACKGROUND = '#EDEDED';
 export const STATUSBAR_BACKGROUND = 'lightgrey';
 export const OPAQUE_BACKGROUND = 'rgba(0, 0, 0, 0.7)';
 export const OPAQUE_LIGHT_BACKGROUND = 'rgba(0, 0, 0, 0.3)';
+export const OPAQUE_VLIGHT_BACKGROUND = 'rgba(0, 0, 0, 0.12)';
 export const OPAQUE_DARK_BACKGROUND = 'rgba(0, 0, 0, 0.85)';
 export const OPAQUE_DUMMY_BACKGROUND = 'rgba(0, 0, 0, 0.0)';
 export const TRANSPARENT_BACKGROUND = 'transparent';

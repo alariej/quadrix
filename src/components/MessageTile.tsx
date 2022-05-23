@@ -1,7 +1,8 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { TILE_BACKGROUND, FOOTER_TEXT, BORDER_RADIUS, SPACING, FONT_NORMAL, TILE_SYSTEM_TEXT, BUTTON_ROUND_WIDTH,
-    TRANSPARENT_BACKGROUND, MARKER_READ_FILL, MARKER_SENT_FILL, TILE_BACKGROUND_OWN, PAGE_MARGIN } from '../ui';
+    TRANSPARENT_BACKGROUND, MARKER_READ_FILL, MARKER_SENT_FILL, TILE_BACKGROUND_OWN, PAGE_MARGIN,
+    OPAQUE_VLIGHT_BACKGROUND, APP_BACKGROUND } from '../ui';
 import ImageMessage from './ImageMessage';
 import FileMessage from './FileMessage';
 import TextMessage from './TextMessage';
@@ -30,7 +31,12 @@ const styles = {
         marginBottom: SPACING,
         padding: SPACING,
         minWidth: 84,
-        overflow: 'visible'
+        overflow: 'visible',
+        shadowOffset: { width: 0, height: 1 },
+        shadowColor: OPAQUE_VLIGHT_BACKGROUND,
+        shadowRadius: 1,
+        elevation: 1,
+        shadowOpacity: 1,
     }),
     containerMessage: RX.Styles.createViewStyle({
         flex: 1,
@@ -79,6 +85,17 @@ const styles = {
         minHeight: FONT_NORMAL + 7,
         color: TILE_SYSTEM_TEXT,
     }),
+    containerCorner: RX.Styles.createViewStyle({
+        position: 'absolute',
+        bottom: 0,
+        height: 1,
+        backgroundColor: APP_BACKGROUND,
+        shadowOffset: { width: 0, height: 1 },
+        shadowColor: OPAQUE_VLIGHT_BACKGROUND,
+        shadowRadius: 1,
+        elevation: 1,
+        shadowOpacity: 1,
+    })
 };
 
 interface MessageTileProps {
@@ -236,11 +253,24 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
             backgroundColor = isOwnMessage ? TILE_BACKGROUND_OWN : TILE_BACKGROUND;
         }
 
+        let borderBottomLeftRadius;
+        let borderBottomRightRadius;
+
+        if (['direct', 'group'].includes(this.props.roomType)) {
+            borderBottomLeftRadius = isOwnMessage ? 0 : BORDER_RADIUS,
+            borderBottomRightRadius = isOwnMessage ? BORDER_RADIUS : 0;
+        } else {
+            borderBottomLeftRadius = BORDER_RADIUS;
+            borderBottomRightRadius = BORDER_RADIUS;
+        }
+
         this.tileStyle = RX.Styles.createViewStyle({
             marginLeft: marginLeft,
             marginRight: marginRight,
             alignSelf: this.props.withSenderDetails? undefined : alignSelf,
             backgroundColor: backgroundColor,
+            borderBottomLeftRadius: borderBottomLeftRadius,
+            borderBottomRightRadius: borderBottomRightRadius,
         }, false);
 
         const timestamp = format(this.props.event.time, 'HH:mm');
@@ -341,30 +371,30 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
         let cornerPointer: ReactElement | undefined;
 
         if (['direct', 'group'].includes(this.props.roomType)) {
+            const cornerWidth = 18;
+            const cornerHeight = cornerWidth * 71.49 / 100;
             cornerPointer = (
                 <RX.View
-                    style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        left: isOwnMessage ? -20 : undefined,
-                        right: isOwnMessage ? undefined : -20,
-                        height: 20,
-                        width: 20 + BORDER_RADIUS,
-                        overflow: 'hidden',
-                    }}
+                    style={[
+                        styles.containerCorner,
+                        {
+                            left: isOwnMessage ? - cornerWidth / 2 : undefined,
+                            right: isOwnMessage ? undefined : - cornerWidth / 2,
+                            width: cornerWidth / 2,
+                        }
+                    ]}
                 >
-                    <RX.View
+                    <IconSvg
                         style={{
                             position: 'absolute',
-                            bottom: -28,
-                            left: isOwnMessage ? -120 / 2 : undefined,
-                            right: isOwnMessage ? undefined : -120 / 2,
-                            height: 100,
-                            width: 100,
-                            borderRadius: 100 / 2,
-                            borderWidth: 20,
-                            borderColor: isOwnMessage ? TILE_BACKGROUND_OWN : TILE_BACKGROUND,
+                            bottom: 0,
+                            left: isOwnMessage ? 0 : undefined,
+                            right: isOwnMessage ? undefined : 0,
                         }}
+                        source= { require('../resources/svg/corner.json') as SvgFile }
+                        fillColor={ isOwnMessage ? TILE_BACKGROUND_OWN : TILE_BACKGROUND }
+                        height={ cornerHeight }
+                        width={ cornerWidth }
                     />
                 </RX.View>
             )
