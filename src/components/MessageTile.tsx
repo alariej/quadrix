@@ -95,6 +95,7 @@ const styles = {
         shadowRadius: 1,
         elevation: 1,
         shadowOpacity: 1,
+        overflow: 'visible'
     })
 };
 
