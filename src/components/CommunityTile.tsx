@@ -15,7 +15,7 @@ const styles = {
         flexDirection: 'row',
         height: TILE_HEIGHT_COMMUNITY,
         width: TILE_WIDTH,
-        marginBottom: SPACING,
+        marginBottom: 1,
         borderRadius: BORDER_RADIUS,
         backgroundColor: TILE_BACKGROUND,
         alignItems: 'center',
