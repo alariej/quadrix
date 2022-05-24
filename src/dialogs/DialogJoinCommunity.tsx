@@ -4,7 +4,7 @@ import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
 import CommunityTile from '../components/CommunityTile';
 import { MODAL_CONTENT_TEXT, OPAQUE_BACKGROUND, BORDER_RADIUS, TILE_WIDTH, SPACING, FONT_LARGE, CONTAINER_PADDING,
-    BUTTON_HEIGHT, PLACEHOLDER_TEXT, OBJECT_MARGIN } from '../ui';
+    BUTTON_HEIGHT, PLACEHOLDER_TEXT, OBJECT_MARGIN, TILE_HEIGHT_COMMUNITY } from '../ui';
 import { theSearchDidNotReturn, theSearchTakesTooLong, cancel, theSearchReturnedError, theCommunity, pressOKToJoin, search, communityName,
     serverName, waitSearch, Languages } from '../translations';
 import UiStore from '../stores/UiStore';
@@ -36,6 +36,7 @@ const styles = {
         backgroundColor: OPAQUE_BACKGROUND,
     }),
     modalView: RX.Styles.createViewStyle({
+        flex: 1,
         alignSelf: 'center',
         justifyContent: 'center',
         width: TILE_WIDTH,
@@ -204,7 +205,10 @@ export default class DialogJoinCommunity extends RX.Component<DialogJoinCommunit
                 disableTouchOpacityAnimation={ true }
             >
                 <RX.View
-                    style={ styles.modalView }
+                    style={ [
+                        styles.modalView,
+                        { maxHeight: (TILE_HEIGHT_COMMUNITY + 1) * (roomTiles.length) }
+                    ] }
                     onPress={ (event: RX.Types.SyntheticEvent) => event.stopPropagation() }
                     disableTouchOpacityAnimation={ true }
                     activeOpacity={ 1 }
