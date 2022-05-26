@@ -4,8 +4,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
-const { app, BrowserWindow, Menu, ipcMain, dialog, screen, MenuItem } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain, dialog, screen, MenuItem, protocol } = require('electron');
 const path = require('path');
+
+protocol.registerSchemesAsPrivileged([{
+    scheme: 'app', privileges: { standard: true, secure: true, supportFetchAPI: true },
+}]);
 
 const disableSpellcheck = {
     en: 'Disable spell checking',
@@ -73,8 +77,8 @@ if (!hasLock) {
             backgroundColor: '#fff',
             icon: path.join(__dirname, 'build-web', iconFile),
             webPreferences: {
-                nodeIntegration: true, // not used in electron v12+
-                contextIsolation: false, // required in electron v12+
+                nodeIntegration: true,
+                contextIsolation: false,
                 enableRemoteModule: true,
                 spellcheck: true
             }
@@ -206,7 +210,18 @@ if (!hasLock) {
             menu.popup()
         });
 
-        mainWindow.loadFile('build-web/index.html').catch(_error => null);
+        protocol.registerFileProtocol('app', (request, callback) => {
+
+            const url = request.url.substr(6);
+            const appPath = path.normalize(`${__dirname}/${url}`);
+
+            callback({ path: appPath });
+        })
+
+        mainWindow.loadURL('app://build-web/index.html').catch(_error => null);
+
+        // mainWindow.loadFile(path.join(__dirname, 'build-web', 'index.html')).catch(_error => null);
+        // mainWindow.loadFile('build-web/index.html').catch(_error => null);
         // mainWindow.loadURL('http://localhost:9999').catch(_error => null);
         // mainWindow.webContents.openDevTools()
 
