@@ -265,7 +265,11 @@ if (!hasLock) {
             appLanguage = appLocale.slice(0, 2);
             if (!['en', 'de', 'fr'].includes(appLanguage)) { appLanguage = 'en' }
 
-            mainWindow.webContents.session.setSpellCheckerLanguages([appLocale])
+            mainWindow.webContents.session.setSpellCheckerLanguages([appLocale]);
+
+            mainWindow.webContents.session.setPermissionRequestHandler((webContents, permission, callback) => {
+                return callback(true)
+            });
         })
         .catch(_error => null);
 
