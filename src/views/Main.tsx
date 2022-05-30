@@ -3,8 +3,8 @@ import RX, { Types } from 'reactxp';
 import RoomList from './RoomList';
 import Room from './Room';
 import { PAGE_MARGIN, MODAL_CONTENT_TEXT, FONT_LARGE, COMPOSER_BORDER,
-    PAGE_WIDE_PADDING, OBJECT_MARGIN, TRANSPARENT_BACKGROUND, HEADER_HEIGHT,
-    STATUSBAR_BACKGROUND } from '../ui';
+    PAGE_WIDE_PADDING, TRANSPARENT_BACKGROUND, HEADER_HEIGHT,
+    STATUSBAR_BACKGROUND, APP_BACKGROUND} from '../ui';
 import DataStore from '../stores/DataStore';
 import { MessageEvent } from '../models/MessageEvent';
 import ApiClient from '../matrix/ApiClient';
@@ -17,6 +17,7 @@ import { ComponentBase } from 'resub';
 import Pushers from '../modules/Pushers';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import AppFont from '../modules/AppFont';
+import IconSvg, { SvgFile } from '../components/IconSvg';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -30,6 +31,7 @@ const styles = {
     }),
     containerRoomList: RX.Styles.createViewStyle({
         marginRight: PAGE_MARGIN,
+        overflow: 'visible'
     }),
     containerRoom: RX.Styles.createViewStyle({
         marginLeft: PAGE_MARGIN,
@@ -54,8 +56,6 @@ const styles = {
         position: 'absolute',
         top: HEADER_HEIGHT,
         bottom: 0,
-        right: 0,
-        padding: OBJECT_MARGIN * 2,
         alignItems: 'center',
         justifyContent: 'center',
     }),
@@ -84,6 +84,8 @@ export default class Main extends ComponentBase<MainProps, MainState> {
     private appLayoutSubscription: number;
     private appOfflineSubscription: number;
     private isOffline: boolean;
+    private backgroundSize: number;
+    private svgArray: ReactElement[] = [];
 
     constructor(props: MainProps) {
         super(props);
@@ -99,6 +101,34 @@ export default class Main extends ComponentBase<MainProps, MainState> {
                 showLogin={ this.props.showLogin }
             />
         );
+
+        this.backgroundSize = 412;
+        for (let index = 0; index < 1500; index++) {
+
+            const logoSize = 12;
+            const r1 = Math.random();
+            const r2 = Math.random();
+            const r3 = Math.random();
+            const rotation = Math.round(360 * r3) + 'deg';
+
+            const iconStyle = RX.Styles.createViewStyle({
+                position: 'absolute',
+                left: r1 * this.backgroundSize - logoSize / 2,
+                top: r2 * this.backgroundSize - logoSize / 2,
+                transform: [{ rotate: rotation }]
+            }, false);
+
+            const svgElement = (
+                <IconSvg
+                    source= { require('../resources/svg/logo.json') as SvgFile }
+                    height={ logoSize }
+                    width={ logoSize }
+                    fillColor={ 'white' }
+                    style={ iconStyle }
+                />
+            )
+            this.svgArray.push(svgElement);
+        }
     }
 
     private changeAppLayout = () => {
@@ -388,8 +418,26 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
         if (!this.state.layout) { return null; }
 
+        const backgroundPadding = this.state.layout.type === 'wide' ? PAGE_WIDE_PADDING * 2 : 0;
+        const offset = this.state.layout.pageWidth - PAGE_MARGIN + backgroundPadding / 2;
+
+        const backgroundImage = (
+            <RX.View style={ [styles.background, { left: offset - this.backgroundSize / 2 }] }>
+                <RX.View style={{ overflow: 'hidden' }}>
+                    { this.svgArray }
+                    <IconSvg
+                        source= { require('../resources/svg/matrix.json') as SvgFile }
+                        height={ this.backgroundSize }
+                        width={ this.backgroundSize }
+                        fillColor={ APP_BACKGROUND }
+                    />
+                </RX.View>
+            </RX.View>
+        );
+
         const roomListPage = (
             <RX.View style={ [styles.containerRoomList, { width: this.state.layout.pageWidth - PAGE_MARGIN * 2 }] }>
+                { backgroundImage }
                 { this.roomList }
             </RX.View>
         );
