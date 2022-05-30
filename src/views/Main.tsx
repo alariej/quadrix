@@ -4,7 +4,7 @@ import RoomList from './RoomList';
 import Room from './Room';
 import { PAGE_MARGIN, MODAL_CONTENT_TEXT, FONT_LARGE, COMPOSER_BORDER,
     PAGE_WIDE_PADDING, TRANSPARENT_BACKGROUND, HEADER_HEIGHT,
-    STATUSBAR_BACKGROUND, APP_BACKGROUND} from '../ui';
+    STATUSBAR_BACKGROUND } from '../ui';
 import DataStore from '../stores/DataStore';
 import { MessageEvent } from '../models/MessageEvent';
 import ApiClient from '../matrix/ApiClient';
@@ -84,8 +84,6 @@ export default class Main extends ComponentBase<MainProps, MainState> {
     private appLayoutSubscription: number;
     private appOfflineSubscription: number;
     private isOffline: boolean;
-    private backgroundSize: number;
-    private svgArray: ReactElement[] = [];
 
     constructor(props: MainProps) {
         super(props);
@@ -101,34 +99,6 @@ export default class Main extends ComponentBase<MainProps, MainState> {
                 showLogin={ this.props.showLogin }
             />
         );
-
-        this.backgroundSize = 320;
-        for (let index = 0; index < 300; index++) {
-
-            const logoSize = 24;
-            const r1 = Math.random();
-            const r2 = Math.random();
-            const r3 = Math.random();
-            const rotation = Math.round(90 * r3) - 45 + 'deg';
-
-            const iconStyle = RX.Styles.createViewStyle({
-                position: 'absolute',
-                left: r1 * this.backgroundSize - logoSize / 2,
-                top: r2 * this.backgroundSize - logoSize / 2,
-                transform: [{ rotate: rotation }]
-            }, false);
-
-            const svgElement = (
-                <IconSvg
-                    source= { require('../resources/svg/matrix.json') as SvgFile }
-                    height={ logoSize }
-                    width={ logoSize }
-                    fillColor={ 'white' }
-                    style={ iconStyle }
-                />
-            )
-            this.svgArray.push(svgElement);
-        }
     }
 
     private changeAppLayout = () => {
@@ -418,20 +388,18 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
         if (!this.state.layout) { return null; }
 
+        const backgroundSize = 240;
         const backgroundPadding = this.state.layout.type === 'wide' ? PAGE_WIDE_PADDING * 2 : 0;
         const offset = 1.5 * this.state.layout.pageWidth - PAGE_MARGIN + backgroundPadding;
 
         const backgroundImage = (
-            <RX.View style={ [styles.background, { left: offset - this.backgroundSize / 2 }] }>
-                <RX.View style={{ overflow: 'hidden' }}>
-                    { this.svgArray }
-                    <IconSvg
-                        source= { require('../resources/svg/logo_negative.json') as SvgFile }
-                        height={ this.backgroundSize }
-                        width={ this.backgroundSize }
-                        fillColor={ APP_BACKGROUND }
-                    />
-                </RX.View>
+            <RX.View style={ [styles.background, { left: offset - backgroundSize / 2 }] }>
+                <IconSvg
+                    source= { require('../resources/svg/matrix.json') as SvgFile }
+                    height={ backgroundSize }
+                    width={ backgroundSize }
+                    fillColor={ 'whitesmoke' }
+                />
             </RX.View>
         );
 
