@@ -4,7 +4,7 @@ import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
 import { TILE_SYSTEM_TEXT, MODAL_CONTENT_TEXT, LINK_TEXT, HEADER_HEIGHT, FONT_NORMAL,
     BUTTON_ROUND_WIDTH, FONT_LARGE, SPACING, ICON_REDUCTION_FACTOR, BUTTON_FILL, TRANSPARENT_BACKGROUND,
-    HEADER_STATUS, PAGE_MARGIN, LOGO_FILL, MODAL_CONTENT_BACKGROUND, OPAQUE_BACKGROUND } from '../ui';
+    HEADER_STATUS, PAGE_MARGIN, LOGO_FILL, APP_BACKGROUND } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogNewRoom from '../dialogs/DialogNewRoom';
 import DialogContainer from '../modules/DialogContainer';
@@ -16,6 +16,7 @@ import { APP_VERSION, APP_WEBSITE, TERMS_URL, GIT_REPO_URL, GITHUB_SPONSOR_URL }
 import Pushers from '../modules/Pushers';
 import AppFont from '../modules/AppFont';
 import FileHandler from '../modules/FileHandler';
+import Shadow from '../modules/Shadow';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -117,19 +118,25 @@ const styles = {
         flex: 1,
         marginVertical: 12,
     }),
+    sponsorText: RX.Styles.createTextStyle({
+        fontFamily: AppFont.fontFamily,
+        fontSize: FONT_NORMAL,
+        textAlign: 'center',
+        color: MODAL_CONTENT_TEXT,
+    }),
     sponsorButton: RX.Styles.createViewStyle({
         flex: 1,
         height: 22,
         marginVertical: 12,
         paddingHorizontal: SPACING * 3,
         borderRadius: 22 / 2,
-        backgroundColor: MODAL_CONTENT_BACKGROUND,
-        shadowOffset: { width: 1, height: 1 },
-        shadowColor: OPAQUE_BACKGROUND,
-        shadowRadius: 3,
-        elevation: 2,
-        shadowOpacity: 0.67,
+        backgroundColor: APP_BACKGROUND,
         overflow: 'visible',
+        shadowOffset: Shadow.medium.offset,
+        shadowColor: Shadow.medium.color,
+        shadowRadius: Shadow.medium.radius,
+        elevation: Shadow.medium.elevation,
+        shadowOpacity: Shadow.medium.opacity,
     })
 };
 
@@ -260,7 +267,10 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
                     style={ styles.sponsorButton }
                     onPress={ event => this.openUrl(GITHUB_SPONSOR_URL, event) }
                 >
-                    <RX.Text>
+                    <RX.Text
+                        allowFontScaling={ false }
+                        style={ styles.sponsorText }
+                    >
                         💙  Sponsor
                     </RX.Text>
                 </RX.Button>

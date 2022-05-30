@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { TILE_BACKGROUND, FOOTER_TEXT, BORDER_RADIUS, SPACING, FONT_NORMAL, TILE_SYSTEM_TEXT, BUTTON_ROUND_WIDTH,
     TRANSPARENT_BACKGROUND, MARKER_READ_FILL, MARKER_SENT_FILL, TILE_BACKGROUND_OWN, PAGE_MARGIN,
-    OPAQUE_VLIGHT_BACKGROUND, APP_BACKGROUND } from '../ui';
+    APP_BACKGROUND } from '../ui';
 import ImageMessage from './ImageMessage';
 import FileMessage from './FileMessage';
 import TextMessage from './TextMessage';
@@ -19,6 +19,7 @@ import AppFont from '../modules/AppFont';
 import VideoMessage from './VideoMessage';
 import DataStore from '../stores/DataStore';
 import ReplyMessage from './ReplyMessage';
+import Shadow from '../modules/Shadow';
 
 const styles = {
     container: RX.Styles.createViewStyle({
@@ -32,11 +33,11 @@ const styles = {
         padding: SPACING,
         minWidth: 84,
         overflow: 'visible',
-        shadowOffset: { width: 0, height: 1 },
-        shadowColor: OPAQUE_VLIGHT_BACKGROUND,
-        shadowRadius: 1,
-        elevation: 1,
-        shadowOpacity: 1,
+        shadowOffset: Shadow.small.offset,
+        shadowColor: Shadow.small.color,
+        shadowRadius: Shadow.small.radius,
+        elevation: Shadow.small.elevation,
+        shadowOpacity: Shadow.small.opacity,
     }),
     containerMessage: RX.Styles.createViewStyle({
         flex: 1,
@@ -90,12 +91,12 @@ const styles = {
         bottom: 0,
         height: 1,
         backgroundColor: APP_BACKGROUND,
-        shadowOffset: { width: 0, height: 1 },
-        shadowColor: OPAQUE_VLIGHT_BACKGROUND,
-        shadowRadius: 1,
-        elevation: 1,
-        shadowOpacity: 1,
-        overflow: 'visible'
+        overflow: 'visible',
+        shadowOffset: Shadow.small.offset,
+        shadowColor: Shadow.small.color,
+        shadowRadius: Shadow.small.radius,
+        elevation: Shadow.small.elevation,
+        shadowOpacity: Shadow.small.opacity,
     })
 };
 
