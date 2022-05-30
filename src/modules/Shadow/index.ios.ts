@@ -5,15 +5,15 @@ class Shadow {
         color: 'lightgrey',
         radius: 0,
         elevation: undefined,
-        opacity: undefined,
+        opacity: 1,
     }
 
     public medium = {
         offset: { width: 1, height: 1 },
-        color: 'silver',
+        color: 'grey',
         radius: 1,
         elevation: undefined,
-        opacity: undefined,
+        opacity: 1,
     }
 }
 
