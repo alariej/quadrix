@@ -102,14 +102,14 @@ export default class Main extends ComponentBase<MainProps, MainState> {
             />
         );
 
-        this.backgroundSize = 412;
-        for (let index = 0; index < 1500; index++) {
+        this.backgroundSize = 320;
+        for (let index = 0; index < 300; index++) {
 
-            const logoSize = 12;
+            const logoSize = 24;
             const r1 = Math.random();
             const r2 = Math.random();
             const r3 = Math.random();
-            const rotation = Math.round(360 * r3) + 'deg';
+            const rotation = Math.round(90 * r3) - 45 + 'deg';
 
             const iconStyle = RX.Styles.createViewStyle({
                 position: 'absolute',
@@ -120,7 +120,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
             const svgElement = (
                 <IconSvg
-                    source= { require('../resources/svg/logo.json') as SvgFile }
+                    source= { require('../resources/svg/matrix.json') as SvgFile }
                     height={ logoSize }
                     width={ logoSize }
                     fillColor={ 'white' }
@@ -419,14 +419,14 @@ export default class Main extends ComponentBase<MainProps, MainState> {
         if (!this.state.layout) { return null; }
 
         const backgroundPadding = this.state.layout.type === 'wide' ? PAGE_WIDE_PADDING * 2 : 0;
-        const offset = this.state.layout.pageWidth - PAGE_MARGIN + backgroundPadding / 2;
+        const offset = 1.5 * this.state.layout.pageWidth - PAGE_MARGIN + backgroundPadding;
 
         const backgroundImage = (
             <RX.View style={ [styles.background, { left: offset - this.backgroundSize / 2 }] }>
                 <RX.View style={{ overflow: 'hidden' }}>
                     { this.svgArray }
                     <IconSvg
-                        source= { require('../resources/svg/matrix.json') as SvgFile }
+                        source= { require('../resources/svg/logo_negative.json') as SvgFile }
                         height={ this.backgroundSize }
                         width={ this.backgroundSize }
                         fillColor={ APP_BACKGROUND }
