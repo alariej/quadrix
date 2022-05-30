@@ -126,10 +126,10 @@ const styles = {
     }),
     sponsorButton: RX.Styles.createViewStyle({
         flex: 1,
-        height: 22,
+        height: 24,
         marginVertical: 12,
-        paddingHorizontal: SPACING * 3,
-        borderRadius: 22 / 2,
+        paddingHorizontal: 12,
+        borderRadius: 24 / 2,
         backgroundColor: APP_BACKGROUND,
         overflow: 'visible',
         shadowOffset: Shadow.medium.offset,
