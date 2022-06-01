@@ -9,6 +9,7 @@
     "homepage": "https://quadrix.chat",
     "scripts": {
         "start:electron": "electron .",
+        "start:electron:wayland": "electron --ozone-platform=wayland .",
         "build:snap": "electron-builder --linux snap --config builder-linux.json",
         "build:snap:armhf": "electron-builder --linux snap --armv7l --config builder-linux.json",
         "build:snap:arm64": "node packager-snap.js",
