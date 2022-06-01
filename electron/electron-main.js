@@ -64,14 +64,16 @@ if (!hasLock) {
 
     const createWindow = () => {
 
-        const primaryDisplay = screen.getPrimaryDisplay()
-        const { width, height } = primaryDisplay.workAreaSize
+        const primaryDisplay = screen.getPrimaryDisplay();
+        const { width, height } = primaryDisplay.workAreaSize;
+
+        const isMobile = height > width;
 
         mainWindow = new BrowserWindow({
-            width: width < height ? width : Math.min(width, 1024),
-            height: width < height ? height : Math.min(height, 720),
+            width: isMobile ? undefined : 1024,
+            height: isMobile ? undefined : 720,
+            resizable: isMobile ? true : false,
             autoHideMenuBar: true,
-            resizable: false,
             frame: true,
             movable: true,
             backgroundColor: '#fff',
