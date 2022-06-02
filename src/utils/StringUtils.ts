@@ -50,12 +50,21 @@ class StringUtils {
 
         if (previewUrl) {
 
+            let ogImage = undefined;
+            let ogWidth = 0;
+            let ogHeight = 0;
+            if (previewUrl['og:image'] && previewUrl['og:image:width'] > 64 && previewUrl['og:image:height'] > 64) {
+                ogImage = this.mxcToHttp(previewUrl['og:image'], ApiClient.credentials.homeServer);
+                ogWidth = previewUrl['og:image:width'];
+                ogHeight = previewUrl['og:image:height'];
+            }
+
             previewData = {
                 url: linkifyElement.href,
                 text: linkifyElement.value,
-                image_url: this.mxcToHttp(previewUrl['og:image'], ApiClient.credentials.homeServer),
-                image_width: previewUrl['og:image:width'] || 0,
-                image_height: previewUrl['og:image:height'] || 0,
+                image_url: ogImage,
+                image_width: ogWidth,
+                image_height: ogHeight,
                 title: previewUrl['og:title'] || linkifyElement.value,
                 site_name: previewUrl['og:site_name'] || linkifyElement.value,
             }
