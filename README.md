@@ -46,6 +46,10 @@
     </a>
 </p>
 
+## Note for Mobile Linux Users
+
+- The arm64 flatpak build was tested on a PinePhone running Mobian/Phosh, and although it seems to generally work well, the onscreen keyboard doesn't pop up automatically and must be opened manually when editing text input fields
+
 ## Matrix Protocol Implementation
 
 - [x] Room directory (Linux version only)
