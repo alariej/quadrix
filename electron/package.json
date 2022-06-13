@@ -3,7 +3,7 @@
     "productName": "quadrix.chat",
     "private": true,
     "main": "electron-main.js",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Minimal, simple, multi-platform chat client for the Matrix protocol",
     "author": "Jean-François Alarie <alariej@quadrix.chat>",
     "homepage": "https://quadrix.chat",
@@ -22,7 +22,7 @@
         "build:exe": "electron-builder --win nsis --config builder-win.json"
     },
     "devDependencies": {
-        "electron": "19.0.1",
+        "electron": "19.0.4",
         "electron-builder": "23.0.3",
         "electron-packager": "15.5.1",
         "electron-packager-languages": "0.5.0"
