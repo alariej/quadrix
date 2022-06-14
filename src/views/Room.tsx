@@ -11,123 +11,110 @@ import { RoomPhase, RoomType } from '../models/MatrixApi';
 import SpinnerUtils from '../utils/SpinnerUtils';
 
 const styles = {
-    container: RX.Styles.createViewStyle({
-        flex: 1,
-    }),
+	container: RX.Styles.createViewStyle({
+		flex: 1,
+	}),
 };
 
 interface RoomState {
-    tempSentMessage: TemporaryMessage;
-    roomPhase: RoomPhase;
-    roomType: RoomType;
-    roomActive: boolean;
-    replyMessage: MessageEvent | undefined;
+	tempSentMessage: TemporaryMessage;
+	roomPhase: RoomPhase;
+	roomType: RoomType;
+	roomActive: boolean;
+	replyMessage: MessageEvent | undefined;
 }
 
 interface RoomProps extends RX.CommonProps {
-    roomId: string;
-    showLogin: () => void;
-    showRoomList: () => void;
-    showTempForwardedMessage: (roomId: string, message: MessageEvent, tempId: string) => void;
-    tempForwardedMessage?: { message: MessageEvent, tempId: string };
-    showJitsiMeet: (jitsiMeetId: string) => void;
+	roomId: string;
+	showLogin: () => void;
+	showRoomList: () => void;
+	showTempForwardedMessage: (roomId: string, message: MessageEvent, tempId: string) => void;
+	tempForwardedMessage?: { message: MessageEvent; tempId: string };
+	showJitsiMeet: (jitsiMeetId: string) => void;
 }
 
 export default class Room extends ComponentBase<RoomProps, RoomState> {
+	protected _buildState(nextProps: RoomProps): Partial<RoomState> {
+		const roomPhase = DataStore.getRoomPhase(nextProps.roomId);
+		const roomType = DataStore.getRoomType(nextProps.roomId);
 
-    protected _buildState(nextProps: RoomProps): Partial<RoomState> {
+		if ((!roomPhase || !roomType) && !SpinnerUtils.isDisplayed('roomspinner')) {
+			SpinnerUtils.showModalSpinner('roomspinner');
+		} else if (roomType && roomPhase && SpinnerUtils.isDisplayed('roomspinner')) {
+			SpinnerUtils.dismissModalSpinner('roomspinner');
+		}
 
-        const roomPhase = DataStore.getRoomPhase(nextProps.roomId);
-        const roomType = DataStore.getRoomType(nextProps.roomId);
+		if (roomPhase === 'join' && SpinnerUtils.isDisplayed('invitespinner')) {
+			SpinnerUtils.dismissModalSpinner('invitespinner');
+		}
 
-        if ((!roomPhase || !roomType) && !SpinnerUtils.isDisplayed('roomspinner')) {
+		return {
+			roomPhase: roomPhase,
+			roomType: roomType,
+			roomActive: DataStore.getRoomActive(nextProps.roomId),
+		};
+	}
 
-            SpinnerUtils.showModalSpinner('roomspinner');
+	private showTempSentMessage = (message: TemporaryMessage) => {
+		this.setState({
+			tempSentMessage: { body: message.body, tempId: message.tempId },
+			replyMessage: undefined,
+		});
+	};
 
-        } else if (roomType && roomPhase && SpinnerUtils.isDisplayed('roomspinner')) {
+	private setReplyMessage = (message: MessageEvent) => {
+		this.setState({ replyMessage: message });
+	};
 
-            SpinnerUtils.dismissModalSpinner('roomspinner');
-        }
+	public render(): JSX.Element | null {
+		if (!this.state.roomPhase) {
+			return null;
+		}
 
-        if (roomPhase === 'join' && SpinnerUtils.isDisplayed('invitespinner')) {
+		let composer: ReactElement | undefined;
+		let roomChat: ReactElement | undefined;
 
-            SpinnerUtils.dismissModalSpinner('invitespinner');
-        }
+		if (this.state.roomPhase === 'join') {
+			composer = (
+				<Composer
+					roomId={this.props.roomId}
+					roomType={this.state.roomType}
+					showTempSentMessage={this.showTempSentMessage}
+					replyMessage={this.state.replyMessage!}
+					showJitsiMeet={this.props.showJitsiMeet}
+					roomActive={this.state.roomActive}
+				/>
+			);
 
-        return {
-            roomPhase: roomPhase,
-            roomType: roomType,
-            roomActive: DataStore.getRoomActive(nextProps.roomId),
-        };
-    }
+			roomChat = (
+				<RoomChat
+					roomId={this.props.roomId}
+					roomType={this.state.roomType}
+					tempSentMessage={this.state.tempSentMessage}
+					setReplyMessage={this.setReplyMessage}
+					showTempForwardedMessage={this.props.showTempForwardedMessage}
+					tempForwardedMessage={this.props.tempForwardedMessage!}
+				/>
+			);
+		} else if (this.state.roomPhase === 'invite') {
+			roomChat = (
+				<InviteRoom
+					roomId={this.props.roomId}
+					showRoomList={this.props.showRoomList}
+				/>
+			);
+		}
 
-    private showTempSentMessage = (message: TemporaryMessage) => {
-
-        this.setState({
-            tempSentMessage: { body: message.body, tempId: message.tempId },
-            replyMessage: undefined
-        });
-    }
-
-    private setReplyMessage = (message: MessageEvent) => {
-
-        this.setState({ replyMessage: message });
-    }
-
-    public render(): JSX.Element | null {
-
-        if (!this.state.roomPhase) { return null }
-
-        let composer: ReactElement | undefined;
-        let roomChat: ReactElement | undefined;
-
-        if (this.state.roomPhase === 'join') {
-
-            composer = (
-                <Composer
-                    roomId={ this.props.roomId }
-                    roomType={ this.state.roomType }
-                    showTempSentMessage={ this.showTempSentMessage }
-                    replyMessage={ this.state.replyMessage! }
-                    showJitsiMeet={ this.props.showJitsiMeet }
-                    roomActive={ this.state.roomActive }
-                />
-            );
-
-            roomChat = (
-                <RoomChat
-                    roomId={ this.props.roomId }
-                    roomType={ this.state.roomType }
-                    tempSentMessage={ this.state.tempSentMessage }
-                    setReplyMessage={ this.setReplyMessage }
-                    showTempForwardedMessage={ this.props.showTempForwardedMessage }
-                    tempForwardedMessage={ this.props.tempForwardedMessage! }
-                />
-            );
-        } else if (this.state.roomPhase === 'invite') {
-
-            roomChat = (
-                <InviteRoom
-                    roomId={ this.props.roomId }
-                    showRoomList={ this.props.showRoomList }
-                />
-            );
-        }
-
-        return (
-            <RX.View style={ styles.container }>
-
-                <RoomHeader
-                    showLogin={ this.props.showLogin }
-                    showRoomList={ this.props.showRoomList }
-                    roomId={ this.props.roomId }
-                />
-
-                { composer }
-
-                { roomChat }
-
-            </RX.View>
-        );
-    }
+		return (
+			<RX.View style={styles.container}>
+				<RoomHeader
+					showLogin={this.props.showLogin}
+					showRoomList={this.props.showRoomList}
+					roomId={this.props.roomId}
+				/>
+				{composer}
+				{roomChat}
+			</RX.View>
+		);
+	}
 }

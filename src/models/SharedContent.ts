@@ -1,6 +1,6 @@
 export interface SharedContent {
-    uri: string;
-    mimeType?: string;
-    fileName?: string;
-    fileSize?: number;
+	uri: string;
+	mimeType?: string;
+	fileName?: string;
+	fileSize?: number;
 }

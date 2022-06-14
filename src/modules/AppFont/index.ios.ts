@@ -1,6 +1,5 @@
 class AppFont {
-
-    public fontFamily = 'System';
+	public fontFamily = 'System';
 }
 
 export default new AppFont();

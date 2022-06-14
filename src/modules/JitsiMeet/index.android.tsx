@@ -3,116 +3,127 @@ import RX from 'reactxp';
 import { APP_WEBSITE_URL, JITSI_SERVER_URL } from '../../appconfig';
 import IconSvg, { SvgFile } from '../../components/IconSvg';
 import { WebView, WebViewMessageEvent } from 'react-native-webview';
-import { JITSI_BORDER, PAGE_MARGIN, TRANSPARENT_BACKGROUND, OPAQUE_BACKGROUND, BUTTON_ROUND_WIDTH, SPACING, BUTTON_FILL,
-    BORDER_RADIUS, BUTTON_JITSI_BACKGROUND, APP_BACKGROUND, TILE_HEIGHT } from '../../ui';
+import {
+	JITSI_BORDER,
+	PAGE_MARGIN,
+	TRANSPARENT_BACKGROUND,
+	OPAQUE_BACKGROUND,
+	BUTTON_ROUND_WIDTH,
+	SPACING,
+	BUTTON_FILL,
+	BORDER_RADIUS,
+	BUTTON_JITSI_BACKGROUND,
+	APP_BACKGROUND,
+	TILE_HEIGHT,
+} from '../../ui';
 import UiStore from '../../stores/UiStore';
 import ApiClient from '../../matrix/ApiClient';
 
 const styles = {
-    container: RX.Styles.createViewStyle({
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: OPAQUE_BACKGROUND,
-        alignItems: 'center',
-        justifyContent: 'center',
-    }),
-    containerMinimized: RX.Styles.createViewStyle({
-        position: 'absolute',
-        bottom: PAGE_MARGIN + SPACING,
-        right: PAGE_MARGIN + SPACING,
-        width: 80,
-        height: 100,
-        backgroundColor: TRANSPARENT_BACKGROUND,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: BORDER_RADIUS,
-        borderWidth: 1,
-        borderColor: JITSI_BORDER,
-        overflow: 'hidden',
-    }),
-    jitsiContainer: RX.Styles.createViewStyle({
-        flex: 1,
-        alignSelf: 'stretch',
-        marginHorizontal: PAGE_MARGIN,
-        marginVertical: TILE_HEIGHT,
-        borderRadius: BORDER_RADIUS,
-        borderWidth: 1,
-        borderColor: JITSI_BORDER,
-        overflow: 'hidden',
-        backgroundColor: APP_BACKGROUND,
-    }),
-    jitsiContainerMinimized: RX.Styles.createViewStyle({
-        width: 80,
-        height: 100,
-    }),
-    buttonMinimize: RX.Styles.createViewStyle({
-        position: 'absolute',
-        left: 2 * SPACING,
-        top: 2 * SPACING,
-        width: BUTTON_ROUND_WIDTH,
-        height: BUTTON_ROUND_WIDTH,
-    }),
-    buttonMaximize: RX.Styles.createViewStyle({
-        position: 'absolute',
-        width: 80,
-        height: 100,
-        backgroundColor: BUTTON_JITSI_BACKGROUND,
-    }),
-    containerIcon: RX.Styles.createViewStyle({
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    }),
-}
+	container: RX.Styles.createViewStyle({
+		position: 'absolute',
+		top: 0,
+		bottom: 0,
+		left: 0,
+		right: 0,
+		backgroundColor: OPAQUE_BACKGROUND,
+		alignItems: 'center',
+		justifyContent: 'center',
+	}),
+	containerMinimized: RX.Styles.createViewStyle({
+		position: 'absolute',
+		bottom: PAGE_MARGIN + SPACING,
+		right: PAGE_MARGIN + SPACING,
+		width: 80,
+		height: 100,
+		backgroundColor: TRANSPARENT_BACKGROUND,
+		alignItems: 'center',
+		justifyContent: 'center',
+		borderRadius: BORDER_RADIUS,
+		borderWidth: 1,
+		borderColor: JITSI_BORDER,
+		overflow: 'hidden',
+	}),
+	jitsiContainer: RX.Styles.createViewStyle({
+		flex: 1,
+		alignSelf: 'stretch',
+		marginHorizontal: PAGE_MARGIN,
+		marginVertical: TILE_HEIGHT,
+		borderRadius: BORDER_RADIUS,
+		borderWidth: 1,
+		borderColor: JITSI_BORDER,
+		overflow: 'hidden',
+		backgroundColor: APP_BACKGROUND,
+	}),
+	jitsiContainerMinimized: RX.Styles.createViewStyle({
+		width: 80,
+		height: 100,
+	}),
+	buttonMinimize: RX.Styles.createViewStyle({
+		position: 'absolute',
+		left: 2 * SPACING,
+		top: 2 * SPACING,
+		width: BUTTON_ROUND_WIDTH,
+		height: BUTTON_ROUND_WIDTH,
+	}),
+	buttonMaximize: RX.Styles.createViewStyle({
+		position: 'absolute',
+		width: 80,
+		height: 100,
+		backgroundColor: BUTTON_JITSI_BACKGROUND,
+	}),
+	containerIcon: RX.Styles.createViewStyle({
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	}),
+};
 
 interface JitsiMeetProps {
-    jitsiMeetId: string;
-    closeJitsiMeet: () => void;
+	jitsiMeetId: string;
+	closeJitsiMeet: () => void;
 }
 
 interface JitsiMeetState {
-    isMinimized: boolean;
+	isMinimized: boolean;
 }
 
 export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetState> {
+	private scale = 1;
 
-    private scale = 1;
+	constructor(props: JitsiMeetProps) {
+		super(props);
 
-    constructor(props: JitsiMeetProps) {
-        super(props);
+		this.scale = Math.min(
+			1,
+			Math.round((100 * (UiStore.getAppLayout_().screenWidth - 2 * PAGE_MARGIN)) / 530) / 100
+		);
 
-        this.scale = Math.min(1, Math.round(100 * (UiStore.getAppLayout_().screenWidth - 2 * PAGE_MARGIN) / 530) / 100);
+		this.state = { isMinimized: false };
+	}
 
-        this.state = { isMinimized: false }
-    }
+	private onMessage = (message: WebViewMessageEvent) => {
+		if (message.nativeEvent.data === 'HANGUP') {
+			this.props.closeJitsiMeet();
+		}
+	};
 
-    private onMessage = (message: WebViewMessageEvent) => {
+	private setMinimized = (isMinimized: boolean) => {
+		this.setState({ isMinimized: isMinimized });
+	};
 
-        if (message.nativeEvent.data === 'HANGUP') {
-            this.props.closeJitsiMeet();
-        }
-    }
+	public render(): JSX.Element | null {
+		const url = APP_WEBSITE_URL;
 
-    private setMinimized = (isMinimized: boolean) => {
-
-        this.setState({ isMinimized: isMinimized });
-    }
-
-    public render(): JSX.Element | null {
-
-        const url = APP_WEBSITE_URL;
-
-        const html =
-            `
+		const html = `
             <!DOCTYPE html>
             <html style="height: 100%; width: 100%; margin: -8px">
                 <head>
                     <meta charset="utf-8">
                     <meta http-equiv="content-type" content="text/html;charset=utf-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=${ this.scale }, maximum-scale=${ this.scale }">
+                    <meta name="viewport" content="width=device-width, initial-scale=${this.scale}, maximum-scale=${
+			this.scale
+		}">
                 </head>
                 <body style="height: 100%; width: 100%; display: flex; justify-content: center; align-items: center">
 
@@ -126,14 +137,14 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                             api.dispose();
                         };
 
-                        const domain = "${ JITSI_SERVER_URL.replace('https://', '') }";
+                        const domain = "${JITSI_SERVER_URL.replace('https://', '')}";
                         const options = {
-                            roomName: "${ this.props.jitsiMeetId }",
+                            roomName: "${this.props.jitsiMeetId}",
                             height: '100%',
                             width: '100%',
                             parentNode: undefined,
                             userInfo: {
-                                displayName: "${ ApiClient.credentials.userId }",
+                                displayName: "${ApiClient.credentials.userId}",
                             },
                             interfaceConfigOverwrite: {
                                 OPTIMAL_BROWSERS: [],
@@ -214,70 +225,60 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
             </html>
             `;
 
-        let buttonMinimize;
-        let buttonMaximize;
+		let buttonMinimize;
+		let buttonMaximize;
 
-        if (this.state.isMinimized) {
+		if (this.state.isMinimized) {
+			buttonMinimize = null;
 
-            buttonMinimize = null;
+			buttonMaximize = (
+				<RX.Button
+					style={styles.buttonMaximize}
+					onPress={() => this.setMinimized(false)}
+					disableTouchOpacityAnimation={true}
+					activeOpacity={1}
+				></RX.Button>
+			);
+		} else {
+			buttonMaximize = null;
 
-            buttonMaximize = (
-                <RX.Button
-                    style={ styles.buttonMaximize }
-                    onPress={ () => this.setMinimized(false) }
-                    disableTouchOpacityAnimation={ true }
-                    activeOpacity={ 1 }
-                >
-                </RX.Button>
-            );
+			buttonMinimize = (
+				<RX.Button
+					style={styles.buttonMinimize}
+					onPress={() => this.setMinimized(true)}
+					disableTouchOpacityAnimation={true}
+					activeOpacity={1}
+				>
+					<RX.View style={styles.containerIcon}>
+						<IconSvg
+							source={require('../../resources/svg/arrow_down.json') as SvgFile}
+							fillColor={BUTTON_FILL}
+							height={16}
+							width={16}
+						/>
+					</RX.View>
+				</RX.Button>
+			);
+		}
 
-        } else {
-
-            buttonMaximize = null;
-
-            buttonMinimize = (
-                <RX.Button
-                    style={ styles.buttonMinimize }
-                    onPress={ () => this.setMinimized(true) }
-                    disableTouchOpacityAnimation={ true }
-                    activeOpacity={ 1 }
-                >
-                    <RX.View style={ styles.containerIcon }>
-                        <IconSvg
-                            source= { require('../../resources/svg/arrow_down.json') as SvgFile }
-                            fillColor={ BUTTON_FILL }
-                            height={ 16 }
-                            width={ 16 }
-                        />
-                    </RX.View>
-                </RX.Button>
-            );
-        }
-
-        return (
-            <RX.View style={ this.state.isMinimized ? styles.containerMinimized : styles.container }>
-
-                <RX.View style={ this.state.isMinimized ? styles.jitsiContainerMinimized : styles.jitsiContainer }>
-
-                    <WebView
-                        scrollEnabled={ false }
-                        originWhitelist={ ['*'] }
-                        source={{
-                            html: html,
-                            baseUrl: `${url}`,
-                        }}
-                        onMessage={ this.onMessage }
-                        mediaPlaybackRequiresUserAction={ false }
-                        allowsInlineMediaPlayback={ true }
-                    />
-
-                    { buttonMinimize }
-
-                </RX.View>
-
-                { buttonMaximize }
-
-            </RX.View>
-        )
-    }
+		return (
+			<RX.View style={this.state.isMinimized ? styles.containerMinimized : styles.container}>
+				<RX.View style={this.state.isMinimized ? styles.jitsiContainerMinimized : styles.jitsiContainer}>
+					<WebView
+						scrollEnabled={false}
+						originWhitelist={['*']}
+						source={{
+							html: html,
+							baseUrl: `${url}`,
+						}}
+						onMessage={this.onMessage}
+						mediaPlaybackRequiresUserAction={false}
+						allowsInlineMediaPlayback={true}
+					/>
+					{buttonMinimize}
+				</RX.View>
+				{buttonMaximize}
+			</RX.View>
+		);
+	}
 }

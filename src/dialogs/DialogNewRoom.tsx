@@ -4,196 +4,194 @@ import DialogNewGroup from './DialogNewGroup';
 import DialogNewNotepad from './DialogNewNotepad';
 import DialogNewDirectConversation from './DialogNewDirectConversation';
 import DialogJoinCommunity from './DialogJoinCommunity';
-import { BUTTON_MODAL_BACKGROUND, BUTTON_MODAL_TEXT, OPAQUE_BACKGROUND, BORDER_RADIUS, DIALOG_WIDTH, SPACING,
-    AVATAR_SMALL_WIDTH, TILE_HEIGHT, FONT_LARGE, AVATAR_FOREGROUND, OBJECT_MARGIN } from '../ui';
+import {
+	BUTTON_MODAL_BACKGROUND,
+	BUTTON_MODAL_TEXT,
+	OPAQUE_BACKGROUND,
+	BORDER_RADIUS,
+	DIALOG_WIDTH,
+	SPACING,
+	AVATAR_SMALL_WIDTH,
+	TILE_HEIGHT,
+	FONT_LARGE,
+	AVATAR_FOREGROUND,
+	OBJECT_MARGIN,
+} from '../ui';
 import UiStore from '../stores/UiStore';
 import { createNewConv, createNewGroup, joinPublicComm, createNewNote } from '../translations';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import AppFont from '../modules/AppFont';
 
 const styles = {
-    containerButtons: RX.Styles.createViewStyle({
-        alignSelf: 'center',
-        alignItems: 'center',
-        justifyContent: 'center',
-    }),
-    containerButton: RX.Styles.createViewStyle({
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderRadius: BORDER_RADIUS,
-        width: DIALOG_WIDTH,
-        height: TILE_HEIGHT,
-        backgroundColor: BUTTON_MODAL_BACKGROUND,
-        padding: SPACING,
-        marginBottom: 1,
-        cursor: 'pointer',
-    }),
-    buttonText: RX.Styles.createTextStyle({
-        fontFamily: AppFont.fontFamily,
-        flex: 1,
-        fontSize: FONT_LARGE,
-        color: BUTTON_MODAL_TEXT,
-        marginRight: OBJECT_MARGIN,
-    }),
-    modalScreen: RX.Styles.createViewStyle({
-        flex: 1,
-        alignSelf: 'stretch',
-        backgroundColor: OPAQUE_BACKGROUND,
-        justifyContent: 'center',
-    }),
-    containerAvatar: RX.Styles.createViewStyle({
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: AVATAR_SMALL_WIDTH,
-        width: AVATAR_SMALL_WIDTH,
-        borderRadius: AVATAR_SMALL_WIDTH / 2,
-    }),
+	containerButtons: RX.Styles.createViewStyle({
+		alignSelf: 'center',
+		alignItems: 'center',
+		justifyContent: 'center',
+	}),
+	containerButton: RX.Styles.createViewStyle({
+		flexDirection: 'row',
+		alignItems: 'center',
+		borderRadius: BORDER_RADIUS,
+		width: DIALOG_WIDTH,
+		height: TILE_HEIGHT,
+		backgroundColor: BUTTON_MODAL_BACKGROUND,
+		padding: SPACING,
+		marginBottom: 1,
+		cursor: 'pointer',
+	}),
+	buttonText: RX.Styles.createTextStyle({
+		fontFamily: AppFont.fontFamily,
+		flex: 1,
+		fontSize: FONT_LARGE,
+		color: BUTTON_MODAL_TEXT,
+		marginRight: OBJECT_MARGIN,
+	}),
+	modalScreen: RX.Styles.createViewStyle({
+		flex: 1,
+		alignSelf: 'stretch',
+		backgroundColor: OPAQUE_BACKGROUND,
+		justifyContent: 'center',
+	}),
+	containerAvatar: RX.Styles.createViewStyle({
+		justifyContent: 'center',
+		alignItems: 'center',
+		height: AVATAR_SMALL_WIDTH,
+		width: AVATAR_SMALL_WIDTH,
+		borderRadius: AVATAR_SMALL_WIDTH / 2,
+	}),
 };
 
 interface DialogNewRoomProps {
-    showRoom: (roomId: string) => void;
+	showRoom: (roomId: string) => void;
 }
 
 export default class DialogNewRoom extends RX.Component<DialogNewRoomProps, RX.Stateless> {
+	private startNewConversation = (event: RX.Types.SyntheticEvent) => {
+		event.stopPropagation();
 
-    private startNewConversation = (event: RX.Types.SyntheticEvent) => {
+		RX.Modal.dismiss('buttonrender');
 
-        event.stopPropagation();
+		RX.Modal.show(<DialogNewDirectConversation showRoom={this.props.showRoom} />, 'createdirectdialog');
+	};
 
-        RX.Modal.dismiss('buttonrender');
+	private createNewGroup = (event: RX.Types.SyntheticEvent) => {
+		event.stopPropagation();
 
-        RX.Modal.show(<DialogNewDirectConversation showRoom={ this.props.showRoom }/>, 'createdirectdialog');
-    }
+		RX.Modal.dismiss('buttonrender');
 
-    private createNewGroup = (event: RX.Types.SyntheticEvent) => {
+		RX.Modal.show(<DialogNewGroup showRoom={this.props.showRoom} />, 'creategroupdialog');
+	};
+	private joinCommunity = (event: RX.Types.SyntheticEvent) => {
+		event.stopPropagation();
 
-        event.stopPropagation();
+		RX.Modal.dismiss('buttonrender');
 
-        RX.Modal.dismiss('buttonrender');
+		RX.Modal.show(<DialogJoinCommunity showRoom={this.props.showRoom} />, 'modaldialog_searchcommunity');
+	};
 
-        RX.Modal.show(<DialogNewGroup showRoom={ this.props.showRoom }/>, 'creategroupdialog');
-    }
-    private joinCommunity = (event: RX.Types.SyntheticEvent) => {
+	private createNewNotepad = (event: RX.Types.SyntheticEvent) => {
+		event.stopPropagation();
 
-        event.stopPropagation();
+		RX.Modal.dismiss('buttonrender');
 
-        RX.Modal.dismiss('buttonrender');
+		RX.Modal.show(<DialogNewNotepad showRoom={this.props.showRoom} />, 'createnotepaddialog');
+	};
 
-        RX.Modal.show(<DialogJoinCommunity showRoom={ this.props.showRoom }/>, 'modaldialog_searchcommunity');
-    }
+	public render(): JSX.Element | null {
+		const language = UiStore.getLanguage();
 
-    private createNewNotepad = (event: RX.Types.SyntheticEvent) => {
+		let joinCommunityButton: ReactElement | null;
 
-        event.stopPropagation();
+		if (
+			(!UiStore.getIsElectron() && UiStore.getPlatform() === 'web') ||
+			(UiStore.getIsElectron() && UiStore.getDesktopOS() === 'Linux')
+		) {
+			joinCommunityButton = (
+				<RX.View
+					style={styles.containerButton}
+					onPress={event => this.joinCommunity(event)}
+					disableTouchOpacityAnimation={false}
+					activeOpacity={0.8}
+				>
+					<RX.View style={styles.containerAvatar}>
+						<IconSvg
+							source={require('../resources/svg/community.json') as SvgFile}
+							fillColor={AVATAR_FOREGROUND}
+							height={AVATAR_SMALL_WIDTH * 0.6}
+							width={AVATAR_SMALL_WIDTH * 0.6}
+						/>
+					</RX.View>
+					<RX.Text style={styles.buttonText}>{joinPublicComm[language]}</RX.Text>
+				</RX.View>
+			);
+		}
 
-        RX.Modal.dismiss('buttonrender');
+		return (
+			<RX.View
+				style={styles.modalScreen}
+				onPress={() => RX.Modal.dismissAll()}
+				disableTouchOpacityAnimation={true}
+			>
+				<RX.View
+					style={styles.containerButtons}
+					onPress={(event: RX.Types.SyntheticEvent) => event.stopPropagation()}
+					disableTouchOpacityAnimation={true}
+					activeOpacity={1}
+				>
+					<RX.View
+						style={styles.containerButton}
+						onPress={event => this.startNewConversation(event)}
+						disableTouchOpacityAnimation={false}
+						activeOpacity={0.8}
+					>
+						<RX.View style={styles.containerAvatar}>
+							<IconSvg
+								source={require('../resources/svg/contact.json') as SvgFile}
+								fillColor={AVATAR_FOREGROUND}
+								height={AVATAR_SMALL_WIDTH * 0.5}
+								width={AVATAR_SMALL_WIDTH * 0.5}
+							/>
+						</RX.View>
+						<RX.Text style={styles.buttonText}>{createNewConv[language]}</RX.Text>
+					</RX.View>
+					<RX.View
+						style={styles.containerButton}
+						onPress={event => this.createNewGroup(event)}
+						disableTouchOpacityAnimation={false}
+						activeOpacity={0.8}
+					>
+						<RX.View style={styles.containerAvatar}>
+							<IconSvg
+								source={require('../resources/svg/group.json') as SvgFile}
+								fillColor={AVATAR_FOREGROUND}
+								height={AVATAR_SMALL_WIDTH * 0.7}
+								width={AVATAR_SMALL_WIDTH * 0.7}
+							/>
+						</RX.View>
+						<RX.Text style={styles.buttonText}>{createNewGroup[language]}</RX.Text>
+					</RX.View>
 
-        RX.Modal.show(<DialogNewNotepad showRoom={ this.props.showRoom }/>, 'createnotepaddialog');
-    }
+					{joinCommunityButton!}
 
-    public render(): JSX.Element | null {
-
-        const language = UiStore.getLanguage();
-
-        let joinCommunityButton: ReactElement | null;
-
-        if ((!UiStore.getIsElectron() && UiStore.getPlatform() === 'web') ||
-            (UiStore.getIsElectron() && UiStore.getDesktopOS() === 'Linux')
-        ) {
-            joinCommunityButton = (
-                <RX.View
-                    style={ styles.containerButton }
-                    onPress={ event => this.joinCommunity(event) }
-                    disableTouchOpacityAnimation={ false }
-                    activeOpacity={ 0.8 }
-                >
-                    <RX.View style={ styles.containerAvatar }>
-                        <IconSvg
-                            source= { require('../resources/svg/community.json') as SvgFile }
-                            fillColor={ AVATAR_FOREGROUND }
-                            height={ AVATAR_SMALL_WIDTH * 0.6 }
-                            width={ AVATAR_SMALL_WIDTH * 0.6 }
-                        />
-                    </RX.View>
-                    <RX.Text style={ styles.buttonText }>
-                        { joinPublicComm[language] }
-                    </RX.Text>
-                </RX.View>
-            )
-        }
-
-        return (
-            <RX.View
-                style={ styles.modalScreen }
-                onPress={() => RX.Modal.dismissAll() }
-                disableTouchOpacityAnimation={ true }
-            >
-                <RX.View
-                    style={ styles.containerButtons }
-                    onPress={ (event: RX.Types.SyntheticEvent) => event.stopPropagation() }
-                    disableTouchOpacityAnimation={ true }
-                    activeOpacity={ 1 }
-                >
-                    <RX.View
-                        style={ styles.containerButton }
-                        onPress={ event => this.startNewConversation(event) }
-                        disableTouchOpacityAnimation={ false }
-                        activeOpacity={ 0.8 }
-                    >
-                        <RX.View style={ styles.containerAvatar }>
-                            <IconSvg
-                                source= { require('../resources/svg/contact.json') as SvgFile }
-                                fillColor={ AVATAR_FOREGROUND }
-                                height={ AVATAR_SMALL_WIDTH * 0.5 }
-                                width={ AVATAR_SMALL_WIDTH * 0.5 }
-                            />
-                        </RX.View>
-                        <RX.Text style={ styles.buttonText }>
-                            { createNewConv[language] }
-                        </RX.Text>
-                    </RX.View>
-                    <RX.View
-                        style={ styles.containerButton }
-                        onPress={ event => this.createNewGroup(event) }
-                        disableTouchOpacityAnimation={ false }
-                        activeOpacity={ 0.8 }
-                    >
-                        <RX.View style={ styles.containerAvatar }>
-                            <IconSvg
-                                source= { require('../resources/svg/group.json') as SvgFile }
-                                fillColor={ AVATAR_FOREGROUND }
-                                height={ AVATAR_SMALL_WIDTH * 0.7 }
-                                width={ AVATAR_SMALL_WIDTH * 0.7 }
-                            />
-                        </RX.View>
-                        <RX.Text style={ styles.buttonText }>
-                            { createNewGroup[language] }
-                        </RX.Text>
-                    </RX.View>
-
-                    { joinCommunityButton! }
-
-                    <RX.View
-                        style={ styles.containerButton }
-                        onPress={ event => this.createNewNotepad(event) }
-                        disableTouchOpacityAnimation={ false }
-                        activeOpacity={ 0.8 }
-                    >
-                        <RX.View style={ styles.containerAvatar }>
-                            <IconSvg
-                                source= { require('../resources/svg/notepad.json') as SvgFile }
-                                fillColor={ AVATAR_FOREGROUND }
-                                height={ AVATAR_SMALL_WIDTH * 0.6 }
-                                width={ AVATAR_SMALL_WIDTH * 0.6 }
-                                style={{ marginLeft: AVATAR_SMALL_WIDTH / 14, marginBottom: AVATAR_SMALL_WIDTH / 14 }}
-                            />
-                        </RX.View>
-                        <RX.Text style={ styles.buttonText }>
-                            { createNewNote[language] }
-                        </RX.Text>
-                    </RX.View>
-                </RX.View>
-            </RX.View>
-        );
-    }
+					<RX.View
+						style={styles.containerButton}
+						onPress={event => this.createNewNotepad(event)}
+						disableTouchOpacityAnimation={false}
+						activeOpacity={0.8}
+					>
+						<RX.View style={styles.containerAvatar}>
+							<IconSvg
+								source={require('../resources/svg/notepad.json') as SvgFile}
+								fillColor={AVATAR_FOREGROUND}
+								height={AVATAR_SMALL_WIDTH * 0.6}
+								width={AVATAR_SMALL_WIDTH * 0.6}
+								style={{ marginLeft: AVATAR_SMALL_WIDTH / 14, marginBottom: AVATAR_SMALL_WIDTH / 14 }}
+							/>
+						</RX.View>
+						<RX.Text style={styles.buttonText}>{createNewNote[language]}</RX.Text>
+					</RX.View>
+				</RX.View>
+			</RX.View>
+		);
+	}
 }

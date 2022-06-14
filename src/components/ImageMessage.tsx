@@ -10,155 +10,168 @@ import Spinner from './Spinner';
 import CachedImage from '../modules/CachedImage';
 
 const styles = {
-    containerMessage: RX.Styles.createViewStyle({
-        cursor: 'pointer',
-    }),
-    image: RX.Styles.createImageStyle({
-        flex: 1,
-        borderRadius: BORDER_RADIUS - 2,
-    }),
-    spinnerContainer: RX.Styles.createViewStyle({
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top:0,
-        bottom:0,
-        justifyContent: 'center',
-        alignItems: 'center',
-    }),
+	containerMessage: RX.Styles.createViewStyle({
+		cursor: 'pointer',
+	}),
+	image: RX.Styles.createImageStyle({
+		flex: 1,
+		borderRadius: BORDER_RADIUS - 2,
+	}),
+	spinnerContainer: RX.Styles.createViewStyle({
+		position: 'absolute',
+		left: 0,
+		right: 0,
+		top: 0,
+		bottom: 0,
+		justifyContent: 'center',
+		alignItems: 'center',
+	}),
 };
 
 interface ImageMessageState {
-    showSpinner: boolean;
+	showSpinner: boolean;
 }
 
 interface ImageMessageProps {
-    roomId: string;
-    message: MessageEvent;
-    showContextDialog: () => void;
+	roomId: string;
+	message: MessageEvent;
+	showContextDialog: () => void;
 }
 
 export default class ImageMessage extends RX.Component<ImageMessageProps, ImageMessageState> {
+	private url = '';
+	private urlFull = '';
+	private heightStyle: RX.Types.ViewStyleRuleSet;
+	private imageRatio = 0;
+	private isMounted_: boolean | undefined;
 
-    private url = '';
-    private urlFull = '';
-    private heightStyle: RX.Types.ViewStyleRuleSet;
-    private imageRatio = 0;
-    private isMounted_: boolean | undefined;
+	constructor(props: ImageMessageProps) {
+		super(props);
 
-    constructor(props: ImageMessageProps) {
-        super(props);
+		this.state = { showSpinner: false };
 
-        this.state = { showSpinner: false }
+		const width =
+			UiStore.getAppLayout_().pageWidth - 2 * PAGE_MARGIN - (BUTTON_ROUND_WIDTH + SPACING) - 2 * SPACING;
 
-        const width = (UiStore.getAppLayout_().pageWidth - 2 * PAGE_MARGIN) - (BUTTON_ROUND_WIDTH + SPACING) - 2 * SPACING;
+		if (props.message.content.info!.thumbnail_url) {
+			this.url = StringUtils.mxcToHttp(
+				this.props.message.content.info!.thumbnail_url!,
+				ApiClient.credentials.homeServer
+			);
 
-        if (props.message.content.info!.thumbnail_url) {
+			if (props.message.content.info!.thumbnail_info!.w && props.message.content.info!.thumbnail_info!.h) {
+				this.heightStyle = RX.Styles.createViewStyle(
+					{
+						height:
+							(width * props.message.content.info!.thumbnail_info!.h) /
+							props.message.content.info!.thumbnail_info!.w,
+					},
+					false
+				);
+			} else {
+				this.heightStyle = RX.Styles.createViewStyle(
+					{
+						height: width,
+					},
+					false
+				);
+			}
 
-            this.url = StringUtils.mxcToHttp(this.props.message.content.info!.thumbnail_url!, ApiClient.credentials.homeServer);
+			this.urlFull = StringUtils.mxcToHttp(props.message.content.url!, ApiClient.credentials.homeServer);
+		} else {
+			this.url = StringUtils.mxcToHttp(props.message.content.url!, ApiClient.credentials.homeServer);
 
-            if (props.message.content.info!.thumbnail_info!.w && props.message.content.info!.thumbnail_info!.h) {
-                this.heightStyle = RX.Styles.createViewStyle({
-                    height: width * props.message.content.info!.thumbnail_info!.h / props.message.content.info!.thumbnail_info!.w,
-                }, false);
-            } else {
-                this.heightStyle = RX.Styles.createViewStyle({
-                    height: width,
-                }, false);
-            }
+			if (props.message.content.info!.w && props.message.content.info!.h) {
+				this.heightStyle = RX.Styles.createViewStyle(
+					{
+						height: (width * props.message.content.info!.h) / props.message.content.info!.w,
+					},
+					false
+				);
+			} else {
+				this.heightStyle = RX.Styles.createViewStyle(
+					{
+						height: width,
+					},
+					false
+				);
+			}
 
-            this.urlFull = StringUtils.mxcToHttp(props.message.content.url!, ApiClient.credentials.homeServer);
+			this.urlFull = this.url;
+		}
+	}
 
-        } else {
+	public componentDidMount(): void {
+		this.isMounted_ = true;
 
-            this.url = StringUtils.mxcToHttp(props.message.content.url!, ApiClient.credentials.homeServer);
+		setTimeout(() => {
+			if (this.isMounted_) {
+				this.setState({ showSpinner: this.imageRatio === 0 });
+			}
+		}, 500);
+	}
 
-            if (props.message.content.info!.w && props.message.content.info!.h) {
-                this.heightStyle = RX.Styles.createViewStyle({
-                    height: width * props.message.content.info!.h / props.message.content.info!.w,
-                }, false);
-            } else {
-                this.heightStyle = RX.Styles.createViewStyle({
-                    height: width,
-                }, false);
-            }
+	public componentWillUnmount(): void {
+		this.isMounted_ = false;
+	}
 
-            this.urlFull = this.url;
-        }
-    }
+	private showFullScreenImage = () => {
+		if (this.state.showSpinner) {
+			return;
+		}
 
-    public componentDidMount(): void {
+		RX.UserInterface.dismissKeyboard();
 
-        this.isMounted_ = true;
+		const fullScreenImage = (
+			<FullScreenImage
+				roomId={this.props.roomId}
+				eventId={this.props.message.eventId}
+				url={this.urlFull}
+				imageRatio={this.imageRatio}
+			/>
+		);
 
-        setTimeout(() => {
-            if (this.isMounted_) { this.setState({ showSpinner: this.imageRatio === 0 }); }
-        }, 500);
-    }
+		RX.Modal.show(fullScreenImage, 'fullscreenimage');
+	};
 
-    public componentWillUnmount(): void {
+	private onLoad = (size: RX.Types.Dimensions) => {
+		if (this.isMounted_) {
+			this.setState({ showSpinner: false });
+		}
 
-        this.isMounted_ = false;
-    }
+		this.imageRatio = size.width / size.height;
+	};
 
-    private showFullScreenImage = () => {
+	public render(): JSX.Element | null {
+		const spinner = (
+			<RX.View
+				style={styles.spinnerContainer}
+				blockPointerEvents={!this.state.showSpinner}
+			>
+				<Spinner isVisible={this.state.showSpinner} />
+			</RX.View>
+		);
 
-        if (this.state.showSpinner) { return; }
-
-        RX.UserInterface.dismissKeyboard();
-
-        const fullScreenImage = (
-            <FullScreenImage
-                roomId={ this.props.roomId }
-                eventId={ this.props.message.eventId }
-                url={ this.urlFull }
-                imageRatio={ this.imageRatio }
-            />
-        );
-
-        RX.Modal.show(fullScreenImage, 'fullscreenimage');
-    }
-
-    private onLoad = (size: RX.Types.Dimensions) => {
-
-        if (this.isMounted_) { this.setState({ showSpinner: false }); }
-
-        this.imageRatio = size.width / size.height;
-    }
-
-    public render(): JSX.Element | null {
-
-        const spinner = (
-            <RX.View
-                style={ styles.spinnerContainer }
-                blockPointerEvents={ !this.state.showSpinner }
-            >
-                <Spinner isVisible={ this.state.showSpinner } />
-            </RX.View>
-        );
-
-        return (
-            <RX.View style={ styles.containerMessage }>
-                <RX.View
-                    style={ this.heightStyle }
-                    onPress={ this.showFullScreenImage }
-                    onLongPress={ () => this.props.showContextDialog() }
-                    onContextMenu={ () => this.props.showContextDialog() }
-                    disableTouchOpacityAnimation={ true }
-                >
-                    <CachedImage
-                        resizeMode={ 'contain' }
-                        style={ styles.image }
-                        source={ this.url }
-                        onLoad={ this.onLoad }
-                        mimeType={ this.props.message.content.info?.mimetype }
-                        animated={ true }
-                    />
-
-                    { spinner }
-
-                </RX.View>
-            </RX.View>
-        );
-    }
+		return (
+			<RX.View style={styles.containerMessage}>
+				<RX.View
+					style={this.heightStyle}
+					onPress={this.showFullScreenImage}
+					onLongPress={() => this.props.showContextDialog()}
+					onContextMenu={() => this.props.showContextDialog()}
+					disableTouchOpacityAnimation={true}
+				>
+					<CachedImage
+						resizeMode={'contain'}
+						style={styles.image}
+						source={this.url}
+						onLoad={this.onLoad}
+						mimeType={this.props.message.content.info?.mimetype}
+						animated={true}
+					/>
+					{spinner}
+				</RX.View>
+			</RX.View>
+		);
+	}
 }

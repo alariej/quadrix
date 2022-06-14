@@ -1,13 +1,11 @@
-import { NativeModules } from 'react-native'
+import { NativeModules } from 'react-native';
 
 class Locale {
+	public async getLocale(): Promise<string> {
+		const locale: string = await NativeModules.I18nManager.localeIdentifier; // eslint-disable-line
 
-    public async getLocale(): Promise<string> {
-
-        const locale: string = await NativeModules.I18nManager.localeIdentifier; // eslint-disable-line
-
-        return locale;
-    }
+		return locale;
+	}
 }
 
 export default new Locale();

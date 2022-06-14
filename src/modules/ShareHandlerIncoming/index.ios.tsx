@@ -1,6 +1,6 @@
 import React from 'react';
 import RX from 'reactxp';
-import DialogRoomPicker from "../../dialogs/DialogRoomPicker";
+import DialogRoomPicker from '../../dialogs/DialogRoomPicker';
 import DialogIncomingContentShare from '../../dialogs/DialogIncomingContentShare';
 import { Linking } from 'react-native';
 import { sendTo } from '../../translations';
@@ -9,77 +9,74 @@ import { SharedContent } from '../../models/SharedContent';
 import { MessageEvent } from '../../models/MessageEvent';
 
 class ShareHandlerIncoming {
+	public async launchedFromSharedContent(
+		_sharedContent: string,
+		shareContent: (event: { url: string }) => void
+	): Promise<void> {
+		const url = await Linking.getInitialURL();
 
-    public async launchedFromSharedContent(_sharedContent: string, shareContent: (event: { url: string }) => void): Promise<void> {
+		if (url) {
+			shareContent({ url: url });
+		}
+	}
 
-        const url = await Linking.getInitialURL();
+	public addListener(shareContent: (event: { url: string }) => void): void {
+		Linking.addEventListener('url', shareContent);
+	}
 
-        if (url) {
-            shareContent({ url: url });
-        }
-    }
+	public removeListener(shareContent: (event: { url: string }) => void): void {
+		Linking.removeEventListener('url', shareContent);
+	}
 
-    public addListener(shareContent: (event: { url: string }) => void): void {
+	public shareContent(
+		sharedContent_: string,
+		showTempForwardedMessage: (roomId: string, message: MessageEvent, tempId: string) => void
+	): void {
+		const contentSeparator = '://sharedContent=';
+		const n = sharedContent_.indexOf(contentSeparator) + contentSeparator.length;
+		const sharedContentEncoded = sharedContent_.substr(n);
+		const sharedContentDecoded = decodeURI(sharedContentEncoded);
+		const sharedContent = JSON.parse(sharedContentDecoded) as SharedContent[];
 
-        Linking.addEventListener('url', shareContent)
-    }
+		RX.Modal.dismissAll();
 
-    public removeListener(shareContent: (event: { url: string }) => void): void {
-
-        Linking.removeEventListener('url', shareContent);
-    }
-
-    public shareContent(
-        sharedContent_: string,
-        showTempForwardedMessage: (roomId: string, message: MessageEvent, tempId: string) => void)
-        : void {
-
-        const contentSeparator = '://sharedContent=';
-        const n = sharedContent_.indexOf(contentSeparator) + contentSeparator.length;
-        const sharedContentEncoded = sharedContent_.substr(n);
-        const sharedContentDecoded = decodeURI(sharedContentEncoded);
-        const sharedContent = JSON.parse(sharedContentDecoded) as SharedContent[];
-
-        RX.Modal.dismissAll();
-
-        /* 
+		/* 
         TODO: problem when sharing URLs from Firefox on iOS
         Firefox sends 2 ojects, with the second one containing the URL
         Other browsers (safari, chrome, ddg) or apps only send one object
         Therefore we use here [m - 1], the last object in the list, and not [0]
         */
 
-        const m = sharedContent.length;
+		const m = sharedContent.length;
 
-        // does not support multi-item-sharing yet
-        const dialogRoomPicker = (
-            <DialogRoomPicker
-                onPressRoom={ roomId => this.askSendContent(roomId, sharedContent[m - 1], showTempForwardedMessage) }
-                label={ sendTo[UiStore.getLanguage()] + '...' }
-            />
-        );
+		// does not support multi-item-sharing yet
+		const dialogRoomPicker = (
+			<DialogRoomPicker
+				onPressRoom={roomId => this.askSendContent(roomId, sharedContent[m - 1], showTempForwardedMessage)}
+				label={sendTo[UiStore.getLanguage()] + '...'}
+			/>
+		);
 
-        RX.Modal.show(dialogRoomPicker, 'DialogRoomPicker');
-    }
+		RX.Modal.show(dialogRoomPicker, 'DialogRoomPicker');
+	}
 
-    private askSendContent(
-        roomId: string,
-        sharedContent: SharedContent,
-        showTempForwardedMessage: (roomId: string, message: MessageEvent, tempId: string) => void)
-        : void {
+	private askSendContent(
+		roomId: string,
+		sharedContent: SharedContent,
+		showTempForwardedMessage: (roomId: string, message: MessageEvent, tempId: string) => void
+	): void {
+		RX.Modal.dismiss('DialogRoomPicker');
 
-        RX.Modal.dismiss('DialogRoomPicker');
+		const dialogIncomingContentShare = (
+			<DialogIncomingContentShare
+				roomId={roomId}
+				sharedContent={sharedContent}
+				showTempForwardedMessage={showTempForwardedMessage}
+			/>
+		);
 
-        const dialogIncomingContentShare = (
-            <DialogIncomingContentShare
-                roomId={ roomId }
-                sharedContent={ sharedContent }
-                showTempForwardedMessage={ showTempForwardedMessage }
-            />
-        );
-
-        RX.Modal.show(dialogIncomingContentShare, 'dialogIncomingContentShare');
-    }
+		RX.Modal.show(dialogIncomingContentShare, 'dialogIncomingContentShare');
+	}
 }
 
 export default new ShareHandlerIncoming();

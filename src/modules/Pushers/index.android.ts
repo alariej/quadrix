@@ -6,87 +6,83 @@ import { PUSH_GATEWAY_URL, APP_ID_ANDROID, APP_NAME, PREFIX_REST } from '../../a
 import UiStore from '../../stores/UiStore';
 
 class Pushers {
+	public async removeFromDevice(credentials: Credentials): Promise<void> {
+		const firebaseToken = await messaging()
+			.getToken()
+			.catch(_error => null);
 
-    public async removeFromDevice(credentials: Credentials): Promise<void> {
+		messaging()
+			.deleteToken()
+			.catch(_error => null);
 
-        const firebaseToken = await messaging().getToken().catch(_error => null);
+		return this.remove(credentials, APP_ID_ANDROID, firebaseToken!);
+	}
 
-        messaging().deleteToken().catch(_error => null);
+	private remove(credentials: Credentials, appId: string, token: string): Promise<void> {
+		const restClient = new RestClient(credentials.accessToken, credentials.homeServer, PREFIX_REST);
 
-        return this.remove(credentials, APP_ID_ANDROID, firebaseToken!);
-    }
+		const pusher: PusherParam_ = {
+			app_id: appId,
+			kind: null,
+			pushkey: token,
+			data: {},
+		};
 
-    private remove(credentials: Credentials, appId: string, token: string): Promise<void> {
+		return restClient.setPusher(pusher);
+	}
 
-        const restClient = new RestClient(credentials.accessToken, credentials.homeServer, PREFIX_REST);
+	public removeAll(credentials: Credentials): Promise<void> {
+		const restClient = new RestClient(credentials.accessToken, credentials.homeServer, PREFIX_REST);
 
-        const pusher: PusherParam_ = {
-            app_id: appId,
-            kind: null,
-            pushkey: token,
-            data: {},
-        };
+		return restClient.getPushers().then(response => {
+			response.pushers.map((pusher: { app_id: string; pushkey: string }) => {
+				this.remove(credentials, pusher.app_id, pusher.pushkey).catch(_error => null);
+			});
+		});
+	}
 
-        return restClient.setPusher(pusher);
-    }
+	public async set(credentials: Credentials): Promise<void> {
+		const language = UiStore.getLanguage();
 
-    public removeAll(credentials: Credentials): Promise<void> {
+		const firebaseToken = await messaging().getToken();
 
-        const restClient = new RestClient(credentials.accessToken, credentials.homeServer, PREFIX_REST);
+		const restClient = new RestClient(credentials.accessToken, credentials.homeServer, PREFIX_REST);
 
-        return restClient.getPushers()
-            .then(response => {
+		restClient
+			.getPushers()
+			.then(response => {
+				let pusherIsOnServer = false;
 
-                response.pushers.map((pusher: { app_id: string; pushkey: string; }) => {
-                    this.remove(credentials, pusher.app_id, pusher.pushkey).catch(_error => null);
-                });
-            });
-    }
+				if (response.pushers && response.pushers.length > 0) {
+					pusherIsOnServer = response.pushers.some(item => {
+						return item.pushkey === firebaseToken;
+					});
+				}
 
-    public async set(credentials: Credentials): Promise<void> {
+				if (!pusherIsOnServer) {
+					const data = {
+						format: 'event_id_only',
+						url: PUSH_GATEWAY_URL,
+						lang: language,
+					};
 
-        const language = UiStore.getLanguage();
+					const pusher: PusherParam_ = {
+						append: false,
+						app_display_name: APP_NAME,
+						app_id: APP_ID_ANDROID,
+						data: data,
+						device_display_name: 'Android', // not used yet
+						kind: 'http',
+						lang: language,
+						profile_tag: 'Android', // not used yet
+						pushkey: firebaseToken,
+					};
 
-        const firebaseToken = await messaging().getToken();
-
-        const restClient = new RestClient(credentials.accessToken, credentials.homeServer, PREFIX_REST);
-
-        restClient.getPushers()
-            .then(response => {
-
-                let pusherIsOnServer = false;
-
-                if (response.pushers && response.pushers.length > 0) {
-
-                    pusherIsOnServer = response.pushers.some(item => {
-                        return item.pushkey === firebaseToken;
-                    });
-                }
-
-                if (!pusherIsOnServer) {
-
-                    const data = {
-                        format: 'event_id_only',
-                        url: PUSH_GATEWAY_URL,
-                        lang: language,
-                    };
-
-                    const pusher: PusherParam_ = {
-                        append: false,
-                        app_display_name: APP_NAME,
-                        app_id: APP_ID_ANDROID,
-                        data: data,
-                        device_display_name: 'Android', // not used yet
-                        kind: 'http',
-                        lang: language,
-                        profile_tag: 'Android', // not used yet
-                        pushkey: firebaseToken,
-                    };
-
-                    restClient.setPusher(pusher).catch(_error => null);
-                }
-            })
-            .catch(_error => null);    }
+					restClient.setPusher(pusher).catch(_error => null);
+				}
+			})
+			.catch(_error => null);
+	}
 }
 
 export default new Pushers();

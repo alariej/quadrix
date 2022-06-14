@@ -1,6 +1,5 @@
 class AppFont {
-
-    public fontFamily = 'sans-serif';
+	public fontFamily = 'sans-serif';
 }
 
 export default new AppFont();

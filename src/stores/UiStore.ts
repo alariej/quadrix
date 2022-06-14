@@ -18,204 +18,181 @@ type DesktopOsType = 'Windows' | 'MacOS' | 'Linux';
 type LayoutType = 'wide' | 'narrow';
 
 export type Layout = {
-    type: LayoutType,
-    containerWidth: number,
-    pageWidth: number,
-    screenWidth: number,
-    screenHeight: number,
+	type: LayoutType;
+	containerWidth: number;
+	pageWidth: number;
+	screenWidth: number;
+	screenHeight: number;
 };
 
 @AutoSubscribeStore
 class UiStore extends StoreBase {
+	public OfflineTrigger = OfflineTrigger;
+	public LayoutTrigger = LayoutTrigger;
 
-    public OfflineTrigger = OfflineTrigger;
-    public LayoutTrigger = LayoutTrigger;
+	private offline = false;
+	private platform: RX.Types.PlatformType | undefined;
+	private device: DeviceType | undefined;
+	private unknownAccessToken = false;
+	private locale: LocaleType = enUS;
+	private language: Languages = 'en';
+	private isElectron = false;
+	private isJitsiActive = false;
+	private isJitsiMaximised = false;
+	private appLayout: Layout | undefined;
+	private selectedRoom = '';
 
-    private offline = false;
-    private platform: RX.Types.PlatformType | undefined;
-    private device: DeviceType | undefined;
-    private unknownAccessToken = false;
-    private locale: LocaleType = enUS;
-    private language: Languages = 'en';
-    private isElectron = false;
-    private isJitsiActive = false;
-    private isJitsiMaximised = false;
-    private appLayout: Layout | undefined;
-    private selectedRoom = '';
+	public setUnknownAccessToken(isUnknown: boolean) {
+		this.unknownAccessToken = isUnknown;
 
-    public setUnknownAccessToken(isUnknown: boolean) {
+		this.trigger(UnknownAccessToken);
+	}
 
-        this.unknownAccessToken = isUnknown;
+	@autoSubscribeWithKey(UnknownAccessToken)
+	public getUnknownAccessToken(): boolean {
+		return this.unknownAccessToken;
+	}
 
-        this.trigger(UnknownAccessToken);
-    }
+	public setOffline(offline: boolean) {
+		this.offline = offline;
 
-    @autoSubscribeWithKey(UnknownAccessToken)
-    public getUnknownAccessToken(): boolean {
+		this.trigger(OfflineTrigger);
+	}
 
-        return this.unknownAccessToken;
-    }
+	@autoSubscribeWithKey(OfflineTrigger)
+	public getOffline(): boolean {
+		return this.offline;
+	}
 
-    public setOffline(offline: boolean) {
+	public setPlatform() {
+		this.platform = RX.Platform.getType();
+	}
 
-        this.offline = offline;
+	public getPlatform(): RX.Types.PlatformType {
+		return this.platform!;
+	}
 
-        this.trigger(OfflineTrigger);
-    }
+	public setDevice() {
+		if (this.platform === 'web') {
+			this.device = navigator.userAgent.toLowerCase().includes('mobile') ? 'mobile' : 'desktop';
+		} else {
+			this.device = 'mobile';
+		}
+	}
 
-    @autoSubscribeWithKey(OfflineTrigger)
-    public getOffline(): boolean {
+	public getDevice(): DeviceType {
+		return this.device!;
+	}
 
-        return this.offline;
-    }
+	public setIsElectron() {
+		if (this.platform === 'web') {
+			this.isElectron = navigator.userAgent.toLowerCase().includes('electron');
+		}
+	}
 
-    public setPlatform() {
+	public getIsElectron(): boolean {
+		return this.isElectron;
+	}
 
-        this.platform = RX.Platform.getType();
-    }
+	public getDesktopOS(): DesktopOsType {
+		const userAgent = navigator.userAgent.toLowerCase();
 
-    public getPlatform(): RX.Types.PlatformType {
+		if (userAgent.indexOf('win') !== -1) {
+			return 'Windows';
+		} else if (userAgent.indexOf('mac') !== -1) {
+			return 'MacOS';
+		} else {
+			return 'Linux';
+		}
+	}
 
-        return this.platform!;
-    }
+	public async setLocale(): Promise<void> {
+		const locale = await Locale.getLocale().catch();
+		const language = locale.slice(0, 2);
 
-    public setDevice() {
+		switch (language) {
+			case 'en':
+				this.locale = enUS;
+				this.language = 'en';
+				break;
 
-        if (this.platform === 'web') {
-            this.device = navigator.userAgent.toLowerCase().includes('mobile') ? 'mobile' : 'desktop';
-        } else {
-            this.device = 'mobile';
-        }
-    }
+			case 'de':
+				this.locale = de;
+				this.language = 'de';
+				break;
 
-    public getDevice(): DeviceType {
+			case 'fr':
+				this.locale = fr;
+				this.language = 'fr';
+				break;
 
-        return this.device!;
-    }
+			default:
+				this.locale = enUS;
+				this.language = 'en';
+		}
+	}
 
-    public setIsElectron() {
+	public getLanguage(): Languages {
+		return this.language;
+	}
 
-        if (this.platform === 'web') {
-            this.isElectron = navigator.userAgent.toLowerCase().includes('electron');
-        }
-    }
+	public getLocale(): LocaleType {
+		return this.locale;
+	}
 
-    public getIsElectron(): boolean {
+	public setJitsiActive(isJitsiActive: boolean) {
+		this.isJitsiActive = isJitsiActive;
+		this.trigger(JitsiActiveTrigger);
+	}
 
-        return this.isElectron;
-    }
+	@autoSubscribeWithKey(JitsiActiveTrigger)
+	public getJitsiActive(): boolean {
+		return this.isJitsiActive;
+	}
 
-    public getDesktopOS(): DesktopOsType {
+	public setJitsiMaximised(isJitsiMaximised: boolean) {
+		this.isJitsiMaximised = isJitsiMaximised;
+		this.trigger(JitsiMaximisedTrigger);
+	}
 
-        const userAgent = navigator.userAgent.toLowerCase();
+	@autoSubscribeWithKey(JitsiMaximisedTrigger)
+	public getJitsiMaximised(): boolean {
+		return this.isJitsiMaximised;
+	}
 
-        if (userAgent.indexOf('win') !== -1) {
-            return 'Windows';
-        } else if (userAgent.indexOf('mac') !== -1) {
-            return 'MacOS';
-        } else {
-            return 'Linux';
-        }
-    }
+	public setAppLayout(layout: ViewOnLayoutEvent) {
+		const layoutType: LayoutType =
+			layout.width >= PAGE_WIDTH_DEFAULT * 2 + PAGE_WIDE_PADDING * 2 ? 'wide' : 'narrow';
 
-    public async setLocale(): Promise<void> {
+		this.appLayout = {
+			type: layoutType,
+			containerWidth: layoutType === 'narrow' ? layout.width * 2 : PAGE_WIDTH_DEFAULT * 2 + PAGE_WIDE_PADDING * 2,
+			pageWidth: layoutType === 'narrow' ? layout.width : PAGE_WIDTH_DEFAULT,
+			screenWidth: layout.width,
+			screenHeight: layout.height,
+		};
 
-        const locale = await Locale.getLocale().catch();
-        const language = locale.slice(0, 2);
+		this.trigger(LayoutTrigger);
+	}
 
-        switch (language) {
-            case 'en':
-                this.locale = enUS;
-                this.language = 'en';
-                break;
+	@autoSubscribeWithKey(LayoutTrigger)
+	public getAppLayout(): Layout {
+		return this.appLayout!;
+	}
 
-            case 'de':
-                this.locale = de;
-                this.language = 'de';
-                break;
+	public getAppLayout_(): Layout {
+		return this.appLayout!;
+	}
 
-            case 'fr':
-                this.locale = fr;
-                this.language = 'fr';
-                break;
+	public setSelectedRoom(roomId: string) {
+		this.selectedRoom = roomId;
+		this.trigger(SelectedRoomTrigger);
+	}
 
-            default:
-                this.locale = enUS;
-                this.language = 'en';
-        }
-    }
-
-    public getLanguage(): Languages {
-
-        return this.language;
-    }
-
-    public getLocale(): LocaleType {
-
-        return this.locale;
-    }
-
-    public setJitsiActive(isJitsiActive: boolean) {
-
-        this.isJitsiActive = isJitsiActive;
-        this.trigger(JitsiActiveTrigger);
-    }
-
-    @autoSubscribeWithKey(JitsiActiveTrigger)
-    public getJitsiActive(): boolean {
-
-        return this.isJitsiActive;
-    }
-
-    public setJitsiMaximised(isJitsiMaximised: boolean) {
-
-        this.isJitsiMaximised = isJitsiMaximised;
-        this.trigger(JitsiMaximisedTrigger);
-    }
-
-    @autoSubscribeWithKey(JitsiMaximisedTrigger)
-    public getJitsiMaximised(): boolean {
-
-        return this.isJitsiMaximised;
-    }
-
-    public setAppLayout(layout: ViewOnLayoutEvent) {
-
-        const layoutType: LayoutType = layout.width >= PAGE_WIDTH_DEFAULT * 2 + PAGE_WIDE_PADDING * 2 ? 'wide' : 'narrow';
-
-        this.appLayout = {
-            type: layoutType,
-            containerWidth: layoutType === 'narrow' ? layout.width * 2 : PAGE_WIDTH_DEFAULT * 2 + PAGE_WIDE_PADDING * 2,
-            pageWidth: layoutType === 'narrow' ? layout.width : PAGE_WIDTH_DEFAULT,
-            screenWidth: layout.width,
-            screenHeight: layout.height,
-        }
-
-        this.trigger(LayoutTrigger);
-    }
-
-    @autoSubscribeWithKey(LayoutTrigger)
-    public getAppLayout(): Layout {
-
-        return this.appLayout!;
-    }
-
-    public getAppLayout_(): Layout {
-
-        return this.appLayout!;
-    }
-
-    public setSelectedRoom(roomId: string) {
-
-        this.selectedRoom = roomId;
-        this.trigger(SelectedRoomTrigger);
-    }
-
-    @autoSubscribeWithKey(SelectedRoomTrigger)
-    public getSelectedRoom(): string {
-
-        return this.selectedRoom;
-    }
+	@autoSubscribeWithKey(SelectedRoomTrigger)
+	public getSelectedRoom(): string {
+		return this.selectedRoom;
+	}
 }
 
 export default new UiStore();

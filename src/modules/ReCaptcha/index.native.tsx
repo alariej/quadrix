@@ -7,31 +7,27 @@ import { APP_WEBSITE_URL } from '../../appconfig';
 import UiStore from '../../stores/UiStore';
 
 interface ReCaptchaProps {
-    siteKey: string;
-    hideSpinner: () => void;
-    onCompleted: (token: string) => void;
+	siteKey: string;
+	hideSpinner: () => void;
+	onCompleted: (token: string) => void;
 }
 
 export default class ReCaptcha extends Component<ReCaptchaProps, RX.Stateless> {
+	private onMessage_ = (response: WebViewMessageEvent) => {
+		this.props.onCompleted(response.nativeEvent.data);
+	};
 
-    private onMessage_ = (response: WebViewMessageEvent) => {
+	public render(): JSX.Element | null {
+		const language = UiStore.getLanguage();
 
-        this.props.onCompleted(response.nativeEvent.data);
-    }
+		const url = APP_WEBSITE_URL;
 
-    public render(): JSX.Element | null {
-
-        const language = UiStore.getLanguage();
-
-        const url = APP_WEBSITE_URL;
-
-        const html =
-            `
+		const html = `
             <!DOCTYPE html>
             <html style="height: 100%">
                 <head>
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <script src="https://recaptcha.google.com/recaptcha/api.js?explicit&hl=${ language }"></script>
+                    <script src="https://recaptcha.google.com/recaptcha/api.js?explicit&hl=${language}"></script>
                     <script type="text/javascript">
                         var onDataCallback = function(response) {
                             window.ReactNativeWebView.postMessage(response);
@@ -48,7 +44,7 @@ export default class ReCaptcha extends Component<ReCaptchaProps, RX.Stateless> {
                     <div
                         id="captcha"
                         class="g-recaptcha"
-                        data-sitekey="${ this.props.siteKey }"
+                        data-sitekey="${this.props.siteKey}"
                         data-callback="onDataCallback"
                         data-expired-callback="onDataExpiredCallback"
                         data-error-callback="onDataErrorCallback"
@@ -58,27 +54,29 @@ export default class ReCaptcha extends Component<ReCaptchaProps, RX.Stateless> {
             </html>
             `;
 
-        return (
-            <View style={ {
-                flex: 1,
-                alignSelf: 'stretch',
-                alignItems: 'center',
-                justifyContent: 'center',
-            } }>
-                <WebView
-                    style= {{
-                        width: UiStore.getAppLayout_().pageWidth - PAGE_MARGIN,
-                        backgroundColor: TRANSPARENT_BACKGROUND,
-                    }}
-                    originWhitelist={ ['*'] }
-                    source={{
-                        html: html,
-                        baseUrl: `${url}`,
-                    }}
-                    onMessage={ this.onMessage_ }
-                    onLoad={ this.props.hideSpinner }
-                />
-            </View>
-        )
-    }
+		return (
+			<View
+				style={{
+					flex: 1,
+					alignSelf: 'stretch',
+					alignItems: 'center',
+					justifyContent: 'center',
+				}}
+			>
+				<WebView
+					style={{
+						width: UiStore.getAppLayout_().pageWidth - PAGE_MARGIN,
+						backgroundColor: TRANSPARENT_BACKGROUND,
+					}}
+					originWhitelist={['*']}
+					source={{
+						html: html,
+						baseUrl: `${url}`,
+					}}
+					onMessage={this.onMessage_}
+					onLoad={this.props.hideSpinner}
+				/>
+			</View>
+		);
+	}
 }

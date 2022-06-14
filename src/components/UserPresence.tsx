@@ -11,123 +11,118 @@ import { SPACING } from '../ui';
 import AppFont from '../modules/AppFont';
 
 const styles = {
-    container: RX.Styles.createViewStyle({
-        flexDirection: 'row',
-        alignItems: 'center',
-    }),
-}
+	container: RX.Styles.createViewStyle({
+		flexDirection: 'row',
+		alignItems: 'center',
+	}),
+};
 
 interface UserPresenceState {
-    lastSeenTime: number;
+	lastSeenTime: number;
 }
 
 interface UserPresenceProps extends RX.CommonProps {
-    userId: string;
-    fontColor: string;
-    fontSize: number;
+	userId: string;
+	fontColor: string;
+	fontSize: number;
 }
 
 export default class UserPresence extends ComponentBase<UserPresenceProps, UserPresenceState> {
+	private language: Languages = 'en';
+	private locale: Locale;
+	private isMounted_: boolean | undefined;
 
-    private language: Languages = 'en';
-    private locale: Locale;
-    private isMounted_: boolean | undefined;
+	constructor(props: UserPresenceProps) {
+		super(props);
 
-    constructor(props: UserPresenceProps) {
-        super(props);
+		this.language = UiStore.getLanguage();
+		this.locale = UiStore.getLocale();
+	}
 
-        this.language = UiStore.getLanguage();
-        this.locale = UiStore.getLocale();
-    }
+	protected _buildState(
+		nextProps: UserPresenceProps,
+		_initState: boolean,
+		prevState: UserPresenceState
+	): UserPresenceState {
+		const prevLastSeenTime = this.props.userId !== nextProps.userId ? 0 : prevState?.lastSeenTime || 0;
 
-    protected _buildState(nextProps: UserPresenceProps, _initState: boolean, prevState: UserPresenceState): UserPresenceState {
+		const lastSeenTime = DataStore.getLastSeenTime(nextProps.userId);
 
-        const prevLastSeenTime = this.props.userId !== nextProps.userId ? 0 : prevState?.lastSeenTime || 0;
+		return { lastSeenTime: Math.max(lastSeenTime, prevLastSeenTime) };
+	}
 
-        const lastSeenTime = DataStore.getLastSeenTime(nextProps.userId);
+	public componentDidMount(): void {
+		super.componentDidMount();
 
-        return { lastSeenTime: Math.max(lastSeenTime, prevLastSeenTime) }
-    }
+		this.isMounted_ = true;
 
-    public componentDidMount(): void {
-        super.componentDidMount();
+		ApiClient.getPresence(this.props.userId)
+			.then(response => {
+				if (response?.last_active_ago) {
+					const lastSeenTime = Date.now() - response.last_active_ago;
+					if (this.isMounted_ && lastSeenTime > this.state.lastSeenTime) {
+						this.setState({ lastSeenTime: lastSeenTime });
+					}
+				}
+			})
+			.catch(_error => null);
+	}
 
-        this.isMounted_ = true;
+	public componentWillUnmount(): void {
+		this.isMounted_ = false;
+	}
 
-        ApiClient.getPresence(this.props.userId)
-            .then(response => {
-                if (response?.last_active_ago) {
-                    const lastSeenTime = Date.now() - response.last_active_ago;
-                    if (this.isMounted_ && lastSeenTime > this.state.lastSeenTime) {
-                        this.setState({ lastSeenTime: lastSeenTime });
-                    }
-                }
-            })
-            .catch(_error => null);
-    }
+	private resetPresence = () => {
+		this.forceUpdate();
+	};
 
-    public componentWillUnmount(): void {
-        this.isMounted_ = false;
-    }
+	public render(): JSX.Element | null {
+		let lastSeenText = '';
 
-    private resetPresence = () => {
-        this.forceUpdate();
-    }
+		if (!this.state.lastSeenTime || this.state.lastSeenTime < 100) {
+			lastSeenText = 'N/A';
+		} else if (differenceInMilliseconds(new Date(), this.state.lastSeenTime) < 30000) {
+			lastSeenText = online[this.language];
 
-    public render(): JSX.Element | null {
+			setTimeout(this.resetPresence, 31000);
+		} else {
+			if (isToday(this.state.lastSeenTime)) {
+				lastSeenText =
+					todayWord[this.language] + format(this.state.lastSeenTime, ' HH:mm', { locale: this.locale });
+			} else if (isYesterday(this.state.lastSeenTime)) {
+				lastSeenText =
+					yesterdayWord[this.language] + format(this.state.lastSeenTime, ' HH:mm', { locale: this.locale });
+			} else if (differenceInDays(new Date(), this.state.lastSeenTime) > 30) {
+				lastSeenText = format(this.state.lastSeenTime, 'd MMM yyyy', { locale: this.locale });
+			} else {
+				lastSeenText = format(this.state.lastSeenTime, 'd MMM HH:mm', { locale: this.locale });
+			}
+		}
 
-        let lastSeenText = '';
+		const activityIcon = (
+			<IconSvg
+				source={require('../resources/svg/activity.json') as SvgFile}
+				style={{ marginRight: SPACING, opacity: 0.7 }}
+				fillColor={this.props.fontColor}
+				height={this.props.fontSize}
+				width={this.props.fontSize}
+			/>
+		);
 
-        if (!this.state.lastSeenTime || this.state.lastSeenTime < 100) {
-
-            lastSeenText = 'N/A';
-
-        } else if (differenceInMilliseconds(new Date(), this.state.lastSeenTime) < 30000) {
-
-            lastSeenText = online[this.language];
-
-            setTimeout(this.resetPresence, 31000);
-
-        } else {
-
-            if (isToday(this.state.lastSeenTime)) {
-
-                lastSeenText = todayWord[this.language] + format(this.state.lastSeenTime, ' HH:mm', { locale: this.locale });
-
-            } else if (isYesterday(this.state.lastSeenTime)) {
-
-                lastSeenText = yesterdayWord[this.language] + format(this.state.lastSeenTime, ' HH:mm', { locale: this.locale });
-
-            } else if (differenceInDays(new Date(), this.state.lastSeenTime) > 30) {
-
-                lastSeenText = format(this.state.lastSeenTime, 'd MMM yyyy', { locale: this.locale });
-
-            } else {
-
-                lastSeenText = format(this.state.lastSeenTime, 'd MMM HH:mm', { locale: this.locale });
-            }
-        }
-
-        const activityIcon = (
-            <IconSvg
-                source= { require('../resources/svg/activity.json') as SvgFile }
-                style={ { marginRight: SPACING, opacity: 0.7 } }
-                fillColor={ this.props.fontColor }
-                height={ this.props.fontSize }
-                width={ this.props.fontSize }
-            />
-        );
-
-        return (
-            <RX.View style={ styles.container }>
-                { activityIcon }
-                <RX.Text
-                    allowFontScaling={ false }
-                    style={{ color: this.props.fontColor, fontSize: this.props.fontSize, fontFamily: AppFont.fontFamily }}
-                >
-                    { lastSeenText }
-                </RX.Text>
-            </RX.View>
-        );
-    }
+		return (
+			<RX.View style={styles.container}>
+				{activityIcon}
+				<RX.Text
+					allowFontScaling={false}
+					style={{
+						color: this.props.fontColor,
+						fontSize: this.props.fontSize,
+						fontFamily: AppFont.fontFamily,
+					}}
+				>
+					{lastSeenText}
+				</RX.Text>
+			</RX.View>
+		);
+	}
 }

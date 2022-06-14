@@ -32,7 +32,6 @@
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-misused-promises": "off",
     "react/jsx-curly-brace-presence": [2, { "props": "always" }],
-    "max-len": ["error", 120],
     "indent": "off"
   },
   "globals": {

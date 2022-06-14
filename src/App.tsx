@@ -12,147 +12,138 @@ import FileHandler from './modules/FileHandler';
 import RXNetInfo from 'reactxp-netinfo';
 
 const styles = {
-    container: RX.Styles.createViewStyle({
-        flex: 1,
-        backgroundColor: APP_BACKGROUND,
-    }),
+	container: RX.Styles.createViewStyle({
+		flex: 1,
+		backgroundColor: APP_BACKGROUND,
+	}),
 };
 
 interface AppState {
-    startPage: ReactElement | undefined;
+	startPage: ReactElement | undefined;
 }
 
 interface AppProps {
-    sharedContent?: string;
+	sharedContent?: string;
 }
 
 export class App extends ComponentBase<AppProps, AppState> {
+	private sharedContent = '';
 
-    private sharedContent = '';
+	constructor(props: AppProps) {
+		super(props);
 
-    constructor(props: AppProps) {
-        super(props);
+		RXNetInfo.isConnected()
+			.then(response => {
+				UiStore.setOffline(!response);
+			})
+			.catch(_error => null);
 
-        RXNetInfo.isConnected()
-            .then(response => {
-                UiStore.setOffline(!response)
-            })
-            .catch(_error => null);
+		RX.UserInterface.useCustomScrollbars(true);
+		RX.International.allowRTL(false);
 
-        RX.UserInterface.useCustomScrollbars(true);
-        RX.International.allowRTL(false);
+		UiStore.setPlatform();
+		UiStore.setDevice();
+		UiStore.setIsElectron();
+		UiStore.setLocale().catch(_error => null);
 
-        UiStore.setPlatform();
-        UiStore.setDevice();
-        UiStore.setIsElectron();
-        UiStore.setLocale().catch(_error => null);
+		if (UiStore.getPlatform() === 'web' && !UiStore.getIsElectron()) {
+			window.oncontextmenu = () => {
+				return false;
+			};
+		}
 
-        if (UiStore.getPlatform() === 'web' && !UiStore.getIsElectron()) {
-            window.oncontextmenu = () => {
-                return false;
-            };
-        }
+		if (UiStore.getIsElectron()) {
+			const { webFrame } = window.require('electron');
 
-        if (UiStore.getIsElectron()) {
+			ApiClient.getStoredZoomFactor()
+				.then(zoomFactor => {
+					webFrame.setZoomFactor(Math.round((zoomFactor || 1) * 100) / 100);
+				})
+				.catch(_error => null);
+		}
 
-            const { webFrame } = window.require('electron');
+		this.sharedContent = props.sharedContent || '';
 
-            ApiClient.getStoredZoomFactor()
-                .then(zoomFactor => {
-                    webFrame.setZoomFactor(Math.round((zoomFactor || 1) * 100) / 100);
-                })
-                .catch(_error => null);
-        }
+		if (UiStore.getIsElectron() || ['android', 'ios'].includes(UiStore.getPlatform())) {
+			FileHandler.setCacheAppFolder();
+		}
+	}
 
-        this.sharedContent = props.sharedContent || '';
+	public async componentDidMount(): Promise<void> {
+		super.componentDidMount();
 
-        if (UiStore.getIsElectron() || ['android', 'ios'].includes(UiStore.getPlatform())) {
-            FileHandler.setCacheAppFolder();
-        }
-    }
+		RX.StatusBar.setBackgroundColor(STATUSBAR_BACKGROUND, true);
+		RX.StatusBar.setBarStyle('dark-content', true);
 
-    public async componentDidMount(): Promise<void> {
-        super.componentDidMount();
+		const credentials = await ApiClient.getStoredCredentials();
+		credentials ? this.showMain() : this.showLogin();
 
-        RX.StatusBar.setBackgroundColor(STATUSBAR_BACKGROUND, true);
-        RX.StatusBar.setBarStyle('dark-content', true);
+		RXNetInfo.connectivityChangedEvent.subscribe(isConnected => {
+			UiStore.setOffline(!isConnected);
+		});
 
-        const credentials = await ApiClient.getStoredCredentials();
-        credentials ? this.showMain() : this.showLogin();
+		if (UiStore.getIsElectron()) {
+			const { ipcRenderer } = window.require('electron');
 
-        RXNetInfo.connectivityChangedEvent.subscribe(isConnected => {
-            UiStore.setOffline(!isConnected);
-        });
+			const storeElectronData = () => {
+				ApiClient.storeAppData()
+					.then(_response => {
+						ipcRenderer.removeListener('storeDataAndCloseApp', storeElectronData);
+						ipcRenderer.send('closeApp');
+					})
+					.catch(_error => null);
+			};
 
-        if (UiStore.getIsElectron()) {
+			ipcRenderer.on('storeDataAndCloseApp', storeElectronData);
+		}
+	}
 
-            const { ipcRenderer } = window.require('electron');
+	public componentWillUnmount(): void {
+		super.componentWillUnmount();
 
-            const storeElectronData = () => {
-                ApiClient.storeAppData()
-                    .then(_response => {
-                        ipcRenderer.removeListener('storeDataAndCloseApp', storeElectronData);
-                        ipcRenderer.send('closeApp');
-                    })
-                    .catch(_error => null);
-            }
+		RXNetInfo.connectivityChangedEvent.unsubscribe(_isConnected => null);
+	}
 
-            ipcRenderer.on('storeDataAndCloseApp', storeElectronData);
-        }
-    }
+	private showLogin = () => {
+		ApiClient.stopSync();
+		ApiClient.clearNextSyncToken();
+		DataStore.clearRoomSummaryList();
 
-    public componentWillUnmount(): void {
-        super.componentWillUnmount();
+		const loginPage = <Login showMainPage={this.showMain} />;
 
-        RXNetInfo.connectivityChangedEvent.unsubscribe(_isConnected => null);
-    }
+		this.setState({ startPage: loginPage });
+	};
 
-    private showLogin = () => {
+	private showMain = () => {
+		const mainPage = (
+			<Main
+				showLogin={this.showLogin}
+				sharedContent={this.sharedContent}
+			/>
+		);
 
-        ApiClient.stopSync();
-        ApiClient.clearNextSyncToken();
-        DataStore.clearRoomSummaryList();
+		this.sharedContent = '';
 
-        const loginPage = (
-            <Login
-                showMainPage={ this.showMain }
-            />
-        );
+		this.setState({ startPage: mainPage });
+	};
 
-        this.setState({ startPage: loginPage });
-    }
+	private setLayout = (layout: ViewOnLayoutEvent) => {
+		UiStore.setAppLayout(layout);
+	};
 
-    private showMain = () => {
+	public render(): JSX.Element | null {
+		if (!this.state.startPage) {
+			return null;
+		}
 
-        const mainPage = (
-            <Main
-                showLogin={ this.showLogin }
-                sharedContent={ this.sharedContent }
-            />
-        );
-
-        this.sharedContent = '';
-
-        this.setState({ startPage: mainPage });
-    }
-
-    private setLayout = (layout: ViewOnLayoutEvent) => {
-
-        UiStore.setAppLayout(layout);
-    }
-
-    public render(): JSX.Element | null {
-
-        if (!this.state.startPage) { return null }
-
-        return (
-            <RX.View
-                style={ styles.container }
-                onLayout={ this.setLayout }
-                useSafeInsets={ true }
-            >
-                { this.state.startPage }
-            </RX.View>
-        );
-    }
+		return (
+			<RX.View
+				style={styles.container}
+				onLayout={this.setLayout}
+				useSafeInsets={true}
+			>
+				{this.state.startPage}
+			</RX.View>
+		);
+	}
 }

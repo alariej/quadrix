@@ -1,33 +1,29 @@
 class VideoThumbnail {
+	public getImage(uri: string): Promise<{ blob: Blob; height: number; width: number }> {
+		return new Promise(resolve => {
+			const videoElement = document.createElement('video');
+			videoElement.src = uri + '#t=0.001';
 
-    public getImage(uri: string): Promise<{ blob: Blob, height: number, width: number }> {
+			videoElement.onloadeddata = async () => {
+				const canvas = document.createElement('canvas');
+				const context = canvas.getContext('2d');
 
-        return new Promise(resolve => {
+				canvas.height = videoElement.videoHeight;
+				canvas.width = videoElement.videoWidth;
 
-            const videoElement = document.createElement('video');
-            videoElement.src = uri + '#t=0.001';
+				context?.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 
-            videoElement.onloadeddata = async () => {
+				const image = canvas.toDataURL('image/jpeg');
 
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
+				const imageData = await fetch(image).catch();
+				const imageBlob = await imageData.blob().catch();
 
-                canvas.height = videoElement.videoHeight;
-                canvas.width = videoElement.videoWidth;
+				resolve({ blob: imageBlob, height: canvas.height, width: canvas.width });
+			};
 
-                context?.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-
-                const image = canvas.toDataURL('image/jpeg');
-
-                const imageData = await fetch(image).catch();
-                const imageBlob = await imageData.blob().catch();
-
-                resolve({ blob: imageBlob, height: canvas.height, width: canvas.width });
-            }
-
-            videoElement.load()
-        });
-    }
+			videoElement.load();
+		});
+	}
 }
 
 export default new VideoThumbnail();

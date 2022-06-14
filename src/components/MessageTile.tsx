@@ -1,8 +1,20 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
-import { TILE_BACKGROUND, FOOTER_TEXT, BORDER_RADIUS, SPACING, FONT_NORMAL, TILE_SYSTEM_TEXT, BUTTON_ROUND_WIDTH,
-    TRANSPARENT_BACKGROUND, MARKER_READ_FILL, MARKER_SENT_FILL, TILE_BACKGROUND_OWN, PAGE_MARGIN,
-    APP_BACKGROUND } from '../ui';
+import {
+	TILE_BACKGROUND,
+	FOOTER_TEXT,
+	BORDER_RADIUS,
+	SPACING,
+	FONT_NORMAL,
+	TILE_SYSTEM_TEXT,
+	BUTTON_ROUND_WIDTH,
+	TRANSPARENT_BACKGROUND,
+	MARKER_READ_FILL,
+	MARKER_SENT_FILL,
+	TILE_BACKGROUND_OWN,
+	PAGE_MARGIN,
+	APP_BACKGROUND,
+} from '../ui';
 import ImageMessage from './ImageMessage';
 import FileMessage from './FileMessage';
 import TextMessage from './TextMessage';
@@ -22,440 +34,451 @@ import ReplyMessage from './ReplyMessage';
 import Shadow from '../modules/Shadow';
 
 const styles = {
-    container: RX.Styles.createViewStyle({
-        flex: 1,
-        overflow: 'visible',
-        backgroundColor: TRANSPARENT_BACKGROUND,
-    }),
-    containerTile: RX.Styles.createViewStyle({
-        borderRadius: BORDER_RADIUS,
-        marginBottom: SPACING,
-        padding: SPACING,
-        minWidth: 84,
-        overflow: 'visible',
-        shadowOffset: Shadow.small.offset,
-        shadowColor: Shadow.small.color,
-        shadowRadius: Shadow.small.radius,
-        elevation: Shadow.small.elevation,
-        shadowOpacity: Shadow.small.opacity,
-    }),
-    containerMessage: RX.Styles.createViewStyle({
-        flex: 1,
-        overflow: 'visible',
-    }),
-    containerFooter: RX.Styles.createViewStyle({
-        flexDirection: 'row',
-        marginTop: 8,
-        overflow: 'visible'
-    }),
-    footer: RX.Styles.createViewStyle({
-        flex: 1,
-        flexDirection: 'row',
-    }),
-    footerDetails: RX.Styles.createViewStyle({
-        flex: 1,
-        flexDirection: 'column',
-    }),
-    footerSenderId: RX.Styles.createTextStyle({
-        fontFamily: AppFont.fontFamily,
-        flexShrink: 1,
-        fontSize: FONT_NORMAL,
-        color: FOOTER_TEXT,
-    }),
-    footerTimestamp: RX.Styles.createTextStyle({
-        fontFamily: AppFont.fontFamily,
-        flexShrink: 0,
-        fontSize: FONT_NORMAL,
-        color: FOOTER_TEXT,
-        marginRight: SPACING,
-    }),
-    containerMarker: RX.Styles.createViewStyle({
-        flex: 1,
-        overflow: 'visible'
-    }),
-    spinner: RX.Styles.createViewStyle({
-        flex: 1,
-        alignSelf: 'flex-end',
-        marginRight: SPACING,
-        overflow: 'visible'
-    }),
-    containerText: RX.Styles.createTextStyle({
-        fontFamily: AppFont.fontFamily,
-        flex: 1,
-        fontSize: FONT_NORMAL,
-        minHeight: FONT_NORMAL + 7,
-        color: TILE_SYSTEM_TEXT,
-    }),
-    containerCorner: RX.Styles.createViewStyle({
-        position: 'absolute',
-        bottom: 0,
-        height: 1,
-        backgroundColor: APP_BACKGROUND,
-        overflow: 'visible',
-        shadowOffset: Shadow.small.offset,
-        shadowColor: Shadow.small.color,
-        shadowRadius: Shadow.small.radius,
-        elevation: Shadow.small.elevation,
-        shadowOpacity: Shadow.small.opacity,
-    })
+	container: RX.Styles.createViewStyle({
+		flex: 1,
+		overflow: 'visible',
+		backgroundColor: TRANSPARENT_BACKGROUND,
+	}),
+	containerTile: RX.Styles.createViewStyle({
+		borderRadius: BORDER_RADIUS,
+		marginBottom: SPACING,
+		padding: SPACING,
+		minWidth: 84,
+		overflow: 'visible',
+		shadowOffset: Shadow.small.offset,
+		shadowColor: Shadow.small.color,
+		shadowRadius: Shadow.small.radius,
+		elevation: Shadow.small.elevation,
+		shadowOpacity: Shadow.small.opacity,
+	}),
+	containerMessage: RX.Styles.createViewStyle({
+		flex: 1,
+		overflow: 'visible',
+	}),
+	containerFooter: RX.Styles.createViewStyle({
+		flexDirection: 'row',
+		marginTop: 8,
+		overflow: 'visible',
+	}),
+	footer: RX.Styles.createViewStyle({
+		flex: 1,
+		flexDirection: 'row',
+	}),
+	footerDetails: RX.Styles.createViewStyle({
+		flex: 1,
+		flexDirection: 'column',
+	}),
+	footerSenderId: RX.Styles.createTextStyle({
+		fontFamily: AppFont.fontFamily,
+		flexShrink: 1,
+		fontSize: FONT_NORMAL,
+		color: FOOTER_TEXT,
+	}),
+	footerTimestamp: RX.Styles.createTextStyle({
+		fontFamily: AppFont.fontFamily,
+		flexShrink: 0,
+		fontSize: FONT_NORMAL,
+		color: FOOTER_TEXT,
+		marginRight: SPACING,
+	}),
+	containerMarker: RX.Styles.createViewStyle({
+		flex: 1,
+		overflow: 'visible',
+	}),
+	spinner: RX.Styles.createViewStyle({
+		flex: 1,
+		alignSelf: 'flex-end',
+		marginRight: SPACING,
+		overflow: 'visible',
+	}),
+	containerText: RX.Styles.createTextStyle({
+		fontFamily: AppFont.fontFamily,
+		flex: 1,
+		fontSize: FONT_NORMAL,
+		minHeight: FONT_NORMAL + 7,
+		color: TILE_SYSTEM_TEXT,
+	}),
+	containerCorner: RX.Styles.createViewStyle({
+		position: 'absolute',
+		bottom: 0,
+		height: 1,
+		backgroundColor: APP_BACKGROUND,
+		overflow: 'visible',
+		shadowOffset: Shadow.small.offset,
+		shadowColor: Shadow.small.color,
+		shadowRadius: Shadow.small.radius,
+		elevation: Shadow.small.elevation,
+		shadowOpacity: Shadow.small.opacity,
+	}),
 };
 
 interface MessageTileProps {
-    roomId: string;
-    event: MessageEvent;
-    roomType: RoomType;
-    readMarkerType?: string;
-    replyMessage?: MessageEvent;
-    setReplyMessage: (message: MessageEvent) => void;
-    onPressReply?: (eventId: string) => void;
-    showTempForwardedMessage?: (roomId: string, message?: MessageEvent, tempId?: string) => void;
-    canPress?: boolean;
-    isRedacted: boolean;
-    withSenderDetails?: boolean | undefined;
+	roomId: string;
+	event: MessageEvent;
+	roomType: RoomType;
+	readMarkerType?: string;
+	replyMessage?: MessageEvent;
+	setReplyMessage: (message: MessageEvent) => void;
+	onPressReply?: (eventId: string) => void;
+	showTempForwardedMessage?: (roomId: string, message?: MessageEvent, tempId?: string) => void;
+	canPress?: boolean;
+	isRedacted: boolean;
+	withSenderDetails?: boolean | undefined;
 }
 
 export default class MessageTile extends RX.Component<MessageTileProps, RX.Stateless> {
+	private mainTile: RX.View | undefined;
+	private tileStyle: RX.Types.ViewStyleRuleSet;
 
-    private mainTile: RX.View | undefined;
-    private tileStyle: RX.Types.ViewStyleRuleSet;
+	public shouldComponentUpdate(nextProps: MessageTileProps): boolean {
+		return (
+			this.props.readMarkerType !== nextProps.readMarkerType ||
+			this.props.isRedacted !== nextProps.isRedacted ||
+			this.props.withSenderDetails !== nextProps.withSenderDetails
+		);
+	}
 
-    public shouldComponentUpdate(nextProps: MessageTileProps): boolean {
+	private showContextDialog = () => {
+		RX.UserInterface.dismissKeyboard();
 
-        return this.props.readMarkerType !== nextProps.readMarkerType ||
-            this.props.isRedacted !== nextProps.isRedacted ||
-            this.props.withSenderDetails !== nextProps.withSenderDetails;
-    }
+		RX.UserInterface.measureLayoutRelativeToWindow(this.mainTile!)
+			.then(layout => {
+				const dialogMessageTile = (
+					<DialogMessageTile
+						roomId={this.props.roomId}
+						event={this.props.event}
+						layout={layout}
+						roomType={this.props.roomType}
+						readMarkerType={this.props.readMarkerType}
+						replyMessage={this.props.replyMessage}
+						setReplyMessage={this.props.setReplyMessage}
+						showTempForwardedMessage={this.props.showTempForwardedMessage}
+						marginStyle={this.tileStyle}
+					/>
+				);
 
-    private showContextDialog = () => {
+				RX.Modal.show(dialogMessageTile, 'dialogMessageTile');
+			})
+			.catch(_error => null);
+	};
 
-        RX.UserInterface.dismissKeyboard();
+	public render(): JSX.Element | null {
+		let message;
+		let messageType: string;
 
-        RX.UserInterface.measureLayoutRelativeToWindow(this.mainTile!)
-            .then(layout => {
+		let replyMessage: ReactElement | undefined;
+		if (this.props.replyMessage) {
+			replyMessage = (
+				<ReplyMessage
+					replyEvent={this.props.replyMessage}
+					roomId={this.props.roomId}
+					onPress={this.props.onPressReply}
+				/>
+			);
+		}
 
-                const dialogMessageTile = (
-                    <DialogMessageTile
-                        roomId={ this.props.roomId }
-                        event={ this.props.event }
-                        layout={ layout }
-                        roomType={ this.props.roomType }
-                        readMarkerType={ this.props.readMarkerType }
-                        replyMessage={ this.props.replyMessage }
-                        setReplyMessage={ this.props.setReplyMessage }
-                        showTempForwardedMessage={ this.props.showTempForwardedMessage }
-                        marginStyle={ this.tileStyle }
-                    />
-                );
+		if (this.props.isRedacted) {
+			messageType = 'system';
 
-                RX.Modal.show(dialogMessageTile, 'dialogMessageTile');
-            })
-            .catch(_error => null);
-    }
+			message = <RX.Text style={styles.containerText}>{messageDeleted[UiStore.getLanguage()]}</RX.Text>;
+		} else if (this.props.event.type === 'm.room.encrypted') {
+			messageType = 'system';
 
-    public render(): JSX.Element | null {
+			message = <RX.Text style={styles.containerText}>{encryptedMessage[UiStore.getLanguage()]}</RX.Text>;
+		} else if (this.props.event.content.msgtype === 'm.image') {
+			messageType = 'media';
 
-        let message;
-        let messageType: string;
+			message = (
+				<ImageMessage
+					roomId={this.props.roomId}
+					message={this.props.event}
+					showContextDialog={this.showContextDialog}
+				/>
+			);
+		} else if (this.props.event.content.msgtype === 'm.video') {
+			messageType = 'media';
 
-        let replyMessage: ReactElement | undefined;
-        if (this.props.replyMessage) {
-            replyMessage = (
-                <ReplyMessage
-                    replyEvent={ this.props.replyMessage }
-                    roomId={ this.props.roomId }
-                    onPress={ this.props.onPressReply }
-                />
-            )
-        }
+			message = (
+				<VideoMessage
+					message={this.props.event}
+					showContextDialog={this.showContextDialog}
+				/>
+			);
+		} else if (this.props.event.content.msgtype === 'm.file') {
+			messageType = 'file';
 
-        if (this.props.isRedacted) {
+			message = (
+				<FileMessage
+					message={this.props.event}
+					showContextDialog={this.showContextDialog}
+				/>
+			);
+		} else {
+			messageType = 'text';
 
-            messageType = 'system';
+			message = (
+				<TextMessage
+					roomId={this.props.roomId}
+					message={this.props.event}
+					showContextDialog={this.showContextDialog}
+				/>
+			);
+		}
 
-            message = (
-                <RX.Text style={ styles.containerText}>
-                    { messageDeleted[UiStore.getLanguage()] }
-                </RX.Text>
-            );
-        } else if (this.props.event.type === 'm.room.encrypted') {
+		const marginMin = BUTTON_ROUND_WIDTH + SPACING;
+		const isOwnMessage = this.props.event.senderId === ApiClient.credentials.userIdFull;
 
-            messageType = 'system';
+		let marginLeft;
+		let marginRight;
+		let alignSelf: RX.Types.FlexboxParentStyle['alignSelf'];
+		let backgroundColor;
 
-            message = (
-                <RX.Text style={ styles.containerText}>
-                    { encryptedMessage[UiStore.getLanguage()] }
-                </RX.Text>
-            );
-        } else if (this.props.event.content.msgtype === 'm.image') {
+		if (this.props.roomType === 'notepad') {
+			marginLeft = marginMin / 2;
+			marginRight = marginMin / 2;
+			alignSelf = undefined;
+			backgroundColor = TILE_BACKGROUND;
+		} else if (messageType === 'media') {
+			marginLeft = isOwnMessage ? marginMin : 0;
+			marginRight = isOwnMessage ? 0 : marginMin;
+			alignSelf = undefined;
+			backgroundColor = isOwnMessage ? TILE_BACKGROUND_OWN : TILE_BACKGROUND;
+		} else {
+			marginLeft = isOwnMessage ? marginMin : 0;
+			marginRight = isOwnMessage ? 0 : marginMin;
+			alignSelf = isOwnMessage ? 'flex-end' : 'flex-start';
+			backgroundColor = isOwnMessage ? TILE_BACKGROUND_OWN : TILE_BACKGROUND;
+		}
 
-            messageType = 'media';
+		let borderBottomLeftRadius;
+		let borderBottomRightRadius;
 
-            message = (
-                <ImageMessage
-                    roomId={ this.props.roomId }
-                    message={ this.props.event }
-                    showContextDialog={ this.showContextDialog }
-                />
-            );
-        } else if (this.props.event.content.msgtype === 'm.video') {
+		if (['direct', 'group'].includes(this.props.roomType)) {
+			(borderBottomLeftRadius = isOwnMessage ? 0 : BORDER_RADIUS),
+				(borderBottomRightRadius = isOwnMessage ? BORDER_RADIUS : 0);
+		} else {
+			borderBottomLeftRadius = BORDER_RADIUS;
+			borderBottomRightRadius = BORDER_RADIUS;
+		}
 
-            messageType = 'media';
+		this.tileStyle = RX.Styles.createViewStyle(
+			{
+				marginLeft: marginLeft,
+				marginRight: marginRight,
+				alignSelf: this.props.withSenderDetails ? undefined : alignSelf,
+				backgroundColor: backgroundColor,
+				borderBottomLeftRadius: borderBottomLeftRadius,
+				borderBottomRightRadius: borderBottomRightRadius,
+			},
+			false
+		);
 
-            message = (
-                <VideoMessage
-                    message={ this.props.event }
-                    showContextDialog={ this.showContextDialog }
-                />
-            );
-        } else if (this.props.event.content.msgtype === 'm.file') {
+		const timestamp = format(this.props.event.time, 'HH:mm');
 
-            messageType = 'file';
+		const width =
+			UiStore.getAppLayout_().pageWidth - 2 * PAGE_MARGIN - (BUTTON_ROUND_WIDTH + SPACING) - 2 * SPACING;
 
-            message = (
-                <FileMessage
-                    message={ this.props.event }
-                    showContextDialog={ this.showContextDialog }
-                />
-            );
-        } else {
+		let footer: ReactElement;
+		if (
+			this.props.roomType !== 'direct' &&
+			ApiClient.credentials.userIdFull !== this.props.event.senderId &&
+			!this.props.withSenderDetails
+		) {
+			const senderInfo =
+				this.props.roomType === 'group'
+					? DataStore.getMemberName(this.props.roomId, this.props.event.senderId)
+					: this.props.event.senderId;
 
-            messageType = 'text';
+			footer = (
+				<RX.View style={[styles.footer, { maxWidth: width }]}>
+					<RX.Text
+						allowFontScaling={false}
+						style={styles.footerSenderId}
+						numberOfLines={1}
+					>
+						{senderInfo}
+					</RX.Text>
+					<RX.Text
+						allowFontScaling={false}
+						style={styles.footerTimestamp}
+					>
+						{' - ' + timestamp}
+					</RX.Text>
+				</RX.View>
+			);
+		} else if (this.props.withSenderDetails) {
+			const memberName = DataStore.getMemberName(this.props.roomId, this.props.event.senderId);
 
-            message = (
-                <TextMessage
-                    roomId={ this.props.roomId }
-                    message={ this.props.event }
-                    showContextDialog={ this.showContextDialog }
-                />
-            );
-        }
+			let senderName: ReactElement | undefined;
+			if (memberName !== this.props.event.senderId) {
+				senderName = (
+					<RX.Text
+						allowFontScaling={false}
+						style={styles.footerSenderId}
+					>
+						{memberName}
+					</RX.Text>
+				);
+			}
 
-        const marginMin = (BUTTON_ROUND_WIDTH + SPACING);
-        const isOwnMessage = this.props.event.senderId === ApiClient.credentials.userIdFull;
+			const dateStamp = format(this.props.event.time, 'd MMMM yyyy', { locale: UiStore.getLocale() });
 
-        let marginLeft;
-        let marginRight;
-        let alignSelf: RX.Types.FlexboxParentStyle['alignSelf'];
-        let backgroundColor;
+			footer = (
+				<RX.View style={[styles.footerDetails, { maxWidth: width }]}>
+					{senderName}
+					<RX.Text
+						allowFontScaling={false}
+						style={styles.footerSenderId}
+					>
+						{this.props.event.senderId}
+					</RX.Text>
+					<RX.Text
+						allowFontScaling={false}
+						style={styles.footerTimestamp}
+					>
+						{dateStamp + ' - ' + timestamp}
+					</RX.Text>
+				</RX.View>
+			);
+		} else {
+			footer = (
+				<RX.Text
+					allowFontScaling={false}
+					style={styles.footerTimestamp}
+				>
+					{timestamp}
+				</RX.Text>
+			);
+		}
 
-        if (this.props.roomType === 'notepad') {
-            marginLeft = marginMin / 2;
-            marginRight = marginMin / 2;
-            alignSelf = undefined;
-            backgroundColor = TILE_BACKGROUND;
-        } else if (messageType === 'media') {
-            marginLeft = isOwnMessage ? marginMin : 0;
-            marginRight = isOwnMessage ? 0 : marginMin;
-            alignSelf = undefined;
-            backgroundColor = isOwnMessage ? TILE_BACKGROUND_OWN : TILE_BACKGROUND;
-        } else {
-            marginLeft = isOwnMessage ? marginMin : 0;
-            marginRight = isOwnMessage ? 0 : marginMin;
-            alignSelf = isOwnMessage ? 'flex-end' : 'flex-start';
-            backgroundColor = isOwnMessage ? TILE_BACKGROUND_OWN : TILE_BACKGROUND;
-        }
+		let readMarker: ReactElement | null = null;
+		if (ApiClient.credentials.userIdFull === this.props.event.senderId) {
+			if (this.props.readMarkerType === 'read' && this.props.roomType !== 'notepad') {
+				readMarker = (
+					<RX.View style={styles.containerMarker}>
+						<IconSvg
+							source={require('../resources/svg/marker.json') as SvgFile}
+							fillColor={MARKER_READ_FILL}
+							height={14}
+							width={14}
+							style={{ alignSelf: 'flex-end' }}
+						/>
+					</RX.View>
+				);
+			} else if (this.props.readMarkerType === 'sent' && this.props.roomType !== 'notepad') {
+				readMarker = (
+					<RX.View style={styles.containerMarker}>
+						<IconSvg
+							source={require('../resources/svg/marker.json') as SvgFile}
+							fillColor={MARKER_SENT_FILL}
+							height={14}
+							width={14}
+							style={{ alignSelf: 'flex-end' }}
+						/>
+					</RX.View>
+				);
+			} else if (this.props.readMarkerType === 'sending') {
+				readMarker = (
+					<RX.View style={styles.containerMarker}>
+						<RX.View style={styles.spinner}>
+							<Spinner
+								size={'small'}
+								color={MARKER_SENT_FILL}
+								isVisible={true}
+							/>
+						</RX.View>
+					</RX.View>
+				);
+			}
+		}
 
-        let borderBottomLeftRadius;
-        let borderBottomRightRadius;
+		let cornerPointer: ReactElement | undefined;
 
-        if (['direct', 'group'].includes(this.props.roomType)) {
-            borderBottomLeftRadius = isOwnMessage ? 0 : BORDER_RADIUS,
-            borderBottomRightRadius = isOwnMessage ? BORDER_RADIUS : 0;
-        } else {
-            borderBottomLeftRadius = BORDER_RADIUS;
-            borderBottomRightRadius = BORDER_RADIUS;
-        }
+		if (['direct', 'group'].includes(this.props.roomType)) {
+			const cornerWidth = 18;
+			const cornerHeight = (cornerWidth * 71.49) / 100;
+			cornerPointer = (
+				<RX.View
+					style={[
+						styles.containerCorner,
+						{
+							left: isOwnMessage ? -cornerWidth / 2 : undefined,
+							right: isOwnMessage ? undefined : -cornerWidth / 2,
+							width: cornerWidth / 2,
+						},
+					]}
+				>
+					<IconSvg
+						style={{
+							position: 'absolute',
+							bottom: 0,
+							left: isOwnMessage ? 0 : undefined,
+							right: isOwnMessage ? undefined : 0,
+						}}
+						source={require('../resources/svg/corner.json') as SvgFile}
+						fillColor={isOwnMessage ? TILE_BACKGROUND_OWN : TILE_BACKGROUND}
+						height={cornerHeight}
+						width={cornerWidth}
+					/>
+				</RX.View>
+			);
+		}
 
-        this.tileStyle = RX.Styles.createViewStyle({
-            marginLeft: marginLeft,
-            marginRight: marginRight,
-            alignSelf: this.props.withSenderDetails? undefined : alignSelf,
-            backgroundColor: backgroundColor,
-            borderBottomLeftRadius: borderBottomLeftRadius,
-            borderBottomRightRadius: borderBottomRightRadius,
-        }, false);
+		let messageWrapper;
 
-        const timestamp = format(this.props.event.time, 'HH:mm');
+		if (UiStore.getPlatform() === 'web' && UiStore.getDevice() === 'mobile') {
+			messageWrapper = (
+				<RX.GestureView
+					style={[styles.containerTile, this.tileStyle]}
+					onLongPress={this.showContextDialog}
+					onPan={() => null}
+				>
+					{cornerPointer}
+					<RX.View style={styles.containerMessage}>
+						{replyMessage}
+						{message}
+					</RX.View>
+					<RX.View
+						style={[styles.containerFooter, { height: this.props.withSenderDetails ? undefined : 16 }]}
+					>
+						{footer}
+						{readMarker}
+					</RX.View>
+				</RX.GestureView>
+			);
+		} else {
+			messageWrapper = (
+				<RX.View
+					style={[styles.containerTile, this.tileStyle]}
+					onPress={() => RX.UserInterface.dismissKeyboard()}
+					onLongPress={this.showContextDialog}
+					disableTouchOpacityAnimation={true}
+					onContextMenu={this.showContextDialog}
+					activeOpacity={1}
+				>
+					{cornerPointer}
+					<RX.View style={styles.containerMessage}>
+						{replyMessage}
+						{message}
+					</RX.View>
+					<RX.View
+						style={[styles.containerFooter, { height: this.props.withSenderDetails ? undefined : 16 }]}
+					>
+						{footer}
+						{readMarker}
+					</RX.View>
+				</RX.View>
+			);
+		}
 
-        const width = (UiStore.getAppLayout_().pageWidth - 2 * PAGE_MARGIN) - (BUTTON_ROUND_WIDTH + SPACING) - 2 * SPACING;
-
-        let footer: ReactElement;
-        if (this.props.roomType !== 'direct' && ApiClient.credentials.userIdFull !== this.props.event.senderId
-            && !this.props.withSenderDetails)
-        {
-            const senderInfo = this.props.roomType === 'group' ?
-                DataStore.getMemberName(this.props.roomId, this.props.event.senderId) :
-                this.props.event.senderId;
-
-            footer = (
-                <RX.View style={ [styles.footer, { maxWidth: width }] }>
-                    <RX.Text allowFontScaling={ false } style={ styles.footerSenderId } numberOfLines={ 1 }>
-                        { senderInfo }
-                    </RX.Text>
-                    <RX.Text allowFontScaling={ false } style={ styles.footerTimestamp }>
-                        {  ' - ' + timestamp }
-                    </RX.Text>
-                </RX.View>
-            );
-        } else if (this.props.withSenderDetails) {
-
-            const memberName = DataStore.getMemberName(this.props.roomId, this.props.event.senderId);
-
-            let senderName: ReactElement | undefined;
-            if (memberName !== this.props.event.senderId) {
-                senderName = (
-                    <RX.Text allowFontScaling={ false } style={ styles.footerSenderId }>
-                        { memberName }
-                    </RX.Text>
-                )
-            }
-
-            const dateStamp = format(this.props.event.time, 'd MMMM yyyy', { locale: UiStore.getLocale() });
-
-            footer = (
-                <RX.View style={ [styles.footerDetails, { maxWidth: width }] }>
-                    { senderName }
-                    <RX.Text allowFontScaling={ false } style={ styles.footerSenderId }>
-                        { this.props.event.senderId }
-                    </RX.Text>
-                    <RX.Text allowFontScaling={ false } style={ styles.footerTimestamp }>
-                        {  dateStamp + ' - ' + timestamp }
-                    </RX.Text>
-                </RX.View>
-            );
-
-        } else {
-            footer = (
-                <RX.Text allowFontScaling={ false } style={ styles.footerTimestamp }>
-                    { timestamp }
-                </RX.Text>
-            );
-        }
-
-        let readMarker: ReactElement | null = null;
-        if (ApiClient.credentials.userIdFull === this.props.event.senderId) {
-
-            if (this.props.readMarkerType === 'read' && this.props.roomType !== 'notepad') {
-                readMarker = (
-                    <RX.View style={ styles.containerMarker }>
-                        <IconSvg
-                            source= { require('../resources/svg/marker.json') as SvgFile }
-                            fillColor={ MARKER_READ_FILL }
-                            height={ 14 }
-                            width={ 14 }
-                            style={ { alignSelf: 'flex-end' }}
-                        />
-                    </RX.View>
-                );
-            } else if (this.props.readMarkerType === 'sent' && this.props.roomType !== 'notepad') {
-                readMarker = (
-                    <RX.View style={ styles.containerMarker }>
-                        <IconSvg
-                            source= { require('../resources/svg/marker.json') as SvgFile }
-                            fillColor={ MARKER_SENT_FILL }
-                            height={ 14 }
-                            width={ 14 }
-                            style={ { alignSelf: 'flex-end' }}
-                        />
-                    </RX.View>
-                );
-            } else if (this.props.readMarkerType === 'sending') {
-                readMarker = (
-                    <RX.View style={ styles.containerMarker }>
-                        <RX.View style={ styles.spinner }>
-                            <Spinner size={ 'small' } color={ MARKER_SENT_FILL } isVisible={ true } />
-                        </RX.View>
-                    </RX.View>
-                );
-            }
-        }
-
-        let cornerPointer: ReactElement | undefined;
-
-        if (['direct', 'group'].includes(this.props.roomType)) {
-            const cornerWidth = 18;
-            const cornerHeight = cornerWidth * 71.49 / 100;
-            cornerPointer = (
-                <RX.View
-                    style={[
-                        styles.containerCorner,
-                        {
-                            left: isOwnMessage ? - cornerWidth / 2 : undefined,
-                            right: isOwnMessage ? undefined : - cornerWidth / 2,
-                            width: cornerWidth / 2,
-                        }
-                    ]}
-                >
-                    <IconSvg
-                        style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            left: isOwnMessage ? 0 : undefined,
-                            right: isOwnMessage ? undefined : 0,
-                        }}
-                        source= { require('../resources/svg/corner.json') as SvgFile }
-                        fillColor={ isOwnMessage ? TILE_BACKGROUND_OWN : TILE_BACKGROUND }
-                        height={ cornerHeight }
-                        width={ cornerWidth }
-                    />
-                </RX.View>
-            )
-        }
-
-        let messageWrapper;
-
-        if (UiStore.getPlatform() === 'web' && UiStore.getDevice() === 'mobile') {
-
-            messageWrapper = (
-                <RX.GestureView
-                    style={ [styles.containerTile, this.tileStyle] }
-                    onLongPress={ this.showContextDialog }
-                    onPan={ () => null }
-                >
-                    { cornerPointer }
-                    <RX.View style={ styles.containerMessage }>
-                        { replyMessage }
-                        { message }
-                    </RX.View>
-                    <RX.View style={ [styles.containerFooter, { height: this.props.withSenderDetails ? undefined : 16 }] }>
-                        { footer }
-                        { readMarker }
-                    </RX.View>
-                </RX.GestureView>
-            );
-
-        } else {
-
-            messageWrapper = (
-                <RX.View
-                    style={ [styles.containerTile, this.tileStyle] }
-                    onPress={ () => RX.UserInterface.dismissKeyboard() }
-                    onLongPress={ this.showContextDialog }
-                    disableTouchOpacityAnimation={ true }
-                    onContextMenu={ this.showContextDialog }
-                    activeOpacity={ 1 }
-                >
-                    { cornerPointer }
-                    <RX.View style={ styles.containerMessage }>
-                        { replyMessage }
-                        { message }
-                    </RX.View>
-                    <RX.View style={ [styles.containerFooter, { height: this.props.withSenderDetails ? undefined : 16 }] }>
-                        { footer }
-                        { readMarker }
-                    </RX.View>
-                </RX.View>
-            );
-        }
-
-        return (
-            <RX.View
-                style={ styles.container }
-                onPress={ () => RX.UserInterface.dismissKeyboard() }
-                ref={ component => this.mainTile = component! }
-            >
-                { messageWrapper }
-            </RX.View>
-        );
-    }
+		return (
+			<RX.View
+				style={styles.container}
+				onPress={() => RX.UserInterface.dismissKeyboard()}
+				ref={component => (this.mainTile = component!)}
+			>
+				{messageWrapper}
+			</RX.View>
+		);
+	}
 }
