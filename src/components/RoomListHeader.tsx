@@ -218,7 +218,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 	};
 
 	private onPressSettings = () => {
-		RX.Modal.show(<DialogSettings />, 'dialogsettings');
+		RX.Modal.show(<DialogSettings showLogin={this.props.showLogin} />, 'dialogsettings');
 	};
 
 	private openUrl = (url: string, event: RX.Types.SyntheticEvent) => {

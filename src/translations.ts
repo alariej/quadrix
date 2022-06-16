@@ -1124,3 +1124,25 @@ export const uploadingFile: Translation = {
 	de: 'Hochladen der Datei: ',
 	fr: 'Téléchargement du fichier: ',
 };
+
+export const enterPassword: Translation = {
+	en: 'Please enter your password',
+	de: 'Bitte geben Sie Ihr Passwort ein',
+	fr: 'Veuillez entrer votre mot de passe',
+};
+
+export const pressOKToDeleteAccount = (server: string, language: string): string => {
+	switch (language) {
+		case 'en':
+			return `Press OK to completely delete your account on the "${server}" server. You will not be able to login again with this user ID, and will immediately lose all messages associated with this account. Your password is required to delete your account.`;
+
+		case 'de':
+			return `Drücken Sie OK, um Ihr Konto auf dem "${server}"-Server vollständig zu löschen. Sie werden sich nicht mehr mit dieser Benutzer-ID anmelden können und werden sofort alle mit diesem Konto verbundenen Nachrichten verlieren. Ihr Passwort ist erforderlich, um Ihr Konto zu löschen.`;
+
+		case 'fr':
+			return `Appuyez sur OK pour supprimer complètement votre compte sur le serveur "${server}". Vous ne pourrez plus vous connecter avec cette ID d'usager et vous perdrez immédiatement tous les messages associés à ce compte. Votre mot de passe est nécessaire pour supprimer votre compte.`;
+
+		default:
+			return '';
+	}
+};

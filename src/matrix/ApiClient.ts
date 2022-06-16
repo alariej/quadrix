@@ -169,6 +169,31 @@ class ApiClient {
 		this.storeCredentials(this.credentials);
 	}
 
+	public deleteAccount(type?: LoginParamType, password?: string, session?: string): Promise<unknown> {
+		const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
+
+		let auth: LoginParam_;
+
+		if (session) {
+			auth = {
+				identifier: {
+					type: 'm.id.user',
+					user: this.credentials.userIdFull,
+				},
+				user: this.credentials.userIdFull,
+				type: type,
+				password: password,
+				session: session,
+			};
+		}
+
+		const data = {
+			auth: auth!,
+		};
+
+		return restClient.deactivateAccount(data);
+	}
+
 	// pushers
 
 	public getPushers(): Promise<PusherGetResponse_> {

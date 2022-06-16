@@ -61,6 +61,10 @@ export default class RestClient extends GenericRestClient {
 		return this.performApiPost<unknown>('account/password', data);
 	}
 
+	public deactivateAccount(data: { auth?: LoginParam_ }): Promise<unknown> {
+		return this.performApiPost<unknown>('account/deactivate', data);
+	}
+
 	public getSyncFiltered(
 		syncToken: string,
 		filter: SyncFilter_,

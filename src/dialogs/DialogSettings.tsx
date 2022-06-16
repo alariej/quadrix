@@ -23,8 +23,9 @@ import {
 	BUTTON_DISABLED_TEXT,
 	BUTTON_MODAL_BACKGROUND,
 	OPAQUE_BACKGROUND,
-	JITSI_BORDER,
 	AVATAR_FOREGROUND,
+	BUTTON_LONG_WIDTH,
+	OBJECT_MARGIN,
 } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
@@ -49,6 +50,10 @@ import {
 	Languages,
 	files,
 	photos,
+	pressOKToDeleteAccount,
+	cancel,
+	enterPassword,
+	errorInvalidPassword,
 } from '../translations';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { AuthResponse_, ErrorResponse_ } from '../models/MatrixApi';
@@ -83,13 +88,6 @@ const styles = {
 		height: BUTTON_HEIGHT,
 		borderRadius: BORDER_RADIUS,
 		backgroundColor: BUTTON_ROUND_BACKGROUND,
-	}),
-	colorButton: RX.Styles.createViewStyle({
-		width: (DIALOG_WIDTH - 5 * SPACING) / 6,
-		height: BUTTON_HEIGHT,
-		borderRadius: BORDER_RADIUS,
-		borderWidth: 1,
-		borderColor: JITSI_BORDER,
 	}),
 	containerIcon: RX.Styles.createViewStyle({
 		flex: 1,
@@ -220,16 +218,40 @@ const styles = {
 		textAlign: 'center',
 		color: BUTTON_MODAL_TEXT,
 	}),
+	buttonDeleteContainer: RX.Styles.createViewStyle({
+		flex: 0,
+		backgroundColor: OPAQUE_BACKGROUND,
+		alignItems: 'center',
+	}),
+	buttonDelete: RX.Styles.createButtonStyle({
+		borderRadius: BUTTON_HEIGHT / 2,
+		width: BUTTON_LONG_WIDTH,
+		height: BUTTON_HEIGHT,
+		backgroundColor: 'white',
+		marginBottom: OBJECT_MARGIN,
+	}),
+	buttonTextDelete: RX.Styles.createTextStyle({
+		fontFamily: AppFont.fontFamily,
+		fontSize: FONT_LARGE,
+		marginVertical: SPACING,
+		textAlign: 'center',
+		color: 'orangered',
+	}),
 };
+
+interface DialogSettingsProps {
+	showLogin: () => void;
+}
 
 interface DialogSettingsState {
 	confirmDisabled: boolean;
 	showSpinner: boolean;
 	offline: boolean;
 	showFileTypePicker: boolean;
+	hideDeleteButton: boolean;
 }
 
-export default class DialogSettings extends ComponentBase<unknown, DialogSettingsState> {
+export default class DialogSettings extends ComponentBase<DialogSettingsProps, DialogSettingsState> {
 	private displayName = '';
 	private displayNameRemote = '';
 	private avatarUrl = '';
@@ -247,7 +269,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
 	private platform: RX.Types.PlatformType;
 	private isMounted_: boolean | undefined;
 
-	constructor(props: unknown) {
+	constructor(props: DialogSettingsProps) {
 		super(props);
 
 		this.language = UiStore.getLanguage();
@@ -262,6 +284,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
 				showSpinner: true,
 				showFileTypePicker: false,
 				offline: UiStore.getOffline(),
+				hideDeleteButton: false,
 			};
 		}
 
@@ -654,6 +677,130 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
 		}
 	};
 
+	private onPressDeleteAccount = () => {
+		const text = (
+			<RX.Text style={styles.textDialog}>
+				{pressOKToDeleteAccount(ApiClient.credentials.homeServer, this.language)}
+			</RX.Text>
+		);
+
+		const leaveRoomConfirmation = (
+			<DialogContainer
+				content={text}
+				confirmButton={true}
+				confirmButtonText={'OK'}
+				cancelButton={true}
+				cancelButtonText={cancel[this.language]}
+				onConfirm={this.askForPassword}
+				onCancel={() => RX.Modal.dismissAll()}
+			/>
+		);
+
+		RX.Modal.show(leaveRoomConfirmation, 'leaveRoomConfirmation');
+	};
+
+	private askForPassword = () => {
+		const text = (
+			<RX.View>
+				<RX.Text style={styles.textDialog}>{enterPassword[this.language]}</RX.Text>
+				<RX.View style={styles.inputField}>
+					<RX.TextInput
+						style={[styles.inputBox, { marginBottom: OBJECT_MARGIN }]}
+						onChangeText={password => (this.currentPassword = password)}
+						secureTextEntry={true}
+						keyboardType={'default'}
+						disableFullscreenUI={true}
+						allowFontScaling={false}
+						autoCapitalize={'none'}
+						autoCorrect={false}
+						autoFocus={true}
+						spellCheck={false}
+					/>
+				</RX.View>
+			</RX.View>
+		);
+
+		const passwordDialog = (
+			<DialogContainer
+				content={text}
+				confirmButton={true}
+				confirmButtonText={'OK'}
+				cancelButton={true}
+				cancelButtonText={cancel[this.language]}
+				onConfirm={this.deleteAccount}
+				onCancel={() => RX.Modal.dismissAll()}
+			/>
+		);
+
+		RX.Modal.show(passwordDialog, 'passwordDialog');
+	};
+
+	private deleteAccount = async () => {
+		RX.Modal.dismissAll();
+
+		const response1 = (await ApiClient.deleteAccount().catch(async (error1: AuthResponse_) => {
+			if (error1.statusCode === 401 && error1.body.flows[0].stages[0] === 'm.login.password') {
+				const type = error1.body.flows[0].stages[0];
+				const session = error1.body.session;
+
+				const response2 = await ApiClient.deleteAccount(type, this.currentPassword, session).catch(
+					(error2: ErrorResponse_) => {
+						RX.Modal.dismissAll();
+
+						if (error2.body.error === 'Invalid password') {
+							const text = (
+								<RX.Text style={styles.textDialog}>{errorInvalidPassword[this.language]}</RX.Text>
+							);
+
+							RX.Modal.show(
+								<DialogContainer
+									content={text}
+									modalId={'errordialog'}
+								/>,
+								'errordialog'
+							);
+						}
+
+						return Promise.resolve(error2);
+					}
+				);
+
+				return Promise.resolve(response2);
+			} else {
+				const error3: ErrorResponse_ = {
+					statusCode: 400,
+					body: {
+						error: 'Server Error (unknown response)',
+					},
+				};
+
+				return Promise.resolve(error3);
+			}
+		})) as ErrorResponse_;
+
+		if (response1.statusCode && response1.statusCode !== 200) {
+			return Promise.reject(response1);
+		} else {
+			ApiClient.stopSync();
+			ApiClient.clearNextSyncToken();
+			Pushers.removeFromDevice(ApiClient.credentials).catch(_error => null);
+			FileHandler.clearCacheAppFolder();
+			await ApiClient.clearStorage();
+			await ApiClient.storeLastUserId();
+			DataStore.clearRoomSummaryList();
+
+			this.props.showLogin();
+
+			return Promise.resolve('ACCOUNT_DELETED');
+		}
+	};
+
+	private onLayout = (layout: RX.Types.ViewOnLayoutEvent) => {
+		const screenHeight = RX.UserInterface.measureWindow().height;
+
+		this.setState({ hideDeleteButton: layout.height / screenHeight < 0.7 });
+	};
+
 	public render(): JSX.Element | null {
 		const spinner = (
 			<RX.View
@@ -924,7 +1071,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
 						</RX.Text>
 						<RX.View style={styles.inputField}>
 							<RX.TextInput
-								style={[styles.inputBox, { marginBottom: 3 }]}
+								style={[styles.inputBox, { marginBottom: SPACING }]}
 								placeholder={currentPassword[this.language]}
 								placeholderTextColor={PLACEHOLDER_TEXT}
 								onChangeText={password => (this.currentPassword = password)}
@@ -939,7 +1086,7 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
 								spellCheck={false}
 							/>
 							<RX.TextInput
-								style={[styles.inputBox, { marginBottom: 3 }]}
+								style={[styles.inputBox, { marginBottom: SPACING }]}
 								placeholder={newPassword[this.language]}
 								placeholderTextColor={PLACEHOLDER_TEXT}
 								onChangeText={password => (this.newPassword = password)}
@@ -991,6 +1138,32 @@ export default class DialogSettings extends ComponentBase<unknown, DialogSetting
 			/>
 		);
 
-		return <RX.View style={styles.modalScreen}>{settingsDialog}</RX.View>;
+		let deleteAccountButton;
+		if (!this.state.hideDeleteButton) {
+			deleteAccountButton = (
+				<RX.View style={styles.buttonDeleteContainer}>
+					<RX.Button
+						style={styles.buttonDelete}
+						onPress={this.onPressDeleteAccount}
+						disableTouchOpacityAnimation={true}
+						activeOpacity={1}
+						disabled={this.state.offline}
+						disabledOpacity={1}
+					>
+						<RX.Text style={styles.buttonTextDelete}>Detete Account</RX.Text>
+					</RX.Button>
+				</RX.View>
+			);
+		}
+
+		return (
+			<RX.View
+				style={styles.modalScreen}
+				onLayout={this.onLayout}
+			>
+				{settingsDialog}
+				{deleteAccountButton}
+			</RX.View>
+		);
 	}
 }
