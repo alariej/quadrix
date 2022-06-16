@@ -45,6 +45,7 @@ import { TERMS_URL } from '../appconfig';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import AppFont from '../modules/AppFont';
 import StringUtils from '../utils/StringUtils';
+import RXNetInfo from 'reactxp-netinfo';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -172,10 +173,12 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 			.catch(_error => null);
 	}
 
-	private onPressMainButton = () => {
+	private onPressMainButton = async () => {
 		RX.UserInterface.dismissKeyboard();
 
-		if (UiStore.getOffline()) {
+		const isOnline = await RXNetInfo.isConnected().catch(_error => null);
+
+		if (!isOnline) {
 			const text = <RX.Text style={styles.errorDialog}>{deviceOfflineLogin[this.language]}</RX.Text>;
 
 			RX.Modal.show(<DialogContainer content={text} />, 'modaldialog');
