@@ -53,18 +53,18 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 		const width =
 			UiStore.getAppLayout_().pageWidth - 2 * PAGE_MARGIN - (BUTTON_ROUND_WIDTH + SPACING) - 2 * SPACING;
 
-		if (props.message.content.info!.thumbnail_url) {
+		if (props.message.content.info?.thumbnail_url) {
 			this.url = StringUtils.mxcToHttp(
-				this.props.message.content.info!.thumbnail_url!,
+				this.props.message.content.info?.thumbnail_url!,
 				ApiClient.credentials.homeServer
 			);
 
-			if (props.message.content.info!.thumbnail_info!.w && props.message.content.info!.thumbnail_info!.h) {
+			if (props.message.content.info?.thumbnail_info?.w && props.message.content.info?.thumbnail_info!.h) {
 				this.heightStyle = RX.Styles.createViewStyle(
 					{
 						height:
-							(width * props.message.content.info!.thumbnail_info!.h) /
-							props.message.content.info!.thumbnail_info!.w,
+							(width * props.message.content.info?.thumbnail_info!.h) /
+							props.message.content.info?.thumbnail_info!.w,
 					},
 					false
 				);
@@ -81,10 +81,10 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 		} else {
 			this.url = StringUtils.mxcToHttp(props.message.content.url!, ApiClient.credentials.homeServer);
 
-			if (props.message.content.info!.w && props.message.content.info!.h) {
+			if (props.message.content.info?.w && props.message.content.info?.h) {
 				this.heightStyle = RX.Styles.createViewStyle(
 					{
-						height: (width * props.message.content.info!.h) / props.message.content.info!.w,
+						height: (width * props.message.content.info?.h) / props.message.content.info?.w,
 					},
 					false
 				);
