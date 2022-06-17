@@ -276,7 +276,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 
 	private onKeyPress = (event: RX.Types.KeyboardEvent) => {
 		if (event.keyCode === 13) {
-			this.onPressMainButton();
+			this.onPressMainButton().catch(_error => null);
 		}
 	};
 

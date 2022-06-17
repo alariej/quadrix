@@ -55,16 +55,16 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 
 		if (props.message.content.info?.thumbnail_url) {
 			this.url = StringUtils.mxcToHttp(
-				this.props.message.content.info?.thumbnail_url!,
+				this.props.message.content.info!.thumbnail_url!,
 				ApiClient.credentials.homeServer
 			);
 
-			if (props.message.content.info?.thumbnail_info?.w && props.message.content.info?.thumbnail_info!.h) {
+			if (props.message.content.info.thumbnail_info!.w && props.message.content.info.thumbnail_info!.h) {
 				this.heightStyle = RX.Styles.createViewStyle(
 					{
 						height:
-							(width * props.message.content.info?.thumbnail_info!.h) /
-							props.message.content.info?.thumbnail_info!.w,
+							(width * props.message.content.info.thumbnail_info!.h) /
+							props.message.content.info.thumbnail_info!.w,
 					},
 					false
 				);
