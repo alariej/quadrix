@@ -703,9 +703,9 @@ export default class DialogSettings extends ComponentBase<DialogSettingsProps, D
 		const text = (
 			<RX.View>
 				<RX.Text style={styles.textDialog}>{enterPassword[this.language]}</RX.Text>
-				<RX.View style={styles.inputField}>
+				<RX.View style={[styles.inputField, { margin: OBJECT_MARGIN }]}>
 					<RX.TextInput
-						style={[styles.inputBox, { marginBottom: OBJECT_MARGIN }]}
+						style={styles.inputBox}
 						onChangeText={password => (this.currentPassword = password)}
 						secureTextEntry={true}
 						keyboardType={'default'}
