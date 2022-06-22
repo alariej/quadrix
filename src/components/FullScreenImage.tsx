@@ -76,6 +76,7 @@ interface FullScreenImageProps {
 	eventId: string;
 	url: string;
 	imageRatio: number;
+	showContextDialog: () => void;
 }
 
 export default class FullScreenImage extends RX.Component<FullScreenImageProps, FullScreenImageState> {
@@ -514,6 +515,11 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
 		}
 	};
 
+	private showContextDialog = () => {
+		RX.Modal.dismissAll();
+		this.props.showContextDialog();
+	};
+
 	public render(): JSX.Element | null {
 		const spinner = (
 			<RX.View
@@ -575,6 +581,8 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
 				style={styles.modalView}
 				onLayout={this.onLayout}
 				onKeyPress={this.onKeyPress}
+				onContextMenu={this.showContextDialog}
+				onLongPress={this.showContextDialog}
 			>
 				<RX.Animated.View style={[styles.containerAnimated, this.animatedStyle]}>
 					<RX.View style={[this.state.gestureImage, this.state.rotatedImage]}>

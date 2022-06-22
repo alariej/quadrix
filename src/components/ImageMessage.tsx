@@ -128,6 +128,7 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 				eventId={this.props.message.eventId}
 				url={this.urlFull}
 				imageRatio={this.imageRatio}
+				showContextDialog={this.props.showContextDialog}
 			/>
 		);
 
