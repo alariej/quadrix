@@ -582,7 +582,6 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
 				onLayout={this.onLayout}
 				onKeyPress={this.onKeyPress}
 				onContextMenu={this.showContextDialog}
-				onLongPress={this.showContextDialog}
 			>
 				<RX.Animated.View style={[styles.containerAnimated, this.animatedStyle]}>
 					<RX.View style={[this.state.gestureImage, this.state.rotatedImage]}>
@@ -603,6 +602,7 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
 					onScrollWheel={this.onScrollWheel}
 					onPan={this.onPan}
 					panPixelThreshold={20}
+					onLongPress={this.showContextDialog}
 				/>
 				{buttonNext}
 				{buttonPrevious}
