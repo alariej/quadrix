@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=quadrix
-Exec=quadrix %U
-Terminal=false
-Type=Application
-Icon=${SNAP}/meta/gui/icon.png
-StartupWMClass=quadrix
-Comment=Minimal, simple, multi-platform chat client for the Matrix protocol
-Categories=Internet;
