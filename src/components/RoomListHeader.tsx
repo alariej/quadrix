@@ -31,6 +31,8 @@ import Pushers from '../modules/Pushers';
 import AppFont from '../modules/AppFont';
 import FileHandler from '../modules/FileHandler';
 import Shadow from '../modules/Shadow';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGears, faPlus, faPowerOff } from '@fortawesome/free-solid-svg-icons'
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -346,12 +348,14 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 					disabledOpacity={0.15}
 				>
 					<RX.View style={styles.containerIcon}>
-						<IconSvg
-							source={require('../resources/svg/plus.json') as SvgFile}
-							fillColor={BUTTON_FILL}
-							height={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
-							width={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
-						/>
+					<FontAwesomeIcon
+						icon={faPlus}
+						color={BUTTON_FILL}
+						style={{
+							height: BUTTON_ROUND_WIDTH / 1.5,
+							width: BUTTON_ROUND_WIDTH / 1.5
+						}}
+					/>
 					</RX.View>
 				</RX.Button>
 				<RX.Button
@@ -364,11 +368,13 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 					disabledOpacity={0.15}
 				>
 					<RX.View style={styles.containerIcon}>
-						<IconSvg
-							source={require('../resources/svg/settings.json') as SvgFile}
-							fillColor={BUTTON_FILL}
-							height={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
-							width={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
+						<FontAwesomeIcon
+							icon={faGears}
+							color={BUTTON_FILL}
+							style={{
+								height: BUTTON_ROUND_WIDTH / 1.7,
+								width: BUTTON_ROUND_WIDTH / 1.7
+							}}
 						/>
 					</RX.View>
 				</RX.Button>
@@ -380,13 +386,14 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 					activeOpacity={0.8}
 				>
 					<RX.View style={styles.containerIcon}>
-						<IconSvg
-							source={require('../resources/svg/logout.json') as SvgFile}
-							style={{ marginBottom: 2 }}
-							fillColor={BUTTON_FILL}
-							height={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
-							width={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
-						/>
+					<FontAwesomeIcon
+						icon={faPowerOff}
+						color={BUTTON_FILL}
+						style={{
+							height: BUTTON_ROUND_WIDTH / 2,
+							width: BUTTON_ROUND_WIDTH / 2
+						}}
+					/>
 					</RX.View>
 				</RX.Button>
 			</RX.View>

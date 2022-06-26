@@ -46,6 +46,10 @@
     "webpack-merge": "5.8.0"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "6.1.1",
+    "@fortawesome/free-regular-svg-icons": "6.1.1",
+    "@fortawesome/free-solid-svg-icons": "6.1.1",
+    "@fortawesome/react-fontawesome": "0.1.18",
     "@react-native-async-storage/async-storage": "1.17.4",
     "@react-native-community/netinfo": "8.3.0",
     "@react-native-firebase/app": "14.11.0",
