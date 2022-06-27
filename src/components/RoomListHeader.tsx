@@ -11,7 +11,6 @@ import {
 	BUTTON_ROUND_WIDTH,
 	FONT_LARGE,
 	SPACING,
-	ICON_REDUCTION_FACTOR,
 	BUTTON_FILL,
 	TRANSPARENT_BACKGROUND,
 	HEADER_STATUS,
@@ -31,6 +30,9 @@ import Pushers from '../modules/Pushers';
 import AppFont from '../modules/AppFont';
 import FileHandler from '../modules/FileHandler';
 import Shadow from '../modules/Shadow';
+import { IoSettingsSharp } from 'react-icons/io5';
+import { FaPowerOff } from 'react-icons/fa';
+import { IoPersonAddSharp } from 'react-icons/io5';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -346,12 +348,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 					disabledOpacity={0.15}
 				>
 					<RX.View style={styles.containerIcon}>
-						<IconSvg
-							source={require('../resources/svg/plus.json') as SvgFile}
-							fillColor={BUTTON_FILL}
-							height={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
-							width={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
-						/>
+						<IoPersonAddSharp color={BUTTON_FILL} size={BUTTON_ROUND_WIDTH / 2}/>
 					</RX.View>
 				</RX.Button>
 				<RX.Button
@@ -364,12 +361,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 					disabledOpacity={0.15}
 				>
 					<RX.View style={styles.containerIcon}>
-						<IconSvg
-							source={require('../resources/svg/settings.json') as SvgFile}
-							fillColor={BUTTON_FILL}
-							height={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
-							width={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
-						/>
+						<IoSettingsSharp color={BUTTON_FILL} size={BUTTON_ROUND_WIDTH / 1.8}/>
 					</RX.View>
 				</RX.Button>
 				<RX.Button
@@ -380,13 +372,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 					activeOpacity={0.8}
 				>
 					<RX.View style={styles.containerIcon}>
-						<IconSvg
-							source={require('../resources/svg/logout.json') as SvgFile}
-							style={{ marginBottom: 2 }}
-							fillColor={BUTTON_FILL}
-							height={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
-							width={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
-						/>
+						<FaPowerOff color={BUTTON_FILL} size={BUTTON_ROUND_WIDTH / 2}/>
 					</RX.View>
 				</RX.Button>
 			</RX.View>
