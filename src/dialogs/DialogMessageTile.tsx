@@ -14,10 +14,11 @@ import {
 	STACKED_BUTTON_HEIGHT,
 	FONT_LARGE,
 	SPACING,
-	BUTTON_SHORT_WIDTH,
 	TRANSPARENT_BACKGROUND,
 	OPAQUE_LIGHT_BACKGROUND,
 	OBJECT_MARGIN,
+	ICON_INFO_SIZE,
+	ICON_INFO_FILL,
 } from '../ui';
 import { LayoutInfo } from 'reactxp/dist/common/Types';
 import DataStore from '../stores/DataStore';
@@ -55,6 +56,7 @@ import SpinnerUtils from '../utils/SpinnerUtils';
 import Spinner from '../components/Spinner';
 import AppFont from '../modules/AppFont';
 import StringUtils from '../utils/StringUtils';
+import IconSvg, { SvgFile } from '../components/IconSvg';
 
 const styles = {
 	modalScreen: RX.Styles.createViewStyle({
@@ -73,8 +75,11 @@ const styles = {
 		overflow: 'visible',
 	}),
 	buttonDialog: RX.Styles.createViewStyle({
+		flexDirection: 'row',
+		alignItems: 'center',
+		padding: SPACING,
 		borderRadius: BORDER_RADIUS,
-		width: BUTTON_SHORT_WIDTH,
+		width: 120,
 		height: STACKED_BUTTON_HEIGHT,
 		backgroundColor: BUTTON_MODAL_BACKGROUND,
 		marginBottom: 1,
@@ -86,10 +91,11 @@ const styles = {
 		overflow: 'visible',
 	}),
 	buttonText: RX.Styles.createTextStyle({
+		flex: 1,
 		fontFamily: AppFont.fontFamily,
 		fontSize: FONT_LARGE,
 		margin: SPACING,
-		textAlign: 'center',
+		textAlign: 'left',
 		color: BUTTON_MODAL_TEXT,
 	}),
 	boldText: RX.Styles.createTextStyle({
@@ -558,6 +564,12 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 						>
 							{details[this.language]}
 						</RX.Text>
+						<IconSvg
+							source={require('../resources/svg/RI_info.json') as SvgFile}
+							fillColor={ICON_INFO_FILL}
+							height={ICON_INFO_SIZE}
+							width={ICON_INFO_SIZE}
+						/>
 					</RX.Button>
 				);
 			}
@@ -582,6 +594,12 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 						>
 							{open[this.language]}
 						</RX.Text>
+						<IconSvg
+							source={require('../resources/svg/RI_msg_open.json') as SvgFile}
+							fillColor={ICON_INFO_FILL}
+							height={ICON_INFO_SIZE}
+							width={ICON_INFO_SIZE}
+						/>
 					</RX.Button>
 				);
 			}
@@ -606,6 +624,12 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 						>
 							{save[this.language]}
 						</RX.Text>
+						<IconSvg
+							source={require('../resources/svg/RI_msg_save.json') as SvgFile}
+							fillColor={ICON_INFO_FILL}
+							height={ICON_INFO_SIZE}
+							width={ICON_INFO_SIZE}
+						/>
 					</RX.Button>
 				);
 			}
@@ -630,6 +654,12 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 						>
 							{share[this.language]}
 						</RX.Text>
+						<IconSvg
+							source={require('../resources/svg/RI_msg_share.json') as SvgFile}
+							fillColor={ICON_INFO_FILL}
+							height={ICON_INFO_SIZE}
+							width={ICON_INFO_SIZE}
+						/>
 					</RX.Button>
 				);
 			}
@@ -654,6 +684,12 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 						>
 							{reply[this.language]}
 						</RX.Text>
+						<IconSvg
+							source={require('../resources/svg/RI_msg_reply.json') as SvgFile}
+							fillColor={ICON_INFO_FILL}
+							height={ICON_INFO_SIZE}
+							width={ICON_INFO_SIZE}
+						/>
 					</RX.Button>
 				);
 			}
@@ -673,6 +709,12 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 					>
 						{forward[this.language]}
 					</RX.Text>
+					<IconSvg
+						source={require('../resources/svg/RI_msg_forward.json') as SvgFile}
+						fillColor={ICON_INFO_FILL}
+						height={ICON_INFO_SIZE}
+						width={ICON_INFO_SIZE}
+					/>
 				</RX.Button>
 			);
 
@@ -693,6 +735,12 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 						>
 							{report[this.language]}
 						</RX.Text>
+						<IconSvg
+							source={require('../resources/svg/RI_msg_report.json') as SvgFile}
+							fillColor={ICON_INFO_FILL}
+							height={ICON_INFO_SIZE}
+							width={ICON_INFO_SIZE}
+						/>
 					</RX.Button>
 				);
 			}
