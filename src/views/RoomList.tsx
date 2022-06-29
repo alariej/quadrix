@@ -167,7 +167,7 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
 				>
 					<IconSvg
 						source={require('../resources/svg/RI_arrowup.json') as SvgFile}
-						style={{ backgroundColor: iconColor }}
+						style={{ backgroundColor: iconColor, borderRadius: 2 }}
 						fillColor={BUTTON_UNREAD_TEXT}
 						height={20}
 						width={20}

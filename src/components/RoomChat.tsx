@@ -311,16 +311,16 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 		redactedEvents?.map(eventId => {
 			const eventIndex = this.eventListItems.findIndex(eventItem => eventItem.event.eventId === eventId);
 			if (eventIndex > -1) {
-			this.eventListItems[eventIndex].isRedacted = true;
+				this.eventListItems[eventIndex].isRedacted = true;
 			}
 		});
 
-			// HACK: need to cut and repaste the last message to force a re-render of the VLV
-			// voodoo: although push does the same as concat, VLV does not update
-			const lastItem = this.eventListItems.pop();
-			this.eventListItems = this.eventListItems.concat(lastItem!);
+		// HACK: need to cut and repaste the last message to force a re-render of the VLV
+		// voodoo: although push does the same as concat, VLV does not update
+		const lastItem = this.eventListItems.pop();
+		this.eventListItems = this.eventListItems.concat(lastItem!);
 
-			this.setState({ eventListItems: this.eventListItems });
+		this.setState({ eventListItems: this.eventListItems });
 	};
 
 	private newMessages = () => {
@@ -641,7 +641,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 				>
 					<IconSvg
 						source={require('../resources/svg/RI_arrowup.json') as SvgFile}
-						style={{ backgroundColor: iconColor }}
+						style={{ backgroundColor: iconColor, borderRadius: 2 }}
 						fillColor={BUTTON_UNREAD_TEXT}
 						height={20}
 						width={20}
