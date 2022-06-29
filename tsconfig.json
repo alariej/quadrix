@@ -23,12 +23,9 @@
     "target": "es2015",
     "jsx": "react",
     "lib": ["es5", "es2015", "dom"],
-    "typeRoots": ["./types", "./node_modules/@types"],
-    "paths":{
-      "react-native-exif": ["./types/react-native-exif"]
-    }
+    "typeRoots": ["./types", "./node_modules/@types"]
   },
 
-  "include": ["src/**/*", "web/**/*", "*.config.js", "index.js", "scripts/**/*", "electron/**/*", "types/png.d.ts"],
+  "include": ["src/**/*", "web/**/*", "*.config.js", "index.js", "scripts/**/*", "electron/**/*", "types/png.d.ts", "types/svg.d.ts"],
   "exclude": ["node_modules"]
 }
