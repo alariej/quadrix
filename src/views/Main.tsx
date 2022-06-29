@@ -363,7 +363,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 			return null;
 		}
 
-		const backgroundSize = 240;
+		const backgroundSize = 140;
 		const backgroundPadding = this.state.layout.type === 'wide' ? PAGE_WIDE_PADDING * 2 : 0;
 		const offset = 1.5 * this.state.layout.pageWidth - PAGE_MARGIN + backgroundPadding;
 
