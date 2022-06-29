@@ -18,6 +18,7 @@ import {
 	OBJECT_MARGIN,
 	TRANSPARENT_BACKGROUND,
 	HEADER_STATUS,
+	BUTTON_UNREAD_TEXT,
 } from '../ui';
 import { MESSAGE_COUNT_ADD } from '../appconfig';
 import { ComponentBase } from 'resub';
@@ -640,11 +641,11 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 					activeOpacity={0.8}
 				>
 					<IconSvg
-						source={require('../resources/svg/arrow.json') as SvgFile}
-						style={{ opacity: 0.9 }}
-						fillColor={iconColor}
-						height={24}
-						width={24}
+						source={require('../resources/svg/RI_arrowup.json') as SvgFile}
+						style={{ backgroundColor: iconColor }}
+						fillColor={BUTTON_UNREAD_TEXT}
+						height={20}
+						width={20}
 					/>
 				</RX.Button>
 			);
@@ -664,11 +665,11 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 					disabledOpacity={0.15}
 				>
 					<IconSvg
-						source={require('../resources/svg/more.json') as SvgFile}
-						style={{ opacity: 0.9 }}
-						fillColor={BUTTON_FILL}
-						height={24}
-						width={24}
+						source={require('../resources/svg/RI_more.json') as SvgFile}
+						style={{ backgroundColor: BUTTON_FILL }}
+						fillColor={BUTTON_UNREAD_TEXT}
+						height={20}
+						width={20}
 					/>
 				</RX.Button>
 			);

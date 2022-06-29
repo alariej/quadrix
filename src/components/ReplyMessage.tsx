@@ -189,11 +189,11 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
 						activeOpacity={1}
 					>
 						<IconSvg
-							source={require('../resources/svg/plus.json') as SvgFile}
+							source={require('../resources/svg/RI_plus.json') as SvgFile}
 							style={styles.cancelIcon}
 							fillColor={TILE_BACKGROUND}
-							height={12}
-							width={12}
+							height={14}
+							width={14}
 						/>
 					</RX.Button>
 				</RX.View>

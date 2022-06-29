@@ -101,8 +101,8 @@ export default class UserPresence extends ComponentBase<UserPresenceProps, UserP
 
 		const activityIcon = (
 			<IconSvg
-				source={require('../resources/svg/activity.json') as SvgFile}
-				style={{ marginRight: SPACING, opacity: 0.7 }}
+				source={require('../resources/svg/RI_activity.json') as SvgFile}
+				style={{ marginRight: SPACING }}
 				fillColor={this.props.fontColor}
 				height={this.props.fontSize}
 				width={this.props.fontSize}

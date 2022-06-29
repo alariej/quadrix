@@ -357,10 +357,10 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 				readMarker = (
 					<RX.View style={styles.containerMarker}>
 						<IconSvg
-							source={require('../resources/svg/marker.json') as SvgFile}
+							source={require('../resources/svg/IO_checkdouble.json') as SvgFile}
 							fillColor={MARKER_READ_FILL}
-							height={14}
-							width={14}
+							height={17}
+							width={17}
 							style={{ alignSelf: 'flex-end' }}
 						/>
 					</RX.View>
@@ -369,10 +369,10 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 				readMarker = (
 					<RX.View style={styles.containerMarker}>
 						<IconSvg
-							source={require('../resources/svg/marker.json') as SvgFile}
+							source={require('../resources/svg/IO_checksingle.json') as SvgFile}
 							fillColor={MARKER_SENT_FILL}
-							height={14}
-							width={14}
+							height={17}
+							width={17}
 							style={{ alignSelf: 'flex-end' }}
 						/>
 					</RX.View>

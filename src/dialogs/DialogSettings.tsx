@@ -26,6 +26,7 @@ import {
 	AVATAR_FOREGROUND,
 	BUTTON_LONG_WIDTH,
 	OBJECT_MARGIN,
+	ICON_REDUCTION_FACTOR,
 } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
@@ -815,10 +816,10 @@ export default class DialogSettings extends ComponentBase<DialogSettingsProps, D
 		if (!this.avatarUrl) {
 			avatar = (
 				<IconSvg
-					source={require('../resources/svg/contact.json') as SvgFile}
+					source={require('../resources/svg/RI_user.json') as SvgFile}
 					fillColor={AVATAR_FOREGROUND}
-					height={AVATAR_MEDIUM_WIDTH * 0.5}
-					width={AVATAR_MEDIUM_WIDTH * 0.5}
+					height={AVATAR_MEDIUM_WIDTH / ICON_REDUCTION_FACTOR}
+					width={AVATAR_MEDIUM_WIDTH / ICON_REDUCTION_FACTOR}
 				/>
 			);
 		} else {

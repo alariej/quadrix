@@ -12,6 +12,7 @@ import {
 	SPACING,
 	TILE_HEIGHT,
 	TRANSPARENT_BACKGROUND,
+	BUTTON_UNREAD_TEXT,
 } from '../ui';
 import RoomListHeader from '../components/RoomListHeader';
 import { VirtualListView, VirtualListViewItemInfo, VirtualListViewCellRenderDetails } from 'reactxp-virtuallistview';
@@ -165,11 +166,11 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
 					activeOpacity={0.8}
 				>
 					<IconSvg
-						source={require('../resources/svg/arrow.json') as SvgFile}
-						style={{ opacity: 0.9 }}
-						fillColor={iconColor}
-						height={24}
-						width={24}
+						source={require('../resources/svg/RI_arrowup.json') as SvgFile}
+						style={{ backgroundColor: iconColor }}
+						fillColor={BUTTON_UNREAD_TEXT}
+						height={20}
+						width={20}
 					/>
 				</RX.Button>
 			);

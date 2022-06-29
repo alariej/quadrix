@@ -25,6 +25,7 @@ import {
 	BUTTON_DISABLED_TEXT,
 	DIALOG_WIDTH,
 	AVATAR_FOREGROUND,
+	ICON_REDUCTION_FACTOR,
 } from '../ui';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { ErrorResponse_, RoomPhase, RoomType, StateEventContent_ } from '../models/MatrixApi';
@@ -321,38 +322,37 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
 			if (this.props.roomType === 'direct') {
 				avatar = (
 					<IconSvg
-						source={require('../resources/svg/contact.json') as SvgFile}
+						source={require('../resources/svg/RI_user.json') as SvgFile}
 						fillColor={AVATAR_FOREGROUND}
-						height={AVATAR_LARGE_WIDTH * 0.5}
-						width={AVATAR_LARGE_WIDTH * 0.5}
+						height={AVATAR_LARGE_WIDTH / ICON_REDUCTION_FACTOR}
+						width={AVATAR_LARGE_WIDTH / ICON_REDUCTION_FACTOR}
 					/>
 				);
 			} else if (this.props.roomType === 'notepad') {
 				avatar = (
 					<IconSvg
-						source={require('../resources/svg/notepad.json') as SvgFile}
+						source={require('../resources/svg/RI_notepad.json') as SvgFile}
 						fillColor={AVATAR_FOREGROUND}
-						height={AVATAR_LARGE_WIDTH * 0.6}
-						width={AVATAR_LARGE_WIDTH * 0.6}
-						style={{ marginLeft: AVATAR_LARGE_WIDTH / 14, marginBottom: AVATAR_LARGE_WIDTH / 14 }}
+						height={AVATAR_LARGE_WIDTH / ICON_REDUCTION_FACTOR}
+						width={AVATAR_LARGE_WIDTH / ICON_REDUCTION_FACTOR}
 					/>
 				);
 			} else if (this.props.roomType === 'group') {
 				avatar = (
 					<IconSvg
-						source={require('../resources/svg/group.json') as SvgFile}
+						source={require('../resources/svg/RI_users.json') as SvgFile}
 						fillColor={AVATAR_FOREGROUND}
-						height={AVATAR_LARGE_WIDTH * 0.7}
-						width={AVATAR_LARGE_WIDTH * 0.7}
+						height={AVATAR_LARGE_WIDTH / ICON_REDUCTION_FACTOR}
+						width={AVATAR_LARGE_WIDTH / ICON_REDUCTION_FACTOR}
 					/>
 				);
 			} else if (this.props.roomType === 'community') {
 				avatar = (
 					<IconSvg
-						source={require('../resources/svg/community.json') as SvgFile}
+						source={require('../resources/svg/RI_public.json') as SvgFile}
 						fillColor={AVATAR_FOREGROUND}
-						height={AVATAR_LARGE_WIDTH * 0.6}
-						width={AVATAR_LARGE_WIDTH * 0.6}
+						height={AVATAR_LARGE_WIDTH / ICON_REDUCTION_FACTOR}
+						width={AVATAR_LARGE_WIDTH / ICON_REDUCTION_FACTOR}
 					/>
 				);
 			}

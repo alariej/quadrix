@@ -7,7 +7,7 @@ import {
 	FONT_NORMAL,
 	TILE_SYSTEM_TEXT,
 	ICON_INFO_FILL,
-	BUTTON_FILL,
+	ICON_INFO_SIZE,
 } from '../ui';
 import FileHandler from '../modules/FileHandler';
 import { MessageEvent } from '../models/MessageEvent';
@@ -141,8 +141,8 @@ export default class FileMessage extends RX.Component<FileMessageProps, FileMess
 			fileIcon = (
 				<RX.View style={styles.progressContainer}>
 					<ProgressIndicator
-						strokeColor={BUTTON_FILL}
-						size={16}
+						strokeColor={ICON_INFO_FILL}
+						size={ICON_INFO_SIZE}
 						progress={this.state.progressValue % 1}
 					/>
 				</RX.View>
@@ -150,10 +150,10 @@ export default class FileMessage extends RX.Component<FileMessageProps, FileMess
 		} else {
 			fileIcon = (
 				<IconSvg
-					source={require('../resources/svg/document.json') as SvgFile}
+					source={require('../resources/svg/RI_file.json') as SvgFile}
 					fillColor={ICON_INFO_FILL}
-					height={16}
-					width={16}
+					height={ICON_INFO_SIZE}
+					width={ICON_INFO_SIZE}
 				/>
 			);
 		}

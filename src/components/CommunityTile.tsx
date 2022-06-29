@@ -12,6 +12,7 @@ import {
 	SPACING,
 	TILE_HEIGHT_COMMUNITY,
 	AVATAR_FOREGROUND,
+	ICON_REDUCTION_FACTOR,
 } from '../ui';
 import UiStore from '../stores/UiStore';
 import { alias, topic, members } from '../translations';
@@ -93,10 +94,10 @@ export default class CommunityTile extends RX.Component<CommunityTileProps, RX.S
 		if (!avatarIsUrl) {
 			avatar = (
 				<IconSvg
-					source={require('../resources/svg/community.json') as SvgFile}
+					source={require('../resources/svg/RI_public.json') as SvgFile}
 					fillColor={AVATAR_FOREGROUND}
-					height={AVATAR_WIDTH * 0.6}
-					width={AVATAR_WIDTH * 0.6}
+					height={AVATAR_WIDTH / ICON_REDUCTION_FACTOR}
+					width={AVATAR_WIDTH / ICON_REDUCTION_FACTOR}
 				/>
 			);
 		} else {

@@ -251,10 +251,10 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
 				>
 					<RX.View style={styles.containerIcon}>
 						<IconSvg
-							source={require('../../resources/svg/arrow_down.json') as SvgFile}
+							source={require('../../resources/svg/RI_arrowdown.json') as SvgFile}
 							fillColor={BUTTON_FILL}
-							height={16}
-							width={16}
+							height={BUTTON_ROUND_WIDTH}
+							width={BUTTON_ROUND_WIDTH}
 						/>
 					</RX.View>
 				</RX.Button>

@@ -128,7 +128,7 @@ const styles = {
 		borderRightWidth: 1,
 		marginLeft: SPACING,
 	}),
-	logo: RX.Styles.createImageStyle({
+	logo: RX.Styles.createViewStyle({
 		flex: 1,
 		marginVertical: 12,
 	}),
@@ -299,7 +299,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 			disconnected = (
 				<RX.View style={styles.connectedContainer}>
 					<IconSvg
-						source={require('../resources/svg/nosignal.json') as SvgFile}
+						source={require('../resources/svg/RI_nochat.json') as SvgFile}
 						fillColor={TILE_SYSTEM_TEXT}
 						height={14}
 						width={14}
@@ -347,7 +347,8 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 				>
 					<RX.View style={styles.containerIcon}>
 						<IconSvg
-							source={require('../resources/svg/plus.json') as SvgFile}
+							source={require('../resources/svg/RI_newchat.json') as SvgFile}
+							style={{ marginTop: 2 }}
 							fillColor={BUTTON_FILL}
 							height={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
 							width={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
@@ -365,7 +366,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 				>
 					<RX.View style={styles.containerIcon}>
 						<IconSvg
-							source={require('../resources/svg/settings.json') as SvgFile}
+							source={require('../resources/svg/RI_settings.json') as SvgFile}
 							fillColor={BUTTON_FILL}
 							height={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
 							width={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
@@ -381,8 +382,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 				>
 					<RX.View style={styles.containerIcon}>
 						<IconSvg
-							source={require('../resources/svg/logout.json') as SvgFile}
-							style={{ marginBottom: 2 }}
+							source={require('../resources/svg/RI_power.json') as SvgFile}
 							fillColor={BUTTON_FILL}
 							height={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
 							width={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}

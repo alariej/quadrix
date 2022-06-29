@@ -12,7 +12,6 @@ import {
 	ICON_REDUCTION_FACTOR,
 	BUTTON_UNREAD_TEXT,
 	BUTTON_UNREAD_BACKGROUND,
-	FONT_SMALL,
 	BUTTON_FILL,
 	AVATAR_BACKGROUND,
 	TRANSPARENT_BACKGROUND,
@@ -125,7 +124,7 @@ const styles = {
 		width: 18,
 		borderRadius: 9,
 		backgroundColor: BUTTON_UNREAD_BACKGROUND,
-		fontSize: FONT_SMALL,
+		fontSize: 10,
 		color: BUTTON_UNREAD_TEXT,
 		textAlign: 'center',
 	}),
@@ -272,38 +271,37 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 			if (this.state.type === 'direct') {
 				avatar = (
 					<IconSvg
-						source={require('../resources/svg/contact.json') as SvgFile}
+						source={require('../resources/svg/RI_user.json') as SvgFile}
 						fillColor={AVATAR_FOREGROUND}
-						height={AVATAR_SMALL_WIDTH * 0.5}
-						width={AVATAR_SMALL_WIDTH * 0.5}
+						height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+						width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
 					/>
 				);
 			} else if (this.state.type === 'notepad') {
 				avatar = (
 					<IconSvg
-						source={require('../resources/svg/notepad.json') as SvgFile}
+						source={require('../resources/svg/RI_notepad.json') as SvgFile}
 						fillColor={AVATAR_FOREGROUND}
-						height={AVATAR_SMALL_WIDTH * 0.6}
-						width={AVATAR_SMALL_WIDTH * 0.6}
-						style={{ marginLeft: AVATAR_SMALL_WIDTH / 14, marginBottom: AVATAR_SMALL_WIDTH / 14 }}
+						height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+						width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
 					/>
 				);
 			} else if (this.state.type === 'group') {
 				avatar = (
 					<IconSvg
-						source={require('../resources/svg/group.json') as SvgFile}
+						source={require('../resources/svg/RI_users.json') as SvgFile}
 						fillColor={AVATAR_FOREGROUND}
-						height={AVATAR_SMALL_WIDTH * 0.7}
-						width={AVATAR_SMALL_WIDTH * 0.7}
+						height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+						width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
 					/>
 				);
 			} else if (this.state.type === 'community') {
 				avatar = (
 					<IconSvg
-						source={require('../resources/svg/community.json') as SvgFile}
+						source={require('../resources/svg/RI_public.json') as SvgFile}
 						fillColor={AVATAR_FOREGROUND}
-						height={AVATAR_SMALL_WIDTH * 0.6}
-						width={AVATAR_SMALL_WIDTH * 0.6}
+						height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+						width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
 					/>
 				);
 			}
@@ -481,7 +479,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 					>
 						<RX.View style={styles.containerIcon}>
 							<IconSvg
-								source={require('../resources/svg/home.json') as SvgFile}
+								source={require('../resources/svg/RI_arrowleft.json') as SvgFile}
 								fillColor={BUTTON_FILL}
 								height={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
 								width={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}

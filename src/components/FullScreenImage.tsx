@@ -550,11 +550,11 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
 					disableTouchOpacityAnimation={true}
 				/>
 			);
-			let iconFile;
+			let iconToggleFullscreen;
 			if (this.state.isWebFullscreen) {
-				iconFile = require('../resources/svg/fullscreen_exit.json') as SvgFile;
+				iconToggleFullscreen = require('../resources/svg/RI_fullscreen_exit.json') as SvgFile;
 			} else {
-				iconFile = require('../resources/svg/fullscreen_enter.json') as SvgFile;
+				iconToggleFullscreen = require('../resources/svg/RI_fullscreen_enter.json') as SvgFile;
 			}
 			buttonFullscreen = (
 				<RX.Button
@@ -565,10 +565,10 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
 				>
 					<RX.View style={styles.containerIcon}>
 						<IconSvg
-							source={iconFile}
+							source={iconToggleFullscreen}
 							fillColor={ICON_FULLSCREEN_FILL}
-							height={16}
-							width={16}
+							height={20}
+							width={20}
 						/>
 					</RX.View>
 				</RX.Button>

@@ -17,6 +17,7 @@ import {
 	LIGHT_BACKGROUND,
 	TILE_MESSAGE_TEXT,
 	AVATAR_FOREGROUND,
+	ICON_REDUCTION_FACTOR,
 } from '../ui';
 import UiStore from '../stores/UiStore';
 import { invited, left, admin } from '../translations';
@@ -112,10 +113,10 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
 		if (!avatarIsUrl) {
 			avatar = (
 				<IconSvg
-					source={require('../resources/svg/contact.json') as SvgFile}
+					source={require('../resources/svg/RI_user.json') as SvgFile}
 					fillColor={AVATAR_FOREGROUND}
-					height={AVATAR_SMALL_WIDTH * 0.5}
-					width={AVATAR_SMALL_WIDTH * 0.5}
+					height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+					width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
 				/>
 			);
 		} else {

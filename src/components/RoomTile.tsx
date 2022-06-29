@@ -16,6 +16,8 @@ import {
 	TILE_MESSAGE_TEXT,
 	AVATAR_FOREGROUND,
 	TILE_BACKGROUND_SELECTED,
+	ICON_REDUCTION_FACTOR,
+	ICON_INFO_SIZE,
 } from '../ui';
 import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
@@ -113,7 +115,7 @@ const styles = {
 		width: 24,
 		borderRadius: 12,
 		backgroundColor: BUTTON_UNREAD_BACKGROUND,
-		fontSize: FONT_LARGE,
+		fontSize: FONT_NORMAL,
 		color: BUTTON_UNREAD_TEXT,
 		textAlign: 'center',
 		marginLeft: 2 * SPACING,
@@ -282,38 +284,37 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 			if (this.state.type === 'direct') {
 				avatar = (
 					<IconSvg
-						source={require('../resources/svg/contact.json') as SvgFile}
+						source={require('../resources/svg/RI_user.json') as SvgFile}
 						fillColor={AVATAR_FOREGROUND}
-						height={AVATAR_SMALL_WIDTH * 0.5}
-						width={AVATAR_SMALL_WIDTH * 0.5}
+						height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+						width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
 					/>
 				);
 			} else if (this.state.type === 'notepad') {
 				avatar = (
 					<IconSvg
-						source={require('../resources/svg/notepad.json') as SvgFile}
+						source={require('../resources/svg/RI_notepad.json') as SvgFile}
 						fillColor={AVATAR_FOREGROUND}
-						height={AVATAR_SMALL_WIDTH * 0.6}
-						width={AVATAR_SMALL_WIDTH * 0.6}
-						style={{ marginLeft: AVATAR_SMALL_WIDTH / 14, marginBottom: AVATAR_SMALL_WIDTH / 14 }}
+						height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+						width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
 					/>
 				);
 			} else if (this.state.type === 'group') {
 				avatar = (
 					<IconSvg
-						source={require('../resources/svg/group.json') as SvgFile}
+						source={require('../resources/svg/RI_users.json') as SvgFile}
 						fillColor={AVATAR_FOREGROUND}
-						height={AVATAR_SMALL_WIDTH * 0.7}
-						width={AVATAR_SMALL_WIDTH * 0.7}
+						height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+						width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
 					/>
 				);
 			} else if (this.state.type === 'community') {
 				avatar = (
 					<IconSvg
-						source={require('../resources/svg/community.json') as SvgFile}
+						source={require('../resources/svg/RI_public.json') as SvgFile}
 						fillColor={AVATAR_FOREGROUND}
-						height={AVATAR_SMALL_WIDTH * 0.6}
-						width={AVATAR_SMALL_WIDTH * 0.6}
+						height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+						width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
 					/>
 				);
 			}
@@ -334,33 +335,33 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 			messageText = invitationWaiting[this.language];
 			messageTypeIcon = (
 				<IconSvg
-					source={require('../resources/svg/info.json') as SvgFile}
+					source={require('../resources/svg/RI_info.json') as SvgFile}
 					style={{ marginRight: SPACING }}
 					fillColor={ICON_INFO_FILL}
-					height={16}
-					width={16}
+					height={ICON_INFO_SIZE}
+					width={ICON_INFO_SIZE}
 				/>
 			);
 		} else if (this.state.contactPhase === 'leave') {
 			messageText = archived[this.language];
 			messageTypeIcon = (
 				<IconSvg
-					source={require('../resources/svg/info.json') as SvgFile}
+					source={require('../resources/svg/RI_info.json') as SvgFile}
 					style={{ marginRight: SPACING }}
 					fillColor={ICON_INFO_FILL}
-					height={16}
-					width={16}
+					height={ICON_INFO_SIZE}
+					width={ICON_INFO_SIZE}
 				/>
 			);
 		} else if (this.state.contactPhase === 'invite') {
 			messageText = invitationNotYetAccepted[this.language];
 			messageTypeIcon = (
 				<IconSvg
-					source={require('../resources/svg/info.json') as SvgFile}
+					source={require('../resources/svg/RI_info.json') as SvgFile}
 					style={{ marginRight: SPACING }}
 					fillColor={ICON_INFO_FILL}
-					height={16}
-					width={16}
+					height={ICON_INFO_SIZE}
+					width={ICON_INFO_SIZE}
 				/>
 			);
 		} else if (this.props.newestRoomEvent) {
@@ -369,11 +370,11 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 					messageText = this.props.newestRoomEvent.content.body;
 					messageTypeIcon = (
 						<IconSvg
-							source={require('../resources/svg/document.json') as SvgFile}
+							source={require('../resources/svg/RI_file.json') as SvgFile}
 							style={{ marginRight: SPACING }}
 							fillColor={ICON_INFO_FILL}
-							height={16}
-							width={16}
+							height={ICON_INFO_SIZE}
+							width={ICON_INFO_SIZE}
 						/>
 					);
 				} else if (this.props.newestRoomEvent.content.msgtype === 'm.image') {
@@ -381,11 +382,11 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 
 					messageTypeIcon = (
 						<IconSvg
-							source={require('../resources/svg/image.json') as SvgFile}
+							source={require('../resources/svg/RI_image.json') as SvgFile}
 							style={{ marginRight: SPACING }}
 							fillColor={ICON_INFO_FILL}
-							height={16}
-							width={16}
+							height={ICON_INFO_SIZE}
+							width={ICON_INFO_SIZE}
 						/>
 					);
 				} else if (this.props.newestRoomEvent.content.msgtype === 'm.video') {
@@ -393,11 +394,11 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 
 					messageTypeIcon = (
 						<IconSvg
-							source={require('../resources/svg/video_media.json') as SvgFile}
+							source={require('../resources/svg/RI_movie.json') as SvgFile}
 							style={{ marginRight: SPACING }}
 							fillColor={ICON_INFO_FILL}
-							height={16}
-							width={16}
+							height={ICON_INFO_SIZE}
+							width={ICON_INFO_SIZE}
 						/>
 					);
 				} else if (this.props.newestRoomEvent.content.body) {
@@ -406,11 +407,11 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 
 						messageTypeIcon = (
 							<IconSvg
-								source={require('../resources/svg/video_camera.json') as SvgFile}
+								source={require('../resources/svg/RI_videoconf.json') as SvgFile}
 								style={{ marginRight: SPACING }}
 								fillColor={ICON_INFO_FILL}
-								height={16}
-								width={16}
+								height={ICON_INFO_SIZE}
+								width={ICON_INFO_SIZE}
 							/>
 						);
 					} else {
@@ -422,11 +423,11 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 				messageText = encryptedMessage[this.language];
 				messageTypeIcon = (
 					<IconSvg
-						source={require('../resources/svg/info.json') as SvgFile}
+						source={require('../resources/svg/RI_info.json') as SvgFile}
 						style={{ marginRight: SPACING }}
 						fillColor={ICON_INFO_FILL}
-						height={16}
-						width={16}
+						height={ICON_INFO_SIZE}
+						width={ICON_INFO_SIZE}
 					/>
 				);
 			} else {
