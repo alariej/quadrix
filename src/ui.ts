@@ -29,6 +29,7 @@ export const AVATAR_MARGIN = 8;
 export const BORDER_RADIUS = 5;
 export const CONTAINER_PADDING = 6;
 export const HEADER_HEIGHT = 54;
+export const ICON_INFO_SIZE = 18;
 export const ICON_REDUCTION_FACTOR = 1.8;
 
 // fonts
@@ -59,7 +60,7 @@ export const TILE_SYSTEM_TEXT = 'grey';
 export const LIGHT_BACKGROUND = 'grey';
 export const BUTTON_FILL = LOGO_FILL;
 export const BUTTON_ROUND_BACKGROUND = 'white';
-export const BUTTON_LONG_BACKGROUND = 'rgba(0, 0, 0, 0.5)';
+export const BUTTON_LONG_BACKGROUND = 'dimgrey';
 export const BUTTON_MODAL_BACKGROUND = 'white';
 export const BUTTON_JITSI_BACKGROUND = 'rgba(0, 0, 0, 0.2)';
 export const BUTTON_UNREAD_BACKGROUND = '#00C3FF';
@@ -82,7 +83,7 @@ export const INPUT_BACKGROUND = 'white';
 export const INPUT_TEXT = 'black';
 export const INPUT_BORDER = 'lightgrey';
 export const PLACEHOLDER_TEXT = 'dimgrey';
-export const AVATAR_FOREGROUND = '#666666';
+export const AVATAR_FOREGROUND = '#0088B3';
 export const AVATAR_BACKGROUND = 'white';
 export const LINK_TEXT = 'blue';
 export const FOOTER_TEXT = 'grey';
