@@ -74,7 +74,6 @@ const styles = {
 	buttonContainer: RX.Styles.createViewStyle({
 		position: 'absolute',
 		flexDirection: 'column',
-		right: -2 * SPACING,
 		overflow: 'visible',
 	}),
 	buttonDialog: RX.Styles.createViewStyle({
@@ -838,14 +837,24 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 				);
 			}
 
+			let right = undefined;
+			let left = undefined;
+			if (this.props.roomType === 'notepad' || this.props.event.senderId !== ApiClient.credentials.userIdFull) {
+				right = -2 * SPACING;
+			} else {
+				left = 2 * SPACING;
+			}
+
 			const appLayout = UiStore.getAppLayout_();
 			const containerHeight = n * (STACKED_BUTTON_HEIGHT + 2 * 1);
-			let pos = (this.props.layout.height - containerHeight - 1) / 2;
-			pos = Math.min(pos, appLayout.screenHeight - this.props.layout.y - containerHeight);
-			pos = Math.max(pos, -1 * this.props.layout.y);
+			let top = (this.props.layout.height - containerHeight - 1) / 2;
+			top = Math.min(top, appLayout.screenHeight - this.props.layout.y - containerHeight);
+			top = Math.max(top, -1 * this.props.layout.y);
 
 			contextMenu = (
-				<RX.Animated.View style={[this.animatedStyle, styles.buttonContainer, { top: pos }]}>
+				<RX.Animated.View
+					style={[this.animatedStyle, styles.buttonContainer, { top: top, right: right, left: left }]}
+				>
 					{detailsButton}
 					{openButton}
 					{saveAsButton}
