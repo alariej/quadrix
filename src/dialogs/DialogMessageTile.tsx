@@ -842,7 +842,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 			if (this.props.roomType === 'notepad' || this.props.event.senderId !== ApiClient.credentials.userIdFull) {
 				right = -2 * SPACING;
 			} else {
-				left = 2 * SPACING;
+				left = -2 * SPACING;
 			}
 
 			const appLayout = UiStore.getAppLayout_();
