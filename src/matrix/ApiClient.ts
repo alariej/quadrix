@@ -541,6 +541,14 @@ class ApiClient {
 		return restClient.reportMessage(roomId, eventId);
 	}
 
+	public redactMessage(roomId: string, eventId: string): Promise<void> {
+		const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
+
+		const transactionId = 'redact' + Date.now();
+
+		return restClient.redactMessage(roomId, eventId, transactionId);
+	}
+
 	public searchUser(searchTerm: string): Promise<DirectorySearch_> {
 		const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
 

@@ -306,14 +306,14 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 	};
 
 	private newMessageRedaction = () => {
-		const lastRedactedEventId = DataStore.getLastRedactedEventId(this.props.roomId);
+		const redactedEvents = DataStore.getRedactedEvents(this.props.roomId);
 
-		if (lastRedactedEventId) {
-			const eventIndex = this.eventListItems.findIndex(
-				eventItem => eventItem.event.eventId === lastRedactedEventId
-			);
-
+		redactedEvents?.map(eventId => {
+			const eventIndex = this.eventListItems.findIndex(eventItem => eventItem.event.eventId === eventId);
+			if (eventIndex > -1) {
 			this.eventListItems[eventIndex].isRedacted = true;
+			}
+		});
 
 			// HACK: need to cut and repaste the last message to force a re-render of the VLV
 			// voodoo: although push does the same as concat, VLV does not update
@@ -321,7 +321,6 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 			this.eventListItems = this.eventListItems.concat(lastItem!);
 
 			this.setState({ eventListItems: this.eventListItems });
-		}
 	};
 
 	private newMessages = () => {

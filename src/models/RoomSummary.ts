@@ -26,5 +26,5 @@ export interface RoomSummary {
 	thirdPartyInviteId?: string;
 	topic?: string;
 	newEventsLimited?: boolean;
-	lastRedactedEventId?: string;
+	redactedEvents: string[];
 }

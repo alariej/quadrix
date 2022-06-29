@@ -302,16 +302,34 @@ export const report: Translation = {
 	fr: 'Signaler',
 };
 
+export const deleteMessage: Translation = {
+	en: 'Delete',
+	de: 'Löschen',
+	fr: 'Supprimer',
+};
+
 export const doYouReallyWantToReport: Translation = {
 	en: "Do you really want to report this message as objectionable or offensive to the server's administrator?",
 	de: 'Möchten Sie diese Nachricht wirklich als anstößig oder beleidigend an den Administrator des Servers melden?',
 	fr: "Voulez-vous vraiment signaler ce message comme étant répréhensible ou offensant à l'administrateur du serveur?",
 };
 
+export const doYouReallyWantToDelete: Translation = {
+	en: 'Press OK to delete this message',
+	de: 'Drücken Sie OK, um die Nachricht zu löschen',
+	fr: 'Appuyez sur OK pour supprimer ce message',
+};
+
 export const messageHasBeenReported: Translation = {
 	en: "The message has been successfully reported to the server's administrator",
 	de: 'Die Nachricht wurde erfolgreich an den Administrator des Servers gemeldet',
 	fr: "Le message a été signalé avec succès à l'administrateur du serveur",
+};
+
+export const messageHasBeenDeleted: Translation = {
+	en: 'The message has been deleted',
+	de: 'Die Nachricht wurde gelöscht',
+	fr: 'Le message a été supprimé',
 };
 
 export const forwardTo: Translation = {

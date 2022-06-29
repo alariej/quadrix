@@ -107,6 +107,7 @@ class DataStore extends StoreBase {
 				active: false,
 				readReceipts: {},
 				newEvents: [],
+				redactedEvents: [],
 			};
 
 			this.roomSummaryList.push(roomSummary);
@@ -123,6 +124,7 @@ class DataStore extends StoreBase {
 				unreadCount: 0,
 				readReceipts: {},
 				newEvents: [],
+				redactedEvents: [],
 			};
 
 			this.roomSummaryList.push(roomSummary);
@@ -159,20 +161,15 @@ class DataStore extends StoreBase {
 		}
 	}
 
-	private redactMessage(event: MessageEvent_, roomIndex: number) {
-		let messageIndex = -1;
-		this.roomSummaryList[roomIndex].timelineEvents.some((event_, index) => {
-			if (event_ && event_.event_id === event.redacts) {
-				messageIndex = index;
-				return true;
-			}
-			return false;
-		});
+	private addRedactedEvent(event: MessageEvent_, roomIndex: number) {
+		this.roomSummaryList[roomIndex].redactedEvents.push(event.redacts!);
 
-		if (messageIndex > -1) {
-			this.roomSummaryList[roomIndex].timelineEvents[messageIndex]._redacted = true;
-			this.roomSummaryList[roomIndex].lastRedactedEventId =
-				this.roomSummaryList[roomIndex].timelineEvents[messageIndex].event_id;
+		const eventIndex = this.roomSummaryList[roomIndex].timelineEvents.findIndex(
+			event_ => event_.event_id === event.redacts
+		);
+
+		if (eventIndex > -1) {
+			this.roomSummaryList[roomIndex].timelineEvents[eventIndex]._redacted = true;
 			if (this.roomSummaryList[roomIndex].newEvents[0].eventId === event.redacts) {
 				this.roomSummaryList[roomIndex].newEvents[0].content.body = '';
 			}
@@ -205,7 +202,7 @@ class DataStore extends StoreBase {
 
 				case 'm.room.redaction':
 					roomEventTriggers.isNewRedactionEvent = true;
-					this.redactMessage(event, roomIndex);
+					this.addRedactedEvent(event, roomIndex);
 					break;
 
 				case 'm.room.name':
@@ -555,6 +552,7 @@ class DataStore extends StoreBase {
 			unreadCount: 0,
 			readReceipts: {},
 			newEvents: [],
+			redactedEvents: [],
 		};
 
 		this.roomSummaryList.push(roomSummary);
@@ -598,6 +596,7 @@ class DataStore extends StoreBase {
 			unreadCount: 1,
 			readReceipts: {},
 			newEvents: [],
+			redactedEvents: [],
 		};
 
 		this.roomSummaryList.push(roomSummary);
@@ -828,10 +827,10 @@ class DataStore extends StoreBase {
 	}
 
 	@autoSubscribeWithKey(RedactionTrigger)
-	public getLastRedactedEventId(roomId: string): string | undefined {
+	public getRedactedEvents(roomId: string): string[] | undefined {
 		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
 
-		return this.roomSummaryList[roomIndex].lastRedactedEventId;
+		return this.roomSummaryList[roomIndex].redactedEvents;
 	}
 
 	@autoSubscribeWithKey('DummyTrigger')

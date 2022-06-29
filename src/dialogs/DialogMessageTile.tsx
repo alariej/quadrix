@@ -48,6 +48,9 @@ import {
 	close,
 	noFileExplorerWasFound,
 	details,
+	deleteMessage,
+	doYouReallyWantToDelete,
+	messageHasBeenDeleted,
 } from '../translations';
 import FileHandler from '../modules/FileHandler';
 import ShareHandlerOutgoing from '../modules/ShareHandlerOutgoing';
@@ -489,6 +492,27 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 		this.setState({ showConfirmationDialog: true });
 	};
 
+	private confirmDeleteMessage = (event: RX.Types.SyntheticEvent) => {
+		event.stopPropagation();
+
+		const text = <RX.Text style={styles.textDialog}>{doYouReallyWantToDelete[this.language]}</RX.Text>;
+
+		this.confirmationDialog = (
+			<DialogContainer
+				content={text}
+				confirmButton={true}
+				confirmButtonText={'OK'}
+				cancelButton={true}
+				backgroundColor={OPAQUE_LIGHT_BACKGROUND}
+				cancelButtonText={cancel[this.language]}
+				onConfirm={this.deleteMessage}
+				onCancel={() => RX.Modal.dismissAll()}
+			/>
+		);
+
+		this.setState({ showConfirmationDialog: true });
+	};
+
 	private reportMessage = () => {
 		this.confirmationDialog = undefined;
 		this.setState({
@@ -529,6 +553,46 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 			});
 	};
 
+	private deleteMessage = () => {
+		this.confirmationDialog = undefined;
+		this.setState({
+			showConfirmationDialog: false,
+			showSpinner: true,
+		});
+
+		ApiClient.redactMessage(this.props.roomId, this.props.event.eventId)
+			.then(_response => {
+				RX.Modal.dismiss('dialogMessageTile');
+
+				const text = <RX.Text style={styles.textDialog}>{messageHasBeenDeleted[this.language]}</RX.Text>;
+
+				RX.Modal.show(
+					<DialogContainer
+						content={text}
+						modalId={'messageDeleted'}
+					/>,
+					'messageDeleted'
+				);
+			})
+			.catch((error: ErrorResponse_) => {
+				RX.Modal.dismiss('dialogMessageTile');
+
+				const text = (
+					<RX.Text style={styles.textDialog}>
+						{error.body && error.body.error ? error.body.error : '[Unknown error]'}
+					</RX.Text>
+				);
+
+				RX.Modal.show(
+					<DialogContainer
+						content={text}
+						modalId={'errordialog'}
+					/>,
+					'errordialog'
+				);
+			});
+	};
+
 	public render(): JSX.Element | null {
 		let contextMenu: ReactElement | undefined;
 		let detailsButton: ReactElement | undefined;
@@ -539,6 +603,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 		let replyButton: ReactElement | undefined;
 		let forwardConfirmButton: ReactElement | undefined;
 		let reportButton: ReactElement | undefined;
+		let deleteButton: ReactElement | undefined;
 		let n;
 
 		if (!this.state.showConfirmationDialog && !this.state.showSpinner && !this.state.withSenderDetails) {
@@ -718,6 +783,34 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 				</RX.Button>
 			);
 
+			if (ApiClient.credentials.userIdFull === this.props.event.senderId) {
+				n++;
+				deleteButton = (
+					<RX.Button
+						style={styles.buttonDialog}
+						onPress={this.confirmDeleteMessage}
+						disableTouchOpacityAnimation={true}
+						activeOpacity={1}
+					>
+						<RX.Text
+							allowFontScaling={false}
+							style={[
+								styles.buttonText,
+								this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined,
+							]}
+						>
+							{deleteMessage[this.language]}
+						</RX.Text>
+						<IconSvg
+							source={require('../resources/svg/RI_msg_delete.json') as SvgFile}
+							fillColor={ICON_INFO_FILL}
+							height={ICON_INFO_SIZE}
+							width={ICON_INFO_SIZE}
+						/>
+					</RX.Button>
+				);
+			}
+
 			if (this.props.roomType === 'community') {
 				n++;
 				reportButton = (
@@ -760,6 +853,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 					{forwardButton}
 					{replyButton}
 					{forwardConfirmButton}
+					{deleteButton}
 					{reportButton}
 				</RX.Animated.View>
 			);

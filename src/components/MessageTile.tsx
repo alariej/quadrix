@@ -139,6 +139,10 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 	}
 
 	private showContextDialog = () => {
+		if (this.props.isRedacted) {
+			return;
+		}
+
 		RX.UserInterface.dismissKeyboard();
 
 		RX.UserInterface.measureLayoutRelativeToWindow(this.mainTile!)
@@ -179,15 +183,12 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 
 		if (this.props.isRedacted) {
 			messageType = 'system';
-
 			message = <RX.Text style={styles.containerText}>{messageDeleted[UiStore.getLanguage()]}</RX.Text>;
 		} else if (this.props.event.type === 'm.room.encrypted') {
 			messageType = 'system';
-
 			message = <RX.Text style={styles.containerText}>{encryptedMessage[UiStore.getLanguage()]}</RX.Text>;
 		} else if (this.props.event.content.msgtype === 'm.image') {
 			messageType = 'media';
-
 			message = (
 				<ImageMessage
 					roomId={this.props.roomId}
@@ -197,7 +198,6 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 			);
 		} else if (this.props.event.content.msgtype === 'm.video') {
 			messageType = 'media';
-
 			message = (
 				<VideoMessage
 					message={this.props.event}
@@ -206,7 +206,6 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 			);
 		} else if (this.props.event.content.msgtype === 'm.file') {
 			messageType = 'file';
-
 			message = (
 				<FileMessage
 					message={this.props.event}
@@ -215,7 +214,6 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 			);
 		} else {
 			messageType = 'text';
-
 			message = (
 				<TextMessage
 					roomId={this.props.roomId}

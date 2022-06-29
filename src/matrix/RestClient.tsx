@@ -309,6 +309,14 @@ export default class RestClient extends GenericRestClient {
 		return this.performApiPost<void>('rooms/' + roomId + '/report/' + eventId, data);
 	}
 
+	public redactMessage(roomId: string, eventId: string, transactionId: string): Promise<void> {
+		const data = {
+			reason: 'N/A',
+		};
+
+		return this.performApiPut<void>('rooms/' + roomId + '/redact/' + eventId + '/' + transactionId, data);
+	}
+
 	public searchUser(searchTerm: string): Promise<DirectorySearch_> {
 		const data = {
 			search_term: searchTerm,
