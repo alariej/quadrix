@@ -10,6 +10,7 @@ import {
 	BUTTON_MODAL_TEXT,
 	TILE_MESSAGE_TEXT,
 	OBJECT_MARGIN,
+	APP_BACKGROUND,
 } from '../ui';
 import { User } from '../models/User';
 import ApiClient from '../matrix/ApiClient';
@@ -25,6 +26,7 @@ const styles = {
 	container: RX.Styles.createViewStyle({
 		flex: 1,
 		justifyContent: 'center',
+		backgroundColor: APP_BACKGROUND,
 	}),
 	containerText: RX.Styles.createViewStyle({
 		flex: 1,
