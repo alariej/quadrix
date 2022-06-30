@@ -36,13 +36,13 @@ export const notepad: Translation = {
 };
 
 export const inviteUser: Translation = {
-	en: 'Invite User',
+	en: 'Invite',
 	de: 'Einladen',
 	fr: 'Inviter',
 };
 
 export const searchUser: Translation = {
-	en: 'Search User',
+	en: 'Search...',
 	de: 'Suchen...',
 	fr: 'Chercher...',
 };
@@ -108,7 +108,7 @@ export const close: Translation = {
 };
 
 export const createGroup: Translation = {
-	en: 'Create Group',
+	en: 'Create',
 	de: 'Erstellen',
 	fr: 'Créer',
 };
@@ -120,7 +120,7 @@ export const groupName: Translation = {
 };
 
 export const createNotepad: Translation = {
-	en: 'Create Notepad',
+	en: 'Create',
 	de: 'Erstellen',
 	fr: 'Créer',
 };
