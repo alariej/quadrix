@@ -17,7 +17,6 @@ import {
 	BUTTON_HEIGHT,
 	OBJECT_MARGIN,
 	TILE_BACKGROUND,
-	ICON_REDUCTION_FACTOR,
 } from '../ui';
 import FileHandler from '../modules/FileHandler';
 import ApiClient from '../matrix/ApiClient';
@@ -753,6 +752,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 			);
 		}
 
+		const iconReductionFactor = 1.6;
+
 		return (
 			<RX.View style={styles.container}>
 				<RX.Button
@@ -772,8 +773,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 					<IconSvg
 						source={require('../resources/svg/RI_videocam.json') as SvgFile}
 						fillColor={BUTTON_FILL}
-						height={BUTTON_COMPOSER_WIDTH / ICON_REDUCTION_FACTOR}
-						width={BUTTON_COMPOSER_WIDTH / ICON_REDUCTION_FACTOR}
+						height={BUTTON_COMPOSER_WIDTH / iconReductionFactor}
+						width={BUTTON_COMPOSER_WIDTH / iconReductionFactor}
 					/>
 				</RX.Button>
 				<RX.Button
@@ -788,8 +789,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 					<IconSvg
 						source={require('../resources/svg/RI_attach.json') as SvgFile}
 						fillColor={BUTTON_FILL}
-						height={BUTTON_COMPOSER_WIDTH / ICON_REDUCTION_FACTOR}
-						width={BUTTON_COMPOSER_WIDTH / ICON_REDUCTION_FACTOR}
+						height={BUTTON_COMPOSER_WIDTH / iconReductionFactor}
+						width={BUTTON_COMPOSER_WIDTH / iconReductionFactor}
 					/>
 				</RX.Button>
 				<RX.Button
@@ -805,8 +806,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 					<IconSvg
 						source={require('../resources/svg/RI_smiley.json') as SvgFile}
 						fillColor={BUTTON_FILL}
-						height={BUTTON_COMPOSER_WIDTH / ICON_REDUCTION_FACTOR}
-						width={BUTTON_COMPOSER_WIDTH / ICON_REDUCTION_FACTOR}
+						height={BUTTON_COMPOSER_WIDTH / iconReductionFactor}
+						width={BUTTON_COMPOSER_WIDTH / iconReductionFactor}
 					/>
 				</RX.Button>
 				<RX.View style={styles.textInputContainer}>
@@ -843,8 +844,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 					<IconSvg
 						source={require('../resources/svg/RI_send.json') as SvgFile}
 						fillColor={BUTTON_FILL}
-						height={BUTTON_COMPOSER_WIDTH / ICON_REDUCTION_FACTOR}
-						width={BUTTON_COMPOSER_WIDTH / ICON_REDUCTION_FACTOR}
+						height={BUTTON_COMPOSER_WIDTH / iconReductionFactor}
+						width={BUTTON_COMPOSER_WIDTH / iconReductionFactor}
 					/>
 				</RX.Button>
 				{progressDialog}
