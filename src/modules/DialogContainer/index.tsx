@@ -13,6 +13,7 @@ import {
 	SPACING,
 	OBJECT_MARGIN,
 	BUTTON_DISABLED_TEXT,
+	BUTTON_CANCEL_BACKGROUND,
 } from '../../ui';
 import UiStore from '../../stores/UiStore';
 import { cancel } from '../../translations';
@@ -39,11 +40,19 @@ const styles = {
 	buttonContainer: RX.Styles.createViewStyle({
 		flexDirection: 'row',
 	}),
-	button: RX.Styles.createViewStyle({
+	buttonConfirm: RX.Styles.createViewStyle({
 		width: DIALOG_WIDTH / 2 - OBJECT_MARGIN / 2,
 		height: BUTTON_HEIGHT,
 		borderRadius: BUTTON_HEIGHT / 2,
 		backgroundColor: BUTTON_MODAL_BACKGROUND,
+	}),
+	buttonCancel: RX.Styles.createViewStyle({
+		width: DIALOG_WIDTH / 2 - OBJECT_MARGIN / 2,
+		height: BUTTON_HEIGHT,
+		borderRadius: BUTTON_HEIGHT / 2,
+		borderWidth: 1,
+		borderColor: BUTTON_MODAL_BACKGROUND,
+		backgroundColor: BUTTON_CANCEL_BACKGROUND,
 	}),
 	buttonText: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
@@ -134,7 +143,7 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
 		if (this.props.confirmButton) {
 			confirmButton = (
 				<RX.Button
-					style={styles.button}
+					style={styles.buttonConfirm}
 					onPress={this.onConfirmButtonClick}
 					disabledOpacity={1}
 					disableTouchOpacityAnimation={false}
@@ -156,7 +165,7 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
 		if (this.props.cancelButton) {
 			cancelButton = (
 				<RX.Button
-					style={this.props.buttonStyle || styles.button}
+					style={this.props.buttonStyle || styles.buttonCancel}
 					onPress={this.onCancelButtonClick}
 					disableTouchOpacityAnimation={false}
 					underlayColor={BUTTON_DISABLED_TEXT}

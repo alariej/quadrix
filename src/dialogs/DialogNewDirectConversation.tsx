@@ -20,6 +20,7 @@ import {
 	BUTTON_MODAL_TEXT,
 	MODAL_DISABLED_TEXT,
 	OPAQUE_BACKGROUND,
+	BUTTON_CANCEL_BACKGROUND,
 } from '../ui';
 import UiStore from '../stores/UiStore';
 import {
@@ -85,11 +86,19 @@ const styles = {
 		flexDirection: 'row',
 		marginVertical: OBJECT_MARGIN,
 	}),
-	button: RX.Styles.createViewStyle({
+	buttonConfirm: RX.Styles.createViewStyle({
 		width: DIALOG_WIDTH / 2 - OBJECT_MARGIN / 2,
 		height: BUTTON_HEIGHT,
 		borderRadius: BUTTON_HEIGHT / 2,
 		backgroundColor: BUTTON_MODAL_BACKGROUND,
+	}),
+	buttonCancel: RX.Styles.createViewStyle({
+		width: DIALOG_WIDTH / 2 - OBJECT_MARGIN / 2,
+		height: BUTTON_HEIGHT,
+		borderRadius: BUTTON_HEIGHT / 2,
+		borderWidth: 1,
+		borderColor: BUTTON_MODAL_BACKGROUND,
+		backgroundColor: BUTTON_CANCEL_BACKGROUND,
 	}),
 	buttonText: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
@@ -370,7 +379,7 @@ export default class DialogNewDirectConversation extends RX.Component<
 		const buttons = (
 			<RX.View style={[styles.buttonContainer, { justifyContent: 'space-between' }]}>
 				<RX.Button
-					style={styles.button}
+					style={styles.buttonConfirm}
 					onPress={this.state.isSearch ? this.searchOnServer : this.createNewDirect}
 					disabledOpacity={1}
 					disableTouchOpacityAnimation={true}
@@ -386,7 +395,7 @@ export default class DialogNewDirectConversation extends RX.Component<
 				</RX.Button>
 
 				<RX.Button
-					style={styles.button}
+					style={styles.buttonCancel}
 					onPress={() => RX.Modal.dismissAll()}
 					disableTouchOpacityAnimation={true}
 					activeOpacity={1}
