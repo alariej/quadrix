@@ -1164,3 +1164,9 @@ export const pressOKToDeleteAccount = (server: string, language: string): string
 			return '';
 	}
 };
+
+export const deleteAccount: Translation = {
+	en: 'Delete Account',
+	de: 'Konto Löschen',
+	fr: 'Supprimer le compte',
+};
