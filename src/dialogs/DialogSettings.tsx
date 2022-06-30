@@ -27,6 +27,7 @@ import {
 	BUTTON_LONG_WIDTH,
 	OBJECT_MARGIN,
 	ICON_REDUCTION_FACTOR,
+	ICON_INFO_SIZE,
 } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
@@ -55,6 +56,7 @@ import {
 	cancel,
 	enterPassword,
 	errorInvalidPassword,
+	deleteAccount,
 } from '../translations';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { AuthResponse_, ErrorResponse_ } from '../models/MatrixApi';
@@ -1151,7 +1153,14 @@ export default class DialogSettings extends ComponentBase<DialogSettingsProps, D
 						disabled={this.state.offline}
 						disabledOpacity={1}
 					>
-						<RX.Text style={styles.buttonTextDelete}>Detete Account</RX.Text>
+						<RX.Text style={styles.buttonTextDelete}>{deleteAccount[this.language]}</RX.Text>
+						<IconSvg
+							source={require('../resources/svg/RI_msg_delete.json') as SvgFile}
+							style={{ position: 'absolute', right: 8 }}
+							fillColor={'orangered'}
+							height={ICON_INFO_SIZE}
+							width={ICON_INFO_SIZE}
+						/>
 					</RX.Button>
 				</RX.View>
 			);
