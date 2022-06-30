@@ -13,7 +13,6 @@ import {
 	BUTTON_MODAL_TEXT,
 	MODAL_CONTENT_BACKGROUND,
 	OPAQUE_BACKGROUND,
-	BUTTON_DISABLED_TEXT,
 	BORDER_RADIUS,
 	TILE_WIDTH,
 	BUTTON_LONG_WIDTH,
@@ -24,6 +23,8 @@ import {
 	TILE_HEIGHT,
 	OBJECT_MARGIN,
 	OPAQUE_DUMMY_BACKGROUND,
+	ICON_INFO_SIZE,
+	ICON_INFO_FILL,
 } from '../ui';
 import {
 	theInvitationWasSent,
@@ -43,6 +44,7 @@ import { ErrorResponse_, RoomPhase, RoomType } from '../models/MatrixApi';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import Spinner from '../components/Spinner';
 import AppFont from '../modules/AppFont';
+import IconSvg, { SvgFile } from '../components/IconSvg';
 
 const styles = {
 	modalScreen: RX.Styles.createViewStyle({
@@ -93,7 +95,6 @@ const styles = {
 		fontSize: FONT_LARGE,
 		marginVertical: SPACING,
 		textAlign: 'center',
-		color: BUTTON_MODAL_TEXT,
 	}),
 	containerButtons: RX.Styles.createViewStyle({
 		alignItems: 'center',
@@ -427,11 +428,16 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
 					disabled={this.state.offline}
 					disabledOpacity={1}
 				>
-					<RX.Text
-						style={[styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined]}
-					>
+					<RX.Text style={[styles.buttonText, { color: 'orangered', opacity: this.state.offline ? 0.3 : 1 }]}>
 						{leaveRoom[this.language + '_' + this.props.roomType.substr(0, 2)]}
 					</RX.Text>
+					<IconSvg
+						source={require('../resources/svg/RI_msg_delete.json') as SvgFile}
+						style={{ position: 'absolute', right: 8, opacity: this.state.offline ? 0.3 : 1 }}
+						fillColor={'orangered'}
+						height={ICON_INFO_SIZE}
+						width={ICON_INFO_SIZE}
+					/>
 				</RX.Button>
 			);
 		}
@@ -450,13 +456,25 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
 					<RX.Text
 						style={[
 							styles.buttonText,
-							(this.state.offline || this.powerLevel) !== 100
-								? { color: BUTTON_DISABLED_TEXT }
-								: undefined,
+							{
+								color: BUTTON_MODAL_TEXT,
+								opacity: this.state.offline || this.powerLevel !== 100 ? 0.3 : 1,
+							},
 						]}
 					>
 						{inviteAdditionalUser[this.language]}
 					</RX.Text>
+					<IconSvg
+						source={require('../resources/svg/RI_useradd.json') as SvgFile}
+						style={{
+							position: 'absolute',
+							right: 8,
+							opacity: this.state.offline || this.powerLevel !== 100 ? 0.3 : 1,
+						}}
+						fillColor={ICON_INFO_FILL}
+						height={ICON_INFO_SIZE}
+						width={ICON_INFO_SIZE}
+					/>
 				</RX.Button>
 			);
 		}
