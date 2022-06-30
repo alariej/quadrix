@@ -21,6 +21,7 @@ import {
 	MODAL_DISABLED_TEXT,
 	OPAQUE_BACKGROUND,
 	BUTTON_CANCEL_BACKGROUND,
+	BUTTON_LONG_TEXT,
 } from '../ui';
 import UiStore from '../stores/UiStore';
 import {
@@ -96,16 +97,21 @@ const styles = {
 		width: DIALOG_WIDTH / 2 - OBJECT_MARGIN / 2,
 		height: BUTTON_HEIGHT,
 		borderRadius: BUTTON_HEIGHT / 2,
-		borderWidth: 1,
-		borderColor: BUTTON_MODAL_BACKGROUND,
 		backgroundColor: BUTTON_CANCEL_BACKGROUND,
 	}),
-	buttonText: RX.Styles.createTextStyle({
+	buttonTextConfirm: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
 		fontSize: FONT_LARGE,
 		marginVertical: SPACING,
 		textAlign: 'center',
 		color: BUTTON_MODAL_TEXT,
+	}),
+	buttonTextCancel: RX.Styles.createTextStyle({
+		fontFamily: AppFont.fontFamily,
+		fontSize: FONT_LARGE,
+		marginVertical: SPACING,
+		textAlign: 'center',
+		color: BUTTON_LONG_TEXT,
 	}),
 };
 
@@ -388,7 +394,7 @@ export default class DialogNewDirectConversation extends RX.Component<
 				>
 					<RX.Text
 						allowFontScaling={false}
-						style={[styles.buttonText, disabledStyle]}
+						style={[styles.buttonTextConfirm, disabledStyle]}
 					>
 						{this.state.isSearch ? searchUser[this.language] : inviteUser[this.language]}
 					</RX.Text>
@@ -402,7 +408,7 @@ export default class DialogNewDirectConversation extends RX.Component<
 				>
 					<RX.Text
 						allowFontScaling={false}
-						style={styles.buttonText}
+						style={styles.buttonTextCancel}
 					>
 						{cancel[this.language]}
 					</RX.Text>

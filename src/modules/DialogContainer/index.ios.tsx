@@ -14,6 +14,7 @@ import {
 	OBJECT_MARGIN,
 	BUTTON_DISABLED_TEXT,
 	BUTTON_CANCEL_BACKGROUND,
+	BUTTON_LONG_TEXT,
 } from '../../ui';
 import UiStore from '../../stores/UiStore';
 import { cancel } from '../../translations';
@@ -61,16 +62,21 @@ const styles = {
 		width: DIALOG_WIDTH / 2 - OBJECT_MARGIN / 2,
 		height: BUTTON_HEIGHT,
 		borderRadius: BUTTON_HEIGHT / 2,
-		borderWidth: 1,
-		borderColor: BUTTON_MODAL_BACKGROUND,
 		backgroundColor: BUTTON_CANCEL_BACKGROUND,
 	}),
-	buttonText: RX.Styles.createTextStyle({
+	buttonTextConfirm: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
 		fontSize: FONT_LARGE,
 		marginVertical: SPACING,
 		textAlign: 'center',
 		color: BUTTON_MODAL_TEXT,
+	}),
+	buttonTextCancel: RX.Styles.createTextStyle({
+		fontFamily: AppFont.fontFamily,
+		fontSize: FONT_LARGE,
+		marginVertical: SPACING,
+		textAlign: 'center',
+		color: BUTTON_LONG_TEXT,
 	}),
 	bottomElement: RX.Styles.createViewStyle({
 		alignItems: 'center',
@@ -168,7 +174,7 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
 				>
 					<RX.Text
 						allowFontScaling={false}
-						style={[styles.buttonText, disabledStyle]}
+						style={[styles.buttonTextConfirm, disabledStyle]}
 					>
 						{this.props.confirmButtonText || 'OK'}
 					</RX.Text>
@@ -188,7 +194,7 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
 				>
 					<RX.Text
 						allowFontScaling={false}
-						style={this.props.buttonTextStyle || styles.buttonText}
+						style={this.props.buttonTextStyle || styles.buttonTextCancel}
 					>
 						{this.props.cancelButtonText || cancel[UiStore.getLanguage()]}
 					</RX.Text>
