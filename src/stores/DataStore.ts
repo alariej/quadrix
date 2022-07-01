@@ -14,6 +14,7 @@ import {
 	SyncResponse_,
 } from '../models/MatrixApi';
 import { differenceInDays } from 'date-fns';
+import { INACTIVE_DAYS } from '../appconfig';
 
 interface RoomEventTriggers {
 	isNewMessageEvent?: boolean;
@@ -984,7 +985,7 @@ class DataStore extends StoreBase {
 	private userIsActive_(roomIndex: number, userId: string): boolean {
 		return Boolean(
 			this.roomSummaryList[roomIndex].readReceipts![userId]?.timestamp &&
-				differenceInDays(new Date(), this.roomSummaryList[roomIndex].readReceipts![userId].timestamp) < 60
+				differenceInDays(new Date(), this.roomSummaryList[roomIndex].readReceipts![userId].timestamp) < INACTIVE_DAYS
 		);
 	}
 

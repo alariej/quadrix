@@ -33,3 +33,4 @@ export const PUSH_GATEWAY_URL = 'https://quadrix.chat/_matrix/push/v1/notify';
 
 export const MESSAGE_COUNT_INC = 100;
 export const MESSAGE_COUNT_ADD = 100;
+export const INACTIVE_DAYS = 30;
