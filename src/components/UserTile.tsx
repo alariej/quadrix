@@ -20,7 +20,7 @@ import {
 	ICON_REDUCTION_FACTOR,
 } from '../ui';
 import UiStore from '../stores/UiStore';
-import { invited, left, admin } from '../translations';
+import { invited, left, admin, inactive } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
 import AppFont from '../modules/AppFont';
 import CachedImage from '../modules/CachedImage';
@@ -74,7 +74,7 @@ const styles = {
 		position: 'absolute',
 		backgroundColor: LIGHT_BACKGROUND,
 		bottom: 0,
-		width: 36,
+		width: AVATAR_SMALL_WIDTH,
 		borderRadius: 3,
 	}),
 	status: RX.Styles.createTextStyle({
@@ -152,6 +152,22 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
 							style={styles.status}
 						>
 							{left[UiStore.getLanguage()]}
+						</RX.Text>
+					</RX.View>
+				);
+			} else if (
+				this.props.roomId &&
+				!['community', 'notepad'].includes(roomType!) &&
+				!DataStore.userIsActive(this.props.roomId, this.props.user.id)
+			) {
+				status = (
+					<RX.View style={styles.containerStatus}>
+						<RX.Text
+							allowFontScaling={false}
+							numberOfLines={1}
+							style={styles.status}
+						>
+							{inactive[UiStore.getLanguage()]}
 						</RX.Text>
 					</RX.View>
 				);

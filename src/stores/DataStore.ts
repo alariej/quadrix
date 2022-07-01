@@ -13,6 +13,7 @@ import {
 	RoomType,
 	SyncResponse_,
 } from '../models/MatrixApi';
+import { differenceInDays } from 'date-fns';
 
 interface RoomEventTriggers {
 	isNewMessageEvent?: boolean;
@@ -967,28 +968,29 @@ class DataStore extends StoreBase {
 	public getReadMarker(roomId: string): number {
 		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
 
-		if (
-			Object.keys(this.roomSummaryList[roomIndex].readReceipts!).length <
-			this.roomSummaryList[roomIndex].joinMembersCount!
-		) {
-			return 0;
-		}
-
-		let oldestMarker = 0;
+		let readMarker = 0;
 		for (const userId in this.roomSummaryList[roomIndex].readReceipts) {
-			if (userId !== ApiClient.credentials.userIdFull) {
-				if (oldestMarker === 0) {
-					oldestMarker = this.roomSummaryList[roomIndex].readReceipts![userId].timestamp;
-				} else {
-					oldestMarker = Math.min(
-						this.roomSummaryList[roomIndex].readReceipts![userId].timestamp,
-						oldestMarker
-					);
-				}
+			if (userId !== ApiClient.credentials.userIdFull && this.userIsActive_(roomIndex, userId)) {
+				readMarker = Math.min(
+					this.roomSummaryList[roomIndex].readReceipts![userId].timestamp,
+					readMarker ? readMarker : this.roomSummaryList[roomIndex].readReceipts![userId].timestamp
+				);
 			}
 		}
 
-		return oldestMarker;
+		return readMarker;
+	}
+
+	private userIsActive_(roomIndex: number, userId: string): boolean {
+		return Boolean(
+			this.roomSummaryList[roomIndex].readReceipts![userId]?.timestamp &&
+				differenceInDays(new Date(), this.roomSummaryList[roomIndex].readReceipts![userId].timestamp) < 60
+		);
+	}
+
+	public userIsActive(roomId: string, userId: string): boolean {
+		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
+		return this.userIsActive_(roomIndex, userId);
 	}
 
 	public getUsers(): User[] {

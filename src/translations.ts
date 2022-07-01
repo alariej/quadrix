@@ -767,8 +767,14 @@ export const serverOffline: Translation = {
 
 export const invited: Translation = {
 	en: 'Invited',
-	de: "E'laden",
+	de: 'Eingeladen',
 	fr: 'Invité',
+};
+
+export const inactive: Translation = {
+	en: 'Inactive',
+	de: 'Inaktiv',
+	fr: 'Inactif',
 };
 
 export const left: Translation = {

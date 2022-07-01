@@ -386,24 +386,24 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 			for (const member of userArray) {
 				const separator = memberRenderArray.length ? ', ' : '';
 				let memberRender: ReactElement;
-				if (member.membership === 'join') {
-					memberRender = (
-						<RX.Text
-							allowFontScaling={false}
-							numberOfLines={1}
-							key={member.id}
-						>
-							{separator + (member.name || member.id)}
-						</RX.Text>
-					);
-					memberRenderArray.push(memberRender);
-				} else if (member.membership === 'invite') {
+				if (member.membership === 'invite' || !DataStore.userIsActive(this.props.roomId, member.id)) {
 					memberRender = (
 						<RX.Text
 							allowFontScaling={false}
 							numberOfLines={1}
 							key={member.id}
 							style={{ fontStyle: 'italic' }}
+						>
+							{separator + (member.name || member.id)}
+						</RX.Text>
+					);
+					memberRenderArray.push(memberRender);
+				} else if (member.membership === 'join') {
+					memberRender = (
+						<RX.Text
+							allowFontScaling={false}
+							numberOfLines={1}
+							key={member.id}
 						>
 							{separator + (member.name || member.id)}
 						</RX.Text>
