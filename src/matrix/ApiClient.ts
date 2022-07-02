@@ -5,7 +5,7 @@ import { Credentials } from '../models/Credentials';
 import { User } from '../models/User';
 import DataStore from '../stores/DataStore';
 import UiStore from '../stores/UiStore';
-import { PREFIX_MEDIA, PREFIX_REST } from '../appconfig';
+import { APP_VERSION, PREFIX_MEDIA, PREFIX_REST } from '../appconfig';
 import {
 	PreviewUrl_,
 	LoginParam_,
@@ -561,7 +561,7 @@ class ApiClient {
 		RX.Storage.setItem('credentials', JSON.stringify(credentials)).catch(_error => null);
 	}
 
-	public storeDatastore(): Promise<[void, void]> {
+	private storeDatastore(): Promise<[void, void]> {
 		const storeRoomSummary = async function (): Promise<void> {
 			const roomSummaryList = DataStore.getRoomSummaryList();
 
@@ -617,6 +617,11 @@ class ApiClient {
 		return Promise.all([restoreRoomSummary(), restoreLastSeenTime()]);
 	}
 
+	public async clearDataStore() {
+		await RX.Storage.removeItem('roomSummaryList');
+		await RX.Storage.removeItem('syncToken');
+	}
+
 	public async clearStorage() {
 		await RX.Storage.clear();
 
@@ -662,10 +667,20 @@ class ApiClient {
 		return RX.Storage.getItem('syncToken');
 	}
 
-	public storeSyncToken(): Promise<void> {
+	private storeSyncToken(): Promise<void> {
 		const syncToken = Sync.getNextSyncToken();
 
 		return RX.Storage.setItem('syncToken', syncToken);
+	}
+
+	public storeAppVersion(): Promise<void> {
+		const appVersion = APP_VERSION;
+
+		return RX.Storage.setItem('appVersion', appVersion);
+	}
+
+	public getStoredAppVersion(): Promise<string | undefined> {
+		return RX.Storage.getItem('appVersion');
 	}
 
 	public storeAppData = async () => {
@@ -677,6 +692,7 @@ class ApiClient {
 			if (storedSyncToken !== nextSyncToken) {
 				await this.storeDatastore();
 				await this.storeSyncToken();
+				await this.storeAppVersion();
 			}
 		}
 	};

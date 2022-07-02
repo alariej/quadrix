@@ -25,6 +25,7 @@ import Pushers from '../modules/Pushers';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import AppFont from '../modules/AppFont';
 import IconSvg, { SvgFile } from '../components/IconSvg';
+import { APP_VERSION, CLEAR_DATASTORE } from '../appconfig';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -119,6 +120,17 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 		UiStore.setUnknownAccessToken(false);
 
 		Pushers.set(ApiClient.credentials).catch(_error => null);
+
+		if (CLEAR_DATASTORE) {
+			const storedAppVersion = await ApiClient.getStoredAppVersion().catch(_err => null);
+
+			if (storedAppVersion !== APP_VERSION) {
+				await ApiClient.clearDataStore();
+				await ApiClient.storeAppVersion();
+				ApiClient.clearNextSyncToken();
+				DataStore.clearRoomSummaryList();
+			}
+		}
 
 		if (!this.isOffline) {
 			DataStore.setSyncComplete(false);
