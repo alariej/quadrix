@@ -75,7 +75,7 @@
 - [ ] Send formatted messages markdown
 - [ ] Rich Text editor for formatted messages
 - [ ] Display formatted messages
-- [ ] Redacting
+- [x] Redacting
 - [ ] Multiple Matrix accounts
 - [x] New user registration
 - [x] VoIP (Jitsi Meet only)
