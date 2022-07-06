@@ -135,6 +135,10 @@ const styles = {
 	}),
 };
 
+const animatedSizeStart = 0.2;
+const animatedDuration = 500;
+const animatedEasing = RX.Animated.Easing.InOutBack();
+
 interface DialogMessageTileProps extends RX.CommonProps {
 	roomId: string;
 	event: MessageEvent;
@@ -171,7 +175,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 		this.isMobile = ['android', 'ios'].includes(UiStore.getPlatform());
 		this.isMedia = ['m.file', 'm.image', 'm.video'].includes(this.props.event.content.msgtype!);
 
-		this.animatedValue = RX.Animated.createValue(0.4);
+		this.animatedValue = RX.Animated.createValue(animatedSizeStart);
 		this.animatedStyle = RX.Styles.createAnimatedViewStyle({
 			transform: [{ scale: this.animatedValue }],
 		});
@@ -201,9 +205,9 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 		super.componentDidMount();
 
 		RX.Animated.timing(this.animatedValue, {
-			duration: 150,
+			duration: animatedDuration,
 			toValue: 1,
-			easing: RX.Animated.Easing.InOutBack(),
+			easing: animatedEasing,
 			useNativeDriver: true,
 		}).start();
 	}
