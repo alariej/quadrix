@@ -71,6 +71,7 @@ export const BUTTON_LONG_TEXT = 'white';
 export const BUTTON_MODAL_TEXT = 'black';
 export const BUTTON_UNREAD_TEXT = 'white';
 export const BUTTON_DISABLED_TEXT = 'silver';
+export const BUTTON_WARNING_TEXT = 'orangered';
 export const COMPOSER_BORDER = 'rgba(0, 0, 0, 0.07)';
 export const ICON_INFO_FILL = 'grey';
 export const ICON_FULLSCREEN_FILL = 'silver';

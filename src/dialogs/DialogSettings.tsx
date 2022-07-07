@@ -28,6 +28,7 @@ import {
 	OBJECT_MARGIN,
 	ICON_REDUCTION_FACTOR,
 	ICON_INFO_SIZE,
+	BUTTON_WARNING_TEXT,
 } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
@@ -238,7 +239,7 @@ const styles = {
 		fontSize: FONT_LARGE,
 		marginVertical: SPACING,
 		textAlign: 'center',
-		color: 'orangered',
+		color: BUTTON_WARNING_TEXT,
 	}),
 };
 
@@ -1157,7 +1158,7 @@ export default class DialogSettings extends ComponentBase<DialogSettingsProps, D
 						<IconSvg
 							source={require('../resources/svg/RI_msg_delete.json') as SvgFile}
 							style={{ position: 'absolute', right: 8 }}
-							fillColor={'orangered'}
+							fillColor={BUTTON_WARNING_TEXT}
 							height={ICON_INFO_SIZE}
 							width={ICON_INFO_SIZE}
 						/>

@@ -25,6 +25,7 @@ import {
 	OPAQUE_DUMMY_BACKGROUND,
 	ICON_INFO_SIZE,
 	ICON_INFO_FILL,
+	BUTTON_WARNING_TEXT,
 } from '../ui';
 import {
 	theInvitationWasSent,
@@ -428,13 +429,18 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
 					disabled={this.state.offline}
 					disabledOpacity={1}
 				>
-					<RX.Text style={[styles.buttonText, { color: 'orangered', opacity: this.state.offline ? 0.3 : 1 }]}>
+					<RX.Text
+						style={[
+							styles.buttonText,
+							{ color: BUTTON_WARNING_TEXT, opacity: this.state.offline ? 0.3 : 1 },
+						]}
+					>
 						{leaveRoom[this.language + '_' + this.props.roomType.substr(0, 2)]}
 					</RX.Text>
 					<IconSvg
 						source={require('../resources/svg/RI_msg_delete.json') as SvgFile}
 						style={{ position: 'absolute', right: 8, opacity: this.state.offline ? 0.3 : 1 }}
-						fillColor={'orangered'}
+						fillColor={BUTTON_WARNING_TEXT}
 						height={ICON_INFO_SIZE}
 						width={ICON_INFO_SIZE}
 					/>

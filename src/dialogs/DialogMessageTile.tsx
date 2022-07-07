@@ -19,6 +19,8 @@ import {
 	OBJECT_MARGIN,
 	ICON_INFO_SIZE,
 	ICON_INFO_FILL,
+	BUTTON_WIDTH,
+	BUTTON_WARNING_TEXT,
 } from '../ui';
 import { LayoutInfo } from 'reactxp/dist/common/Types';
 import DataStore from '../stores/DataStore';
@@ -81,7 +83,7 @@ const styles = {
 		alignItems: 'center',
 		padding: SPACING,
 		borderRadius: BORDER_RADIUS,
-		width: 120,
+		width: BUTTON_WIDTH,
 		height: STACKED_BUTTON_HEIGHT,
 		backgroundColor: BUTTON_MODAL_BACKGROUND,
 		marginBottom: 1,
@@ -827,13 +829,13 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 					>
 						<RX.Text
 							allowFontScaling={false}
-							style={[styles.buttonText, { color: this.state.offline ? BUTTON_DISABLED_TEXT : 'red' }]}
+							style={[styles.buttonText, { color: this.state.offline ? BUTTON_DISABLED_TEXT : BUTTON_WARNING_TEXT }]}
 						>
 							{report[this.language]}
 						</RX.Text>
 						<IconSvg
 							source={require('../resources/svg/RI_msg_report.json') as SvgFile}
-							fillColor={ICON_INFO_FILL}
+							fillColor={BUTTON_WARNING_TEXT}
 							height={ICON_INFO_SIZE}
 							width={ICON_INFO_SIZE}
 						/>
