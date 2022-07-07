@@ -308,6 +308,54 @@ export const deleteMessage: Translation = {
 	fr: 'Supprimer',
 };
 
+export const startChat: Translation = {
+	en: 'Message',
+	de: 'Nachricht',
+	fr: 'Message',
+};
+
+export const removeUser: Translation = {
+	en: 'Remove',
+	de: 'Entfernen',
+	fr: 'Retirer',
+};
+
+export const doYouReallyWantToRemove1: Translation = {
+	en: 'Do you really want to remove ',
+	de: 'Möchten Sie wirklich ',
+	fr: 'Voulez-vous vraiment retirer ',
+};
+
+export const doYouReallyWantToRemove2: Translation = {
+	en: ' from the ',
+	de: ' aus der Gruppe ',
+	fr: ' du groupe ',
+};
+
+export const doYouReallyWantToRemove3: Translation = {
+	en: ' group?',
+	de: ' entfernen?',
+	fr: '?',
+};
+
+export const memberWasRemoved: Translation = {
+	en: 'The user was successfully removed from the group',
+	de: 'Der Benutzer wurde erfolgreich aus der Gruppe entfernt',
+	fr: "L'usager a été retiré du groupe avec succès",
+};
+
+export const pressOKToStartDM1: Translation = {
+	en: 'Press OK to open a private conversation with ',
+	de: 'Drücken Sie auf OK, um einen privaten Chat mit ',
+	fr: 'Appuyez sur OK pour ouvrir une conversation privée avec ',
+};
+
+export const pressOKToStartDM2: Translation = {
+	en: '. If no existing conversation is available, an invitation will first be sent.',
+	de: ' zu eröffnen. Wenn kein Chat vorhanden ist, wird zuerst eine Einladung verschickt.',
+	fr: ". Si aucune conversation existante n'est disponible, une invitation sera d'abord envoyée.",
+};
+
 export const doYouReallyWantToReport: Translation = {
 	en: "Do you really want to report this message as objectionable or offensive to the server's administrator?",
 	de: 'Möchten Sie diese Nachricht wirklich als anstößig oder beleidigend an den Administrator des Servers melden?',

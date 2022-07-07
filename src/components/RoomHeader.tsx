@@ -143,6 +143,7 @@ interface RoomHeaderState {
 interface RoomHeaderProps extends RX.CommonProps {
 	showLogin: () => void;
 	showRoomList: () => void;
+	showRoom: (roomID: string) => void;
 	roomId: string;
 }
 
@@ -258,6 +259,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 				roomPhase={this.state.phase}
 				members={this.state.members}
 				showRoomList={this.props.showRoomList}
+				showRoom={this.props.showRoom}
 			/>,
 			'dialogroomheader'
 		);

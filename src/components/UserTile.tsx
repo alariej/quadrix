@@ -26,6 +26,8 @@ import AppFont from '../modules/AppFont';
 import CachedImage from '../modules/CachedImage';
 import StringUtils from '../utils/StringUtils';
 import UserPresence from './UserPresence';
+import DialogUserTile from '../dialogs/DialogUserTile';
+import { RoomType } from '../models/MatrixApi';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -36,6 +38,7 @@ const styles = {
 		backgroundColor: TILE_BACKGROUND,
 		alignItems: 'center',
 		padding: 2 * SPACING,
+		overflow: 'visible',
 	}),
 	containerAvatar: RX.Styles.createViewStyle({
 		justifyContent: 'center',
@@ -92,15 +95,41 @@ interface UserTileProps {
 	canPress?: boolean;
 	hideMembership?: boolean;
 	roomId?: string;
+	roomType?: RoomType;
+	showRoom?: (roomID: string) => void;
 }
 
 export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> {
+	private mainTile: RX.View | undefined;
+
 	private onTileClick = (event: RX.Types.SyntheticEvent) => {
 		event.stopPropagation();
 
 		if (this.props.inviteUser) {
 			this.props.inviteUser(this.props.user.id);
 		}
+	};
+
+	private showContextDialog = () => {
+		if (this.props.canPress) {
+			return;
+		}
+
+		RX.UserInterface.measureLayoutRelativeToWindow(this.mainTile!)
+			.then(layout => {
+				const dialogUserTile = (
+					<DialogUserTile
+						user={this.props.user}
+						roomId={this.props.roomId!}
+						roomType={this.props.roomType!}
+						layout={layout}
+						showRoom={this.props.showRoom}
+					/>
+				);
+
+				RX.Modal.show(dialogUserTile, 'dialog_user_tile');
+			})
+			.catch(_error => null);
 	};
 
 	public render(): JSX.Element | null {
@@ -206,6 +235,9 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
 				onPress={event => this.onTileClick(event)}
 				disableTouchOpacityAnimation={false}
 				activeOpacity={0.8}
+				onLongPress={this.showContextDialog}
+				onContextMenu={this.showContextDialog}
+				ref={component => (this.mainTile = component!)}
 			>
 				<RX.View style={styles.containerAvatar}>
 					{avatar}

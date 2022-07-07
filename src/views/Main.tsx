@@ -278,6 +278,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 				showTempForwardedMessage={this.showTempForwardedMessage}
 				tempForwardedMessage={{ message: this.message, tempId: this.tempId }}
 				showJitsiMeet={this.showJitsiMeet}
+				showRoom={this.showRoom}
 			/>
 		);
 
@@ -307,6 +308,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 				showRoomList={this.showRoomList}
 				showTempForwardedMessage={this.showTempForwardedMessage}
 				showJitsiMeet={this.showJitsiMeet}
+				showRoom={this.showRoom}
 			/>
 		);
 

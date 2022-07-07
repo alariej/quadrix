@@ -125,6 +125,7 @@ interface DialogRoomHeaderProps extends RX.CommonProps {
 	roomPhase: RoomPhase;
 	members: { [id: string]: User };
 	showRoomList: () => void;
+	showRoom: (roomID: string) => void;
 }
 
 interface DialogRoomHeaderState {
@@ -410,6 +411,8 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
 					user={cellRender.item.member}
 					hideMembership={false}
 					roomId={this.props.roomId}
+					roomType={this.props.roomType}
+					showRoom={this.props.showRoom}
 				/>
 			</RX.View>
 		);

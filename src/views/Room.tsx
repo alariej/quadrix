@@ -31,6 +31,7 @@ interface RoomProps extends RX.CommonProps {
 	showTempForwardedMessage: (roomId: string, message: MessageEvent, tempId: string) => void;
 	tempForwardedMessage?: { message: MessageEvent; tempId: string };
 	showJitsiMeet: (jitsiMeetId: string) => void;
+	showRoom: (roomID: string) => void;
 }
 
 export default class Room extends ComponentBase<RoomProps, RoomState> {
@@ -111,6 +112,7 @@ export default class Room extends ComponentBase<RoomProps, RoomState> {
 					showLogin={this.props.showLogin}
 					showRoomList={this.props.showRoomList}
 					roomId={this.props.roomId}
+					showRoom={this.props.showRoom}
 				/>
 				{composer}
 				{roomChat}
