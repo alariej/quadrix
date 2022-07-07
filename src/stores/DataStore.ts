@@ -1060,7 +1060,7 @@ class DataStore extends StoreBase {
 		if (this.roomSummaryList[roomIndex].type === 'direct') {
 			roomName = this.roomSummaryList[roomIndex].members[this.roomSummaryList[roomIndex].contactId!].name;
 		} else {
-			roomName = this.roomSummaryList[roomIndex].name;
+			roomName = this.roomSummaryList[roomIndex].name || this.roomSummaryList[roomIndex].alias;
 		}
 
 		return roomIndex > -1 ? roomName : '';
