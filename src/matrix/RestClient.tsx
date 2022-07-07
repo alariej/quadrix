@@ -325,4 +325,13 @@ export default class RestClient extends GenericRestClient {
 
 		return this.performApiPost<DirectorySearch_>('user_directory/search', data);
 	}
+
+	public kickMember(roomId: string, userId: string): Promise<void> {
+		const data = {
+			reason: 'N/A',
+			user_id: userId,
+		};
+
+		return this.performApiPost<void>('rooms/' + roomId + '/kick', data);
+	}
 }

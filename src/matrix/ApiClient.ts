@@ -555,6 +555,12 @@ class ApiClient {
 		return restClient.searchUser(searchTerm);
 	}
 
+	public kickMember(roomId: string, userId: string): Promise<void> {
+		const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
+
+		return restClient.kickMember(roomId, userId);
+	}
+
 	// local storage
 
 	private storeCredentials(credentials: Credentials): void {
