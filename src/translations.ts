@@ -608,9 +608,9 @@ export const sending: Translation = {
 };
 
 export const messageDeleted: Translation = {
-	en: '*** Message deleted ***',
-	de: '*** Nachricht gelöscht ***',
-	fr: '*** Message effacé ***',
+	en: '🛈 [Message deleted]',
+	de: '🛈 [Nachricht gelöscht]',
+	fr: '🛈 [Message effacé]',
 };
 
 export const clickHereOrPressShftEnter: Translation = {
@@ -1060,9 +1060,9 @@ export const errorInvalidPassword: Translation = {
 };
 
 export const encryptedMessage: Translation = {
-	en: '[encrypted message]',
-	de: '[verschlüsselte Nachricht]',
-	fr: '[message message encrypté]',
+	en: '🛈 [encrypted message]',
+	de: '🛈 [verschlüsselte Nachricht]',
+	fr: '🛈 [message encrypté]',
 };
 
 export const pressOKJitsi: Translation = {
