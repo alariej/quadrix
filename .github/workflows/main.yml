@@ -4,27 +4,30 @@ name: CI
 
 # Controls when the workflow will run
 on:
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+    steps:      
+      - name: Clone repository
+        uses: actions/checkout@v3
+ 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+ 
+      - name: Install dependencies
+        run: npm ci
 
-      # Runs a single command using the runners shell
       - name: Build Web
         run: npm run build:web
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo TEST LINE 1,
-          echo TEST LINE 2.
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: react-github-actions-build
+          path: electron/build-web
+          
