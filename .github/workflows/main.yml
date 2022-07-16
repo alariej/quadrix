@@ -37,3 +37,32 @@ jobs:
           name: Upload web
           path: electron/build-web
 
+      - name: Change directory
+        run: cd electron
+
+      - name: Install dependencies
+        run: npm install
+     
+      - name: Build snap amd64
+        run: npm run build:snap
+
+      - name: Build snap armhf
+        run: npm run build:snap:armhf
+
+      - name: Build deb amd64
+        run: npm run build:deb
+
+      - name: Build deb arm64
+        uses: uraimo/run-on-arch-action@v2
+        id: runcmd
+        with:
+          arch: aarch64
+          distro: ubuntu_latest
+          githubToken: ${{ github.token }}
+          run: npm run build:deb
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Upload dist
+          path: electron/dist
