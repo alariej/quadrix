@@ -269,7 +269,7 @@ if (!hasLock) {
 
 			appLocale = app.getLocale();
 			appLanguage = appLocale.slice(0, 2);
-			if (!['en', 'de', 'fr'].includes(appLanguage)) {
+			if (!['en', 'de', 'fr', 'es'].includes(appLanguage)) {
 				appLanguage = 'en';
 			}
 

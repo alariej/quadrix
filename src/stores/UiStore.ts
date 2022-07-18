@@ -4,7 +4,7 @@ import { autoSubscribeWithKey, AutoSubscribeStore, StoreBase } from 'resub';
 import { ViewOnLayoutEvent } from 'reactxp/dist/common/Types';
 import { Languages } from '../translations';
 import { Locale as LocaleType } from 'date-fns';
-import { enUS, de, fr } from 'date-fns/locale';
+import { enUS, de, fr, es } from 'date-fns/locale';
 import { PAGE_WIDTH_DEFAULT, PAGE_WIDE_PADDING } from '../ui';
 
 const UnknownAccessToken = 'UnknownAccessToken';
@@ -124,6 +124,11 @@ class UiStore extends StoreBase {
 			case 'fr':
 				this.locale = fr;
 				this.language = 'fr';
+				break;
+
+			case 'es':
+				this.locale = es;
+				this.language = 'es';
 				break;
 
 			default:

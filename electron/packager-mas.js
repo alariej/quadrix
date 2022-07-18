@@ -23,7 +23,7 @@ const options = {
         './macos/fr.lproj'
     ],
     afterCopy: [setLanguages([
-        'en', 'en-US', 'de', 'fr'
+        'en', 'en-US', 'de', 'fr', 'es'
     ])]
 };
 
