@@ -296,7 +296,7 @@ export const repeatNewPassword: Translation = {
 	en: 'Repeat new password',
 	de: 'Neu. Passw. wiederhol.',
 	fr: 'Répéter nouveau MdP',
-	es: 'Repetir nueva contraseña',
+	es: 'Repetir nueva contras.',
 };
 
 export const save: Translation = {
@@ -322,7 +322,7 @@ export const pressOKToLogout: Translation = {
 	es:
 		'Pulse OK para cerrar la sesión y borrar el almacenamiento local de ' +
 		APP_NAME +
-		'. Necesitarás su nombre de usuario y contraseña para volver a conectarse.',
+		'. Necesitarás su ID de usuario y contraseña para volver a conectarse.',
 };
 
 export const termsPrivacyLicense: Translation = {
