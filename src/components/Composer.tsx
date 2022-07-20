@@ -655,7 +655,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
 		const messageContent: MessageEventContent_ = {
 			msgtype: 'm.text',
-			body: jitsiStartedExternal[this.language] + '?' + jitsiMeetId,
+			body: jitsiStartedExternal[this.language] + '/' + jitsiMeetId,
 			jitsi_started: true,
 		};
 
