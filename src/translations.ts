@@ -584,13 +584,13 @@ export const hasInvitedToRoom = (member: string, key: string): string => {
 		case 'fr_co':
 			return ` a invité ${member} au groupe public`;
 
-		case 'fr_di':
+		case 'es_di':
 			return ` ha invitado a ${member} a la conversación`;
 
-		case 'fr_gr':
+		case 'es_gr':
 			return ` ha invitado a ${member} al grupo`;
 
-		case 'fr_co':
+		case 'es_co':
 			return ` ha invitado a ${member} al grupo público`;
 
 		default:
