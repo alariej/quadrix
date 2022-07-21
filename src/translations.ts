@@ -343,7 +343,7 @@ export const reply: Translation = {
 	en: 'Reply',
 	de: 'Antworten',
 	fr: 'Répondre',
-	es: '',
+	es: 'Responder',
 };
 
 export const report: Translation = {
