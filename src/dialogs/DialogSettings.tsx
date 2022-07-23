@@ -1154,7 +1154,12 @@ export default class DialogSettings extends ComponentBase<DialogSettingsProps, D
 						disabled={this.state.offline}
 						disabledOpacity={1}
 					>
-						<RX.Text style={styles.buttonTextDelete}>{deleteAccount[this.language]}</RX.Text>
+						<RX.Text
+							allowFontScaling={false}
+							style={styles.buttonTextDelete}
+						>
+							{deleteAccount[this.language]}
+						</RX.Text>
 						<IconSvg
 							source={require('../resources/svg/RI_msg_delete.json') as SvgFile}
 							style={{ position: 'absolute', right: 8 }}
