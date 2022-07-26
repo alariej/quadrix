@@ -433,6 +433,7 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
 					disabledOpacity={1}
 				>
 					<RX.Text
+						allowFontScaling={false}
 						style={[
 							styles.buttonText,
 							{ color: BUTTON_WARNING_TEXT, opacity: this.state.offline ? 0.3 : 1 },
