@@ -9,7 +9,7 @@ import { ViewOnLayoutEvent } from 'reactxp/dist/common/Types';
 import { ComponentBase } from 'resub';
 import { APP_BACKGROUND, STATUSBAR_BACKGROUND } from './ui';
 import FileHandler from './modules/FileHandler';
-import RXNetInfo from 'reactxp-netinfo';
+import NetInfo from './modules/NetInfo';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -32,7 +32,7 @@ export class App extends ComponentBase<AppProps, AppState> {
 	constructor(props: AppProps) {
 		super(props);
 
-		RXNetInfo.isConnected()
+		NetInfo.isConnected()
 			.then(response => {
 				UiStore.setOffline(!response);
 			})
@@ -78,7 +78,7 @@ export class App extends ComponentBase<AppProps, AppState> {
 		const credentials = await ApiClient.getStoredCredentials();
 		credentials ? this.showMain() : this.showLogin();
 
-		RXNetInfo.connectivityChangedEvent.subscribe(isConnected => {
+		NetInfo.connectivityChangedEvent.subscribe(isConnected => {
 			UiStore.setOffline(!isConnected);
 		});
 
@@ -101,7 +101,7 @@ export class App extends ComponentBase<AppProps, AppState> {
 	public componentWillUnmount(): void {
 		super.componentWillUnmount();
 
-		RXNetInfo.connectivityChangedEvent.unsubscribe(_isConnected => null);
+		NetInfo.connectivityChangedEvent.unsubscribe(_isConnected => null);
 	}
 
 	private showLogin = () => {
