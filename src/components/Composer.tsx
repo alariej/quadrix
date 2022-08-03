@@ -48,6 +48,7 @@ import VideoPlayer from '../modules/VideoPlayer';
 import ProgressDialog from '../modules/ProgressDialog';
 import { UploadFileInfo } from '../models/UploadFileInfo';
 import ReplyMessage from './ReplyMessage';
+import AsyncStorage from '../modules/AsyncStorage';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -288,8 +289,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 		});
 	};
 
-	private getTextInputFromStorage = (roomId: string) => {
-		RX.Storage.getItem('composer' + roomId)
+	private getTextInputFromStorage = (roomId: string) => {		
+		AsyncStorage.getItem('composer' + roomId)
 			.then(textInput => {
 				this.textInput = textInput || '';
 				this.setState({ textInput: this.textInput });
@@ -299,9 +300,9 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
 	private setTextInputToStorage = (roomId: string) => {
 		if (this.textInput) {
-			RX.Storage.setItem('composer' + roomId, this.textInput).catch(_error => null);
+			AsyncStorage.setItem('composer' + roomId, this.textInput).catch(_error => null);
 		} else {
-			RX.Storage.removeItem('composer' + roomId).catch(_error => null);
+			AsyncStorage.removeItem('composer' + roomId).catch(_error => null);
 		}
 	};
 

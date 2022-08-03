@@ -1,4 +1,3 @@
-import RX from 'reactxp';
 import RestClient from './RestClient';
 import Sync from './Sync';
 import { Credentials } from '../models/Credentials';
@@ -29,6 +28,7 @@ import {
 import { RoomSummary } from '../models/RoomSummary';
 import EventUtils from '../utils/EventUtils';
 import { MessageEvent } from '../models/MessageEvent';
+import AsyncStorage from '../modules/AsyncStorage';
 
 class ApiClient {
 	public credentials!: Credentials;
@@ -564,14 +564,14 @@ class ApiClient {
 	// local storage
 
 	private storeCredentials(credentials: Credentials): void {
-		RX.Storage.setItem('credentials', JSON.stringify(credentials)).catch(_error => null);
+		AsyncStorage.setItem('credentials', JSON.stringify(credentials)).catch(_error => null);
 	}
 
 	private storeDatastore(): Promise<[void, void]> {
 		const storeRoomSummary = async function (): Promise<void> {
 			const roomSummaryList = DataStore.getRoomSummaryList();
 
-			await RX.Storage.setItem('roomSummaryList', JSON.stringify(roomSummaryList)).catch(error => {
+			await AsyncStorage.setItem('roomSummaryList', JSON.stringify(roomSummaryList)).catch(error => {
 				return Promise.reject(error);
 			});
 
@@ -581,7 +581,7 @@ class ApiClient {
 		const storeLastSeenTime = async function (): Promise<void> {
 			const lastSeenTime = DataStore.getLastSeenTimeArray();
 
-			await RX.Storage.setItem('lastSeenTime', JSON.stringify(lastSeenTime)).catch(error => {
+			await AsyncStorage.setItem('lastSeenTime', JSON.stringify(lastSeenTime)).catch(error => {
 				return Promise.reject(error);
 			});
 
@@ -593,7 +593,7 @@ class ApiClient {
 
 	public restoreDataStore(): Promise<[void, void]> {
 		const restoreRoomSummary = async function (): Promise<void> {
-			const response = await RX.Storage.getItem('roomSummaryList').catch(error => {
+			const response = await AsyncStorage.getItem('roomSummaryList').catch(error => {
 				return Promise.reject(error);
 			});
 
@@ -609,7 +609,7 @@ class ApiClient {
 		};
 
 		const restoreLastSeenTime = async function (): Promise<void> {
-			const response = await RX.Storage.getItem('lastSeenTime').catch(error => {
+			const response = await AsyncStorage.getItem('lastSeenTime').catch(error => {
 				return Promise.reject(error);
 			});
 
@@ -624,12 +624,12 @@ class ApiClient {
 	}
 
 	public async clearDataStore() {
-		await RX.Storage.removeItem('roomSummaryList');
-		await RX.Storage.removeItem('syncToken');
+		await AsyncStorage.removeItem('roomSummaryList');
+		await AsyncStorage.removeItem('syncToken');
 	}
 
 	public async clearStorage() {
-		await RX.Storage.clear();
+		await AsyncStorage.clear();
 
 		if (UiStore.getIsElectron()) {
 			const { webFrame } = window.require('electron');
@@ -639,7 +639,7 @@ class ApiClient {
 	}
 
 	public async getStoredCredentials(): Promise<Credentials | undefined> {
-		const credentials = await RX.Storage.getItem('credentials');
+		const credentials = await AsyncStorage.getItem('credentials');
 
 		if (credentials) {
 			this.credentials = JSON.parse(credentials) as Credentials;
@@ -650,43 +650,43 @@ class ApiClient {
 	}
 
 	public async storeLastUserId(): Promise<void> {
-		await RX.Storage.setItem('lastUserId', this.credentials.userIdFull);
+		await AsyncStorage.setItem('lastUserId', this.credentials.userIdFull);
 	}
 
 	public async getStoredLastUserId(): Promise<string | undefined> {
-		const lastUserId = await RX.Storage.getItem('lastUserId');
+		const lastUserId = await AsyncStorage.getItem('lastUserId');
 
 		return Promise.resolve(lastUserId ? lastUserId : undefined);
 	}
 
 	public storeZoomFactor(zoomFactor: number): void {
-		RX.Storage.setItem('zoomFactor', zoomFactor.toString()).catch(_error => null);
+		AsyncStorage.setItem('zoomFactor', zoomFactor.toString()).catch(_error => null);
 	}
 
 	public async getStoredZoomFactor(): Promise<number | undefined> {
-		const zoomFactor = await RX.Storage.getItem('zoomFactor');
+		const zoomFactor = await AsyncStorage.getItem('zoomFactor');
 
 		return Promise.resolve(zoomFactor ? Number(zoomFactor) : undefined);
 	}
 
 	public getStoredSyncToken(): Promise<string | undefined> {
-		return RX.Storage.getItem('syncToken');
+		return AsyncStorage.getItem('syncToken');
 	}
 
 	private storeSyncToken(): Promise<void> {
 		const syncToken = Sync.getNextSyncToken();
 
-		return RX.Storage.setItem('syncToken', syncToken);
+		return AsyncStorage.setItem('syncToken', syncToken);
 	}
 
 	public storeAppVersion(): Promise<void> {
 		const appVersion = APP_VERSION;
 
-		return RX.Storage.setItem('appVersion', appVersion);
+		return AsyncStorage.setItem('appVersion', appVersion);
 	}
 
 	public getStoredAppVersion(): Promise<string | undefined> {
-		return RX.Storage.getItem('appVersion');
+		return AsyncStorage.getItem('appVersion');
 	}
 
 	public storeAppData = async () => {
