@@ -48,7 +48,7 @@
 
 ## Note for Mobile Linux Users
 
-- The arm64 flatpak build was tested on a PinePhone running Mobian/Phosh, and although it seems to generally work well, the onscreen keyboard doesn't pop up automatically and must be opened manually when editing text input fields
+- The arm64 flatpak build was tested on a PinePhone running Mobian/Phosh, and although it seems to generally work well, the onscreen keyboard doesn't pop up automatically and must be opened manually when editing text input fields, and the camera refuses to start for video-conferences.
 
 ## Matrix Protocol Implementation
 
