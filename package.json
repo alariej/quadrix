@@ -68,7 +68,6 @@
     "react-native-svg": "12.3.0",
     "react-native-webview": "11.22.5",
     "reactxp": "github:alariej/reactxp",
-    "reactxp-imagesvg": "github:alariej/reactxp-imagesvg",
     "reactxp-virtuallistview": "github:alariej/reactxp-virtuallistview",
     "resub": "github:alariej/ReSub",
     "simplerestclients": "1.0.0"

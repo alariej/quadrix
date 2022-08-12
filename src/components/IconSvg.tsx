@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
-import RXImageSvg, { SvgPath as RXSvgPath } from 'reactxp-imagesvg';
+import Svg, { SvgPath } from '../modules/Svg';
 
 interface IconSvgProps {
 	source: SvgFile;
@@ -16,7 +16,7 @@ export default class IconSvg extends RX.Component<IconSvgProps, RX.Stateless> {
 
 		this.props.source.paths.map((path: string, i: number) => {
 			const svgPath = (
-				<RXSvgPath
+				<SvgPath
 					key={i}
 					fillColor={Array.isArray(this.props.fillColor) ? this.props.fillColor[i] : this.props.fillColor}
 					d={path}
@@ -26,14 +26,14 @@ export default class IconSvg extends RX.Component<IconSvgProps, RX.Stateless> {
 		});
 
 		return (
-			<RXImageSvg
+			<Svg
 				viewBox={this.props.source.viewBox}
 				width={this.props.width}
 				height={this.props.height}
 				style={this.props.style}
 			>
 				{svgPaths}
-			</RXImageSvg>
+			</Svg>
 		);
 	}
 }

@@ -1,12 +1,13 @@
 import * as React from 'react';
 import * as RX from 'reactxp';
-import RXImageSvg, { SvgPath as RXSvgPath, Types as SvgTypes } from 'reactxp-imagesvg';
+import Svg, { SvgPath } from '../modules/Svg';
 import { TRANSPARENT_BACKGROUND } from '../ui';
 
-export interface ProgressIndicatorProps extends RX.CommonStyledProps<SvgTypes.ImageSvgStyleRuleSet, ProgressIndicator> {
+export interface ProgressIndicatorProps {
 	strokeColor: string;
 	progress: number;
 	size: number;
+	style?: RX.Types.StyleRuleSet<RX.Types.ViewStyle>;
 }
 
 export class ProgressIndicator extends RX.Component<ProgressIndicatorProps, RX.Stateless> {
@@ -41,19 +42,19 @@ export class ProgressIndicator extends RX.Component<ProgressIndicatorProps, RX.S
 		const path = this.getPath();
 
 		return (
-			<RXImageSvg
+			<Svg
 				viewBox={'0 0 ' + size + ' ' + size}
 				height={size}
 				width={size}
 				style={this.props.style}
 			>
-				<RXSvgPath
+				<SvgPath
 					fillColor={TRANSPARENT_BACKGROUND}
 					strokeColor={this.props.strokeColor}
 					strokeWidth={2}
 					d={path}
 				/>
-			</RXImageSvg>
+			</Svg>
 		);
 	}
 }
