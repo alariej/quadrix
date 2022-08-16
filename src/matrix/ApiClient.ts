@@ -50,7 +50,7 @@ class ApiClient {
 
 		this.stopSync();
 		this.clearNextSyncToken();
-		await this.clearStorage();
+		await this.clearStorage().catch(_error => null);
 		DataStore.clearRoomSummaryList();
 
 		const response = await restClient.login(data).catch(error => {
@@ -65,8 +65,8 @@ class ApiClient {
 			homeServer: server,
 		};
 
-		this.storeCredentials(this.credentials);
-		this.storeLastUserId().catch(_error => null);
+		await this.storeCredentials(this.credentials).catch(_error => null);
+		await this.storeLastUserId().catch(_error => null);
 
 		return Promise.resolve();
 	}
@@ -166,7 +166,7 @@ class ApiClient {
 			homeServer: credentials.homeServer,
 		};
 
-		this.storeCredentials(this.credentials);
+		this.storeCredentials(this.credentials).catch(_error => null);
 	}
 
 	public deleteAccount(type?: LoginParamType, password?: string, session?: string): Promise<unknown> {
@@ -563,8 +563,8 @@ class ApiClient {
 
 	// local storage
 
-	private storeCredentials(credentials: Credentials): void {
-		AsyncStorage.setItem('credentials', JSON.stringify(credentials)).catch(_error => null);
+	private async storeCredentials(credentials: Credentials): Promise<void> {
+		await AsyncStorage.setItem('credentials', JSON.stringify(credentials)).catch(_error => null);
 	}
 
 	private storeDatastore(): Promise<[void, void]> {
