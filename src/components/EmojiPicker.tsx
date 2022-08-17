@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import { FONT_EMOJI_LARGE, SPACING, TILE_BACKGROUND } from '../ui';
-import { VirtualListView, VirtualListViewItemInfo, VirtualListViewCellRenderDetails } from 'reactxp-virtuallistview';
+import { VirtualListView, VirtualListViewCellRenderDetails, VirtualListViewItemInfo } from '../components/VirtualListView';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
