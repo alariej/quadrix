@@ -3,7 +3,7 @@ import RX from 'reactxp';
 import { User } from '../models/User';
 import ApiClient from '../matrix/ApiClient';
 import UserTile from '../components/UserTile';
-import { VirtualListView, VirtualListViewItemInfo, VirtualListViewCellRenderDetails } from 'reactxp-virtuallistview';
+import { VirtualListView, VirtualListViewCellRenderDetails, VirtualListViewItemInfo } from '../components/VirtualListView';
 import DataStore from '../stores/DataStore';
 import DialogContainer from '../modules/DialogContainer';
 import { ComponentBase } from 'resub';

@@ -23,7 +23,7 @@ import {
 import { MESSAGE_COUNT_ADD } from '../appconfig';
 import { ComponentBase } from 'resub';
 import DataStore from '../stores/DataStore';
-import { VirtualListView, VirtualListViewItemInfo, VirtualListViewCellRenderDetails } from 'reactxp-virtuallistview';
+import { VirtualListView, VirtualListViewCellRenderDetails, VirtualListViewItemInfo } from '../components/VirtualListView';
 import MessageTile from './MessageTile';
 import ApiClient from '../matrix/ApiClient';
 import EventUtils from '../utils/EventUtils';

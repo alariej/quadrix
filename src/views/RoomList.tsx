@@ -15,7 +15,7 @@ import {
 	BUTTON_UNREAD_TEXT,
 } from '../ui';
 import RoomListHeader from '../components/RoomListHeader';
-import { VirtualListView, VirtualListViewItemInfo, VirtualListViewCellRenderDetails } from 'reactxp-virtuallistview';
+import { VirtualListView, VirtualListViewCellRenderDetails, VirtualListViewItemInfo } from '../components/VirtualListView';
 import UiStore from '../stores/UiStore';
 import { MessageEvent } from '../models/MessageEvent';
 import SpinnerUtils from '../utils/SpinnerUtils';
