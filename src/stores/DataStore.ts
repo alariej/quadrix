@@ -983,10 +983,21 @@ class DataStore extends StoreBase {
 	}
 
 	private userIsActive_(roomIndex: number, userId: string): boolean {
-		return Boolean(
-			this.roomSummaryList[roomIndex].readReceipts![userId]?.timestamp &&
-				differenceInDays(new Date(), this.roomSummaryList[roomIndex].readReceipts![userId].timestamp) < INACTIVE_DAYS
-		);
+		const lastSeenTime = this.getLastSeenTime(userId);
+
+		const isActive = differenceInDays(new Date(), lastSeenTime) < INACTIVE_DAYS;
+
+		if (isActive) {
+			return true;
+		} else {
+			const readReceipt = this.roomSummaryList[roomIndex].readReceipts![userId];
+
+			if (!readReceipt) {
+				return true;
+			} else {
+				return differenceInDays(new Date(), readReceipt.timestamp) < INACTIVE_DAYS;
+			}
+		}
 	}
 
 	public userIsActive(roomId: string, userId: string): boolean {
