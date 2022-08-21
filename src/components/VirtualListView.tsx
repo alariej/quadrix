@@ -181,7 +181,7 @@ const _accessibilityVirtualKeyPrefix = 'ac_';
 const _keyCodeUpArrow = _isWeb ? 38 : 19;
 const _keyCodeDownArrow = _isWeb ? 40 : 20;
 
-const assert = (cond: any, message?: string | undefined): void => {
+const assert = (cond: boolean, message?: string | undefined): void => {
 	if (!cond) {
 		throw new Error(message || 'Assertion Failed');
 	}
@@ -254,7 +254,6 @@ export class VirtualListView<ItemInfo extends VirtualListViewItemInfo> extends R
 	// List of cells that are rendered
 	private _navigatableItemsRendered: {
 		key: string;
-		// eslint-disable-next-line @typescript-eslint/camelcase
 		vc_key: string;
 	}[] = [];
 
@@ -1259,7 +1258,7 @@ export class VirtualListView<ItemInfo extends VirtualListViewItemInfo> extends R
 			const item = this.props.itemList[itemIndex];
 
 			const virtualCellInfo = this._activeCells.get(item.key)!;
-			assert(virtualCellInfo, 'Active Cell not found for key ' + item.key + ', index=' + i);
+			assert(Boolean(virtualCellInfo), 'Active Cell not found for key ' + item.key + ', index=' + i);
 
 			cellList.push({
 				cellInfo: virtualCellInfo,
@@ -1273,7 +1272,7 @@ export class VirtualListView<ItemInfo extends VirtualListViewItemInfo> extends R
 		}
 
 		for (const virtualCellInfo of this._recycledCells) {
-			assert(virtualCellInfo, 'Recycled Cells array contains a null/undefined object');
+			assert(Boolean(virtualCellInfo), 'Recycled Cells array contains a null/undefined object');
 			cellList.push({
 				cellInfo: virtualCellInfo,
 				item: undefined,

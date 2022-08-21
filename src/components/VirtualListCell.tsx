@@ -74,7 +74,7 @@ const _keyCodeEnter = 13;
 const _keyCodeSpace = 32;
 const _keyCodeReturn = 3;
 
-const assert = (cond: any, message?: string | undefined): void => {
+const assert = (cond: boolean, message?: string | undefined): void => {
 	if (!cond) {
 		throw new Error(message || 'Assertion Failed');
 	}
@@ -86,7 +86,6 @@ export class VirtualListCell<ItemInfo extends VirtualListCellInfo> extends RX.Co
 > {
 	// Helper class used to render child elements. If we know that none of the children changed - we would like to skip
 	// the render completely, to improve performance.
-	// eslint-disable-next-line @typescript-eslint/member-naming
 	private static StaticRenderer = class<CellItemInfo extends VirtualListCellInfo> extends RX.Component<
 		StaticRendererProps<CellItemInfo>,
 		RX.Stateless
