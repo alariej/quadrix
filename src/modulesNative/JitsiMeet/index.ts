@@ -1,4 +1,5 @@
 import { HostComponent, NativeModules, requireNativeComponent, ViewProps } from 'react-native';
+import { NativeComponentType } from 'react-native/Libraries/Utilities/codegenNativeComponent';
 
 const { RNJitsiMeetView } = NativeModules;
 
@@ -12,7 +13,7 @@ interface RNJitsiMeetViewInterface {
 }
 
 class JitsiMeet {
-	public View: HostComponent<JitsiMeetViewProps> = requireNativeComponent('RNJitsiMeetView');
+	public View: HostComponent<JitsiMeetViewProps> = requireNativeComponent('RNJitsiMeetView') as NativeComponentType<JitsiMeetViewProps>;
 
 	public call(url: string, userInfo: { displayName: string }, featureFlags: { [flag: string]: boolean | number }) {
 		const RNJitsiMeetView_ = RNJitsiMeetView as RNJitsiMeetViewInterface;
