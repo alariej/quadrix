@@ -7,6 +7,7 @@ export interface SvgProps {
 	width: number;
 	viewBox?: string;
 	style?: RX.Types.StyleRuleSet<RX.Types.ViewStyle>;
+	children: React.ReactNode;
 }
 
 interface SvgPathProps {
