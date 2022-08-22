@@ -964,6 +964,10 @@ class DataStore extends StoreBase {
 		return this.lastSeenTime[userId] || 0;
 	}
 
+	private getLastSeenTime_(userId: string): number {
+		return this.lastSeenTime[userId] || 0;
+	}
+
 	// used in roomchat
 	@autoSubscribeWithKey(ReadReceiptTrigger)
 	public getReadMarker(roomId: string): number {
@@ -983,7 +987,7 @@ class DataStore extends StoreBase {
 	}
 
 	private userIsActive_(roomIndex: number, userId: string): boolean {
-		const lastSeenTime = this.getLastSeenTime(userId);
+		const lastSeenTime = this.getLastSeenTime_(userId);
 
 		const isActive = differenceInDays(new Date(), lastSeenTime) < INACTIVE_DAYS;
 
