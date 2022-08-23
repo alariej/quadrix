@@ -1463,7 +1463,7 @@ export class VirtualListView<ItemInfo extends VirtualListViewItemInfo> extends R
 				indexToSelect = idx;
 				return true;
 			} else {
-				return false;
+				return undefined;
 			}
 		});
 
