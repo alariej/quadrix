@@ -26,7 +26,7 @@ const styles = {
 	containerText: RX.Styles.createTextStyle({
 		flex: 1,
 		fontFamily: AppFont.fontFamily,
-		paddingHorizontal: SPACING,
+		paddingRight: SPACING,
 		overflow: 'visible',
 		wordBreak: 'break-word',
 	}),
