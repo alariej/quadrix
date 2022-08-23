@@ -89,6 +89,7 @@ export const AVATAR_FOREGROUND = '#0088B3';
 export const AVATAR_BACKGROUND = 'white';
 export const LINK_TEXT = 'blue';
 export const FOOTER_TEXT = 'grey';
+export const SENDER_TEXT = '#0088B3';
 export const MARKER_READ_FILL = '#19C9FF';
 export const MARKER_SENT_FILL = 'darkgrey';
 export const EMOJI_TEXT = 'black';

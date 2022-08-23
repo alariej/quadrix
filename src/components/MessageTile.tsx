@@ -14,6 +14,7 @@ import {
 	TILE_BACKGROUND_OWN,
 	PAGE_MARGIN,
 	APP_BACKGROUND,
+	SENDER_TEXT,
 } from '../ui';
 import ImageMessage from './ImageMessage';
 import FileMessage from './FileMessage';
@@ -72,7 +73,7 @@ const styles = {
 		fontFamily: AppFont.fontFamily,
 		flexShrink: 1,
 		fontSize: FONT_NORMAL,
-		color: FOOTER_TEXT,
+		color: SENDER_TEXT,
 	}),
 	footerTimestamp: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
