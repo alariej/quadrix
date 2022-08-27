@@ -118,6 +118,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
 				'pip.enabled': false,
 				'tile-view.enabled': false,
 				'toolbox.alwaysVisible': true,
+				'prejoinpage.enabled': false,
 				resolution: 240,
 			};
 
