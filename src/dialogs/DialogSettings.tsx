@@ -129,7 +129,6 @@ const styles = {
 		fontSize: FONT_NORMAL,
 		color: PLACEHOLDER_TEXT,
 		width: 96,
-		textAlign: 'right',
 		padding: SPACING,
 	}),
 	inputBox: RX.Styles.createTextInputStyle({
