@@ -377,7 +377,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 			return null;
 		}
 
-		const backgroundSize = 140;
+		const backgroundSize = 180;
 		const backgroundPadding = this.state.layout.type === 'wide' ? PAGE_WIDE_PADDING * 2 : 0;
 		const offset = 1.5 * this.state.layout.pageWidth - PAGE_MARGIN + backgroundPadding;
 
@@ -385,9 +385,10 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 			<RX.View style={[styles.background, { left: offset - backgroundSize / 2 }]}>
 				<IconSvg
 					source={require('../resources/svg/matrix.json') as SvgFile}
+					style={{ opacity: 0.4 }}
 					height={backgroundSize}
 					width={backgroundSize}
-					fillColor={'whitesmoke'}
+					fillColor={'white'}
 				/>
 			</RX.View>
 		);
