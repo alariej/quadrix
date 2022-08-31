@@ -240,7 +240,7 @@ export const displayName: Translation = {
 	en: 'Display Name',
 	de: 'Display-Name',
 	fr: "Nom d'affichage",
-	es: 'nombre de visualización',
+	es: 'Nombre de visualización',
 };
 
 export const enterYourName: Translation = {
@@ -322,7 +322,7 @@ export const pressOKToLogout: Translation = {
 	es:
 		'Pulse OK para cerrar la sesión y borrar el almacenamiento local de ' +
 		APP_NAME +
-		'. Necesitarás su ID de usuario y contraseña para volver a conectarse.',
+		'. Necesitará su ID de usuario y contraseña para volver a conectarse.',
 };
 
 export const termsPrivacyLicense: Translation = {
