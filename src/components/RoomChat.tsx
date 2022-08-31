@@ -23,7 +23,11 @@ import {
 import { MESSAGE_COUNT_ADD } from '../appconfig';
 import { ComponentBase } from 'resub';
 import DataStore from '../stores/DataStore';
-import { VirtualListView, VirtualListViewCellRenderDetails, VirtualListViewItemInfo } from '../components/VirtualListView';
+import {
+	VirtualListView,
+	VirtualListViewCellRenderDetails,
+	VirtualListViewItemInfo,
+} from '../components/VirtualListView';
 import MessageTile from './MessageTile';
 import ApiClient from '../matrix/ApiClient';
 import EventUtils from '../utils/EventUtils';
@@ -641,7 +645,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 				>
 					<IconSvg
 						source={require('../resources/svg/RI_arrowup.json') as SvgFile}
-						style={{ backgroundColor: iconColor, borderRadius: 2 }}
+						style={{ backgroundColor: iconColor, borderRadius: BORDER_RADIUS }}
 						fillColor={BUTTON_UNREAD_TEXT}
 						height={20}
 						width={20}
@@ -665,7 +669,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 				>
 					<IconSvg
 						source={require('../resources/svg/RI_more.json') as SvgFile}
-						style={{ backgroundColor: BUTTON_FILL }}
+						style={{ backgroundColor: BUTTON_FILL, borderRadius: BORDER_RADIUS }}
 						fillColor={BUTTON_UNREAD_TEXT}
 						height={20}
 						width={20}

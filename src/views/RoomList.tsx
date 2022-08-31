@@ -13,9 +13,14 @@ import {
 	TILE_HEIGHT,
 	TRANSPARENT_BACKGROUND,
 	BUTTON_UNREAD_TEXT,
+	BORDER_RADIUS,
 } from '../ui';
 import RoomListHeader from '../components/RoomListHeader';
-import { VirtualListView, VirtualListViewCellRenderDetails, VirtualListViewItemInfo } from '../components/VirtualListView';
+import {
+	VirtualListView,
+	VirtualListViewCellRenderDetails,
+	VirtualListViewItemInfo,
+} from '../components/VirtualListView';
 import UiStore from '../stores/UiStore';
 import { MessageEvent } from '../models/MessageEvent';
 import SpinnerUtils from '../utils/SpinnerUtils';
@@ -167,7 +172,7 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
 				>
 					<IconSvg
 						source={require('../resources/svg/RI_arrowup.json') as SvgFile}
-						style={{ backgroundColor: iconColor, borderRadius: 2 }}
+						style={{ backgroundColor: iconColor, borderRadius: BORDER_RADIUS }}
 						fillColor={BUTTON_UNREAD_TEXT}
 						height={20}
 						width={20}
