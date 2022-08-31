@@ -829,7 +829,10 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 					>
 						<RX.Text
 							allowFontScaling={false}
-							style={[styles.buttonText, { color: this.state.offline ? BUTTON_DISABLED_TEXT : BUTTON_WARNING_TEXT }]}
+							style={[
+								styles.buttonText,
+								{ color: this.state.offline ? BUTTON_DISABLED_TEXT : BUTTON_WARNING_TEXT },
+							]}
 						>
 							{report[this.language]}
 						</RX.Text>
@@ -846,9 +849,9 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 			let right = undefined;
 			let left = undefined;
 			if (this.props.roomType === 'notepad' || this.props.event.senderId !== ApiClient.credentials.userIdFull) {
-				right = -2 * SPACING;
+				right = 0;
 			} else {
-				left = -2 * SPACING;
+				left = 0;
 			}
 
 			const appLayout = UiStore.getAppLayout_();
