@@ -17,6 +17,9 @@ import {
 	TRANSPARENT_BACKGROUND,
 	HEADER_STATUS,
 	AVATAR_FOREGROUND,
+	TILE_BACKGROUND,
+	BUTTON_HEADER_WIDTH,
+	BUTTON_HEADER_MARGIN,
 } from '../ui';
 import { ComponentBase } from 'resub';
 import DataStore from '../stores/DataStore';
@@ -41,7 +44,7 @@ const styles = {
 	container: RX.Styles.createViewStyle({
 		flexDirection: 'row',
 		height: HEADER_HEIGHT,
-		marginBottom: SPACING,
+		marginBottom: 1,
 	}),
 	containerRoomHeader: RX.Styles.createViewStyle({
 		flex: 1,
@@ -105,13 +108,11 @@ const styles = {
 		overflow: 'visible',
 	}),
 	roundButton: RX.Styles.createViewStyle({
-		borderRadius: BUTTON_ROUND_WIDTH / 2,
-		width: BUTTON_ROUND_WIDTH,
-		height: BUTTON_ROUND_WIDTH,
-		backgroundColor: TRANSPARENT_BACKGROUND,
-	}),
-	containerIcon: RX.Styles.createViewStyle({
-		flex: 1,
+		borderRadius: (BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN) / 2,
+		width: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
+		height: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
+		backgroundColor: TILE_BACKGROUND,
+		margin: SPACING,
 		justifyContent: 'center',
 		alignItems: 'center',
 	}),
@@ -479,14 +480,12 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 						underlayColor={BUTTON_FILL}
 						activeOpacity={0.8}
 					>
-						<RX.View style={styles.containerIcon}>
-							<IconSvg
-								source={require('../resources/svg/RI_arrowleft.json') as SvgFile}
-								fillColor={BUTTON_FILL}
-								height={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
-								width={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
-							/>
-						</RX.View>
+						<IconSvg
+							source={require('../resources/svg/RI_arrowleft.json') as SvgFile}
+							fillColor={BUTTON_FILL}
+							height={BUTTON_HEADER_WIDTH}
+							width={BUTTON_HEADER_WIDTH}
+						/>
 					</RX.Button>
 					{unread}
 				</RX.View>

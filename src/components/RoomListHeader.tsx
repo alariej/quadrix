@@ -11,13 +11,15 @@ import {
 	BUTTON_ROUND_WIDTH,
 	FONT_LARGE,
 	SPACING,
-	ICON_REDUCTION_FACTOR,
 	BUTTON_FILL,
 	TRANSPARENT_BACKGROUND,
 	HEADER_STATUS,
 	PAGE_MARGIN,
 	LOGO_FILL,
 	APP_BACKGROUND,
+	TILE_BACKGROUND,
+	BUTTON_HEADER_WIDTH,
+	BUTTON_HEADER_MARGIN,
 } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogNewRoom from '../dialogs/DialogNewRoom';
@@ -36,7 +38,7 @@ const styles = {
 	container: RX.Styles.createViewStyle({
 		flexDirection: 'row',
 		height: HEADER_HEIGHT,
-		marginBottom: SPACING,
+		marginBottom: 1,
 	}),
 	containerHeader: RX.Styles.createViewStyle({
 		flex: 1,
@@ -57,14 +59,11 @@ const styles = {
 		paddingBottom: 1,
 	}),
 	roundButton: RX.Styles.createViewStyle({
-		borderRadius: BUTTON_ROUND_WIDTH / 2,
-		width: BUTTON_ROUND_WIDTH,
-		height: BUTTON_ROUND_WIDTH,
-		backgroundColor: TRANSPARENT_BACKGROUND,
-		marginLeft: SPACING,
-	}),
-	containerIcon: RX.Styles.createViewStyle({
-		flex: 1,
+		borderRadius: (BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN) / 2,
+		width: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
+		height: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
+		backgroundColor: TILE_BACKGROUND,
+		margin: SPACING,
 		justifyContent: 'center',
 		alignItems: 'center',
 	}),
@@ -345,15 +344,12 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 					disabled={this.state.offline}
 					disabledOpacity={0.15}
 				>
-					<RX.View style={styles.containerIcon}>
-						<IconSvg
-							source={require('../resources/svg/RI_newchat.json') as SvgFile}
-							style={{ marginTop: 2 }}
-							fillColor={BUTTON_FILL}
-							height={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
-							width={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
-						/>
-					</RX.View>
+					<IconSvg
+						source={require('../resources/svg/RI_newchat.json') as SvgFile}
+						fillColor={BUTTON_FILL}
+						height={BUTTON_HEADER_WIDTH}
+						width={BUTTON_HEADER_WIDTH}
+					/>
 				</RX.Button>
 				<RX.Button
 					style={styles.roundButton}
@@ -364,14 +360,12 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 					disabled={this.state.offline}
 					disabledOpacity={0.15}
 				>
-					<RX.View style={styles.containerIcon}>
-						<IconSvg
-							source={require('../resources/svg/RI_settings.json') as SvgFile}
-							fillColor={BUTTON_FILL}
-							height={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
-							width={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
-						/>
-					</RX.View>
+					<IconSvg
+						source={require('../resources/svg/RI_settings.json') as SvgFile}
+						fillColor={BUTTON_FILL}
+						height={BUTTON_HEADER_WIDTH}
+						width={BUTTON_HEADER_WIDTH}
+					/>
 				</RX.Button>
 				<RX.Button
 					style={styles.roundButton}
@@ -380,14 +374,13 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 					underlayColor={BUTTON_FILL}
 					activeOpacity={0.8}
 				>
-					<RX.View style={styles.containerIcon}>
-						<IconSvg
-							source={require('../resources/svg/RI_power.json') as SvgFile}
-							fillColor={BUTTON_FILL}
-							height={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
-							width={BUTTON_ROUND_WIDTH / ICON_REDUCTION_FACTOR}
-						/>
-					</RX.View>
+					<IconSvg
+						source={require('../resources/svg/RI_power.json') as SvgFile}
+						style={{ marginBottom: 1 }}
+						fillColor={BUTTON_FILL}
+						height={BUTTON_HEADER_WIDTH}
+						width={BUTTON_HEADER_WIDTH}
+					/>
 				</RX.Button>
 			</RX.View>
 		);
