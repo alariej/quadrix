@@ -9,7 +9,7 @@ import {
 	SPACING,
 	FONT_LARGE,
 	FONT_NORMAL,
-	AVATAR_SMALL_WIDTH,
+	AVATAR_TILE_WIDTH,
 	TILE_HEIGHT,
 	TRANSPARENT_BACKGROUND,
 	ICON_INFO_FILL,
@@ -67,14 +67,14 @@ const styles = {
 	containerAvatar: RX.Styles.createViewStyle({
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: AVATAR_SMALL_WIDTH,
-		height: AVATAR_SMALL_WIDTH,
+		width: AVATAR_TILE_WIDTH,
+		height: AVATAR_TILE_WIDTH,
 	}),
 	avatar: RX.Styles.createImageStyle({
 		flex: 1,
-		width: AVATAR_SMALL_WIDTH,
-		height: AVATAR_SMALL_WIDTH,
-		borderRadius: AVATAR_SMALL_WIDTH / 2,
+		width: AVATAR_TILE_WIDTH,
+		height: AVATAR_TILE_WIDTH,
+		borderRadius: AVATAR_TILE_WIDTH / 2,
 	}),
 	containerRoomInfo: RX.Styles.createViewStyle({
 		flex: 1,
@@ -286,8 +286,8 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 					<IconSvg
 						source={require('../resources/svg/RI_user.json') as SvgFile}
 						fillColor={AVATAR_FOREGROUND}
-						height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
-						width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+						height={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
+						width={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
 					/>
 				);
 			} else if (this.state.type === 'notepad') {
@@ -295,8 +295,8 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 					<IconSvg
 						source={require('../resources/svg/RI_notepad.json') as SvgFile}
 						fillColor={AVATAR_FOREGROUND}
-						height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
-						width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+						height={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
+						width={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
 					/>
 				);
 			} else if (this.state.type === 'group') {
@@ -304,8 +304,8 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 					<IconSvg
 						source={require('../resources/svg/RI_users.json') as SvgFile}
 						fillColor={AVATAR_FOREGROUND}
-						height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
-						width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+						height={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
+						width={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
 					/>
 				);
 			} else if (this.state.type === 'community') {
@@ -313,8 +313,8 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 					<IconSvg
 						source={require('../resources/svg/RI_public.json') as SvgFile}
 						fillColor={AVATAR_FOREGROUND}
-						height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
-						width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+						height={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
+						width={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
 					/>
 				);
 			}

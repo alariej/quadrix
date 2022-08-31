@@ -11,7 +11,7 @@ import {
 	BORDER_RADIUS,
 	DIALOG_WIDTH,
 	SPACING,
-	AVATAR_SMALL_WIDTH,
+	AVATAR_TILE_WIDTH,
 	TILE_HEIGHT,
 	FONT_LARGE,
 	AVATAR_FOREGROUND,
@@ -56,9 +56,9 @@ const styles = {
 	containerAvatar: RX.Styles.createViewStyle({
 		justifyContent: 'center',
 		alignItems: 'center',
-		height: AVATAR_SMALL_WIDTH,
-		width: AVATAR_SMALL_WIDTH,
-		borderRadius: AVATAR_SMALL_WIDTH / 2,
+		height: AVATAR_TILE_WIDTH,
+		width: AVATAR_TILE_WIDTH,
+		borderRadius: AVATAR_TILE_WIDTH / 2,
 	}),
 };
 
@@ -118,8 +118,8 @@ export default class DialogNewRoom extends RX.Component<DialogNewRoomProps, RX.S
 						<IconSvg
 							source={require('../resources/svg/RI_public.json') as SvgFile}
 							fillColor={AVATAR_FOREGROUND}
-							height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
-							width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+							height={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
+							width={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
 						/>
 					</RX.View>
 					<RX.Text style={styles.buttonText}>{joinPublicComm[language]}</RX.Text>
@@ -149,8 +149,8 @@ export default class DialogNewRoom extends RX.Component<DialogNewRoomProps, RX.S
 							<IconSvg
 								source={require('../resources/svg/RI_user.json') as SvgFile}
 								fillColor={AVATAR_FOREGROUND}
-								height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
-								width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+								height={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
+								width={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
 							/>
 						</RX.View>
 						<RX.Text style={styles.buttonText}>{createNewConv[language]}</RX.Text>
@@ -165,8 +165,8 @@ export default class DialogNewRoom extends RX.Component<DialogNewRoomProps, RX.S
 							<IconSvg
 								source={require('../resources/svg/RI_users.json') as SvgFile}
 								fillColor={AVATAR_FOREGROUND}
-								height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
-								width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+								height={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
+								width={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
 							/>
 						</RX.View>
 						<RX.Text style={styles.buttonText}>{createNewGroup[language]}</RX.Text>
@@ -184,8 +184,8 @@ export default class DialogNewRoom extends RX.Component<DialogNewRoomProps, RX.S
 							<IconSvg
 								source={require('../resources/svg/RI_notepad.json') as SvgFile}
 								fillColor={AVATAR_FOREGROUND}
-								height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
-								width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+								height={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
+								width={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
 							/>
 						</RX.View>
 						<RX.Text style={styles.buttonText}>{createNewNote[language]}</RX.Text>

@@ -13,7 +13,7 @@ import {
 	FONT_LARGE,
 	FONT_SMALL,
 	TILE_HEIGHT,
-	AVATAR_SMALL_WIDTH,
+	AVATAR_TILE_WIDTH,
 	LIGHT_BACKGROUND,
 	TILE_MESSAGE_TEXT,
 	AVATAR_FOREGROUND,
@@ -43,14 +43,14 @@ const styles = {
 	containerAvatar: RX.Styles.createViewStyle({
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: AVATAR_SMALL_WIDTH,
-		height: AVATAR_SMALL_WIDTH,
+		width: AVATAR_TILE_WIDTH,
+		height: AVATAR_TILE_WIDTH,
 	}),
 	avatar: RX.Styles.createImageStyle({
 		flex: 1,
-		width: AVATAR_SMALL_WIDTH,
-		height: AVATAR_SMALL_WIDTH,
-		borderRadius: AVATAR_SMALL_WIDTH / 2,
+		width: AVATAR_TILE_WIDTH,
+		height: AVATAR_TILE_WIDTH,
+		borderRadius: AVATAR_TILE_WIDTH / 2,
 	}),
 	containerUserInfo: RX.Styles.createViewStyle({
 		flex: 1,
@@ -78,7 +78,7 @@ const styles = {
 		position: 'absolute',
 		backgroundColor: LIGHT_BACKGROUND,
 		bottom: 0,
-		width: AVATAR_SMALL_WIDTH,
+		width: AVATAR_TILE_WIDTH,
 		borderRadius: 3,
 	}),
 	status: RX.Styles.createTextStyle({
@@ -145,8 +145,8 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
 				<IconSvg
 					source={require('../resources/svg/RI_user.json') as SvgFile}
 					fillColor={AVATAR_FOREGROUND}
-					height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
-					width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+					height={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
+					width={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
 				/>
 			);
 		} else {
