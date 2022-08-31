@@ -8,7 +8,7 @@ import {
 	SPACING,
 	FONT_NORMAL,
 	FONT_LARGE,
-	AVATAR_SMALL_WIDTH,
+	AVATAR_HEADER_WIDTH,
 	ICON_REDUCTION_FACTOR,
 	BUTTON_UNREAD_TEXT,
 	BUTTON_UNREAD_BACKGROUND,
@@ -55,14 +55,14 @@ const styles = {
 	containerAvatar: RX.Styles.createViewStyle({
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: AVATAR_SMALL_WIDTH,
-		height: AVATAR_SMALL_WIDTH,
+		width: AVATAR_HEADER_WIDTH,
+		height: AVATAR_HEADER_WIDTH,
 		cursor: 'pointer',
 	}),
 	avatar: RX.Styles.createImageStyle({
 		flex: 1,
-		width: AVATAR_SMALL_WIDTH,
-		borderRadius: AVATAR_SMALL_WIDTH / 2,
+		width: AVATAR_HEADER_WIDTH,
+		borderRadius: AVATAR_HEADER_WIDTH / 2,
 		backgroundColor: AVATAR_BACKGROUND,
 	}),
 	containerRoomInfo: RX.Styles.createViewStyle({
@@ -275,8 +275,8 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 					<IconSvg
 						source={require('../resources/svg/RI_user.json') as SvgFile}
 						fillColor={AVATAR_FOREGROUND}
-						height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
-						width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+						height={AVATAR_HEADER_WIDTH / ICON_REDUCTION_FACTOR}
+						width={AVATAR_HEADER_WIDTH / ICON_REDUCTION_FACTOR}
 					/>
 				);
 			} else if (this.state.type === 'notepad') {
@@ -284,8 +284,8 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 					<IconSvg
 						source={require('../resources/svg/RI_notepad.json') as SvgFile}
 						fillColor={AVATAR_FOREGROUND}
-						height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
-						width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+						height={AVATAR_HEADER_WIDTH / ICON_REDUCTION_FACTOR}
+						width={AVATAR_HEADER_WIDTH / ICON_REDUCTION_FACTOR}
 					/>
 				);
 			} else if (this.state.type === 'group') {
@@ -293,8 +293,8 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 					<IconSvg
 						source={require('../resources/svg/RI_users.json') as SvgFile}
 						fillColor={AVATAR_FOREGROUND}
-						height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
-						width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+						height={AVATAR_HEADER_WIDTH / ICON_REDUCTION_FACTOR}
+						width={AVATAR_HEADER_WIDTH / ICON_REDUCTION_FACTOR}
 					/>
 				);
 			} else if (this.state.type === 'community') {
@@ -302,8 +302,8 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 					<IconSvg
 						source={require('../resources/svg/RI_public.json') as SvgFile}
 						fillColor={AVATAR_FOREGROUND}
-						height={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
-						width={AVATAR_SMALL_WIDTH / ICON_REDUCTION_FACTOR}
+						height={AVATAR_HEADER_WIDTH / ICON_REDUCTION_FACTOR}
+						width={AVATAR_HEADER_WIDTH / ICON_REDUCTION_FACTOR}
 					/>
 				);
 			}

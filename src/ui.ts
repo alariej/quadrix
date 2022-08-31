@@ -23,6 +23,7 @@ export const BUTTON_SHORT_WIDTH = 100;
 export const BUTTON_COMPOSER_WIDTH = 32;
 export const AVATAR_WIDTH = 48;
 export const AVATAR_TILE_WIDTH = TILE_HEIGHT - 4 * SPACING;
+export const AVATAR_HEADER_WIDTH = HEADER_HEIGHT - 2 * SPACING;
 export const AVATAR_MEDIUM_WIDTH = 128;
 export const AVATAR_LARGE_WIDTH = 144;
 export const AVATAR_MARGIN = 8;
