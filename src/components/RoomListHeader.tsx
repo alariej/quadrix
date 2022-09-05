@@ -347,8 +347,8 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 					<IconSvg
 						source={require('../resources/svg/RI_newchat.json') as SvgFile}
 						fillColor={BUTTON_FILL}
-						height={BUTTON_HEADER_WIDTH}
-						width={BUTTON_HEADER_WIDTH}
+						height={BUTTON_HEADER_WIDTH * 0.95}
+						width={BUTTON_HEADER_WIDTH * 0.95}
 					/>
 				</RX.Button>
 				<RX.Button
