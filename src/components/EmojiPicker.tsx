@@ -1,7 +1,11 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
-import { FONT_EMOJI_LARGE, SPACING, TILE_BACKGROUND } from '../ui';
-import { VirtualListView, VirtualListViewCellRenderDetails, VirtualListViewItemInfo } from '../components/VirtualListView';
+import { COMPOSER_BORDER, FONT_EMOJI_LARGE, SPACING, TILE_BACKGROUND } from '../ui';
+import {
+	VirtualListView,
+	VirtualListViewCellRenderDetails,
+	VirtualListViewItemInfo,
+} from '../components/VirtualListView';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -11,6 +15,7 @@ const styles = {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		backgroundColor: TILE_BACKGROUND,
+		borderWidth: 0,
 	}),
 };
 
@@ -32,7 +37,7 @@ export default class EmojiPicker extends RX.Component<EmojiPickerProps, RX.State
 		while (i < props.emojiArray.length) {
 			const emojiRow_: EmojiRowItemInfo = {
 				key: String(i),
-				height: FONT_EMOJI_LARGE + 2 * SPACING,
+				height: FONT_EMOJI_LARGE + (i === 0 ? 4 : 2) * SPACING + (i === 0 ? 1 : 0),
 				template: 'emojiRow',
 				emojiRow: props.emojiArray.slice(i, i + 5),
 				measureHeight: false,
@@ -46,7 +51,17 @@ export default class EmojiPicker extends RX.Component<EmojiPickerProps, RX.State
 	private renderItem = (cellRender: VirtualListViewCellRenderDetails<EmojiRowItemInfo>) => {
 		const rowWrapper = (
 			<RX.View
-				style={styles.emojiRow}
+				style={[
+					styles.emojiRow,
+					cellRender.item.key === '0'
+						? {
+								borderBottomWidth: 1,
+								borderColor: COMPOSER_BORDER,
+								paddingBottom: SPACING,
+								marginBottom: SPACING,
+						  }
+						: undefined,
+				]}
 				onPress={(event: RX.Types.SyntheticEvent) => event.stopPropagation()}
 				disableTouchOpacityAnimation={true}
 				activeOpacity={1}
