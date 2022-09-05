@@ -15,6 +15,8 @@ import {
 	PAGE_MARGIN,
 	APP_BACKGROUND,
 	SENDER_TEXT,
+	ICON_INFO_FILL,
+	ICON_INFO_SIZE,
 } from '../ui';
 import ImageMessage from './ImageMessage';
 import FileMessage from './FileMessage';
@@ -184,10 +186,38 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 
 		if (this.props.isRedacted) {
 			messageType = 'system';
-			message = <RX.Text style={styles.containerText}>{messageDeleted[UiStore.getLanguage()]}</RX.Text>;
+			const messageIcon = (
+				<IconSvg
+					source={require('../resources/svg/RI_info.json') as SvgFile}
+					style={{ marginRight: SPACING }}
+					fillColor={ICON_INFO_FILL}
+					height={ICON_INFO_SIZE}
+					width={ICON_INFO_SIZE}
+				/>
+			);
+			message = (
+				<RX.View style={{ flexDirection: 'row' }}>
+					{messageIcon}
+					<RX.Text style={styles.containerText}>{messageDeleted[UiStore.getLanguage()]}</RX.Text>
+				</RX.View>
+			);
 		} else if (this.props.event.type === 'm.room.encrypted') {
 			messageType = 'system';
-			message = <RX.Text style={styles.containerText}>{encryptedMessage[UiStore.getLanguage()]}</RX.Text>;
+			const messageIcon = (
+				<IconSvg
+					source={require('../resources/svg/RI_info.json') as SvgFile}
+					style={{ marginRight: SPACING }}
+					fillColor={ICON_INFO_FILL}
+					height={ICON_INFO_SIZE}
+					width={ICON_INFO_SIZE}
+				/>
+			);
+			message = (
+				<RX.View style={{ flexDirection: 'row' }}>
+					{messageIcon}
+					<RX.Text style={styles.containerText}>{encryptedMessage[UiStore.getLanguage()]}</RX.Text>;
+				</RX.View>
+			);
 		} else if (this.props.event.content.msgtype === 'm.image') {
 			messageType = 'media';
 			message = (

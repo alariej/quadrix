@@ -717,10 +717,10 @@ export const sending: Translation = {
 };
 
 export const messageDeleted: Translation = {
-	en: '🛈 [Message deleted]',
-	de: '🛈 [Nachricht gelöscht]',
-	fr: '🛈 [Message effacé]',
-	es: '🛈 [Mensaje borrado]',
+	en: '[Message deleted]',
+	de: '[Nachricht gelöscht]',
+	fr: '[Message effacé]',
+	es: '[Mensaje borrado]',
 };
 
 export const clickHereOrPressShftEnter: Translation = {
@@ -1174,10 +1174,10 @@ export const errorInvalidPassword: Translation = {
 };
 
 export const encryptedMessage: Translation = {
-	en: '🛈 [encrypted message]',
-	de: '🛈 [verschlüsselte Nachricht]',
-	fr: '🛈 [message encrypté]',
-	es: '🛈 [mensaje encriptado]',
+	en: '[encrypted message]',
+	de: '[verschlüsselte Nachricht]',
+	fr: '[message encrypté]',
+	es: '[mensaje encriptado]',
 };
 
 export const pressOKJitsi: Translation = {
