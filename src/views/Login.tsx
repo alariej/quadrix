@@ -351,7 +351,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 				tabIndex={-1}
 			>
 				<IconSvg
-					source={require('../resources/svg/RI_menu.json') as SvgFile}
+					source={require('../resources/svg/RI_expand.json') as SvgFile}
 					fillColor={BUTTON_LONG_BACKGROUND}
 					height={20}
 					width={20}
