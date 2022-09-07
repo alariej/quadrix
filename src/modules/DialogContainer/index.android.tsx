@@ -93,6 +93,7 @@ interface DialogContainerProps {
 	bottomElement?: ReactElement;
 	buttonStyle?: RX.Types.ButtonStyleRuleSet;
 	buttonTextStyle?: RX.Types.TextStyleRuleSet;
+	animated?: boolean;
 }
 
 export default class DialogContainer extends RX.Component<DialogContainerProps, RX.Stateless> {
@@ -109,12 +110,14 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
 	}
 
 	public componentDidMount(): void {
-		RX.Animated.timing(this.animatedValue, {
-			duration: 150,
-			toValue: 1,
-			easing: RX.Animated.Easing.InOut(),
-			useNativeDriver: true,
-		}).start();
+		if (this.props.animated) {
+			RX.Animated.timing(this.animatedValue, {
+				duration: 150,
+				toValue: 1,
+				easing: RX.Animated.Easing.InOut(),
+				useNativeDriver: true,
+			}).start();
+		}
 	}
 
 	private onConfirmButtonClick = () => {
