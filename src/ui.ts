@@ -16,6 +16,7 @@ export const HEADER_HEIGHT = TILE_HEIGHT;
 export const MESSAGE_HEIGHT_DEFAULT = 50;
 export const DIALOG_WIDTH = 260;
 export const BUTTON_WIDTH = 120;
+export const BUTTON_WIDTH_MAIN = 140;
 export const BUTTON_HEIGHT = 28;
 export const STACKED_BUTTON_HEIGHT = 34;
 export const BUTTON_ROUND_WIDTH = 36;

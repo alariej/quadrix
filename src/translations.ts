@@ -1333,3 +1333,24 @@ export const deleteAccount: Translation = {
 	fr: 'Supprimer le compte',
 	es: 'Borrar la cuenta',
 };
+
+export const newRoom: Translation = {
+	en: 'New...',
+	de: 'Neu...',
+	fr: 'Nouveau...',
+	es: 'Nuevo...',
+};
+
+export const about: Translation = {
+	en: 'About',
+	de: 'Über',
+	fr: 'À propos',
+	es: 'Acerca',
+};
+
+export const logout: Translation = {
+	en: 'Logout',
+	de: 'Ausloggen',
+	fr: 'Déconnexion',
+	es: 'Desconexión',
+};

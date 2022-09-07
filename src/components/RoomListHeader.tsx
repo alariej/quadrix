@@ -17,7 +17,6 @@ import {
 	PAGE_MARGIN,
 	LOGO_FILL,
 	APP_BACKGROUND,
-	TILE_BACKGROUND,
 	BUTTON_HEADER_WIDTH,
 	BUTTON_HEADER_MARGIN,
 } from '../ui';
@@ -33,6 +32,7 @@ import Pushers from '../modules/Pushers';
 import AppFont from '../modules/AppFont';
 import FileHandler from '../modules/FileHandler';
 import Shadow from '../modules/Shadow';
+import DialogMenuMain from '../dialogs/DialogMenuMain';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -43,15 +43,14 @@ const styles = {
 	containerHeader: RX.Styles.createViewStyle({
 		flex: 1,
 		justifyContent: 'center',
-		cursor: 'pointer',
 		backgroundColor: TRANSPARENT_BACKGROUND,
 	}),
-	userNameContainer: RX.Styles.createViewStyle({
+	userIdContainer: RX.Styles.createViewStyle({
 		alignItems: 'center',
 		justifyContent: 'center',
 		flexDirection: 'row',
 	}),
-	userName: RX.Styles.createTextStyle({
+	userId: RX.Styles.createTextStyle({
 		textAlign: 'center',
 		fontFamily: AppFont.fontFamily,
 		fontSize: FONT_NORMAL,
@@ -62,7 +61,6 @@ const styles = {
 		borderRadius: (BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN) / 2,
 		width: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
 		height: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
-		backgroundColor: TILE_BACKGROUND,
 		margin: SPACING,
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -71,8 +69,8 @@ const styles = {
 		position: 'absolute',
 		height: 14,
 		width: 14,
-		bottom: SPACING,
-		right: SPACING,
+		top: SPACING,
+		left: SPACING,
 	}),
 	logoutTextDialog: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
@@ -94,9 +92,6 @@ const styles = {
 		textAlign: 'center',
 		padding: 12,
 		backgroundColor: TRANSPARENT_BACKGROUND,
-	}),
-	app_name: RX.Styles.createViewStyle({
-		marginVertical: 12,
 	}),
 	textVersion: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
@@ -174,7 +169,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 
 	protected _buildState(): RoomListHeaderState {
 		if (UiStore.getUnknownAccessToken()) {
-			this.doLogout().catch(_error => null);
+			this.logout().catch(_error => null);
 		}
 
 		return {
@@ -183,7 +178,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 		};
 	}
 
-	private doLogout = async () => {
+	private logout = async () => {
 		RX.Modal.dismissAll();
 
 		Pushers.removeFromDevice(ApiClient.credentials).catch(_error => null);
@@ -198,7 +193,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 		this.props.showLogin();
 	};
 
-	private onLogout = () => {
+	private onPressLogout = () => {
 		const text = <RX.Text style={styles.logoutTextDialog}>{pressOKToLogout[this.language]}</RX.Text>;
 
 		const logoutConfirmation = (
@@ -208,7 +203,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 				confirmButtonText={'OK'}
 				cancelButton={true}
 				cancelButtonText={cancel[this.language]}
-				onConfirm={this.doLogout}
+				onConfirm={this.logout}
 				onCancel={() => RX.Modal.dismissAll()}
 			/>
 		);
@@ -231,7 +226,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 		}
 	};
 
-	private onPressTile = () => {
+	private onPressAbout = () => {
 		const text = (
 			<RX.View style={styles.containerAbout}>
 				<RX.View style={styles.logo}>
@@ -292,6 +287,19 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 		RX.Modal.show(<DialogNewRoom showRoom={this.props.showRoom} />, 'dialognewroom');
 	};
 
+	private showMenu = () => {
+		const dialogMenuMain = (
+			<DialogMenuMain
+				onPressNewChat={this.onPressNewChat}
+				onPressSettings={this.onPressSettings}
+				onPressAbout={this.onPressAbout}
+				onPressLogout={this.onPressLogout}
+			/>
+		);
+
+		RX.Modal.show(dialogMenuMain, 'dialog_menu_main');
+	};
+
 	public render(): JSX.Element | null {
 		let disconnected: ReactElement;
 		if (this.state.offline) {
@@ -310,23 +318,22 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 		const width =
 			UiStore.getAppLayout_().pageWidth -
 			2 * PAGE_MARGIN -
-			3 * (BUTTON_ROUND_WIDTH + SPACING) -
+			1 * (BUTTON_ROUND_WIDTH + SPACING) -
 			2 * 4 -
 			2 * SPACING;
 
 		return (
 			<RX.View style={styles.container}>
+				{disconnected!}
 				<RX.View
 					style={styles.containerHeader}
-					onPress={() => (this.state.isJitsiMaximised ? null : this.onPressTile())}
 					disableTouchOpacityAnimation={true}
 					activeOpacity={1}
 				>
-					{disconnected!}
-					<RX.View style={styles.userNameContainer}>
+					<RX.View style={styles.userIdContainer}>
 						<RX.View style={styles.bracketLeft} />
 						<RX.Text
-							style={[styles.userName, { maxWidth: width }]}
+							style={[styles.userId, { maxWidth: width }]}
 							allowFontScaling={false}
 							numberOfLines={1}
 						>
@@ -337,45 +344,13 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 				</RX.View>
 				<RX.Button
 					style={styles.roundButton}
-					onPress={() => (this.state.isJitsiMaximised ? null : this.onPressNewChat())}
-					disableTouchOpacityAnimation={false}
-					underlayColor={BUTTON_FILL}
-					activeOpacity={0.8}
-					disabled={this.state.offline}
-					disabledOpacity={0.15}
-				>
-					<IconSvg
-						source={require('../resources/svg/RI_newchat.json') as SvgFile}
-						fillColor={BUTTON_FILL}
-						height={BUTTON_HEADER_WIDTH * 0.95}
-						width={BUTTON_HEADER_WIDTH * 0.95}
-					/>
-				</RX.Button>
-				<RX.Button
-					style={styles.roundButton}
-					onPress={() => (this.state.isJitsiMaximised ? null : this.onPressSettings())}
-					disableTouchOpacityAnimation={false}
-					underlayColor={BUTTON_FILL}
-					activeOpacity={0.8}
-					disabled={this.state.offline}
-					disabledOpacity={0.15}
-				>
-					<IconSvg
-						source={require('../resources/svg/RI_settings.json') as SvgFile}
-						fillColor={BUTTON_FILL}
-						height={BUTTON_HEADER_WIDTH}
-						width={BUTTON_HEADER_WIDTH}
-					/>
-				</RX.Button>
-				<RX.Button
-					style={styles.roundButton}
-					onPress={() => (this.state.isJitsiMaximised ? null : this.onLogout())}
+					onPress={() => (this.state.isJitsiMaximised ? null : this.showMenu())}
 					disableTouchOpacityAnimation={false}
 					underlayColor={BUTTON_FILL}
 					activeOpacity={0.8}
 				>
 					<IconSvg
-						source={require('../resources/svg/RI_power.json') as SvgFile}
+						source={require('../resources/svg/RI_menu.json') as SvgFile}
 						style={{ marginBottom: 1 }}
 						fillColor={BUTTON_FILL}
 						height={BUTTON_HEADER_WIDTH}
