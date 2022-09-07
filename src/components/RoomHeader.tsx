@@ -17,7 +17,6 @@ import {
 	TRANSPARENT_BACKGROUND,
 	HEADER_STATUS,
 	AVATAR_FOREGROUND,
-	TILE_BACKGROUND,
 	BUTTON_HEADER_WIDTH,
 	BUTTON_HEADER_MARGIN,
 } from '../ui';
@@ -111,7 +110,6 @@ const styles = {
 		borderRadius: (BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN) / 2,
 		width: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
 		height: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
-		backgroundColor: TILE_BACKGROUND,
 		margin: SPACING,
 		justifyContent: 'center',
 		alignItems: 'center',
