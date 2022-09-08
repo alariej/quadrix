@@ -237,7 +237,7 @@ export const userSettings: Translation = {
 };
 
 export const displayName: Translation = {
-	en: 'Display Name',
+	en: 'Display name',
 	de: 'Display-Name',
 	fr: "Nom d'affichage",
 	es: 'Nombre de visualización',
@@ -251,7 +251,7 @@ export const enterYourName: Translation = {
 };
 
 export const profilePicture: Translation = {
-	en: 'Profile Picture',
+	en: 'Profile picture',
 	de: 'Profil-Bild',
 	fr: 'Photo de profil',
 	es: 'Foto de perfil',
@@ -825,7 +825,7 @@ export const youDoNotHavePrivateContacts: Translation = {
 };
 
 export const storageAccess: Translation = {
-	en: 'Storage Access',
+	en: 'Storage access',
 	de: 'Speicherzugriff.',
 	fr: 'Accès au stockage',
 	es: 'Acceso al almacenamiento',
@@ -874,7 +874,7 @@ export const fileHasBeenSavedAndroid: Translation = {
 };
 
 export const toFolder: Translation = {
-	en: 'To Folder',
+	en: 'To folder',
 	de: 'Zum Ordner',
 	fr: 'Vers dossier',
 	es: 'A la carpeta',
@@ -991,14 +991,14 @@ export const invitationNotYetAccepted: Translation = {
 };
 
 export const acceptInvitation: Translation = {
-	en: 'Accept Invitation',
+	en: 'Accept invitation',
 	de: 'Einladung akzeptieren',
 	fr: "Accepter l'invitation",
 	es: 'Aceptar la invitación',
 };
 
 export const rejectInvitation: Translation = {
-	en: 'Reject Invitation',
+	en: 'Reject invitation',
 	de: 'Einladung ablehnen',
 	fr: "Rejeter l'invitation",
 	es: 'Rechazar la invitación',
@@ -1328,8 +1328,8 @@ export const pressOKToDeleteAccount = (server: string, language: string): string
 };
 
 export const deleteAccount: Translation = {
-	en: 'Delete Account',
-	de: 'Konto Löschen',
+	en: 'Delete account',
+	de: 'Konto löschen',
 	fr: 'Supprimer le compte',
 	es: 'Borrar la cuenta',
 };
