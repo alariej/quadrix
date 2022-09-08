@@ -5,18 +5,14 @@ import { ComponentBase } from 'resub';
 import {
 	TILE_SYSTEM_TEXT,
 	MODAL_CONTENT_TEXT,
-	LINK_TEXT,
 	HEADER_HEIGHT,
 	FONT_NORMAL,
-	BUTTON_ROUND_WIDTH,
 	FONT_LARGE,
 	SPACING,
 	BUTTON_FILL,
 	TRANSPARENT_BACKGROUND,
 	HEADER_STATUS,
 	PAGE_MARGIN,
-	LOGO_FILL,
-	APP_BACKGROUND,
 	BUTTON_HEADER_WIDTH,
 	BUTTON_HEADER_MARGIN,
 } from '../ui';
@@ -25,14 +21,13 @@ import DialogNewRoom from '../dialogs/DialogNewRoom';
 import DialogContainer from '../modules/DialogContainer';
 import DialogSettings from '../dialogs/DialogSettings';
 import UiStore from '../stores/UiStore';
-import { pressOKToLogout, cancel, termsPrivacyLicense, Languages } from '../translations';
+import { pressOKToLogout, cancel, Languages } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
-import { APP_VERSION, APP_WEBSITE, TERMS_URL, GIT_REPO_URL, GITHUB_SPONSOR_URL } from '../appconfig';
 import Pushers from '../modules/Pushers';
 import AppFont from '../modules/AppFont';
 import FileHandler from '../modules/FileHandler';
-import Shadow from '../modules/Shadow';
 import DialogMenuMain from '../dialogs/DialogMenuMain';
+import About from './About';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -80,26 +75,6 @@ const styles = {
 		marginVertical: 12,
 		marginHorizontal: 24,
 	}),
-	containerAbout: RX.Styles.createViewStyle({
-		padding: SPACING,
-		alignItems: 'center',
-	}),
-	link: RX.Styles.createTextStyle({
-		fontFamily: AppFont.fontFamily,
-		fontSize: FONT_NORMAL,
-		color: LINK_TEXT,
-		textDecorationLine: 'underline',
-		textAlign: 'center',
-		padding: 12,
-		backgroundColor: TRANSPARENT_BACKGROUND,
-	}),
-	textVersion: RX.Styles.createTextStyle({
-		fontFamily: AppFont.fontFamily,
-		fontSize: FONT_NORMAL,
-		textAlign: 'center',
-		color: MODAL_CONTENT_TEXT,
-		marginVertical: 12,
-	}),
 	bracketLeft: RX.Styles.createViewStyle({
 		height: 22,
 		width: 3,
@@ -121,30 +96,6 @@ const styles = {
 		borderBottomWidth: 1,
 		borderRightWidth: 1,
 		marginLeft: SPACING,
-	}),
-	logo: RX.Styles.createViewStyle({
-		flex: 1,
-		marginVertical: 12,
-	}),
-	sponsorText: RX.Styles.createTextStyle({
-		fontFamily: AppFont.fontFamily,
-		fontSize: FONT_NORMAL,
-		textAlign: 'center',
-		color: MODAL_CONTENT_TEXT,
-	}),
-	sponsorButton: RX.Styles.createViewStyle({
-		flex: 1,
-		height: 24,
-		marginVertical: 12,
-		paddingHorizontal: 12,
-		borderRadius: 24 / 2,
-		backgroundColor: APP_BACKGROUND,
-		overflow: 'visible',
-		shadowOffset: Shadow.medium.offset,
-		shadowColor: Shadow.medium.color,
-		shadowRadius: Shadow.medium.radius,
-		elevation: Shadow.medium.elevation,
-		shadowOpacity: Shadow.medium.opacity,
 	}),
 };
 
@@ -215,65 +166,12 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 		RX.Modal.show(<DialogSettings showLogin={this.props.showLogin} />, 'dialogsettings');
 	};
 
-	private openUrl = (url: string, event: RX.Types.SyntheticEvent) => {
-		event.stopPropagation();
-
-		if (UiStore.getIsElectron()) {
-			const { shell } = window.require('electron');
-			shell.openExternal(url).catch(_error => null);
-		} else {
-			RX.Linking.openUrl(url).catch(_error => null);
-		}
-	};
-
 	private onPressAbout = () => {
-		const text = (
-			<RX.View style={styles.containerAbout}>
-				<RX.View style={styles.logo}>
-					<IconSvg
-						source={require('../resources/svg/logo.json') as SvgFile}
-						height={52}
-						width={52}
-						fillColor={LOGO_FILL}
-					/>
-				</RX.View>
-				<RX.Text
-					allowFontScaling={false}
-					style={styles.textVersion}
-				>
-					{'Version: ' + APP_VERSION}
-				</RX.Text>
-				<RX.Text
-					allowFontScaling={false}
-					style={styles.link}
-					onPress={event => this.openUrl(GIT_REPO_URL, event)}
-				>
-					{APP_WEBSITE}
-				</RX.Text>
-				<RX.Text
-					allowFontScaling={false}
-					style={styles.link}
-					onPress={event => this.openUrl(TERMS_URL, event)}
-				>
-					{termsPrivacyLicense[this.language]}
-				</RX.Text>
-				<RX.Button
-					style={styles.sponsorButton}
-					onPress={event => this.openUrl(GITHUB_SPONSOR_URL, event)}
-				>
-					<RX.Text
-						allowFontScaling={false}
-						style={styles.sponsorText}
-					>
-						💙 Sponsor
-					</RX.Text>
-				</RX.Button>
-			</RX.View>
-		);
+		const about = <About />;
 
 		const versionDialog = (
 			<DialogContainer
-				content={text}
+				content={about}
 				confirmButton={false}
 				cancelButton={false}
 				onCancel={() => RX.Modal.dismissAll()}
@@ -318,7 +216,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 		const width =
 			UiStore.getAppLayout_().pageWidth -
 			2 * PAGE_MARGIN -
-			1 * (BUTTON_ROUND_WIDTH + SPACING) -
+			1 * (BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN + SPACING) -
 			2 * 4 -
 			2 * SPACING;
 
