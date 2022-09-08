@@ -3,7 +3,7 @@ import RX from 'reactxp';
 import ApiClient from '../matrix/ApiClient';
 import {
 	OPAQUE_BACKGROUND,
-	BUTTON_WIDTH,
+	BUTTON_SHORT_WIDTH,
 	BUTTON_HEIGHT,
 	BUTTON_MODAL_BACKGROUND,
 	FONT_LARGE,
@@ -55,7 +55,7 @@ const styles = {
 		position: 'absolute',
 		bottom: OBJECT_MARGIN,
 		borderRadius: BUTTON_HEIGHT / 2,
-		width: BUTTON_WIDTH,
+		width: BUTTON_SHORT_WIDTH,
 		height: BUTTON_HEIGHT,
 		backgroundColor: BUTTON_MODAL_BACKGROUND,
 	}),

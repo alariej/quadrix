@@ -14,9 +14,9 @@ import {
 	OPAQUE_LIGHT_BACKGROUND,
 	ICON_INFO_SIZE,
 	ICON_INFO_FILL,
-	BUTTON_WIDTH,
 	OBJECT_MARGIN,
 	BUTTON_WARNING_TEXT,
+	BUTTON_MENU_WIDTH,
 } from '../ui';
 import { LayoutInfo } from 'reactxp/dist/common/Types';
 import DataStore from '../stores/DataStore';
@@ -65,7 +65,7 @@ const styles = {
 		alignItems: 'center',
 		padding: SPACING,
 		borderRadius: BORDER_RADIUS,
-		width: BUTTON_WIDTH,
+		width: BUTTON_MENU_WIDTH,
 		height: STACKED_BUTTON_HEIGHT,
 		backgroundColor: BUTTON_MODAL_BACKGROUND,
 		marginBottom: 1,

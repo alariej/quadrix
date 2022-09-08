@@ -15,6 +15,7 @@ export const TILE_HEIGHT_COMMUNITY = 80;
 export const HEADER_HEIGHT = TILE_HEIGHT;
 export const MESSAGE_HEIGHT_DEFAULT = 50;
 export const DIALOG_WIDTH = 260;
+export const BUTTON_MENU_WIDTH = 120;
 export const BUTTON_MENU_MAIN_WIDTH = 140;
 export const BUTTON_ROUND_WIDTH = 36;
 export const BUTTON_LONG_WIDTH = 220;
