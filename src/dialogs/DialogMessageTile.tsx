@@ -184,7 +184,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 		this.animatedScale = RX.Animated.createValue(animatedSizeStart);
 		this.animatedTranslateX = RX.Animated.createValue((BUTTON_MENU_WIDTH / 2) * (this.rightAlignment ? 1 : -1));
 		this.animatedStyle = RX.Styles.createAnimatedViewStyle({
-			transform: [{ translateX: this.animatedTranslateX, scale: this.animatedScale }],
+			transform: [{ translateX: this.animatedTranslateX }, { scale: this.animatedScale }],
 		});
 
 		props.setReplyMessage(undefined);

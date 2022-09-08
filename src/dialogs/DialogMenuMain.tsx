@@ -97,7 +97,9 @@ export default class DialogMenuMain extends ComponentBase<DialogMenuMainProps, D
 		this.animatedTranslateY = RX.Animated.createValue(-((4 * STACKED_BUTTON_HEIGHT) / 2));
 		this.animatedStyle = RX.Styles.createAnimatedViewStyle({
 			transform: [
-				{ translateX: this.animatedTranslateX, translateY: this.animatedTranslateY, scale: this.animatedScale },
+				{ translateX: this.animatedTranslateX },
+				{ translateY: this.animatedTranslateY },
+				{ scale: this.animatedScale },
 			],
 		});
 	}
