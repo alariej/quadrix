@@ -18,7 +18,7 @@ import {
 	BUTTON_HEADER_WIDTH,
 	BUTTON_HEADER_MARGIN,
 	PAGE_WIDE_PADDING,
-	BUTTON_WIDTH_MAIN,
+	BUTTON_MENU_MAIN_WIDTH,
 } from '../ui';
 import { about, Languages, logout, newRoom, userSettings } from '../translations';
 import AppFont from '../modules/AppFont';
@@ -44,7 +44,7 @@ const styles = {
 		alignItems: 'center',
 		padding: SPACING,
 		borderRadius: BORDER_RADIUS,
-		width: BUTTON_WIDTH_MAIN,
+		width: BUTTON_MENU_MAIN_WIDTH,
 		height: STACKED_BUTTON_HEIGHT,
 		backgroundColor: BUTTON_MODAL_BACKGROUND,
 		marginBottom: 1,
@@ -93,7 +93,7 @@ export default class DialogMenuMain extends ComponentBase<DialogMenuMainProps, D
 		this.language = UiStore.getLanguage();
 
 		this.animatedScale = RX.Animated.createValue(animatedSizeStart);
-		this.animatedTranslateX = RX.Animated.createValue(BUTTON_WIDTH_MAIN / 2);
+		this.animatedTranslateX = RX.Animated.createValue(BUTTON_MENU_MAIN_WIDTH / 2);
 		this.animatedTranslateY = RX.Animated.createValue(-((4 * STACKED_BUTTON_HEIGHT) / 2));
 		this.animatedStyle = RX.Styles.createAnimatedViewStyle({
 			transform: [
