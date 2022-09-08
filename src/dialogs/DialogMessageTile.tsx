@@ -150,7 +150,6 @@ interface DialogMessageTileProps extends RX.CommonProps {
 	setReplyMessage: (message: MessageEvent | undefined) => void;
 	showTempForwardedMessage?: (roomId: string, message?: MessageEvent, tempId?: string) => void;
 	layout: LayoutInfo;
-	marginStyle: RX.Types.ViewStyleRuleSet;
 }
 
 interface DialogMessageTileState {
@@ -165,9 +164,11 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 	private isElectron: boolean;
 	private isMobile: boolean;
 	private isMedia: boolean;
-	private animatedValue: RX.Animated.Value;
+	private animatedScale: RX.Animated.Value;
+	private animatedTranslateX: RX.Animated.Value;
 	private animatedStyle: RX.Types.AnimatedViewStyleRuleSet;
 	private confirmationDialog: ReactElement | undefined;
+	private rightAlignment: boolean;
 
 	constructor(props: DialogMessageTileProps) {
 		super(props);
@@ -177,9 +178,13 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 		this.isMobile = ['android', 'ios'].includes(UiStore.getPlatform());
 		this.isMedia = ['m.file', 'm.image', 'm.video'].includes(this.props.event.content.msgtype!);
 
-		this.animatedValue = RX.Animated.createValue(animatedSizeStart);
+		this.rightAlignment =
+			this.props.roomType === 'notepad' || this.props.event.senderId !== ApiClient.credentials.userIdFull;
+
+		this.animatedScale = RX.Animated.createValue(animatedSizeStart);
+		this.animatedTranslateX = RX.Animated.createValue((BUTTON_MENU_WIDTH / 2) * (this.rightAlignment ? 1 : -1));
 		this.animatedStyle = RX.Styles.createAnimatedViewStyle({
-			transform: [{ scale: this.animatedValue }],
+			transform: [{ translateX: this.animatedTranslateX, scale: this.animatedScale }],
 		});
 
 		props.setReplyMessage(undefined);
@@ -206,12 +211,20 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 	public componentDidMount(): void {
 		super.componentDidMount();
 
-		RX.Animated.timing(this.animatedValue, {
-			duration: animatedDuration,
-			toValue: 1,
-			easing: animatedEasing,
-			useNativeDriver: true,
-		}).start();
+		RX.Animated.parallel([
+			RX.Animated.timing(this.animatedScale, {
+				duration: animatedDuration,
+				toValue: 1,
+				easing: animatedEasing,
+				useNativeDriver: true,
+			}),
+			RX.Animated.timing(this.animatedTranslateX, {
+				duration: animatedDuration,
+				toValue: 0,
+				easing: animatedEasing,
+				useNativeDriver: true,
+			}),
+		]).start();
 	}
 
 	private setReplyMessage = () => {
@@ -848,7 +861,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 
 			let right = undefined;
 			let left = undefined;
-			if (this.props.roomType === 'notepad' || this.props.event.senderId !== ApiClient.credentials.userIdFull) {
+			if (this.rightAlignment) {
 				right = 0;
 			} else {
 				left = 0;
