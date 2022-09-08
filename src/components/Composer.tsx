@@ -49,6 +49,7 @@ import ProgressDialog from '../modules/ProgressDialog';
 import { UploadFileInfo } from '../models/UploadFileInfo';
 import ReplyMessage from './ReplyMessage';
 import AsyncStorage from '../modules/AsyncStorage';
+import DialogMenuComposer from '../dialogs/DialogMenuComposer';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -289,7 +290,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 		});
 	};
 
-	private getTextInputFromStorage = (roomId: string) => {		
+	private getTextInputFromStorage = (roomId: string) => {
 		AsyncStorage.getItem('composer' + roomId)
 			.then(textInput => {
 				this.textInput = textInput || '';
@@ -400,7 +401,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 		}, 250);
 	};
 
-	private onPressAttachmentButton = async () => {
+	private onPressAttachment = async () => {
 		const fetchProgress = (_text: string, _progress: number) => {
 			this.progressText = _text;
 			this.setState({ progressValue: _progress });
@@ -604,47 +605,34 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 		}
 	};
 
-	private showJitsiMeetDialog = (): Promise<boolean> => {
+	private onPressVideoCall = (): void => {
 		RX.Modal.dismissAll();
 
-		return new Promise(resolve => {
-			const text = (
-				<RX.Text style={styles.textDialog}>
-					<RX.Text>{pressOKJitsi[this.language + '_' + this.props.roomType.substr(0, 2)]}</RX.Text>
-				</RX.Text>
-			);
+		const text = (
+			<RX.Text style={styles.textDialog}>
+				<RX.Text>{pressOKJitsi[this.language + '_' + this.props.roomType.substr(0, 2)]}</RX.Text>
+			</RX.Text>
+		);
 
-			const jitsiMeetDialog = (
-				<DialogContainer
-					content={text}
-					confirmButton={true}
-					confirmButtonText={'OK'}
-					cancelButton={true}
-					cancelButtonText={cancel[this.language]}
-					onConfirm={() => {
-						resolve(true);
-					}}
-					onCancel={() => {
-						resolve(false);
-					}}
-				/>
-			);
+		const videoCallDialog = (
+			<DialogContainer
+				content={text}
+				confirmButton={true}
+				confirmButtonText={'OK'}
+				cancelButton={true}
+				cancelButtonText={cancel[this.language]}
+				onConfirm={this.startVideoCall}
+				onCancel={() => RX.Modal.dismiss('video_call_dialog')}
+			/>
+		);
 
-			RX.Modal.show(jitsiMeetDialog, 'jitsiMeetDialog');
-		});
+		RX.Modal.show(videoCallDialog, 'video_call_dialog');
 	};
 
-	private startJitsiMeet = async () => {
+	private startVideoCall = async () => {
 		this.textInputComponent?.blur();
 
-		const shouldJoin = await this.showJitsiMeetDialog();
-
-		if (!shouldJoin) {
-			RX.Modal.dismiss('jitsiMeetDialog');
-			return;
-		}
-
-		RX.Modal.dismiss('jitsiMeetDialog');
+		RX.Modal.dismiss('video_call_dialog');
 
 		const jitsiMeetId = APP_ID + '.' + this.props.roomId.substr(1, 15).toLowerCase();
 
@@ -729,6 +717,17 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 		this.setState({ showReplyMessage: false });
 	};
 
+	private showMenu = () => {
+		const dialogMenuMain = (
+			<DialogMenuComposer
+				onPressFile={this.onPressAttachment}
+				onPressVideoCall={this.onPressVideoCall}
+			/>
+		);
+
+		RX.Modal.show(dialogMenuMain, 'dialog_menu_main');
+	};
+
 	public render(): ReactElement | null {
 		const disabledOpacity = 0.4;
 
@@ -753,34 +752,11 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 			);
 		}
 
-		const iconReductionFactor = 1.6;
-
 		return (
 			<RX.View style={styles.container}>
 				<RX.Button
 					style={styles.button}
-					onPress={this.startJitsiMeet}
-					disableTouchOpacityAnimation={false}
-					underlayColor={BUTTON_FILL}
-					activeOpacity={0.8}
-					disabled={
-						this.state.offline ||
-						this.state.jitsiActive ||
-						['community', 'notepad'].includes(this.props.roomType) ||
-						!this.props.roomActive
-					}
-					disabledOpacity={disabledOpacity}
-				>
-					<IconSvg
-						source={require('../resources/svg/RI_videocam.json') as SvgFile}
-						fillColor={BUTTON_FILL}
-						height={BUTTON_COMPOSER_WIDTH / iconReductionFactor}
-						width={BUTTON_COMPOSER_WIDTH / iconReductionFactor}
-					/>
-				</RX.Button>
-				<RX.Button
-					style={styles.button}
-					onPress={this.onPressAttachmentButton}
+					onPress={this.showMenu}
 					disableTouchOpacityAnimation={false}
 					underlayColor={BUTTON_FILL}
 					activeOpacity={0.8}
@@ -788,10 +764,10 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 					disabledOpacity={disabledOpacity}
 				>
 					<IconSvg
-						source={require('../resources/svg/RI_attach.json') as SvgFile}
+						source={require('../resources/svg/RI_menu.json') as SvgFile}
 						fillColor={BUTTON_FILL}
-						height={BUTTON_COMPOSER_WIDTH / iconReductionFactor}
-						width={BUTTON_COMPOSER_WIDTH / iconReductionFactor}
+						height={18}
+						width={18}
 					/>
 				</RX.Button>
 				<RX.Button
@@ -807,8 +783,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 					<IconSvg
 						source={require('../resources/svg/RI_smiley.json') as SvgFile}
 						fillColor={BUTTON_FILL}
-						height={BUTTON_COMPOSER_WIDTH / iconReductionFactor}
-						width={BUTTON_COMPOSER_WIDTH / iconReductionFactor}
+						height={20}
+						width={20}
 					/>
 				</RX.Button>
 				<RX.View style={styles.textInputContainer}>
@@ -845,8 +821,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 					<IconSvg
 						source={require('../resources/svg/RI_send.json') as SvgFile}
 						fillColor={BUTTON_FILL}
-						height={BUTTON_COMPOSER_WIDTH / iconReductionFactor}
-						width={BUTTON_COMPOSER_WIDTH / iconReductionFactor}
+						height={20}
+						width={20}
 					/>
 				</RX.Button>
 				{progressDialog}

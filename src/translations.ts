@@ -1215,10 +1215,10 @@ export const jitsiStartedExternal: Translation = {
 };
 
 export const jitsiStartedInternal: Translation = {
-	en: 'Videoconference started / joined. Press the video icon next to the message input field to also join.',
-	de: 'Videokonferenz gestartet / beigetreten. Drücken Sie auf das Videosymbol neben dem Texteingabefeld, um ebenfalls teilzunehmen.',
-	fr: "Vidéoconférence lancée / jointe. Appuyez sur l'icône vidéo à côté du champ de saisie du message pour vous joindre également.",
-	es: 'Videoconferencia iniciada / conectada. Pulse el icono de vídeo situado junto al campo de entrada de mensajes para unirse también.',
+	en: 'Videoconference started / joined. Join by using the menu on the left of the message input field.',
+	de: 'Videokonferenz gestartet / beigetreten. Nehmen Sie teil, indem Sie das Menü links neben dem Texteingabefeld verwenden.',
+	fr: 'Vidéoconférence lancée / jointe. Joignez vous en utilisant le menu à gauche du champ de saisie du message.',
+	es: 'Videoconferencia iniciada / conectada. Únase utilizando el menú a la izquierda del campo de entrada de mensajes.',
 };
 
 export const jitsiStartedShort: Translation = {
@@ -1353,4 +1353,18 @@ export const logout: Translation = {
 	de: 'Ausloggen',
 	fr: 'Déconnexion',
 	es: 'Desconexión',
+};
+
+export const sendFile: Translation = {
+	en: 'Send file',
+	de: 'Datei senden',
+	fr: 'Envoi de fichier',
+	es: 'Enviar archivo',
+};
+
+export const videoconference: Translation = {
+	en: 'Videoconference',
+	de: 'Videokonferenz',
+	fr: 'Vidéoconférence',
+	es: 'Videoconferencia',
 };
