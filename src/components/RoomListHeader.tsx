@@ -56,7 +56,6 @@ const styles = {
 		borderRadius: (BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN) / 2,
 		width: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
 		height: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
-		margin: SPACING,
 		justifyContent: 'center',
 		alignItems: 'center',
 	}),
