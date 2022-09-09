@@ -720,6 +720,9 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 	private showMenu = () => {
 		const dialogMenuMain = (
 			<DialogMenuComposer
+				roomType={this.props.roomType}
+				roomActive={this.props.roomActive}
+				jitsiActive={this.state.jitsiActive}
 				onPressFile={this.onPressAttachment}
 				onPressVideoCall={this.onPressVideoCall}
 			/>

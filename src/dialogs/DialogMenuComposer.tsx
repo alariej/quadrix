@@ -23,6 +23,7 @@ import {
 import { Languages, sendFile, videoconference } from '../translations';
 import AppFont from '../modules/AppFont';
 import IconSvg, { SvgFile } from '../components/IconSvg';
+import { RoomType } from '../models/MatrixApi';
 
 const styles = {
 	modalScreen: RX.Styles.createViewStyle({
@@ -70,6 +71,9 @@ const animatedDuration = 500;
 const animatedEasing = RX.Animated.Easing.InOutBack();
 
 interface DialogMenuComposerProps {
+	roomType: RoomType;
+	roomActive: boolean;
+	jitsiActive: boolean;
 	onPressFile: () => void;
 	onPressVideoCall: () => void;
 }
@@ -160,24 +164,30 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 			</RX.Button>
 		);
 
+		const videoCallButtonDisabled =
+			this.state.offline ||
+			this.props.jitsiActive ||
+			['community', 'notepad'].includes(this.props.roomType) ||
+			!this.props.roomActive;
+
 		const videoCallButton = (
 			<RX.Button
 				style={styles.buttonDialog}
 				onPress={this.props.onPressVideoCall}
 				disableTouchOpacityAnimation={true}
 				activeOpacity={1}
-				disabled={this.state.offline}
+				disabled={videoCallButtonDisabled}
 				disabledOpacity={1}
 			>
 				<RX.Text
 					allowFontScaling={false}
-					style={[styles.buttonText, { opacity: this.state.offline ? 0.3 : 1 }]}
+					style={[styles.buttonText, { opacity: videoCallButtonDisabled ? 0.3 : 1 }]}
 				>
 					{videoconference[this.language]}
 				</RX.Text>
 				<IconSvg
 					source={require('../resources/svg/RI_videocam.json') as SvgFile}
-					style={{ opacity: this.state.offline ? 0.3 : 1 }}
+					style={{ opacity: videoCallButtonDisabled ? 0.3 : 1 }}
 					fillColor={ICON_INFO_FILL}
 					height={ICON_INFO_SIZE}
 					width={ICON_INFO_SIZE}
