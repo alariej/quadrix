@@ -99,7 +99,9 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
 	constructor(props: DialogContainerProps) {
 		super(props);
 
-		this.animatedValue = RX.Animated.createValue(0.9);
+		const startValue = this.props.animated ? 0.8 : 1;
+
+		this.animatedValue = RX.Animated.createValue(startValue);
 		this.animatedStyle = RX.Styles.createAnimatedViewStyle({
 			transform: [{ scale: this.animatedValue }],
 		});
