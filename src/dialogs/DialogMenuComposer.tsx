@@ -10,7 +10,6 @@ import {
 	STACKED_BUTTON_HEIGHT,
 	FONT_LARGE,
 	SPACING,
-	OPAQUE_LIGHT_BACKGROUND,
 	ICON_INFO_SIZE,
 	ICON_INFO_FILL,
 	OBJECT_MARGIN,
@@ -19,11 +18,13 @@ import {
 	BUTTON_COMPOSER_WIDTH,
 	HEADER_HEIGHT,
 	BUTTON_MENU_COMPOSER_WIDTH,
+	LIGHT_BACKGROUND,
 } from '../ui';
 import { Languages, sendFile, videoconference } from '../translations';
 import AppFont from '../modules/AppFont';
-import IconSvg, { SvgFile } from '../components/IconSvg';
+import { SvgFile } from '../components/IconSvg';
 import { RoomType } from '../models/MatrixApi';
+import AnimatedButton from '../components/AnimatedButton';
 
 const styles = {
 	modalScreen: RX.Styles.createViewStyle({
@@ -31,14 +32,9 @@ const styles = {
 		alignSelf: 'stretch',
 		backgroundColor: OPAQUE_BACKGROUND,
 	}),
-	menu: RX.Styles.createViewStyle({
-		position: 'absolute',
-		overflow: 'visible',
-	}),
 	buttonContainer: RX.Styles.createViewStyle({
 		position: 'absolute',
 		flexDirection: 'column',
-		overflow: 'visible',
 	}),
 	buttonDialog: RX.Styles.createViewStyle({
 		flexDirection: 'row',
@@ -49,12 +45,6 @@ const styles = {
 		height: STACKED_BUTTON_HEIGHT,
 		backgroundColor: BUTTON_MODAL_BACKGROUND,
 		marginBottom: 1,
-		shadowOffset: { width: -1, height: 1 },
-		shadowColor: OPAQUE_LIGHT_BACKGROUND,
-		shadowRadius: 3,
-		elevation: 3,
-		shadowOpacity: 1,
-		overflow: 'visible',
 	}),
 	buttonText: RX.Styles.createTextStyle({
 		flex: 1,
@@ -140,28 +130,19 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 
 	public render(): JSX.Element | null {
 		const fileButton = (
-			<RX.Button
-				style={styles.buttonDialog}
+			<AnimatedButton
+				buttonStyle={styles.buttonDialog}
+				iconSource={require('../resources/svg/RI_attach.json') as SvgFile}
+				iconStyle={{ opacity: this.state.offline ? 0.3 : 1 }}
+				iconFillColor={ICON_INFO_FILL}
+				iconHeight={ICON_INFO_SIZE}
+				iconWidth={ICON_INFO_SIZE}
+				animatedColor={LIGHT_BACKGROUND}
 				onPress={this.props.onPressFile}
-				disableTouchOpacityAnimation={true}
-				activeOpacity={1}
 				disabled={this.state.offline}
-				disabledOpacity={1}
-			>
-				<RX.Text
-					allowFontScaling={false}
-					style={[styles.buttonText, { opacity: this.state.offline ? 0.3 : 1 }]}
-				>
-					{sendFile[this.language]}
-				</RX.Text>
-				<IconSvg
-					source={require('../resources/svg/RI_attach.json') as SvgFile}
-					style={{ opacity: this.state.offline ? 0.3 : 1 }}
-					fillColor={ICON_INFO_FILL}
-					height={ICON_INFO_SIZE}
-					width={ICON_INFO_SIZE}
-				/>
-			</RX.Button>
+				text={sendFile[this.language]}
+				textStyle={[styles.buttonText, { opacity: this.state.offline ? 0.3 : 1 }]}
+			/>
 		);
 
 		const videoCallButtonDisabled =
@@ -171,28 +152,19 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 			!this.props.roomActive;
 
 		const videoCallButton = (
-			<RX.Button
-				style={styles.buttonDialog}
+			<AnimatedButton
+				buttonStyle={styles.buttonDialog}
+				iconSource={require('../resources/svg/RI_videocam.json') as SvgFile}
+				iconStyle={{ opacity: videoCallButtonDisabled ? 0.3 : 1 }}
+				iconFillColor={ICON_INFO_FILL}
+				iconHeight={ICON_INFO_SIZE}
+				iconWidth={ICON_INFO_SIZE}
+				animatedColor={LIGHT_BACKGROUND}
 				onPress={this.props.onPressVideoCall}
-				disableTouchOpacityAnimation={true}
-				activeOpacity={1}
 				disabled={videoCallButtonDisabled}
-				disabledOpacity={1}
-			>
-				<RX.Text
-					allowFontScaling={false}
-					style={[styles.buttonText, { opacity: videoCallButtonDisabled ? 0.3 : 1 }]}
-				>
-					{videoconference[this.language]}
-				</RX.Text>
-				<IconSvg
-					source={require('../resources/svg/RI_videocam.json') as SvgFile}
-					style={{ opacity: videoCallButtonDisabled ? 0.3 : 1 }}
-					fillColor={ICON_INFO_FILL}
-					height={ICON_INFO_SIZE}
-					width={ICON_INFO_SIZE}
-				/>
-			</RX.Button>
+				text={videoconference[this.language]}
+				textStyle={[styles.buttonText, { opacity: videoCallButtonDisabled ? 0.3 : 1 }]}
+			/>
 		);
 
 		const appLayout = UiStore.getAppLayout_();
@@ -218,7 +190,7 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 				onPress={this.dismissDialog}
 				disableTouchOpacityAnimation={true}
 			>
-				<RX.View style={styles.menu}>{contextMenu}</RX.View>
+				{contextMenu}
 			</RX.View>
 		);
 	}

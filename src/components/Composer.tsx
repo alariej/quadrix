@@ -28,7 +28,6 @@ import {
 	messageCouldNotBeSent,
 	cancel,
 	sending,
-	clickHereOrPressShftEnter,
 	pressOKJitsi,
 	jitsiStartedExternal,
 	jitsiStartedInternal,
@@ -50,6 +49,7 @@ import { UploadFileInfo } from '../models/UploadFileInfo';
 import ReplyMessage from './ReplyMessage';
 import AsyncStorage from '../modules/AsyncStorage';
 import DialogMenuComposer from '../dialogs/DialogMenuComposer';
+import AnimatedButton from './AnimatedButton';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -732,8 +732,6 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 	};
 
 	public render(): ReactElement | null {
-		const disabledOpacity = 0.4;
-
 		let progressDialog: ReactElement | undefined;
 		if (this.state.showProgress) {
 			progressDialog = (
@@ -757,31 +755,26 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
 		return (
 			<RX.View style={styles.container}>
-				<RX.Button
-					style={styles.button}
+				<AnimatedButton
+					buttonStyle={styles.button}
+					iconSource={require('../resources/svg/RI_menu.json') as SvgFile}
+					iconStyle={{ opacity: this.state.offline || !this.props.roomActive ? 0.3 : 1 }}
+					iconFillColor={BUTTON_FILL}
+					iconHeight={18}
+					iconWidth={18}
+					animatedColor={BUTTON_FILL}
 					onPress={this.showMenu}
-					disableTouchOpacityAnimation={false}
-					underlayColor={BUTTON_FILL}
-					activeOpacity={0.8}
 					disabled={this.state.offline || !this.props.roomActive}
-					disabledOpacity={disabledOpacity}
-				>
-					<IconSvg
-						source={require('../resources/svg/RI_menu.json') as SvgFile}
-						fillColor={BUTTON_FILL}
-						height={18}
-						width={18}
-					/>
-				</RX.Button>
+				/>
 				<RX.Button
 					style={styles.button}
 					ref={component => (this.buttonComponent = component!)}
 					onPressIn={this.toggleEmojiPicker}
 					disableTouchOpacityAnimation={false}
 					underlayColor={BUTTON_FILL}
-					activeOpacity={0.8}
+					activeOpacity={0.7}
 					disabled={!this.props.roomActive}
-					disabledOpacity={disabledOpacity}
+					disabledOpacity={0.3}
 				>
 					<IconSvg
 						source={require('../resources/svg/RI_smiley.json') as SvgFile}
@@ -811,23 +804,19 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 						onSelectionChange={this.onSelectionChange}
 					/>
 				</RX.View>
-				<RX.Button
-					style={styles.buttonSend}
-					title={clickHereOrPressShftEnter[this.language]}
+				<AnimatedButton
+					buttonStyle={styles.buttonSend}
+					iconSource={require('../resources/svg/RI_send.json') as SvgFile}
+					iconStyle={{
+						opacity: this.state.offline || !this.props.roomActive || this.state.sendDisabled ? 0.3 : 1,
+					}}
+					iconFillColor={BUTTON_FILL}
+					iconHeight={20}
+					iconWidth={20}
+					animatedColor={BUTTON_FILL}
 					onPress={this.onPressSendButton}
-					disableTouchOpacityAnimation={false}
-					underlayColor={BUTTON_FILL}
-					activeOpacity={0.8}
 					disabled={this.state.offline || !this.props.roomActive || this.state.sendDisabled}
-					disabledOpacity={disabledOpacity}
-				>
-					<IconSvg
-						source={require('../resources/svg/RI_send.json') as SvgFile}
-						fillColor={BUTTON_FILL}
-						height={20}
-						width={20}
-					/>
-				</RX.Button>
+				/>
 				{progressDialog}
 			</RX.View>
 		);

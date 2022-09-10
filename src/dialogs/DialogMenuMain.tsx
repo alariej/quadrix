@@ -10,7 +10,6 @@ import {
 	STACKED_BUTTON_HEIGHT,
 	FONT_LARGE,
 	SPACING,
-	OPAQUE_LIGHT_BACKGROUND,
 	ICON_INFO_SIZE,
 	ICON_INFO_FILL,
 	OBJECT_MARGIN,
@@ -19,10 +18,12 @@ import {
 	BUTTON_HEADER_MARGIN,
 	PAGE_WIDE_PADDING,
 	BUTTON_MENU_MAIN_WIDTH,
+	LIGHT_BACKGROUND,
 } from '../ui';
 import { about, Languages, logout, newRoom, userSettings } from '../translations';
 import AppFont from '../modules/AppFont';
-import IconSvg, { SvgFile } from '../components/IconSvg';
+import { SvgFile } from '../components/IconSvg';
+import AnimatedButton from '../components/AnimatedButton';
 
 const styles = {
 	modalScreen: RX.Styles.createViewStyle({
@@ -30,14 +31,9 @@ const styles = {
 		alignSelf: 'stretch',
 		backgroundColor: OPAQUE_BACKGROUND,
 	}),
-	menu: RX.Styles.createViewStyle({
-		position: 'absolute',
-		overflow: 'visible',
-	}),
 	buttonContainer: RX.Styles.createViewStyle({
 		position: 'absolute',
 		flexDirection: 'column',
-		overflow: 'visible',
 	}),
 	buttonDialog: RX.Styles.createViewStyle({
 		flexDirection: 'row',
@@ -48,12 +44,6 @@ const styles = {
 		height: STACKED_BUTTON_HEIGHT,
 		backgroundColor: BUTTON_MODAL_BACKGROUND,
 		marginBottom: 1,
-		shadowOffset: { width: -1, height: 1 },
-		shadowColor: OPAQUE_LIGHT_BACKGROUND,
-		shadowRadius: 3,
-		elevation: 3,
-		shadowOpacity: 1,
-		overflow: 'visible',
 	}),
 	buttonText: RX.Styles.createTextStyle({
 		flex: 1,
@@ -138,103 +128,69 @@ export default class DialogMenuMain extends ComponentBase<DialogMenuMainProps, D
 
 	public render(): JSX.Element | null {
 		const newChatButton = (
-			<RX.Button
-				style={styles.buttonDialog}
+			<AnimatedButton
+				buttonStyle={styles.buttonDialog}
+				iconSource={require('../resources/svg/RI_newchat.json') as SvgFile}
+				iconStyle={{ opacity: this.state.offline ? 0.3 : 1 }}
+				iconFillColor={ICON_INFO_FILL}
+				iconHeight={ICON_INFO_SIZE}
+				iconWidth={ICON_INFO_SIZE}
+				animatedColor={LIGHT_BACKGROUND}
 				onPress={this.props.onPressNewChat}
-				disableTouchOpacityAnimation={true}
-				activeOpacity={1}
 				disabled={this.state.offline}
-				disabledOpacity={1}
-			>
-				<RX.Text
-					allowFontScaling={false}
-					style={[styles.buttonText, { opacity: this.state.offline ? 0.3 : 1 }]}
-				>
-					{newRoom[this.language]}
-				</RX.Text>
-				<IconSvg
-					source={require('../resources/svg/RI_newchat.json') as SvgFile}
-					style={{ opacity: this.state.offline ? 0.3 : 1 }}
-					fillColor={ICON_INFO_FILL}
-					height={ICON_INFO_SIZE}
-					width={ICON_INFO_SIZE}
-				/>
-			</RX.Button>
+				text={newRoom[this.language]}
+				textStyle={[styles.buttonText, { opacity: this.state.offline ? 0.3 : 1 }]}
+			/>
 		);
 
 		const settingsButton = (
-			<RX.Button
-				style={styles.buttonDialog}
+			<AnimatedButton
+				buttonStyle={styles.buttonDialog}
+				iconSource={require('../resources/svg/RI_settings.json') as SvgFile}
+				iconStyle={{ opacity: this.state.offline ? 0.3 : 1 }}
+				iconFillColor={ICON_INFO_FILL}
+				iconHeight={ICON_INFO_SIZE}
+				iconWidth={ICON_INFO_SIZE}
+				animatedColor={LIGHT_BACKGROUND}
 				onPress={this.props.onPressSettings}
-				disableTouchOpacityAnimation={true}
-				activeOpacity={1}
 				disabled={this.state.offline}
-				disabledOpacity={1}
-			>
-				<RX.Text
-					allowFontScaling={false}
-					style={[styles.buttonText, { opacity: this.state.offline ? 0.3 : 1 }]}
-				>
-					{userSettings[this.language]}
-				</RX.Text>
-				<IconSvg
-					source={require('../resources/svg/RI_settings.json') as SvgFile}
-					style={{ opacity: this.state.offline ? 0.3 : 1 }}
-					fillColor={ICON_INFO_FILL}
-					height={ICON_INFO_SIZE}
-					width={ICON_INFO_SIZE}
-				/>
-			</RX.Button>
+				text={userSettings[this.language]}
+				textStyle={[styles.buttonText, { opacity: this.state.offline ? 0.3 : 1 }]}
+			/>
 		);
 
 		const aboutButton = (
-			<RX.Button
-				style={styles.buttonDialog}
+			<AnimatedButton
+				buttonStyle={styles.buttonDialog}
+				iconSource={require('../resources/svg/RI_info.json') as SvgFile}
+				iconFillColor={ICON_INFO_FILL}
+				iconHeight={ICON_INFO_SIZE}
+				iconWidth={ICON_INFO_SIZE}
+				animatedColor={LIGHT_BACKGROUND}
 				onPress={this.props.onPressAbout}
-				disableTouchOpacityAnimation={true}
-				activeOpacity={1}
-			>
-				<RX.Text
-					allowFontScaling={false}
-					style={styles.buttonText}
-				>
-					{about[this.language]}
-				</RX.Text>
-				<IconSvg
-					source={require('../resources/svg/RI_info.json') as SvgFile}
-					fillColor={ICON_INFO_FILL}
-					height={ICON_INFO_SIZE}
-					width={ICON_INFO_SIZE}
-				/>
-			</RX.Button>
+				text={about[this.language]}
+				textStyle={styles.buttonText}
+			/>
 		);
 
 		const logoutButton = (
-			<RX.Button
-				style={styles.buttonDialog}
+			<AnimatedButton
+				buttonStyle={styles.buttonDialog}
+				iconSource={require('../resources/svg/RI_power.json') as SvgFile}
+				iconFillColor={ICON_INFO_FILL}
+				iconHeight={ICON_INFO_SIZE}
+				iconWidth={ICON_INFO_SIZE}
+				animatedColor={LIGHT_BACKGROUND}
 				onPress={this.props.onPressLogout}
-				disableTouchOpacityAnimation={true}
-				activeOpacity={1}
-			>
-				<RX.Text
-					allowFontScaling={false}
-					style={styles.buttonText}
-				>
-					{logout[this.language]}
-				</RX.Text>
-				<IconSvg
-					source={require('../resources/svg/RI_power.json') as SvgFile}
-					fillColor={ICON_INFO_FILL}
-					height={ICON_INFO_SIZE}
-					width={ICON_INFO_SIZE}
-				/>
-			</RX.Button>
+				text={logout[this.language]}
+				textStyle={styles.buttonText}
+			/>
 		);
 
 		const appLayout = UiStore.getAppLayout_();
 
 		const right =
-			(appLayout.type === 'wide' ? -appLayout.screenWidth / 2 + PAGE_WIDE_PADDING : -appLayout.screenWidth) +
+			(appLayout.type === 'wide' ? appLayout.screenWidth / 2 + PAGE_WIDE_PADDING : 0) +
 			(BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN) +
 			PAGE_MARGIN +
 			OBJECT_MARGIN;
@@ -256,7 +212,7 @@ export default class DialogMenuMain extends ComponentBase<DialogMenuMainProps, D
 				onPress={this.dismissDialog}
 				disableTouchOpacityAnimation={true}
 			>
-				<RX.View style={styles.menu}>{contextMenu}</RX.View>
+				{contextMenu}
 			</RX.View>
 		);
 	}

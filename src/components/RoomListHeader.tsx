@@ -28,6 +28,7 @@ import AppFont from '../modules/AppFont';
 import FileHandler from '../modules/FileHandler';
 import DialogMenuMain from '../dialogs/DialogMenuMain';
 import About from './About';
+import AnimatedButton from './AnimatedButton';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -239,21 +240,15 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 						<RX.View style={styles.bracketRight} />
 					</RX.View>
 				</RX.View>
-				<RX.Button
-					style={styles.roundButton}
+				<AnimatedButton
+					buttonStyle={styles.roundButton}
+					iconSource={require('../resources/svg/RI_menu.json') as SvgFile}
+					iconFillColor={BUTTON_FILL}
+					iconHeight={BUTTON_HEADER_WIDTH}
+					iconWidth={BUTTON_HEADER_WIDTH}
+					animatedColor={BUTTON_FILL}
 					onPress={() => (this.state.isJitsiMaximised ? null : this.showMenu())}
-					disableTouchOpacityAnimation={false}
-					underlayColor={BUTTON_FILL}
-					activeOpacity={0.8}
-				>
-					<IconSvg
-						source={require('../resources/svg/RI_menu.json') as SvgFile}
-						style={{ marginBottom: 1 }}
-						fillColor={BUTTON_FILL}
-						height={BUTTON_HEADER_WIDTH}
-						width={BUTTON_HEADER_WIDTH}
-					/>
-				</RX.Button>
+				/>
 			</RX.View>
 		);
 	}

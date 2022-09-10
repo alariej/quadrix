@@ -38,6 +38,7 @@ import UserPresence from './UserPresence';
 import FileHandler from '../modules/FileHandler';
 import CachedImage from '../modules/CachedImage';
 import StringUtils from '../utils/StringUtils';
+import AnimatedButton from './AnimatedButton';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -470,20 +471,15 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 					</RX.View>
 				</RX.View>
 				<RX.View style={styles.containerHomeButton}>
-					<RX.Button
-						style={styles.roundButton}
+					<AnimatedButton
+						buttonStyle={styles.roundButton}
+						iconSource={require('../resources/svg/RI_arrowleft.json') as SvgFile}
+						iconFillColor={BUTTON_FILL}
+						iconHeight={BUTTON_HEADER_WIDTH}
+						iconWidth={BUTTON_HEADER_WIDTH}
+						animatedColor={BUTTON_FILL}
 						onPress={this.onPressHomeButton}
-						disableTouchOpacityAnimation={false}
-						underlayColor={BUTTON_FILL}
-						activeOpacity={0.8}
-					>
-						<IconSvg
-							source={require('../resources/svg/RI_arrowleft.json') as SvgFile}
-							fillColor={BUTTON_FILL}
-							height={BUTTON_HEADER_WIDTH}
-							width={BUTTON_HEADER_WIDTH}
-						/>
-					</RX.Button>
+					/>
 					{unread}
 				</RX.View>
 			</RX.View>
