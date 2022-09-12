@@ -80,11 +80,18 @@ interface MainState {
 	layout: Layout;
 }
 
+const animatedRoomTranslateX = -2 * PAGE_WIDE_PADDING;
+const animatedRoomDurationIn = 150;
+const animatedRoomDurationOut = 450;
+
 export default class Main extends ComponentBase<MainProps, MainState> {
 	private message!: MessageEvent;
 	private tempId = '';
 	private jitsiMeetId = '';
-	private animatedValue!: RX.Animated.Value;
+	private animatedTranslateXRoom: RX.Animated.Value;
+	private animatedOpacityRoom: RX.Animated.Value;
+	private animationRoomIn: RX.Types.Animated.CompositeAnimation;
+	private animationRoomOut: RX.Types.Animated.CompositeAnimation;
 	private animatedStyle: RX.Types.AnimatedViewStyleRuleSet;
 	private roomList: ReactElement | undefined;
 	private room: ReactElement | undefined;
@@ -106,6 +113,43 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 				showLogin={this.props.showLogin}
 			/>
 		);
+
+		this.animatedTranslateXRoom = RX.Animated.createValue(animatedRoomTranslateX);
+		this.animatedOpacityRoom = RX.Animated.createValue(0);
+		this.animatedStyle = RX.Styles.createAnimatedViewStyle({
+			opacity: this.animatedOpacityRoom,
+			transform: [{ translateX: this.animatedTranslateXRoom }],
+		});
+
+		this.animationRoomIn = RX.Animated.parallel([
+			RX.Animated.timing(this.animatedOpacityRoom, {
+				duration: animatedRoomDurationIn,
+				toValue: 0,
+				easing: RX.Animated.Easing.InOut(),
+				useNativeDriver: true,
+			}),
+			RX.Animated.timing(this.animatedTranslateXRoom, {
+				duration: animatedRoomDurationIn,
+				toValue: animatedRoomTranslateX,
+				easing: RX.Animated.Easing.InOut(),
+				useNativeDriver: true,
+			}),
+		]);
+
+		this.animationRoomOut = RX.Animated.parallel([
+			RX.Animated.timing(this.animatedOpacityRoom, {
+				duration: animatedRoomDurationOut,
+				toValue: 1,
+				easing: RX.Animated.Easing.InOut(),
+				useNativeDriver: true,
+			}),
+			RX.Animated.timing(this.animatedTranslateXRoom, {
+				duration: animatedRoomDurationOut,
+				toValue: 0,
+				easing: RX.Animated.Easing.InOut(),
+				useNativeDriver: true,
+			}),
+		]);
 	}
 
 	private changeAppLayout = () => {
@@ -282,22 +326,17 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 			/>
 		);
 
-		if (this.state.layout.type !== 'wide') {
-			this.animatedValue = RX.Animated.createValue(0);
-			this.animatedStyle = RX.Styles.createAnimatedViewStyle({
-				transform: [{ translateX: this.animatedValue }],
+		if (this.state.showRoom) {
+			this.animationRoomIn.start(() => {
+				this.animationRoomOut.start();
+				this.setState({ showRoom: true });
 			});
-
-			RX.Animated.timing(this.animatedValue, {
-				duration: 250,
-				toValue: -this.state.layout.pageWidth,
-				easing: RX.Animated.Easing.InOut(),
-				useNativeDriver: true,
-			}).start();
+		} else {
+			this.animationRoomOut.start();
+			this.setState({ showRoom: true });
 		}
 
 		UiStore.setSelectedRoom(roomId);
-		this.setState({ showRoom: true });
 	};
 
 	private showRoom = (roomId: string) => {
@@ -312,47 +351,27 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 			/>
 		);
 
-		if (this.state.layout.type !== 'wide') {
-			this.animatedValue = RX.Animated.createValue(0);
-			this.animatedStyle = RX.Styles.createAnimatedViewStyle({
-				transform: [{ translateX: this.animatedValue }],
+		if (this.state.showRoom) {
+			this.animationRoomIn.start(() => {
+				this.animationRoomOut.start();
+				this.setState({ showRoom: true });
 			});
-
-			RX.Animated.timing(this.animatedValue, {
-				duration: 250,
-				toValue: -this.state.layout.pageWidth,
-				easing: RX.Animated.Easing.InOut(),
-				useNativeDriver: true,
-			}).start();
+		} else {
+			this.animationRoomOut.start();
+			this.setState({ showRoom: true });
 		}
 
 		UiStore.setSelectedRoom(roomId);
-		this.setState({ showRoom: true });
 	};
 
 	private showRoomList = () => {
-		if (this.state.layout?.type !== 'wide' && this.room) {
-			this.animatedValue = RX.Animated.createValue(-this.state.layout.pageWidth);
-			this.animatedStyle = RX.Styles.createAnimatedViewStyle({
-				transform: [{ translateX: this.animatedValue }],
-			});
-
-			RX.Animated.timing(this.animatedValue, {
-				duration: 250,
-				toValue: 0,
-				easing: RX.Animated.Easing.InOut(),
-				useNativeDriver: true,
-			}).start(() => {
-				this.room = undefined;
-				this.setState({ showRoom: false });
-			});
-
-			this.forceUpdate();
+		if (this.state.showRoom) {
+			this.animationRoomIn.start(() => this.setState({ showRoom: false }));
 		} else {
-			this.room = undefined;
 			this.setState({ showRoom: false });
 		}
 
+		this.room = undefined;
 		UiStore.setSelectedRoom('');
 	};
 
@@ -428,6 +447,10 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 			paddingRight = <RX.View style={styles.paddingRight} />;
 		}
 
+		console.log('********************');
+		console.log(this.state.layout);
+		console.log(this.state.showRoom);
+
 		return (
 			<RX.View style={{ flex: 1 }}>
 				<RX.View
@@ -436,13 +459,20 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 						{
 							width: this.state.layout.containerWidth,
 							alignSelf: this.state.layout.type === 'wide' ? 'center' : undefined,
+							/* 
+							left:
+								this.state.layout.type === 'narrow' && this.state.showRoom
+									? -this.state.layout.pageWidth
+									: 0,
+ 							*/
 						},
 					]}
 				>
+					{roomListPage}
+					{paddingLeft}
+					{paddingRight}
+
 					<RX.Animated.View style={[styles.containerAnimated, this.animatedStyle]}>
-						{roomListPage}
-						{paddingLeft}
-						{paddingRight}
 						{roomPage}
 					</RX.Animated.View>
 				</RX.View>
