@@ -231,7 +231,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 			} else if (!body && body_ && tempId === tempId_) {
 				partialState.eventListItems = this.eventListItems;
 			}
-		} else if (nextProps.tempForwardedMessage !== this.props.tempForwardedMessage) {
+		} else if (nextProps.tempForwardedMessage && (nextProps.tempForwardedMessage !== this.props.tempForwardedMessage)) {
 			const content = nextProps.tempForwardedMessage.message.content;
 			const tempId = nextProps.tempForwardedMessage.tempId;
 			const content_ = this.props.tempForwardedMessage

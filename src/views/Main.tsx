@@ -349,6 +349,15 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 			this.setState({ showRoom: true });
 		}
 
+		if (this.state.layout.type === 'narrow') {
+			RX.Animated.timing(this.animatedContainerTranslateXValue, {
+				duration: animatedContainerDuration,
+				toValue: this.animatedContainerTranslateX,
+				easing: RX.Animated.Easing.InOut(),
+				useNativeDriver: true,
+			}).start();
+		}
+
 		UiStore.setSelectedRoom(roomId);
 	};
 
