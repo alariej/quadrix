@@ -35,6 +35,7 @@ interface ImageMessageState {
 interface ImageMessageProps {
 	roomId: string;
 	message: MessageEvent;
+	animated: boolean;
 	showContextDialog: () => void;
 }
 
@@ -168,7 +169,7 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 						source={this.url}
 						onLoad={this.onLoad}
 						mimeType={this.props.message.content.info?.mimetype}
-						animated={true}
+						animated={this.props.animated}
 					/>
 					{spinner}
 				</RX.View>

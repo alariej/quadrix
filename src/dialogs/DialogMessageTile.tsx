@@ -930,6 +930,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 						isRedacted={false}
 						withSenderDetails={this.state.withSenderDetails}
 						setReplyMessage={() => null}
+						animatedImage={false}
 					/>
 					<RX.View
 						style={[

@@ -127,6 +127,7 @@ interface MessageTileProps {
 	canPress?: boolean;
 	isRedacted: boolean;
 	withSenderDetails?: boolean | undefined;
+	animatedImage: boolean;
 }
 
 export default class MessageTile extends RX.Component<MessageTileProps, RX.Stateless> {
@@ -223,6 +224,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 				<ImageMessage
 					roomId={this.props.roomId}
 					message={this.props.event}
+					animated={this.props.animatedImage}
 					showContextDialog={this.showContextDialog}
 				/>
 			);
@@ -231,6 +233,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 			message = (
 				<VideoMessage
 					message={this.props.event}
+					animated={this.props.animatedImage}
 					showContextDialog={this.showContextDialog}
 				/>
 			);

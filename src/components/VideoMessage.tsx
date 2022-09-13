@@ -37,6 +37,7 @@ const styles = {
 
 interface VideoMessageProps {
 	message: MessageEvent;
+	animated: boolean;
 	showContextDialog: () => void;
 }
 
@@ -97,7 +98,7 @@ export default class VideoMessage extends RX.Component<VideoMessageProps, RX.Sta
 						style={styles.image}
 						source={thumbnailUrl}
 						mimeType={this.props.message.content.info?.thumbnail_info?.mimetype}
-						animated={true}
+						animated={this.props.animated}
 					/>
 					<RX.View style={styles.playIcon}>
 						<IconSvg

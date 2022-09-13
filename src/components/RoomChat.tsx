@@ -496,6 +496,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 						showTempForwardedMessage={this.props.showTempForwardedMessage}
 						canPress={true}
 						isRedacted={cellRender.item.isRedacted || false}
+						animatedImage={true}
 					/>
 				</RX.View>
 			);
