@@ -630,7 +630,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 		RX.Modal.show(videoCallDialog, 'video_call_dialog');
 	};
 
-	private startVideoCall = async () => {
+	private startVideoCall = () => {
 		this.textInputComponent?.blur();
 
 		RX.Modal.dismiss('video_call_dialog');
