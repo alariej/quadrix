@@ -123,13 +123,13 @@ export default class VideoPlayer extends RX.Component<VideoPlayerProps, VideoPla
 
 		const videoPathTemp = ReactNativeBlobUtil.fs.dirs.CacheDir + '/temp.xyz';
 
-		const tempExists = await ReactNativeBlobUtil.fs.exists(videoPathTemp).catch(_err => null);
+		const tempExists = await ReactNativeBlobUtil.fs.exists(videoPathTemp).catch(_error => null);
 
 		if (tempExists) {
-			await ReactNativeBlobUtil.fs.unlink(videoPathTemp).catch(_err => null);
+			await ReactNativeBlobUtil.fs.unlink(videoPathTemp).catch(_error => null);
 		}
 
-		await ReactNativeBlobUtil.fs.cp(this.props.uri.replace('file://', ''), videoPathTemp).catch(_err => null);
+		await ReactNativeBlobUtil.fs.cp(this.props.uri.replace('file://', ''), videoPathTemp).catch(_error => null);
 
 		const html = `
             <!DOCTYPE html>

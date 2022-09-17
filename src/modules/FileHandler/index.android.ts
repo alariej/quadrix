@@ -181,7 +181,7 @@ class FileHandler {
 
 		let uri: string | undefined;
 		if (response.uri.startsWith('content://')) {
-			const stat = await ReactNativeBlobUtil.fs.stat(response.uri).catch(_err => null);
+			const stat = await ReactNativeBlobUtil.fs.stat(response.uri).catch(_error => null);
 			uri = 'file://' + stat?.path;
 		} else {
 			uri = response.uri;
@@ -244,7 +244,7 @@ class FileHandler {
 					minimumFileSizeForCompress: 5,
 				},
 				compressionProgress
-			).catch(_err => null);
+			).catch(_error => null);
 
 			if (compressedUri) {
 				let uri = compressedUri;
@@ -252,7 +252,7 @@ class FileHandler {
 					uri = compressedUri?.replace('file://', 'file:///');
 				}
 
-				const stat = await ReactNativeBlobUtil.fs.stat(uri).catch(_err => null);
+				const stat = await ReactNativeBlobUtil.fs.stat(uri).catch(_error => null);
 
 				file.uri = uri!;
 				fileName = file.name.split('.')[0] + '.mp4';

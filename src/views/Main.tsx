@@ -177,7 +177,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 		Pushers.set(ApiClient.credentials).catch(_error => null);
 
 		if (CLEAR_DATASTORE) {
-			const storedAppVersion = await ApiClient.getStoredAppVersion().catch(_err => null);
+			const storedAppVersion = await ApiClient.getStoredAppVersion().catch(_error => null);
 
 			if (storedAppVersion !== APP_VERSION) {
 				await ApiClient.clearDataStore();

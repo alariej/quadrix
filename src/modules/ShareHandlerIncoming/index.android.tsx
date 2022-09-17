@@ -72,7 +72,7 @@ class ShareHandlerIncoming {
 		RX.Modal.dismiss('DialogRoomPicker');
 
 		if (sharedContent.uri.startsWith('content://')) {
-			const stat = await ReactNativeBlobUtil.fs.stat(sharedContent.uri).catch(_err => null);
+			const stat = await ReactNativeBlobUtil.fs.stat(sharedContent.uri).catch(_error => null);
 			sharedContent.uri = 'file://' + stat?.path;
 		}
 

@@ -227,12 +227,12 @@ class FileHandler {
 					minimumFileSizeForCompress: 5,
 				},
 				compressionProgress
-			).catch(_err => null);
+			).catch(_error => null);
 
 			if (compressedUri) {
 				const stat = await ReactNativeBlobUtil.fs
 					.stat(compressedUri.replace('file://', ''))
-					.catch(_err => null);
+					.catch(_error => null);
 
 				file.uri = compressedUri;
 				fileName = file.name.split('.')[0] + '.mp4';
