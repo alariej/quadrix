@@ -54,7 +54,7 @@ const styles = {
 	}),
 };
 
-export default class About extends RX.Component<{}, RX.Stateless> {
+export default class About extends RX.Component<unknown, RX.Stateless> {
 	private openUrl = (url: string, event: RX.Types.SyntheticEvent) => {
 		event.stopPropagation();
 
