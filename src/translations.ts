@@ -1368,3 +1368,22 @@ export const videoconference: Translation = {
 	fr: 'Vidéoconférence',
 	es: 'Videoconferencia',
 };
+
+export const newVersion = (versionInstalled: string, versionAvailable: string, language: string): string => {
+	switch (language) {
+		case 'en':
+			return `You are using version ${versionInstalled} of Quadrix. Version ${versionAvailable} is now available at:`;
+
+		case 'de':
+			return `Sie verwenden die Version ${versionInstalled} von Quadrix. Version ${versionAvailable} ist jetzt verfügbar unter:`;
+
+		case 'fr':
+			return `Vous utilisez la version ${versionInstalled} de Quadrix. La version ${versionAvailable} est maintenant disponible sur:`;
+
+		case 'es':
+			return `Está utilizando la versión ${versionInstalled} de Quadrix. La versión ${versionAvailable} ya está disponible en:`;
+
+		default:
+			return '';
+	}
+};

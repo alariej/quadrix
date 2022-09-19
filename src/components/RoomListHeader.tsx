@@ -29,6 +29,7 @@ import FileHandler from '../modules/FileHandler';
 import DialogMenuMain from '../dialogs/DialogMenuMain';
 import About from './About';
 import AnimatedButton from './AnimatedButton';
+import StoreVersion from '../modules/StoreVersion';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -60,12 +61,15 @@ const styles = {
 		justifyContent: 'center',
 		alignItems: 'center',
 	}),
-	connectedContainer: RX.Styles.createViewStyle({
+	infoContainer: RX.Styles.createViewStyle({
 		position: 'absolute',
-		height: 14,
-		width: 14,
-		top: SPACING,
-		left: SPACING,
+		width: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
+		height: HEADER_HEIGHT - BUTTON_HEADER_WIDTH - BUTTON_HEADER_MARGIN - SPACING,
+		bottom: SPACING,
+		right: 0,
+		alignItems: 'center',
+		justifyContent: 'center',
+		overflow: 'visible',
 	}),
 	logoutTextDialog: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
@@ -107,6 +111,7 @@ interface RoomListHeaderProps extends RX.CommonProps {
 interface RoomListHeaderState {
 	offline: boolean;
 	isJitsiMaximised: boolean;
+	showInfoButton: boolean;
 }
 
 export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, RoomListHeaderState> {
@@ -118,15 +123,39 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 		this.language = UiStore.getLanguage();
 	}
 
-	protected _buildState(): RoomListHeaderState {
+	protected _buildState(
+		_nextProps: RoomListHeaderProps,
+		initState: boolean,
+		_prevState: RoomListHeaderState
+	): Partial<RoomListHeaderState> {
+		const partialState: Partial<RoomListHeaderState> = {};
+
+		if (initState) {
+			partialState.showInfoButton = false;
+		}
+
 		if (UiStore.getUnknownAccessToken()) {
 			this.logout().catch(_error => null);
 		}
 
-		return {
-			offline: UiStore.getOffline(),
-			isJitsiMaximised: UiStore.getJitsiMaximised(),
-		};
+		partialState.offline = UiStore.getOffline();
+		partialState.isJitsiMaximised = UiStore.getJitsiMaximised();
+
+		return partialState;
+	}
+
+	public componentDidMount() {
+		super.componentDidMount();
+
+		if (!this.state.offline && ['android', 'ios'].includes(UiStore.getPlatform() || UiStore.getIsElectron())) {
+			StoreVersion.check()
+				.then(response => {
+					if (response) {
+						this.setState({ showInfoButton: true });
+					}
+				})
+				.catch(_error => null);
+		}
 	}
 
 	private logout = async () => {
@@ -199,15 +228,32 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 	};
 
 	public render(): JSX.Element | null {
-		let disconnected: ReactElement;
+		let disconnected: ReactElement | undefined;
 		if (this.state.offline) {
 			disconnected = (
-				<RX.View style={styles.connectedContainer}>
+				<RX.View style={styles.infoContainer}>
 					<IconSvg
 						source={require('../resources/svg/RI_nochat.json') as SvgFile}
 						fillColor={TILE_SYSTEM_TEXT}
 						height={14}
 						width={14}
+					/>
+				</RX.View>
+			);
+		}
+
+		let infoButton: ReactElement | undefined;
+		if (!this.state.offline && this.state.showInfoButton) {
+			infoButton = (
+				<RX.View style={styles.infoContainer}>
+					<AnimatedButton
+						buttonStyle={styles.roundButton}
+						iconSource={require('../resources/svg/RI_info.json') as SvgFile}
+						iconFillColor={TILE_SYSTEM_TEXT}
+						iconHeight={BUTTON_HEADER_WIDTH}
+						iconWidth={BUTTON_HEADER_WIDTH}
+						animatedColor={TILE_SYSTEM_TEXT}
+						onPress={() => (this.state.isJitsiMaximised ? null : StoreVersion.showDialog())}
 					/>
 				</RX.View>
 			);
@@ -222,7 +268,6 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 
 		return (
 			<RX.View style={styles.container}>
-				{disconnected!}
 				<RX.View
 					style={styles.containerHeader}
 					disableTouchOpacityAnimation={true}
@@ -249,6 +294,8 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 					animatedColor={BUTTON_FILL}
 					onPress={() => (this.state.isJitsiMaximised ? null : this.showMenu())}
 				/>
+				{disconnected}
+				{infoButton}
 			</RX.View>
 		);
 	}
