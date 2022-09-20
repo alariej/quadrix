@@ -16,7 +16,6 @@ import {
 	PAGE_MARGIN,
 	PAGE_WIDE_PADDING,
 	BUTTON_COMPOSER_WIDTH,
-	HEADER_HEIGHT,
 	BUTTON_MENU_COMPOSER_WIDTH,
 	LIGHT_BACKGROUND,
 } from '../ui';
@@ -25,6 +24,7 @@ import AppFont from '../modules/AppFont';
 import { SvgFile } from '../components/IconSvg';
 import { RoomType } from '../models/MatrixApi';
 import AnimatedButton from '../components/AnimatedButton';
+import { LayoutInfo } from 'reactxp/dist/common/Types';
 
 const styles = {
 	modalScreen: RX.Styles.createViewStyle({
@@ -61,6 +61,7 @@ const animatedDuration = 500;
 const animatedEasing = RX.Animated.Easing.InOutBack();
 
 interface DialogMenuComposerProps {
+	layout: LayoutInfo;
 	roomType: RoomType;
 	roomActive: boolean;
 	jitsiActive: boolean;
@@ -125,7 +126,7 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 	}
 
 	private dismissDialog = () => {
-		RX.Modal.dismiss('dialog_menu_main');
+		RX.Modal.dismiss('dialog_menu_composer');
 	};
 
 	public render(): JSX.Element | null {
@@ -175,7 +176,7 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 			PAGE_MARGIN +
 			OBJECT_MARGIN;
 
-		const top = PAGE_MARGIN + HEADER_HEIGHT + BUTTON_COMPOSER_WIDTH / 2;
+		const top = this.props.layout.y + BUTTON_COMPOSER_WIDTH / 2;
 
 		const contextMenu = (
 			<RX.Animated.View style={[this.animatedStyle, styles.buttonContainer, { top: top, left: left }]}>

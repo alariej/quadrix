@@ -194,6 +194,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 	private videoWidth: number | undefined;
 	private progressText = '';
 	private replyEvent: MessageEvent | undefined;
+	private containerView: RX.View | undefined;
 
 	constructor(props: ComposerProps) {
 		super(props);
@@ -719,17 +720,22 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 	};
 
 	private showMenu = () => {
-		const dialogMenuMain = (
-			<DialogMenuComposer
-				roomType={this.props.roomType}
-				roomActive={this.props.roomActive}
-				jitsiActive={this.state.jitsiActive}
-				onPressFile={this.onPressAttachment}
-				onPressVideoCall={this.onPressVideoCall}
-			/>
-		);
+		RX.UserInterface.measureLayoutRelativeToWindow(this.containerView!)
+			.then(layout => {
+				const dialogMenuComposer = (
+					<DialogMenuComposer
+						layout={layout}
+						roomType={this.props.roomType}
+						roomActive={this.props.roomActive}
+						jitsiActive={this.state.jitsiActive}
+						onPressFile={this.onPressAttachment}
+						onPressVideoCall={this.onPressVideoCall}
+					/>
+				);
 
-		RX.Modal.show(dialogMenuMain, 'dialog_menu_main');
+				RX.Modal.show(dialogMenuComposer, 'dialog_menu_composer');
+			})
+			.catch(_error => null);
 	};
 
 	public render(): ReactElement | null {
@@ -755,7 +761,10 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 		}
 
 		return (
-			<RX.View style={styles.container}>
+			<RX.View
+				style={styles.container}
+				ref={component => (this.containerView = component!)}
+			>
 				<AnimatedButton
 					buttonStyle={styles.button}
 					iconSource={require('../resources/svg/RI_menu.json') as SvgFile}

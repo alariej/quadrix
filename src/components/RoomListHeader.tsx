@@ -116,6 +116,7 @@ interface RoomListHeaderState {
 
 export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, RoomListHeaderState> {
 	private language: Languages = 'en';
+	private containerView: RX.View | undefined;
 
 	constructor(props: RoomListHeaderProps) {
 		super(props);
@@ -215,16 +216,21 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 	};
 
 	private showMenu = () => {
-		const dialogMenuMain = (
-			<DialogMenuMain
-				onPressNewChat={this.onPressNewChat}
-				onPressSettings={this.onPressSettings}
-				onPressAbout={this.onPressAbout}
-				onPressLogout={this.onPressLogout}
-			/>
-		);
+		RX.UserInterface.measureLayoutRelativeToWindow(this.containerView!)
+			.then(layout => {
+				const dialogMenuMain = (
+					<DialogMenuMain
+						layout={layout}
+						onPressNewChat={this.onPressNewChat}
+						onPressSettings={this.onPressSettings}
+						onPressAbout={this.onPressAbout}
+						onPressLogout={this.onPressLogout}
+					/>
+				);
 
-		RX.Modal.show(dialogMenuMain, 'dialog_menu_main');
+				RX.Modal.show(dialogMenuMain, 'dialog_menu_main');
+			})
+			.catch(_error => null);
 	};
 
 	public render(): JSX.Element | null {
@@ -267,7 +273,10 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 			2 * SPACING;
 
 		return (
-			<RX.View style={styles.container}>
+			<RX.View
+				style={styles.container}
+				ref={component => (this.containerView = component!)}
+			>
 				<RX.View
 					style={styles.containerHeader}
 					disableTouchOpacityAnimation={true}

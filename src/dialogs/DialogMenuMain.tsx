@@ -24,6 +24,7 @@ import { about, Languages, logout, newRoom, userSettings } from '../translations
 import AppFont from '../modules/AppFont';
 import { SvgFile } from '../components/IconSvg';
 import AnimatedButton from '../components/AnimatedButton';
+import { LayoutInfo } from 'reactxp/dist/common/Types';
 
 const styles = {
 	modalScreen: RX.Styles.createViewStyle({
@@ -60,6 +61,7 @@ const animatedDuration = 500;
 const animatedEasing = RX.Animated.Easing.InOutBack();
 
 interface DialogMenuMainProps {
+	layout: LayoutInfo;
 	onPressNewChat: () => void;
 	onPressSettings: () => void;
 	onPressAbout: () => void;
@@ -195,7 +197,7 @@ export default class DialogMenuMain extends ComponentBase<DialogMenuMainProps, D
 			PAGE_MARGIN +
 			OBJECT_MARGIN;
 
-		const top = PAGE_MARGIN + (BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN) / 2;
+		const top = this.props.layout.y + (BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN) / 2;
 
 		const contextMenu = (
 			<RX.Animated.View style={[this.animatedStyle, styles.buttonContainer, { top: top, right: right }]}>
