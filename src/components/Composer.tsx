@@ -785,6 +785,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 			<RX.View
 				style={styles.container}
 				ref={component => (this.containerView = component!)}
+				onLayout={() => null}
 			>
 				<AnimatedButton
 					buttonStyle={styles.button}

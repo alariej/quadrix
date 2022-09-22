@@ -276,6 +276,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 			<RX.View
 				style={styles.container}
 				ref={component => (this.containerView = component!)}
+				onLayout={() => null}
 			>
 				<RX.View
 					style={styles.containerHeader}

@@ -486,6 +486,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 					disableTouchOpacityAnimation={true}
 					onContextMenu={this.showContextDialog}
 					activeOpacity={1}
+					onLayout={() => null}
 				>
 					{cornerPointer}
 					<RX.View style={styles.containerMessage}>

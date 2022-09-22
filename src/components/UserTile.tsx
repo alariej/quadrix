@@ -238,6 +238,7 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
 				onLongPress={this.showContextDialog}
 				onContextMenu={this.showContextDialog}
 				ref={component => (this.mainTile = component!)}
+				onLayout={() => null}
 			>
 				<RX.View style={styles.containerAvatar}>
 					{avatar}
