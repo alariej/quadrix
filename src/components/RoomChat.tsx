@@ -42,6 +42,7 @@ import { differenceInDays, format, isSameYear, isToday, isYesterday, Locale } fr
 import Spinner from './Spinner';
 import AppFont from '../modules/AppFont';
 import StringUtils from '../utils/StringUtils';
+import FloatingSendButton from '../modules/FloatingSendButton';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -140,6 +141,7 @@ interface RoomChatProps extends RX.CommonProps {
 	setReplyMessage: (message: MessageEvent) => void;
 	showTempForwardedMessage: (roomId: string, message: MessageEvent, tempId: string) => void;
 	tempForwardedMessage: { message: MessageEvent; tempId: string };
+	onPressSendButton: (() => void) | undefined;
 }
 
 export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState> {
@@ -231,7 +233,10 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 			} else if (!body && body_ && tempId === tempId_) {
 				partialState.eventListItems = this.eventListItems;
 			}
-		} else if (nextProps.tempForwardedMessage && (nextProps.tempForwardedMessage !== this.props.tempForwardedMessage)) {
+		} else if (
+			nextProps.tempForwardedMessage &&
+			nextProps.tempForwardedMessage !== this.props.tempForwardedMessage
+		) {
 			const content = nextProps.tempForwardedMessage.message.content;
 			const tempId = nextProps.tempForwardedMessage.tempId;
 			const content_ = this.props.tempForwardedMessage
@@ -703,6 +708,13 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 			);
 		}
 
+		const floatingSendButton = (
+			<FloatingSendButton
+				onPressSendButton={this.props.onPressSendButton}
+				offline={this.state.offline}
+			/>
+		);
+
 		return (
 			<RX.View
 				style={styles.container}
@@ -721,6 +733,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 				{arrowButton}
 				{moreButton}
 				{loadingButton}
+				{floatingSendButton}
 			</RX.View>
 		);
 	}

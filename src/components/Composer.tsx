@@ -154,6 +154,7 @@ interface ComposerProps extends RX.CommonProps {
 	replyMessage: MessageEvent;
 	showJitsiMeet: (id: string) => void;
 	roomActive: boolean;
+	floatingSendButton: (onPressSendButton: (() => void) | undefined) => void;
 }
 
 interface ComposerState {
@@ -195,6 +196,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 	private progressText = '';
 	private replyEvent: MessageEvent | undefined;
 	private containerView: RX.View | undefined;
+	private isNativeMobile: boolean;
 
 	constructor(props: ComposerProps) {
 		super(props);
@@ -204,6 +206,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 		const platform = UiStore.getPlatform();
 		this.isWeb = platform === 'web';
 		this.isAndroid = platform === 'android';
+		this.isNativeMobile = ['android', 'ios'].includes(platform);
 
 		const numLines = 10;
 		const paddingVertical = this.isAndroid ? 2 : (BUTTON_COMPOSER_WIDTH - (FONT_LARGE + 4)) / 2;
@@ -297,6 +300,9 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 			.then(textInput => {
 				this.textInput = textInput || '';
 				this.setState({ textInput: this.textInput });
+				if (this.isNativeMobile && this.textInput) {
+					this.props.floatingSendButton(this.onPressSendButton);
+				}
 			})
 			.catch(_error => null);
 	};
@@ -324,6 +330,10 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 			textInput: '',
 			sendDisabled: true,
 		});
+
+		if (this.isNativeMobile) {
+			this.props.floatingSendButton(undefined);
+		}
 
 		setTimeout(() => {
 			if (this.state.sendDisabled) {
@@ -591,6 +601,17 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 		});
 	};
 
+	private onChangeText = (textInput: string) => {
+		if (this.isNativeMobile) {
+			if (textInput && !this.textInput) {
+				this.props.floatingSendButton(this.onPressSendButton);
+			} else if (!textInput && this.textInput) {
+				this.props.floatingSendButton(undefined);
+			}
+		}
+		this.textInput = textInput;
+	};
+
 	private onKeyPress = (event: RX.Types.KeyboardEvent) => {
 		if (this.state.textInput !== undefined) {
 			this.setState({ textInput: undefined });
@@ -800,7 +821,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 						style={[styles.textInput, this.textInputStyle]}
 						ref={component => (this.textInputComponent = component!)}
 						onKeyPress={this.onKeyPress}
-						onChangeText={textInput => (this.textInput = textInput)}
+						onChangeText={this.onChangeText}
 						value={this.state.textInput}
 						editable={this.props.roomActive || false}
 						keyboardType={'default'}

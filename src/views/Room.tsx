@@ -22,6 +22,7 @@ interface RoomState {
 	roomType: RoomType;
 	roomActive: boolean;
 	replyMessage: MessageEvent | undefined;
+	onPressSendButton: (() => void) | undefined;
 }
 
 interface RoomProps extends RX.CommonProps {
@@ -67,6 +68,14 @@ export default class Room extends ComponentBase<RoomProps, RoomState> {
 		this.setState({ replyMessage: message });
 	};
 
+	private floatingSendButton = (onPressSendButton: (() => void) | undefined) => {
+		if (onPressSendButton && !this.state.onPressSendButton) {
+			this.setState({ onPressSendButton: onPressSendButton });
+		} else if (!onPressSendButton && this.state.onPressSendButton) {
+			this.setState({ onPressSendButton: undefined });
+		}
+	};
+
 	public render(): JSX.Element | null {
 		if (!this.state.roomPhase) {
 			return null;
@@ -84,6 +93,7 @@ export default class Room extends ComponentBase<RoomProps, RoomState> {
 					replyMessage={this.state.replyMessage!}
 					showJitsiMeet={this.props.showJitsiMeet}
 					roomActive={this.state.roomActive}
+					floatingSendButton={this.floatingSendButton}
 				/>
 			);
 
@@ -95,6 +105,7 @@ export default class Room extends ComponentBase<RoomProps, RoomState> {
 					setReplyMessage={this.setReplyMessage}
 					showTempForwardedMessage={this.props.showTempForwardedMessage}
 					tempForwardedMessage={this.props.tempForwardedMessage!}
+					onPressSendButton={this.state.onPressSendButton}
 				/>
 			);
 		} else if (this.state.roomPhase === 'invite') {
