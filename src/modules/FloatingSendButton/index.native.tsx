@@ -5,6 +5,7 @@ import { SvgFile } from '../../components/IconSvg';
 import { BUTTON_FILL, BUTTON_HEIGHT } from '../../ui';
 import { EmitterSubscription, Keyboard } from 'react-native';
 import { hasNotch } from 'react-native-device-info';
+import UiStore from '../../stores/UiStore';
 
 interface FloatingSendButtonProps {
 	offline: boolean;
@@ -18,14 +19,18 @@ interface FloatingSendButtonState {
 export default class FloatingSendButton extends Component<FloatingSendButtonProps, FloatingSendButtonState> {
 	private showSubscription: EmitterSubscription;
 	private hideSubscription: EmitterSubscription;
+	private isAndroid: boolean;
 
 	constructor(props: FloatingSendButtonProps) {
 		super(props);
 
+		this.isAndroid = UiStore.getPlatform() === 'android';
+		const hideListener = this.isAndroid ? 'keyboardDidHide' : 'keyboardWillHide';
+
 		this.showSubscription = Keyboard.addListener('keyboardDidShow', e =>
 			this.setKeyboardHeight(e.endCoordinates.height)
 		);
-		this.hideSubscription = Keyboard.addListener('keyboardWillHide', () => this.setKeyboardHeight(0));
+		this.hideSubscription = Keyboard.addListener(hideListener, () => this.setKeyboardHeight(0));
 
 		this.state = {
 			keyboardHeight: 0,
@@ -46,13 +51,19 @@ export default class FloatingSendButton extends Component<FloatingSendButtonProp
 			return null;
 		}
 
-		const notchHeight = hasNotch() ? 37 : 0;
+		let bottom: number;
+		if (this.isAndroid) {
+			bottom = 12;
+		} else {
+			const notchHeight = hasNotch() ? 37 : 0;
+			bottom = 12 + this.state.keyboardHeight - notchHeight;
+		}
 
 		return (
 			<RX.View
 				style={{
 					position: 'absolute',
-					bottom: this.state.keyboardHeight + 12 - notchHeight,
+					bottom: bottom,
 					right: 12,
 				}}
 			>
