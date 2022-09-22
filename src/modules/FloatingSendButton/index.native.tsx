@@ -7,6 +7,10 @@ import { EmitterSubscription, Keyboard } from 'react-native';
 import { hasNotch } from 'react-native-device-info';
 import UiStore from '../../stores/UiStore';
 
+const animatedSizeStart = 0;
+const animatedDuration = 500;
+const animatedEasing = RX.Animated.Easing.InOutBack();
+
 interface FloatingSendButtonProps {
 	offline: boolean;
 	onPressSendButton: (() => void) | undefined;
@@ -20,6 +24,8 @@ export default class FloatingSendButton extends Component<FloatingSendButtonProp
 	private showSubscription: EmitterSubscription;
 	private hideSubscription: EmitterSubscription;
 	private isAndroid: boolean;
+	private animatedValue: RX.Animated.Value;
+	private animatedStyle: RX.Types.AnimatedViewStyleRuleSet;
 
 	constructor(props: FloatingSendButtonProps) {
 		super(props);
@@ -35,11 +41,27 @@ export default class FloatingSendButton extends Component<FloatingSendButtonProp
 		this.state = {
 			keyboardHeight: 0,
 		};
+
+		this.animatedValue = RX.Animated.createValue(animatedSizeStart);
+		this.animatedStyle = RX.Styles.createAnimatedViewStyle({
+			transform: [{ scale: this.animatedValue }],
+		});
 	}
 
 	public componentWillUnmount(): void {
 		this.showSubscription.remove();
 		this.hideSubscription.remove();
+	}
+
+	public shouldComponentUpdate(
+		nextProps: Readonly<FloatingSendButtonProps>,
+		nextState: Readonly<FloatingSendButtonState>
+	): boolean {
+		return (
+			this.props.onPressSendButton !== nextProps.onPressSendButton ||
+			this.props.offline !== nextProps.offline ||
+			this.state.keyboardHeight !== nextState.keyboardHeight
+		);
 	}
 
 	private setKeyboardHeight = (height: number) => {
@@ -48,7 +70,19 @@ export default class FloatingSendButton extends Component<FloatingSendButtonProp
 
 	public render(): JSX.Element | null {
 		if (!this.props.onPressSendButton || !this.state.keyboardHeight || this.props.offline) {
-			return null;
+			RX.Animated.timing(this.animatedValue, {
+				duration: animatedDuration,
+				toValue: 0,
+				easing: animatedEasing,
+				useNativeDriver: true,
+			}).start();
+		} else {
+			RX.Animated.timing(this.animatedValue, {
+				duration: animatedDuration,
+				toValue: 1,
+				easing: animatedEasing,
+				useNativeDriver: true,
+			}).start();
 		}
 
 		let bottom: number;
@@ -67,22 +101,24 @@ export default class FloatingSendButton extends Component<FloatingSendButtonProp
 					right: 12,
 				}}
 			>
-				<AnimatedButton
-					buttonStyle={{
-						width: 80,
-						height: BUTTON_HEIGHT,
-						borderRadius: BUTTON_HEIGHT / 2,
-						justifyContent: 'center',
-						alignItems: 'center',
-						backgroundColor: BUTTON_FILL,
-					}}
-					iconSource={require('../../resources/svg/RI_send.json') as SvgFile}
-					iconFillColor={'white'}
-					iconHeight={20}
-					iconWidth={20}
-					animatedColor={'white'}
-					onPress={this.props.onPressSendButton}
-				/>
+				<RX.Animated.View style={this.animatedStyle}>
+					<AnimatedButton
+						buttonStyle={{
+							width: 80,
+							height: BUTTON_HEIGHT,
+							borderRadius: BUTTON_HEIGHT / 2,
+							justifyContent: 'center',
+							alignItems: 'center',
+							backgroundColor: BUTTON_FILL,
+						}}
+						iconSource={require('../../resources/svg/RI_send.json') as SvgFile}
+						iconFillColor={'white'}
+						iconHeight={20}
+						iconWidth={20}
+						animatedColor={'white'}
+						onPress={this.props.onPressSendButton!}
+					/>
+				</RX.Animated.View>
 			</RX.View>
 		);
 	}
