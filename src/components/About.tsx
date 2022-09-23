@@ -1,6 +1,17 @@
 import React from 'react';
 import RX from 'reactxp';
-import { APP_VERSION, APP_WEBSITE, GITHUB_SPONSOR_URL, GIT_REPO_URL, TERMS_URL } from '../appconfig';
+import {
+	APPSTORES_ANDROID_URL,
+	APPSTORES_FLATHUB_URL,
+	APPSTORES_IOS_URL,
+	APPSTORES_MACOS_URL,
+	APPSTORES_WINDOWS_URL,
+	APP_VERSION,
+	APP_WEBSITE,
+	GITHUB_SPONSOR_URL,
+	GIT_REPO_URL,
+	TERMS_URL,
+} from '../appconfig';
 import AppFont from '../modules/AppFont';
 import Shadow from '../modules/Shadow';
 import UiStore from '../stores/UiStore';
@@ -16,6 +27,10 @@ const styles = {
 	logo: RX.Styles.createViewStyle({
 		flex: 1,
 		marginVertical: 12,
+	}),
+	logostore: RX.Styles.createViewStyle({
+		flex: 1,
+		margin: 5,
 	}),
 	link: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
@@ -67,6 +82,8 @@ export default class About extends RX.Component<unknown, RX.Stateless> {
 	};
 
 	public render(): JSX.Element | null {
+		const storeIconSize = 28;
+		const storeIconColor = 'grey';
 		return (
 			<RX.View style={styles.containerAbout}>
 				<RX.View style={styles.logo}>
@@ -108,6 +125,63 @@ export default class About extends RX.Component<unknown, RX.Stateless> {
 						💙 Sponsor
 					</RX.Text>
 				</RX.Button>
+				<RX.View style={{ flexDirection: 'row', marginTop: 12 }}>
+					<RX.Button
+						style={styles.logostore}
+						onPress={event => this.openUrl(APPSTORES_ANDROID_URL, event)}
+					>
+						<IconSvg
+							source={require('../resources/svg/logo_android.json') as SvgFile}
+							height={storeIconSize}
+							width={storeIconSize}
+							fillColor={storeIconColor}
+						/>
+					</RX.Button>
+					<RX.Button
+						style={styles.logostore}
+						onPress={event => this.openUrl(APPSTORES_IOS_URL, event)}
+					>
+						<IconSvg
+							source={require('../resources/svg/logo_ios.json') as SvgFile}
+							height={storeIconSize}
+							width={storeIconSize}
+							fillColor={storeIconColor}
+						/>
+					</RX.Button>
+					<RX.Button
+						style={styles.logostore}
+						onPress={event => this.openUrl(APPSTORES_MACOS_URL, event)}
+					>
+						<IconSvg
+							source={require('../resources/svg/logo_macos.json') as SvgFile}
+							height={storeIconSize}
+							width={storeIconSize}
+							fillColor={storeIconColor}
+						/>
+					</RX.Button>
+					<RX.Button
+						style={styles.logostore}
+						onPress={event => this.openUrl(APPSTORES_WINDOWS_URL, event)}
+					>
+						<IconSvg
+							source={require('../resources/svg/logo_windows.json') as SvgFile}
+							height={storeIconSize}
+							width={storeIconSize}
+							fillColor={storeIconColor}
+						/>
+					</RX.Button>
+					<RX.Button
+						style={styles.logostore}
+						onPress={event => this.openUrl(APPSTORES_FLATHUB_URL, event)}
+					>
+						<IconSvg
+							source={require('../resources/svg/logo_linux.json') as SvgFile}
+							height={storeIconSize}
+							width={storeIconSize}
+							fillColor={storeIconColor}
+						/>
+					</RX.Button>
+				</RX.View>
 			</RX.View>
 		);
 	}

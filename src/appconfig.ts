@@ -1,4 +1,5 @@
 import packageJson from '../package.json';
+import StoreJson from '../stores.json';
 
 export const APP_VERSION = packageJson.version;
 
@@ -21,6 +22,11 @@ export const GIT_REPO_URL = 'https://github.com/alariej/quadrix#readme';
 export const TERMS_URL = 'https://github.com/alariej/quadrix#terms--privacy--license';
 export const GITHUB_SPONSOR_URL = 'https://github.com/sponsors/alariej';
 export const APPSTORES_INFO_URL = 'https://raw.githubusercontent.com/alariej/quadrix/dev/stores.json';
+export const APPSTORES_IOS_URL = StoreJson.appstore.url;
+export const APPSTORES_MACOS_URL = StoreJson.macappstore.url;
+export const APPSTORES_ANDROID_URL = StoreJson.googleplay.url;
+export const APPSTORES_WINDOWS_URL = StoreJson.microsoft.url;
+export const APPSTORES_FLATHUB_URL = StoreJson.flathub.url;
 
 // jitsi server
 
