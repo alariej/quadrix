@@ -28,6 +28,10 @@ const styles = {
 		flex: 1,
 		marginVertical: 12,
 	}),
+	stores: RX.Styles.createViewStyle({
+		flexDirection: 'row',
+		marginTop: 12,
+	}),
 	logostore: RX.Styles.createViewStyle({
 		flex: 1,
 		margin: 5,
@@ -125,7 +129,7 @@ export default class About extends RX.Component<unknown, RX.Stateless> {
 						💙 Sponsor
 					</RX.Text>
 				</RX.Button>
-				<RX.View style={{ flexDirection: 'row', marginTop: 12 }}>
+				<RX.View style={[styles.stores, { width: 5 * (storeIconSize + 2 * 5) }]}>
 					<RX.Button
 						style={styles.logostore}
 						onPress={event => this.openUrl(APPSTORES_ANDROID_URL, event)}
