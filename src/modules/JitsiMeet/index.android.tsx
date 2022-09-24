@@ -196,7 +196,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                                 p2p: { enabled: false }, // 'true' crashes chromium + electron
                                 disableH264: true,
                                 enableLayerSuspension: true,
-                                prejoinPageEnabled: false,
+								prejoinConfig: { enabled: false },
                                 defaultLanguage: 'en',
                                 disableThirdPartyRequests: true,
                                 disableDeepLinking: true,
