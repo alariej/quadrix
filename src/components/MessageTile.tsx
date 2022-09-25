@@ -170,7 +170,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 	};
 
 	public render(): JSX.Element | null {
-		let message;
+		let message: ReactElement;
 		let messageType: string;
 
 		let replyMessage: ReactElement | undefined;
@@ -215,7 +215,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 			message = (
 				<RX.View style={{ flexDirection: 'row' }}>
 					{messageIcon}
-					<RX.Text style={styles.containerText}>{encryptedMessage[UiStore.getLanguage()]}</RX.Text>;
+					<RX.Text style={styles.containerText}>{encryptedMessage[UiStore.getLanguage()]}</RX.Text>
 				</RX.View>
 			);
 		} else if (this.props.event.content.msgtype === 'm.image') {
