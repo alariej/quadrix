@@ -9,7 +9,7 @@ class ShareHandlerIncoming {
 		// do nothing in web / desktop
 	}
 
-	public removeListener(_shareContent: (event: { url: string }) => void): void {
+	public removeListener(): void {
 		// do nothing in web / desktop
 	}
 

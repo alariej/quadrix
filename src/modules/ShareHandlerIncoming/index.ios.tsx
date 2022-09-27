@@ -2,13 +2,15 @@ import React from 'react';
 import RX from 'reactxp';
 import DialogRoomPicker from '../../dialogs/DialogRoomPicker';
 import DialogIncomingContentShare from '../../dialogs/DialogIncomingContentShare';
-import { Linking } from 'react-native';
+import { EmitterSubscription, Linking } from 'react-native';
 import { sendTo } from '../../translations';
 import UiStore from '../../stores/UiStore';
 import { SharedContent } from '../../models/SharedContent';
 import { MessageEvent } from '../../models/MessageEvent';
 
 class ShareHandlerIncoming {
+	private linkingListener: EmitterSubscription | undefined;
+
 	public async launchedFromSharedContent(
 		_sharedContent: string,
 		shareContent: (event: { url: string }) => void
@@ -21,11 +23,11 @@ class ShareHandlerIncoming {
 	}
 
 	public addListener(shareContent: (event: { url: string }) => void): void {
-		Linking.addEventListener('url', shareContent);
+		this.linkingListener = Linking.addEventListener('url', shareContent);
 	}
 
-	public removeListener(shareContent: (event: { url: string }) => void): void {
-		Linking.removeEventListener('url', shareContent);
+	public removeListener(): void {
+		this.linkingListener?.remove();
 	}
 
 	public shareContent(

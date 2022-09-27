@@ -263,7 +263,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
 		RX.App.activationStateChangedEvent.unsubscribe(this.activationChanged);
 
-		ShareHandlerIncoming.removeListener(this.shareContent);
+		ShareHandlerIncoming.removeListener();
 
 		UiStore.unsubscribe(this.appLayoutSubscription);
 		UiStore.unsubscribe(this.appOfflineSubscription);
