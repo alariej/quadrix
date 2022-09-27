@@ -13,7 +13,7 @@ class AsyncStorage {
 		try {
 			await RNAsyncStorage.setItem(key, value);
 		} catch (error) {
-			throw new Error(error);
+			return Promise.reject(error);
 		}
 	}
 
@@ -21,7 +21,7 @@ class AsyncStorage {
 		try {
 			await RNAsyncStorage.removeItem(key);
 		} catch (error) {
-			throw new Error(error);
+			return Promise.reject(error);
 		}
 	}
 
@@ -29,7 +29,7 @@ class AsyncStorage {
 		try {
 			await RNAsyncStorage.clear();
 		} catch (error) {
-			throw new Error(error);
+			return Promise.reject(error);
 		}
 	}
 }
