@@ -10,6 +10,7 @@ import {
 } from '../translations';
 import UiStore from '../stores/UiStore';
 import { MessageEvent_, RoomType } from '../models/MatrixApi';
+import * as _ from 'lodash';
 
 class EventUtils {
 	public filterEvent(event: MessageEvent_, roomType: RoomType): boolean {
@@ -61,17 +62,9 @@ class EventUtils {
 			lastMessageDate.setDate(lastMessageDate.getDate() + 1); // tomorrow
 		}
 
-		let lastEvent = {
-			event_id: '',
-		};
-
-		return timelineEvents
+		const timelineEvents_ = timelineEvents
 			.filter(event => {
-				const valid_1 = this.filterEvent(event, roomType);
-				// simplistic duplicate check
-				const valid_2 = event.event_id !== lastEvent.event_id;
-				lastEvent = event;
-				return valid_1 && valid_2;
+				return this.filterEvent(event, roomType);
 			})
 			.map(event => {
 				const thisMessageDate = new Date(event.origin_server_ts);
@@ -92,6 +85,9 @@ class EventUtils {
 					isRedacted: event._redacted || Object.keys(event.content).length === 0,
 				};
 			});
+
+		// duplicates filter
+		return _.uniqBy(timelineEvents_, event => event.eventId);
 	}
 
 	public getSystemMessage(event: MessageEvent, roomType: RoomType) {
