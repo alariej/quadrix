@@ -64,8 +64,7 @@ export interface VirtualListViewItemInfo extends VirtualListCellInfo {
 	isNavigable?: boolean;
 }
 
-export interface VirtualListViewCellRenderDetails<T extends VirtualListViewItemInfo>
-	extends VirtualListCellRenderDetails<T> {}
+export type VirtualListViewCellRenderDetails<T extends VirtualListViewItemInfo> = VirtualListCellRenderDetails<T>
 
 export interface VirtualListViewProps<ItemInfo extends VirtualListViewItemInfo>
 	extends RX.CommonStyledProps<RX.Types.ViewStyleRuleSet, VirtualListView<ItemInfo>> {
@@ -548,7 +547,7 @@ export class VirtualListView<ItemInfo extends VirtualListViewItemInfo> extends R
 			? Math.min(
 					Math.max(this._layoutHeight * this._renderOverdrawFactor, this._minOverdrawAmount),
 					this._maxOverdrawAmount
-			  )
+			)
 			: 0;
 	}
 
