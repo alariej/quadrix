@@ -240,7 +240,7 @@ class FileHandler {
 				const file: FileObject = {
 					size: inputElement.files![0].size,
 					name: inputElement.files![0].name,
-					type: inputElement.files![0].type,
+					type: inputElement.files![0].type.toLowerCase(),
 					uri: uri,
 					object: inputElement.files![0],
 					imageWidth: imageSize.width,
@@ -286,9 +286,9 @@ class FileHandler {
 		const blob = new Blob([file.object!], { type: file.object!.type });
 
 		let resizedImage;
-		if (file.type.includes('image')) {
+		if (file.type.includes('image') && !file.type.includes('svg')) {
 			let compressFormat: string | undefined;
-			if (file.type.toLowerCase().includes('png') || file.name.toLowerCase().includes('.png')) {
+			if (file.type.includes('png') || file.name.toLowerCase().includes('.png')) {
 				compressFormat = 'PNG';
 			} else {
 				compressFormat = 'JPEG';
@@ -301,6 +301,30 @@ class FileHandler {
 			};
 
 			resizedImage = await resizeImage(blob).catch(_error => null);
+		} else if (file.type.includes('image') && file.type.includes('svg')) {
+			const getThumbnail = (blob: Blob): Promise<string | File | Blob | ProgressEvent<FileReader>> => {
+				return new Promise(resolve => {
+					Resizer.imageFileResizer(blob, 1280, 1280, 'PNG', 90, 0, uri => resolve(uri), 'blob');
+				});
+			};
+
+			const thumbnail = (await getThumbnail(blob).catch(_error => null)) as Blob;
+
+			axiosInstance.defaults.headers.post['Content-Type'] = 'image/png';
+			const fetchPost: { status: number; data: { content_uri: string } } = await axiosInstance
+				.post(PREFIX_UPLOAD, thumbnail)
+				.catch(error => {
+					return Promise.reject(error);
+				});
+
+			thumbnailInfo = {
+				mimeType: thumbnail.type,
+				fileSize: thumbnail.size,
+				height: file.imageHeight!,
+				width: file.imageWidth!,
+			};
+
+			thumbnailUrl = fetchPost.data.content_uri;
 		} else if (file.type.includes('video')) {
 			const thumbnail = await VideoThumbnail.getImage(file.uri).catch();
 
