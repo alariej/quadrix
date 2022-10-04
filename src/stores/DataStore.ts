@@ -855,6 +855,7 @@ class DataStore extends StoreBase {
 					event.type === 'm.room.message' &&
 					event.content &&
 					event.content.msgtype === 'm.image' &&
+					!event.content.body?.toLowerCase().includes('.svg') &&
 					event.content.url
 			)
 			.sort((a, b) => b.origin_server_ts - a.origin_server_ts);
