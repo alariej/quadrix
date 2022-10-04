@@ -275,7 +275,7 @@ class FileHandler {
 					url,
 					{
 						Authorization: 'Bearer ' + credentials.accessToken,
-						'Content-Type': 'application/octet-stream',
+						'Content-Type': 'image/jpeg',
 					},
 					ReactNativeBlobUtil.wrap(thumbnail.path)
 				)
@@ -301,7 +301,7 @@ class FileHandler {
 			url,
 			{
 				Authorization: 'Bearer ' + credentials.accessToken,
-				'Content-Type': 'application/octet-stream',
+				'Content-Type': file.type,
 			},
 			ReactNativeBlobUtil.wrap(file.uri)
 		)

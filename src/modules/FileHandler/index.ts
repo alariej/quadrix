@@ -275,10 +275,7 @@ class FileHandler {
 			baseURL: 'https://' + credentials.homeServer,
 		});
 
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 		axiosInstance.defaults.headers.common['Authorization'] = 'Bearer ' + credentials.accessToken;
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-		axiosInstance.defaults.headers.post['Content-Type'] = 'application/octet-stream';
 
 		const config = {
 			onUploadProgress: function (progressEvent: { loaded: number; total: number }) {
@@ -307,6 +304,7 @@ class FileHandler {
 		} else if (file.type.includes('video')) {
 			const thumbnail = await VideoThumbnail.getImage(file.uri).catch();
 
+			axiosInstance.defaults.headers.post['Content-Type'] = 'image/jpeg';
 			const fetchPost: { status: number; data: { content_uri: string } } = await axiosInstance
 				.post(PREFIX_UPLOAD, thumbnail.blob)
 				.catch(error => {
@@ -323,6 +321,7 @@ class FileHandler {
 			thumbnailUrl = fetchPost.data.content_uri;
 		}
 
+		axiosInstance.defaults.headers.post['Content-Type'] = file.type;
 		const response: { status: number; data: { content_uri: string } } = await axiosInstance
 			.post(PREFIX_UPLOAD, resizedImage || blob, config)
 			.catch(error => {
