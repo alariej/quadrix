@@ -151,17 +151,17 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
 					video: {
 						height: {
 							ideal: 540,
-							max: 720,
+							max: 540,
 							min: 240,
 						},
 						width: {
 							ideal: 540,
-							max: 720,
+							max: 540,
 							min: 240,
 						},
 						frameRate: {
 							ideal: 10,
-							max: 15,
+							max: 10,
 							min: 5,
 						},
 						aspectRatio: 1,
