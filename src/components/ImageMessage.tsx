@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import StringUtils from '../utils/StringUtils';
 import ApiClient from '../matrix/ApiClient';
 import { MessageEvent } from '../models/MessageEvent';
 import FullScreenImage from './FullScreenImage';
-import { SPACING, BUTTON_ROUND_WIDTH, PAGE_MARGIN, BORDER_RADIUS } from '../ui';
+import { SPACING, BUTTON_ROUND_WIDTH, PAGE_MARGIN, BORDER_RADIUS, TILE_SYSTEM_TEXT } from '../ui';
 import UiStore from '../stores/UiStore';
 import Spinner from './Spinner';
 import CachedImage from '../modules/CachedImage';
+import FileMessage from './FileMessage';
 
 const styles = {
 	containerMessage: RX.Styles.createViewStyle({
@@ -25,6 +26,18 @@ const styles = {
 		bottom: 0,
 		justifyContent: 'center',
 		alignItems: 'center',
+	}),
+	svg: RX.Styles.createTextStyle({
+		position: 'absolute',
+		right: SPACING,
+		top: SPACING,
+		fontSize: 9,
+		color: TILE_SYSTEM_TEXT,
+		borderWidth: 1,
+		borderColor: TILE_SYSTEM_TEXT,
+		borderRadius: 3,
+		padding: SPACING,
+		textAlign: 'center',
 	}),
 };
 
@@ -117,7 +130,10 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 	}
 
 	private showFullScreenImage = () => {
-		if (this.state.showSpinner) {
+		if (
+			this.state.showSpinner ||
+			(this.props.message.content.info?.mimetype?.includes('svg') && UiStore.getPlatform() !== 'web')
+		) {
 			return;
 		}
 
@@ -154,8 +170,21 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 			</RX.View>
 		);
 
-		return (
-			<RX.View style={styles.containerMessage}>
+		let svg: ReactElement | undefined;
+		let content: ReactElement;
+		if (
+			this.props.message.content.info?.mimetype?.includes('svg') &&
+			!this.props.message.content.info?.thumbnail_url
+		) {
+			content = (
+				<FileMessage
+					message={this.props.message}
+					showContextDialog={() => this.props.showContextDialog()}
+				/>
+			);
+		} else {
+			svg = <RX.Text style={styles.svg}>SVG</RX.Text>;
+			content = (
 				<RX.View
 					style={this.heightStyle}
 					onPress={this.showFullScreenImage}
@@ -173,6 +202,13 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 					/>
 					{spinner}
 				</RX.View>
+			);
+		}
+
+		return (
+			<RX.View style={styles.containerMessage}>
+				{content}
+				{svg}
 			</RX.View>
 		);
 	}
