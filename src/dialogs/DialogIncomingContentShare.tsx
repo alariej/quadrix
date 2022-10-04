@@ -83,12 +83,14 @@ export default class DialogIncomingContentShare extends RX.Component<
 	private videoHeight: number | undefined;
 	private videoWidth: number | undefined;
 	private progressText = '';
+	private imageSvg = false;
 
 	constructor(props: DialogIncomingContentShareProps) {
 		super(props);
 
 		if (props.sharedContent.mimeType!.startsWith('image')) {
 			this.contentType = 'm.image';
+			this.imageSvg = props.sharedContent.fileName?.toLowerCase().includes('.svg') || false;
 		} else if (props.sharedContent.mimeType!.startsWith('text')) {
 			this.contentType = 'm.text';
 		} else if (props.sharedContent.mimeType!.startsWith('application')) {
@@ -103,7 +105,7 @@ export default class DialogIncomingContentShare extends RX.Component<
 	}
 
 	public async componentDidMount(): Promise<void> {
-		if (this.contentType === 'm.image') {
+		if (this.contentType === 'm.image' && !this.imageSvg) {
 			const imageSize = await ImageSizeLocal.getSize(this.props.sharedContent.uri);
 
 			this.imageWidth = imageSize.width;
@@ -210,7 +212,7 @@ export default class DialogIncomingContentShare extends RX.Component<
 				uri: this.props.sharedContent.uri,
 				name: this.props.sharedContent.fileName!,
 				size: this.props.sharedContent.fileSize,
-				type: this.props.sharedContent.mimeType!,
+				type: this.imageSvg ? 'image/svg+xml' : this.props.sharedContent.mimeType!.toLowerCase(),
 				imageHeight: this.imageHeight,
 				imageWidth: this.imageWidth,
 			};
@@ -300,7 +302,7 @@ export default class DialogIncomingContentShare extends RX.Component<
 					value={this.state.progressValue}
 				/>
 			);
-		} else if (this.contentType === 'm.image') {
+		} else if (this.contentType === 'm.image' && !this.imageSvg) {
 			const heightStyle = RX.Styles.createViewStyle(
 				{
 					height: (DIALOG_WIDTH - 2 * SPACING) * this.state.imageRatio,
@@ -348,7 +350,7 @@ export default class DialogIncomingContentShare extends RX.Component<
 					/>
 				</RX.View>
 			);
-		} else if (this.contentType === 'm.file') {
+		} else if (this.contentType === 'm.file' || (this.contentType === 'm.image' && this.imageSvg)) {
 			content = (
 				<RX.View style={styles.containerModalContent}>
 					<RX.View style={styles.containerContent}>

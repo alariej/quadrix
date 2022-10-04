@@ -539,7 +539,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 		return new Promise(resolve => {
 			let content: ReactElement;
 
-			if (file.type.startsWith('image')) {
+			if (file.type.startsWith('image') && !(file.type.includes('svg') && UiStore.getPlatform() !== 'web')) {
 				const heightStyle = RX.Styles.createViewStyle(
 					{
 						height: ((DIALOG_WIDTH - 2 * SPACING) * file.imageHeight!) / file.imageWidth!,
