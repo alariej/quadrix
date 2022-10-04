@@ -171,7 +171,7 @@ class FileHandler {
 				const file: FileObject = {
 					size: response.assets![0].fileSize,
 					name: response.assets![0].fileName || '',
-					type: response.assets![0].type || 'unknown',
+					type: response.assets![0].type?.toLowerCase() || 'unknown',
 					uri: response.assets![0].uri || '',
 					imageWidth: response.assets![0].width,
 					imageHeight: response.assets![0].height,
@@ -206,7 +206,7 @@ class FileHandler {
 		let thumbnailInfo: ThumbnailInfo | undefined;
 
 		let compressedUri: string | null;
-		if (file.type.includes('image')) {
+		if (file.type.includes('image') && !file.type.includes('svg')) {
 			compressedUri = await Image.compress(file.uri, {
 				compressionMethod: 'auto',
 			});

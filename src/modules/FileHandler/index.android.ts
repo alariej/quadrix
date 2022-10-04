@@ -190,7 +190,7 @@ class FileHandler {
 		const file: FileObject = {
 			size: response.size,
 			name: response.name,
-			type: response.type || 'unknown',
+			type: response.type?.toLowerCase() || 'unknown',
 			uri: uri,
 			imageWidth: imageSize.width,
 			imageHeight: imageSize.height,
@@ -218,7 +218,7 @@ class FileHandler {
 		let thumbnailInfo: ThumbnailInfo | undefined;
 
 		let compressedUri: string | null;
-		if (file.type.includes('image')) {
+		if (file.type.includes('image') && !file.type.includes('svg')) {
 			compressedUri = await Image.compress(file.uri, {
 				compressionMethod: 'auto',
 			});
