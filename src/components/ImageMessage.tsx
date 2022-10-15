@@ -183,7 +183,11 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 				/>
 			);
 		} else {
-			svg = <RX.Text style={styles.svg}>SVG</RX.Text>;
+			svg =
+				this.props.message.content.info?.mimetype?.includes('svg') &&
+				this.props.message.content.info?.thumbnail_url ? (
+					<RX.Text style={styles.svg}>SVG</RX.Text>
+				) : undefined;
 			content = (
 				<RX.View
 					style={this.heightStyle}
