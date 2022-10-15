@@ -10,7 +10,9 @@ export interface MessageEvent {
 	previousContent?: MessageEventContent_;
 	dateChangeFlag?: boolean;
 	tempId?: string;
+	redacts?: string;
 	isRedacted?: boolean;
+	isEdited?: boolean;
 }
 
 export interface TemporaryMessage {

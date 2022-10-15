@@ -123,6 +123,7 @@ interface EventListItemInfo extends VirtualListViewItemInfo {
 	event: MessageEvent;
 	readMarkerType: string;
 	isRedacted?: boolean;
+	body?: string;
 }
 
 interface RoomChatState {
@@ -149,7 +150,6 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 	private virtualListView: VirtualListView<VirtualListViewItemInfo> | undefined;
 	private endToken = '';
 	private timelineLimited = false;
-	private newRedactionSubscription: number;
 	private newMessageSubscription: number;
 	private newReadReceiptSubscription: number;
 	private readMarkerTime = 0;
@@ -159,7 +159,6 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 	constructor(props: RoomChatProps) {
 		super(props);
 
-		this.newRedactionSubscription = DataStore.subscribe(this.newMessageRedaction, DataStore.RedactionTrigger);
 		this.newMessageSubscription = DataStore.subscribe(this.newMessages, DataStore.MessageTrigger);
 		this.newReadReceiptSubscription = DataStore.subscribe(this.newReadReceipt, DataStore.ReadReceiptTrigger);
 
@@ -175,19 +174,42 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 		if (initState || this.props.roomId !== nextProps.roomId) {
 			this.readMarkerTime = DataStore.getReadMarker(nextProps.roomId);
 
-			this.eventListItems = DataStore.getAllRoomEvents(nextProps.roomId).map(event => {
-				const messageInfo: EventListItemInfo = {
-					key: event.eventId,
-					height: MESSAGE_HEIGHT_DEFAULT,
-					template: 'event',
-					measureHeight: true,
-					event: event,
-					readMarkerType: event.time > this.readMarkerTime ? 'sent' : 'read',
-					isRedacted: event.isRedacted,
-				};
+			const roomEvents = DataStore.getAllRoomEvents(nextProps.roomId);
+			this.eventListItems = [];
 
-				return messageInfo;
-			});
+			for (let i = 0; i < roomEvents.length; i++) {
+				const event = roomEvents[i];
+
+				if (event.type === 'm.room.redaction') {
+					const eventIndex = roomEvents.findIndex(event_ => event_.eventId === event.redacts);
+					if (eventIndex > -1) {
+						roomEvents[eventIndex].isRedacted = true;
+					}
+				} else if (event.content['m.relates_to']?.rel_type === 'm.replace') {
+					const editedEventId = event.content['m.relates_to'].event_id;
+					const eventIndex = roomEvents.findIndex(event_ => event_.eventId === editedEventId);
+					if (eventIndex > -1) {
+						if (event.time > (roomEvents[eventIndex].content._time || 0)) {
+							roomEvents[eventIndex].content = event.content['m.new_content']!;
+						}
+						roomEvents[eventIndex].isEdited = true;
+						roomEvents[eventIndex].content._time = event.time;
+					}
+				} else {
+					const messageInfo: EventListItemInfo = {
+						key: event.eventId + '_' + Math.random(),
+						height: MESSAGE_HEIGHT_DEFAULT,
+						template: 'event',
+						measureHeight: true,
+						event: event,
+						readMarkerType: event.time > this.readMarkerTime ? 'sent' : 'read',
+						isRedacted: event.isRedacted,
+						body: event.content.body,
+					};
+
+					this.eventListItems.push(messageInfo);
+				}
+			}
 
 			this.endToken = DataStore.getTimelineToken(nextProps.roomId)!;
 			this.timelineLimited = DataStore.getTimelineLimited(nextProps.roomId)!;
@@ -275,7 +297,6 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 	public componentWillUnmount(): void {
 		super.componentWillUnmount();
 
-		DataStore.unsubscribe(this.newRedactionSubscription);
 		DataStore.unsubscribe(this.newMessageSubscription);
 		DataStore.unsubscribe(this.newReadReceiptSubscription);
 	}
@@ -314,41 +335,49 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 		return [tempMessageInfo].concat(this.eventListItems);
 	};
 
-	private newMessageRedaction = () => {
-		const redactedEvents = DataStore.getRedactedEvents(this.props.roomId);
-
-		redactedEvents?.map(eventId => {
-			const eventIndex = this.eventListItems.findIndex(eventItem => eventItem.event.eventId === eventId);
-			if (eventIndex > -1) {
-				this.eventListItems[eventIndex].isRedacted = true;
-			}
-		});
-
-		// HACK: need to cut and repaste the last message to force a re-render of the VLV
-		// voodoo: although push does the same as concat, VLV does not update
-		const lastItem = this.eventListItems.pop();
-		this.eventListItems = this.eventListItems.concat(lastItem!);
-
-		this.setState({ eventListItems: this.eventListItems });
-	};
-
 	private newMessages = () => {
 		const newRoomEvents = DataStore.getNewRoomEvents(this.props.roomId);
 		const newEventsLimited = DataStore.getNewEventsLimited(this.props.roomId);
 
-		const newEventListItems = newRoomEvents.map(event => {
-			const messageInfo: EventListItemInfo = {
-				key: event.tempId || event.eventId,
-				height: MESSAGE_HEIGHT_DEFAULT,
-				template: 'event',
-				measureHeight: true,
-				event: event,
-				readMarkerType: event.time > this.readMarkerTime ? 'sent' : 'read',
-			};
+		if (newRoomEvents.length === 0) {
+			return;
+		}
 
-			return messageInfo;
-		});
+		const newEventListItems: EventListItemInfo[] = [];
 
+		for (let i = 0; i < newRoomEvents.length; i++) {
+			const event = newRoomEvents[i];
+
+			if (event.type === 'm.room.redaction') {
+				const eventIndex = this.eventListItems.findIndex(item => item.event.eventId === event.redacts);
+				if (eventIndex > -1) {
+					this.eventListItems[eventIndex].isRedacted = true;
+				}
+			} else if (event.content['m.relates_to']?.rel_type === 'm.replace') {
+				const editedEventId = event.content['m.relates_to'].event_id;
+				const eventIndex = this.eventListItems.findIndex(item => item.event.eventId === editedEventId);
+				if (eventIndex > -1) {
+					this.eventListItems[eventIndex].event.content = event.content['m.new_content']!;
+					this.eventListItems[eventIndex].body = event.content['m.new_content']?.body;
+					this.eventListItems[eventIndex].event.isEdited = true;
+					this.eventListItems[eventIndex].event.content._time = event.time;
+				}
+			} else {
+				const messageInfo: EventListItemInfo = {
+					key: event.tempId || event.eventId + '_' + Math.random(),
+					height: MESSAGE_HEIGHT_DEFAULT,
+					template: 'event',
+					measureHeight: true,
+					event: event,
+					readMarkerType: event.time > this.readMarkerTime ? 'sent' : 'read',
+				};
+
+				newEventListItems.push(messageInfo);
+			}
+		}
+
+		// sometimes, a new event is sent twice by the server, with a delay of up to 10 seconds in between
+		// shouldn't this be picked up in the datastore?
 		if (newEventListItems.length > 0 && newRoomEvents[0].eventId !== this.eventListItems[0].event.eventId) {
 			if (newEventsLimited) {
 				this.eventListItems = newEventListItems;
@@ -376,11 +405,15 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
             if user is close to the top of the list, and actualised when user either scrolls back up,
             or presses the Up button.
             */
-
-			if (!this.state.showArrowButton) {
-				ApiClient.sendReadReceipt(this.props.roomId, newRoomEvents[0].eventId).catch(_error => null);
-				this.setState({ eventListItems: this.eventListItems });
-			}
+		} else {
+			// HACK: need to cut and repaste the last message to force a re-render of the VLV
+			// voodoo: although push does the same as concat, VLV does not update
+			const lastItem = this.eventListItems.pop();
+			this.eventListItems = this.eventListItems.concat(lastItem!);
+		}
+		if (!this.state.showArrowButton) {
+			ApiClient.sendReadReceipt(this.props.roomId, newRoomEvents[0].eventId).catch(_error => null);
+			this.setState({ eventListItems: this.eventListItems });
 		}
 	};
 
@@ -501,6 +534,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 						showTempForwardedMessage={this.props.showTempForwardedMessage}
 						canPress={true}
 						isRedacted={cellRender.item.isRedacted || false}
+						body={cellRender.item.event.content?.body}
 						animatedImage={true}
 					/>
 				</RX.View>
@@ -584,19 +618,27 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 					return;
 				}
 
-				const olderEventListItems = response.events.map(event => {
-					const messageInfo: EventListItemInfo = {
-						key: event.eventId,
-						height: MESSAGE_HEIGHT_DEFAULT,
-						template: 'event',
-						measureHeight: true,
-						event: event,
-						readMarkerType: event.time > this.readMarkerTime ? 'sent' : 'read',
-						isRedacted: event.isRedacted,
-					};
+				const olderEventListItems: EventListItemInfo[] = [];
 
-					return messageInfo;
-				});
+				for (let i = 0; i < response.events.length; i++) {
+					const event = response.events[i];
+
+					if (event.content['m.relates_to']?.rel_type === 'm.replace') {
+						// just ignore edits, and assume edited content is already in the original message?
+					} else {
+						const messageInfo: EventListItemInfo = {
+							key: event.eventId + '_' + Math.random(),
+							height: MESSAGE_HEIGHT_DEFAULT,
+							template: 'event',
+							measureHeight: true,
+							event: event,
+							readMarkerType: event.time > this.readMarkerTime ? 'sent' : 'read',
+							isRedacted: event.isRedacted,
+							body: event.content.body,
+						};
+						olderEventListItems.push(messageInfo);
+					}
+				}
 
 				this.eventListItems = this.eventListItems.concat(olderEventListItems);
 

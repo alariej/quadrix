@@ -18,7 +18,6 @@ import { INACTIVE_DAYS } from '../appconfig';
 
 interface RoomEventTriggers {
 	isNewMessageEvent?: boolean;
-	isNewRedactionEvent?: boolean;
 	isNewMemberEvent?: boolean;
 	isNewRoomNameEvent?: boolean;
 	isNewRoomAvatarEvent?: boolean;
@@ -36,7 +35,6 @@ interface RoomEventTriggers {
 
 const ReadReceiptTrigger = 'ReadReceiptTrigger';
 const MessageTrigger = 'MessageTrigger';
-const RedactionTrigger = 'RedactionTrigger';
 const RoomTypeTrigger = 'RoomTypeTrigger';
 const RoomPhaseTrigger = 'RoomPhaseTrigger';
 const RoomActiveTrigger = 'RoomActiveTrigger';
@@ -58,7 +56,6 @@ class DataStore extends StoreBase {
 
 	public ReadReceiptTrigger = ReadReceiptTrigger;
 	public MessageTrigger = MessageTrigger;
-	public RedactionTrigger = RedactionTrigger;
 	public RoomTypeTrigger = RoomTypeTrigger;
 	public RoomPhaseTrigger = RoomPhaseTrigger;
 	public RoomActiveTrigger = RoomActiveTrigger;
@@ -109,7 +106,6 @@ class DataStore extends StoreBase {
 				active: false,
 				readReceipts: {},
 				newEvents: [],
-				redactedEvents: [],
 			};
 
 			this.roomSummaryList.push(roomSummary);
@@ -126,7 +122,6 @@ class DataStore extends StoreBase {
 				unreadCount: 0,
 				readReceipts: {},
 				newEvents: [],
-				redactedEvents: [],
 			};
 
 			this.roomSummaryList.push(roomSummary);
@@ -163,28 +158,12 @@ class DataStore extends StoreBase {
 		}
 	}
 
-	private addRedactedEvent(event: MessageEvent_, roomIndex: number) {
-		this.roomSummaryList[roomIndex].redactedEvents.push(event.redacts!);
-
-		const eventIndex = this.roomSummaryList[roomIndex].timelineEvents.findIndex(
-			event_ => event_.event_id === event.redacts
-		);
-
-		if (eventIndex > -1) {
-			this.roomSummaryList[roomIndex].timelineEvents[eventIndex]._redacted = true;
-			if (this.roomSummaryList[roomIndex].newEvents[0].eventId === event.redacts) {
-				this.roomSummaryList[roomIndex].newEvents[0].content.body = '';
-			}
-		}
-	}
-
 	private setRoomInfoFromEvents(events: MessageEvent_[], roomIndex: number): RoomEventTriggers {
-		const roomEventTriggers: RoomEventTriggers = {};
-
 		if (!events || events.length === 0) {
-			return roomEventTriggers;
+			return {};
 		}
 
+		const roomEventTriggers: RoomEventTriggers = {};
 		events.map(event => {
 			switch (event.type) {
 				case 'm.room.message':
@@ -203,8 +182,7 @@ class DataStore extends StoreBase {
 					break;
 
 				case 'm.room.redaction':
-					roomEventTriggers.isNewRedactionEvent = true;
-					this.addRedactedEvent(event, roomIndex);
+					roomEventTriggers.isNewMessageEvent = true;
 					break;
 
 				case 'm.room.name':
@@ -383,7 +361,7 @@ class DataStore extends StoreBase {
 	}
 
 	private updateTimeLine(timeline: RoomTimeline_, roomIndex: number) {
-		if (!timeline.events) {
+		if (!timeline.events || timeline.events.length === 0) {
 			return;
 		}
 
@@ -409,7 +387,7 @@ class DataStore extends StoreBase {
 	}
 
 	private updateNewEvents(timeline: RoomTimeline_, roomIndex: number) {
-		if (!timeline.events) {
+		if (!timeline.events || timeline.events.length === 0) {
 			return;
 		}
 
@@ -417,10 +395,45 @@ class DataStore extends StoreBase {
 			timeline.events.slice(0).reverse(),
 			this.roomSummaryList[roomIndex].type!
 		);
+		this.roomSummaryList[roomIndex].newEvents = newEvents;
 		this.roomSummaryList[roomIndex].newEventsLimited = timeline.limited;
+	}
 
-		if (newEvents.length > 0) {
-			this.roomSummaryList[roomIndex].newEvents = newEvents;
+	private updateLatestFilteredEvent(roomIndex: number) {
+		if (
+			!this.roomSummaryList[roomIndex].timelineEvents ||
+			this.roomSummaryList[roomIndex].timelineEvents.length === 0
+		) {
+			return;
+		}
+
+		const redactedEventIds: string[] = [];
+		for (let i = this.roomSummaryList[roomIndex].timelineEvents.length; i > 0; i--) {
+			const event = this.roomSummaryList[roomIndex].timelineEvents[i - 1];
+			const isFilteredEvent = EventUtils.filterEvent(event, this.roomSummaryList[roomIndex].type!);
+			if (isFilteredEvent && event.type === 'm.room.redaction') {
+				if (event.redacts) {
+					redactedEventIds.push(event.redacts);
+				}
+			} else if (isFilteredEvent && event.type !== 'm.room.redaction') {
+				this.roomSummaryList[roomIndex].latestFilteredEvent = {
+					eventId: event.event_id,
+					content: event.content,
+					type: event.type,
+					time: event.origin_server_ts,
+					senderId: event.sender,
+					previousContent: event.unsigned ? event.unsigned.prev_content : undefined,
+					userId: event.state_key,
+					isRedacted:
+						redactedEventIds.includes(event.event_id) ||
+						(event.content['m.relates_to']?.rel_type === 'm.replace'
+							? redactedEventIds.includes(event.content['m.relates_to'].event_id!)
+							: false) ||
+						Object.keys(event.content).length === 0,
+					isEdited: Boolean(event.unsigned?.['m.relations']?.['m.replace']),
+				};
+				break;
+			}
 		}
 	}
 
@@ -460,7 +473,7 @@ class DataStore extends StoreBase {
 			if (roomIndex > -1 && this.roomSummaryList[roomIndex].phase === 'join') {
 				this.updateTimeLine(syncData.rooms.join[roomId].timeline, roomIndex);
 
-				this.updateNewEvents(syncData.rooms.join[roomId].timeline, roomIndex);
+				this.updateLatestFilteredEvent(roomIndex);
 
 				if (this.roomSummaryList[roomIndex].type !== 'community') {
 					this.updateReadReceipts(syncData.rooms.join[roomId], roomIndex);
@@ -475,8 +488,10 @@ class DataStore extends StoreBase {
 
 	private updateJoinRoom(roomObj: RoomData_, roomIndex: number): RoomEventTriggers {
 		this.updateTimeLine(roomObj.timeline, roomIndex);
-
 		this.updateNewEvents(roomObj.timeline, roomIndex);
+		if (roomObj.timeline.events?.length > 0) {
+			this.updateLatestFilteredEvent(roomIndex);
+		}
 
 		const roomEventTriggers1 = this.setRoomInfoFromEvents(roomObj.timeline.events, roomIndex);
 
@@ -509,6 +524,7 @@ class DataStore extends StoreBase {
 		this.updateTimeLine(roomObj.timeline, roomIndex);
 
 		this.updateNewEvents(roomObj.timeline, roomIndex);
+		this.updateLatestFilteredEvent(roomIndex);
 
 		if (this.roomSummaryList[roomIndex].type) {
 			roomEventTriggers.isNewRoom = true;
@@ -528,6 +544,7 @@ class DataStore extends StoreBase {
 		this.updateTimeLine(roomObj.timeline, roomIndex);
 
 		this.updateNewEvents(roomObj.timeline, roomIndex);
+		this.updateLatestFilteredEvent(roomIndex);
 
 		this.setRoomInfoFromSummary(roomObj.summary, roomIndex);
 
@@ -554,7 +571,6 @@ class DataStore extends StoreBase {
 			unreadCount: 0,
 			readReceipts: {},
 			newEvents: [],
-			redactedEvents: [],
 		};
 
 		this.roomSummaryList.push(roomSummary);
@@ -572,6 +588,7 @@ class DataStore extends StoreBase {
 		this.updateTimeLine(roomObj.timeline, roomIndex);
 
 		this.updateNewEvents(roomObj.timeline, roomIndex);
+		this.updateLatestFilteredEvent(roomIndex);
 
 		if (this.roomSummaryList[roomIndex].type) {
 			roomEventTriggers.isNewRoom = true;
@@ -598,7 +615,6 @@ class DataStore extends StoreBase {
 			unreadCount: 1,
 			readReceipts: {},
 			newEvents: [],
-			redactedEvents: [],
 		};
 
 		this.roomSummaryList.push(roomSummary);
@@ -678,10 +694,6 @@ class DataStore extends StoreBase {
 			this.trigger(MessageTrigger);
 		}
 
-		if (roomEventTriggers.isNewRedactionEvent) {
-			this.trigger(RedactionTrigger);
-		}
-
 		if (roomEventTriggers.isNewRoomType) {
 			this.trigger(RoomTypeTrigger);
 		}
@@ -698,7 +710,6 @@ class DataStore extends StoreBase {
 			roomEventTriggers.isNewMessageEvent ||
 			roomEventTriggers.isNewRoom ||
 			roomEventTriggers.isNewRoomPhase ||
-			roomEventTriggers.isNewRedactionEvent ||
 			roomEventTriggers.isNewMemberEvent ||
 			roomEventTriggers.isNewRoomNameEvent ||
 			roomEventTriggers.isNewRoomAvatarEvent
@@ -745,11 +756,11 @@ class DataStore extends StoreBase {
 	}
 
 	private updateReadReceipts(roomObj: RoomData_, roomIndex: number): boolean {
-		const newReceipts: { [id: string]: { eventId: string; timestamp: number } } = {};
-
-		if (!roomObj.ephemeral || !roomObj.ephemeral.events) {
+		if (!roomObj.ephemeral.events || roomObj.ephemeral.events.length === 0) {
 			return false;
 		}
+
+		const newReceipts: { [id: string]: { eventId: string; timestamp: number } } = {};
 
 		roomObj.ephemeral.events
 			.filter(event => event.type === 'm.receipt')
@@ -828,13 +839,6 @@ class DataStore extends StoreBase {
 		return this.roomSummaryList[roomIndex].newEventsLimited;
 	}
 
-	@autoSubscribeWithKey(RedactionTrigger)
-	public getRedactedEvents(roomId: string): string[] | undefined {
-		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
-
-		return this.roomSummaryList[roomIndex].redactedEvents;
-	}
-
 	@autoSubscribeWithKey('DummyTrigger')
 	public getAllRoomEvents(roomId: string): MessageEvent[] {
 		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
@@ -845,7 +849,6 @@ class DataStore extends StoreBase {
 		);
 	}
 
-	// TODO: handle redactions
 	public getImageTimeline(roomId: string): { timeline: MessageEvent_[]; endToken: string } {
 		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
 
@@ -953,7 +956,7 @@ class DataStore extends StoreBase {
 				(a, b) =>
 					a.phase.localeCompare(b.phase) ||
 					b.unreadCount - a.unreadCount ||
-					(b.newEvents[0] ? b.newEvents[0].time : 0) - (a.newEvents[0] ? a.newEvents[0].time : 0)
+					(b.latestFilteredEvent?.time || 0) - (a.latestFilteredEvent?.time || 0)
 			);
 
 		return sortedRoomList;

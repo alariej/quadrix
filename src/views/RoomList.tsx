@@ -25,6 +25,7 @@ import UiStore from '../stores/UiStore';
 import { MessageEvent } from '../models/MessageEvent';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import IconSvg, { SvgFile } from '../components/IconSvg';
+import { RoomSummary } from '../models/RoomSummary';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -53,8 +54,10 @@ interface RoomListProps extends RX.CommonProps {
 }
 
 interface RoomListItemInfo extends VirtualListViewItemInfo {
-	room: { id: string; newEvents: MessageEvent[] };
-	newestEvent: MessageEvent;
+	room: RoomSummary;
+	latestFilteredEvent: MessageEvent;
+	isRedacted: boolean;
+	body: string;
 }
 
 interface RoomListState {
@@ -103,7 +106,9 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
 				height: TILE_HEIGHT + 1,
 				template: 'room',
 				room: room,
-				newestEvent: room.newEvents[0],
+				latestFilteredEvent: room.latestFilteredEvent!,
+				isRedacted: room.latestFilteredEvent?.isRedacted || false,
+				body: room.latestFilteredEvent?.content.body || '',
 				measureHeight: false,
 			};
 
@@ -147,7 +152,7 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
 				<RoomTile
 					key={cellRender.item.room.id}
 					roomId={cellRender.item.room.id}
-					newestRoomEvent={cellRender.item.newestEvent}
+					newestRoomEvent={cellRender.item.latestFilteredEvent}
 					onPressRoom={this.props.showRoom}
 				/>
 			</RX.View>

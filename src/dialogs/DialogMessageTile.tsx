@@ -931,6 +931,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 						withSenderDetails={this.state.withSenderDetails}
 						setReplyMessage={() => null}
 						animatedImage={false}
+						body={this.props.event.content.body}
 					/>
 					<RX.View
 						style={[

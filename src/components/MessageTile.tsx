@@ -24,7 +24,7 @@ import TextMessage from './TextMessage';
 import ApiClient from '../matrix/ApiClient';
 import { MessageEvent } from '../models/MessageEvent';
 import DialogMessageTile from '../dialogs/DialogMessageTile';
-import { encryptedMessage, messageDeleted } from '../translations';
+import { encryptedMessage, deleted } from '../translations';
 import UiStore from '../stores/UiStore';
 import IconSvg, { SvgFile } from './IconSvg';
 import { format } from 'date-fns';
@@ -126,6 +126,7 @@ interface MessageTileProps {
 	showTempForwardedMessage?: (roomId: string, message?: MessageEvent, tempId?: string) => void;
 	canPress?: boolean;
 	isRedacted: boolean;
+	body?: string;
 	withSenderDetails?: boolean | undefined;
 	animatedImage: boolean;
 }
@@ -138,6 +139,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 		return (
 			this.props.readMarkerType !== nextProps.readMarkerType ||
 			this.props.isRedacted !== nextProps.isRedacted ||
+			this.props.body !== nextProps.body ||
 			this.props.withSenderDetails !== nextProps.withSenderDetails
 		);
 	}
@@ -198,7 +200,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 			message = (
 				<RX.View style={{ flexDirection: 'row' }}>
 					{messageIcon}
-					<RX.Text style={styles.containerText}>{messageDeleted[UiStore.getLanguage()]}</RX.Text>
+					<RX.Text style={styles.containerText}>{deleted[UiStore.getLanguage()]}</RX.Text>
 				</RX.View>
 			);
 		} else if (this.props.event.type === 'm.room.encrypted') {
@@ -226,6 +228,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 					message={this.props.event}
 					animated={this.props.animatedImage}
 					showContextDialog={this.showContextDialog}
+					// body={this.props.body || ''}
 				/>
 			);
 		} else if (this.props.event.content.msgtype === 'm.video') {
@@ -235,6 +238,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 					message={this.props.event}
 					animated={this.props.animatedImage}
 					showContextDialog={this.showContextDialog}
+					// body={this.props.body || ''}
 				/>
 			);
 		} else if (this.props.event.content.msgtype === 'm.file') {
@@ -243,6 +247,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 				<FileMessage
 					message={this.props.event}
 					showContextDialog={this.showContextDialog}
+					// body={this.props.body || ''}
 				/>
 			);
 		} else {
@@ -252,6 +257,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 					roomId={this.props.roomId}
 					message={this.props.event}
 					showContextDialog={this.showContextDialog}
+					body={this.props.body || ''}
 				/>
 			);
 		}

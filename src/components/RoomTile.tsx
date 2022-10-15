@@ -33,6 +33,8 @@ import {
 	video,
 	yesterdayWord,
 	Languages,
+	messageEdited,
+	deleted,
 } from '../translations';
 import UiStore from '../stores/UiStore';
 import IconSvg, { SvgFile } from './IconSvg';
@@ -366,7 +368,29 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 			);
 		} else if (this.props.newestRoomEvent) {
 			if (this.props.newestRoomEvent.type === 'm.room.message') {
-				if (this.props.newestRoomEvent.content.msgtype === 'm.file') {
+				if (this.props.newestRoomEvent.isRedacted) {
+					messageText = deleted[this.language];
+					messageTypeIcon = (
+						<IconSvg
+							source={require('../resources/svg/RI_info.json') as SvgFile}
+							style={{ marginRight: SPACING }}
+							fillColor={ICON_INFO_FILL}
+							height={ICON_INFO_SIZE}
+							width={ICON_INFO_SIZE}
+						/>
+					);
+				} else if (this.props.newestRoomEvent.content['m.relates_to']?.rel_type === 'm.replace') {
+					messageText = messageEdited[this.language];
+					messageTypeIcon = (
+						<IconSvg
+							source={require('../resources/svg/RI_info.json') as SvgFile}
+							style={{ marginRight: SPACING }}
+							fillColor={ICON_INFO_FILL}
+							height={ICON_INFO_SIZE}
+							width={ICON_INFO_SIZE}
+						/>
+					);
+				} else if (this.props.newestRoomEvent.content.msgtype === 'm.file') {
 					messageText = this.props.newestRoomEvent.content.body;
 					messageTypeIcon = (
 						<IconSvg

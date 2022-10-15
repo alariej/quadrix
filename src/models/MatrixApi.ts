@@ -77,9 +77,20 @@ export interface MessageEvent_ {
 	origin_server_ts: number;
 	sender: string;
 	state_key?: string;
-	unsigned?: { prev_content: MessageEventContent_; transaction_id: string; membership: RoomPhase };
+	unsigned?: {
+		age?: number;
+		prev_content?: MessageEventContent_;
+		transaction_id?: string;
+		membership?: RoomPhase;
+		'm.relations'?: {
+			'm.replace'?: {
+				event_id?: string;
+				origin_server_ts?: number;
+				sender?: string;
+			};
+		};
+	};
 	redacts?: string;
-	_redacted?: boolean;
 }
 
 export interface ThumbnailInfo_ {
@@ -104,6 +115,11 @@ export interface MessageEventContent_ {
 	info?: MessageEventContentInfo_;
 	url?: string;
 	membership?: RoomPhase;
+	'm.new_content'?: {
+		body?: string;
+		msgtype?: string;
+		_time?: number; // custom field
+	};
 	'm.relates_to'?: {
 		event_id?: string;
 		is_falling_back?: boolean;
@@ -124,6 +140,7 @@ export interface MessageEventContent_ {
 	is_notepad?: string; // custom field
 	jitsi_started?: boolean; // custom field
 	url_preview?: LinkPreview_; // custom field
+	_time?: number; // custom field
 }
 
 export interface PusherParam_ {

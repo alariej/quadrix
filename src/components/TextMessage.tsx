@@ -9,11 +9,13 @@ import {
 	PAGE_MARGIN,
 	BORDER_RADIUS,
 	FONT_EMOJI_LARGE,
+	FONT_NORMAL,
+	TILE_SYSTEM_TEXT,
 } from '../ui';
 import { MessageEvent } from '../models/MessageEvent';
 import UiStore from '../stores/UiStore';
 import * as linkify from 'linkifyjs';
-import { jitsiStartedInternal } from '../translations';
+import { edited, jitsiStartedInternal } from '../translations';
 import { LinkifyElement } from '../models/LinkifyElement';
 import AppFont from '../modules/AppFont';
 import StringUtils from '../utils/StringUtils';
@@ -59,6 +61,11 @@ const styles = {
 		wordBreak: 'break-all',
 		cursor: 'pointer',
 	}),
+	edited: RX.Styles.createTextStyle({
+		fontFamily: AppFont.fontFamily,
+		fontSize: FONT_NORMAL,
+		color: TILE_SYSTEM_TEXT,
+	}),
 	image: RX.Styles.createImageStyle({
 		flex: 1,
 		borderRadius: BORDER_RADIUS - 2,
@@ -72,6 +79,7 @@ const styles = {
 interface TextMessageProps {
 	roomId: string;
 	message: MessageEvent;
+	body: string;
 	showContextDialog: () => void;
 }
 
@@ -110,21 +118,35 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 	};
 
 	public render(): JSX.Element | null {
-		if (!this.props.message.content.body) {
+		if (!this.props.body) {
 			return null;
 		}
 
 		const isSelectable = UiStore.getPlatform() === 'web' && UiStore.getDevice() === 'desktop';
 
 		const messageRenderArray: Array<ReactElement> = [];
+
+		if (this.props.message.isEdited) {
+			const language = UiStore.getLanguage();
+			const editedInfo = (
+				<RX.Text
+					key={'edited'}
+					style={styles.edited}
+				>
+					{edited[language] + ' '}
+				</RX.Text>
+			);
+			messageRenderArray.push(editedInfo);
+		}
+
 		let renderContent: ReactElement;
 
 		let messageBody: string;
 		const replyEventId = this.props.message.content['m.relates_to']?.['m.in_reply_to']?.event_id;
 		if (replyEventId) {
-			messageBody = StringUtils.stripReplyMessage(this.props.message.content.body);
+			messageBody = StringUtils.stripReplyMessage(this.props.body);
 		} else {
-			messageBody = this.props.message.content.body!;
+			messageBody = this.props.body;
 		}
 
 		if (this.props.message.content.url_preview) {

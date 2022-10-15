@@ -716,11 +716,11 @@ export const sending: Translation = {
 	es: 'Envío del documento ',
 };
 
-export const messageDeleted: Translation = {
-	en: '[Message deleted]',
-	de: '[Nachricht gelöscht]',
-	fr: '[Message effacé]',
-	es: '[Mensaje borrado]',
+export const deleted: Translation = {
+	en: '[deleted]',
+	de: '[gelöscht]',
+	fr: '[effacé]',
+	es: '[borrado]',
 };
 
 export const clickHereOrPressShftEnter: Translation = {
@@ -1386,4 +1386,18 @@ export const newVersion = (versionInstalled: string, versionAvailable: string, l
 		default:
 			return '';
 	}
+};
+
+export const edited: Translation = {
+	en: '[edited]',
+	de: '[bearbeitet]',
+	fr: '[édité]',
+	es: '[editado]',
+};
+
+export const messageEdited: Translation = {
+	en: '[a message was edited]',
+	de: '[Nachricht wurde bearbeitet]',
+	fr: '[un message a été édité]',
+	es: '[un mensaje fue editado]',
 };

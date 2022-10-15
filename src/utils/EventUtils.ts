@@ -10,7 +10,6 @@ import {
 } from '../translations';
 import UiStore from '../stores/UiStore';
 import { MessageEvent_, RoomType } from '../models/MatrixApi';
-import * as _ from 'lodash';
 
 class EventUtils {
 	public filterEvent(event: MessageEvent_, roomType: RoomType): boolean {
@@ -22,6 +21,7 @@ class EventUtils {
 			Boolean(
 				// (event.type === 'm.room.message' && event.content.body)
 				event.type === 'm.room.message' ||
+					event.type === 'm.room.redaction' ||
 					event.type === 'm.room.encrypted' ||
 					event.type === 'm.room.third_party_invite' ||
 					(event.type === 'm.room.member' && roomType !== 'community') ||
@@ -82,12 +82,13 @@ class EventUtils {
 					userId: event.state_key,
 					dateChangeFlag: dateChangeFlag,
 					tempId: event.unsigned ? event.unsigned.transaction_id : undefined,
-					isRedacted: event._redacted || Object.keys(event.content).length === 0,
+					redacts: event.redacts,
+					isRedacted: Object.keys(event.content).length === 0,
+					isEdited: Boolean(event.unsigned?.['m.relations']?.['m.replace']),
 				};
 			});
 
-		// duplicates filter
-		return _.uniqBy(timelineEvents_, event => event.eventId);
+		return timelineEvents_;
 	}
 
 	public getSystemMessage(event: MessageEvent, roomType: RoomType) {
