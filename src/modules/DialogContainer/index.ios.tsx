@@ -145,12 +145,14 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
 			RX.UserInterface.dismissKeyboard();
 		}
 
-		if (!this.props.cancelButton) {
+		if (!this.props.cancelButton && !this.props.confirmButton && !this.props.onCancel) {
 			if (this.props.modalId) {
 				RX.Modal.dismiss(this.props.modalId);
 			} else {
 				RX.Modal.dismissAll();
 			}
+		} else if (!this.props.cancelButton && !this.props.confirmButton && this.props.onCancel) {
+			this.props.onCancel();
 		}
 	};
 
