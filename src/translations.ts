@@ -1401,3 +1401,10 @@ export const messageEdited: Translation = {
 	fr: '[un message a été édité]',
 	es: '[un mensaje fue editado]',
 };
+
+export const clearDatastore: Translation = {
+	en: 'This new version of Quadrix needs to update your messaging data from the server. Please be patient.',
+	de: 'Diese neue Version von Quadrix benötigt eine Aktualisierung Ihrer Messaging-Daten auf dem Server. Bitte haben Sie etwas Geduld.',
+	fr: 'Cette nouvelle version de Quadrix nécessite le renouvellement de vos données de messagerie à partir du serveur. Veuillez être patient.',
+	es: 'Esta nueva versión de Quadrix necesita actualizar sus datos de mensajería desde el servidor. Por favor, tenga paciencia.',
+};

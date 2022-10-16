@@ -124,7 +124,7 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
 	public componentDidMount(): void {
 		super.componentDidMount();
 
-		if (!this.state.syncComplete) {
+		if (!this.state.syncComplete && !RX.Modal.isDisplayed('modal_cleardatastore')) {
 			SpinnerUtils.showModalSpinner('syncspinner');
 		}
 	}

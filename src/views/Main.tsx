@@ -18,7 +18,7 @@ import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
 import ShareHandlerIncoming from '../modules/ShareHandlerIncoming';
 import UiStore, { Layout } from '../stores/UiStore';
-import { deviceOffline } from '../translations';
+import { clearDatastore, deviceOffline } from '../translations';
 import JitsiMeet from '../modules/JitsiMeet';
 import { ComponentBase } from 'resub';
 import Pushers from '../modules/Pushers';
@@ -179,11 +179,33 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 		if (CLEAR_DATASTORE) {
 			const storedAppVersion = await ApiClient.getStoredAppVersion().catch(_error => null);
 
-			if (storedAppVersion !== APP_VERSION) {
+			if (storedAppVersion && storedAppVersion !== APP_VERSION) {
 				await ApiClient.clearDataStore();
 				await ApiClient.storeAppVersion();
 				ApiClient.clearNextSyncToken();
 				DataStore.clearRoomSummaryList();
+
+				const text = (
+					<RX.Text style={styles.textDialog}>
+						<RX.Text>{clearDatastore[UiStore.getLanguage()]}</RX.Text>
+					</RX.Text>
+				);
+
+				const onCancel = () => {
+					RX.Modal.dismiss('modal_cleardatastore');
+					if (!DataStore.getSyncComplete()) {
+						SpinnerUtils.showModalSpinner('syncspinner');
+					}
+				};
+
+				const dialog = (
+					<DialogContainer
+						content={text}
+						onCancel={onCancel}
+					/>
+				);
+
+				RX.Modal.show(dialog, 'modal_cleardatastore');
 			}
 		}
 
