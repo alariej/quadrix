@@ -9,6 +9,7 @@ import UiStore from '../stores/UiStore';
 import Spinner from './Spinner';
 import CachedImage from '../modules/CachedImage';
 import FileMessage from './FileMessage';
+import AppFont from '../modules/AppFont';
 
 const styles = {
 	containerMessage: RX.Styles.createViewStyle({
@@ -28,6 +29,7 @@ const styles = {
 		alignItems: 'center',
 	}),
 	svg: RX.Styles.createTextStyle({
+		fontFamily: AppFont.fontFamily,
 		position: 'absolute',
 		right: SPACING,
 		top: SPACING,
