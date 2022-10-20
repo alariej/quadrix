@@ -60,7 +60,7 @@
 - [x] Display room description (public rooms only)
 - [ ] Edit room description
 - [ ] Highlights
-- [ ] Pushrules
+- [x] Pushrules (new messages in private rooms only)
 - [x] Send read markers
 - [x] Display read markers (private rooms only)
 - [x] Sending invites (private rooms only)
@@ -69,6 +69,7 @@
 - [ ] E2EE
 - [x] Replies
 - [ ] Threads
+- [ ] Message search
 - [x] Attachment uploading
 - [x] Attachment downloading
 - [ ] Send stickers
@@ -77,12 +78,12 @@
 - [ ] Display formatted messages
 - [x] Redacting
 - [ ] Multiple Matrix accounts
-- [x] New user registration
+- [x] New user registration (support for ReCaptcha, email address)
 - [x] VoIP (Jitsi Meet only)
 - [ ] Reactions
-- [ ] Message editing
+- [x] Message editing (displaying only)
 - [ ] Room upgrades
-- [ ] Localizations
+- [x] Localizations (English, German, French, Spanish)
 - [ ] SSO Support
 
 ## Installation
