@@ -65,6 +65,7 @@ export const TILE_SYSTEM_TEXT = 'grey';
 export const LIGHT_BACKGROUND = 'grey';
 export const BUTTON_FILL = LOGO_FILL;
 export const BUTTON_ROUND_BACKGROUND = 'white';
+export const BUTTON_HEADER_BACKGROUND = '#F7F7F7';
 export const BUTTON_LONG_BACKGROUND = 'dimgrey';
 export const BUTTON_MODAL_BACKGROUND = 'white';
 export const BUTTON_CANCEL_BACKGROUND = 'grey';

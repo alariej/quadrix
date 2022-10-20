@@ -15,6 +15,7 @@ import {
 	PAGE_MARGIN,
 	BUTTON_HEADER_WIDTH,
 	BUTTON_HEADER_MARGIN,
+	BUTTON_HEADER_BACKGROUND,
 } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogNewRoom from '../dialogs/DialogNewRoom';
@@ -60,6 +61,9 @@ const styles = {
 		height: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
 		justifyContent: 'center',
 		alignItems: 'center',
+		backgroundColor: BUTTON_HEADER_BACKGROUND,
+		marginTop: 2,
+		marginRight: 2,
 	}),
 	infoContainer: RX.Styles.createViewStyle({
 		position: 'absolute',

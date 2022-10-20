@@ -19,6 +19,7 @@ import {
 	AVATAR_FOREGROUND,
 	BUTTON_HEADER_WIDTH,
 	BUTTON_HEADER_MARGIN,
+	BUTTON_HEADER_BACKGROUND,
 } from '../ui';
 import { ComponentBase } from 'resub';
 import DataStore from '../stores/DataStore';
@@ -106,6 +107,8 @@ const styles = {
 		height: BUTTON_ROUND_WIDTH,
 		marginLeft: SPACING,
 		overflow: 'visible',
+		marginTop: 2,
+		marginRight: 2,
 	}),
 	roundButton: RX.Styles.createViewStyle({
 		borderRadius: (BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN) / 2,
@@ -113,6 +116,7 @@ const styles = {
 		height: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
 		justifyContent: 'center',
 		alignItems: 'center',
+		backgroundColor: BUTTON_HEADER_BACKGROUND,
 	}),
 	unreadNumber: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
