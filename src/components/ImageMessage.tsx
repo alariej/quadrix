@@ -38,7 +38,7 @@ const styles = {
 		borderWidth: 1,
 		borderColor: TILE_SYSTEM_TEXT,
 		borderRadius: 3,
-		padding: SPACING,
+		padding: 2,
 		textAlign: 'center',
 	}),
 };
