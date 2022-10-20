@@ -6,75 +6,156 @@ interface AnimatedSpinnerProps {
 	size: number;
 }
 
+const animatedSizeStart = 1;
+const animatedSizeStop = 0.5;
+const animatedDuration = 250;
+const loopDuration = 1500;
+const easing = RX.Animated.Easing.Out();
+
 export default class AnimatedSpinner extends RX.Component<AnimatedSpinnerProps, RX.Stateless> {
-	private animatedValue: RX.Animated.Value;
-	private animatedStyle: RX.Types.AnimatedViewStyleRuleSet;
-	private animatedLoop: RX.Types.Animated.LoopConfig;
+	private animatedScale1: RX.Animated.Value;
+	private animatedScale2: RX.Animated.Value;
+	private animatedScale3: RX.Animated.Value;
+	private animatedStyle1: RX.Types.AnimatedViewStyleRuleSet;
+	private animatedStyle2: RX.Types.AnimatedViewStyleRuleSet;
+	private animatedStyle3: RX.Types.AnimatedViewStyleRuleSet;
+	private animation1: RX.Types.Animated.CompositeAnimation;
+	private animation2: RX.Types.Animated.CompositeAnimation;
+	private animation3: RX.Types.Animated.CompositeAnimation;
+	private animation4: RX.Types.Animated.CompositeAnimation;
+	private _isMounted = false;
 
 	constructor(props: AnimatedSpinnerProps) {
 		super(props);
 
-		this.animatedValue = RX.Animated.createValue(0);
-		this.animatedStyle = RX.Styles.createAnimatedViewStyle({
-			transform: [
-				{
-					rotate: this.animatedValue.interpolate({
-						inputRange: [0, 1],
-						outputRange: ['0deg', '360deg'],
-					}),
-				},
-			],
+		this.animatedScale1 = RX.Animated.createValue(animatedSizeStart);
+		this.animatedScale2 = RX.Animated.createValue(animatedSizeStart);
+		this.animatedScale3 = RX.Animated.createValue(animatedSizeStart);
+
+		this.animatedStyle1 = RX.Styles.createAnimatedViewStyle({
+			transform: [{ scale: this.animatedScale1 }],
 		});
-		this.animatedLoop = {
-			restartFrom: 0,
-		};
+		this.animatedStyle2 = RX.Styles.createAnimatedViewStyle({
+			transform: [{ scale: this.animatedScale2 }],
+		});
+		this.animatedStyle3 = RX.Styles.createAnimatedViewStyle({
+			transform: [{ scale: this.animatedScale3 }],
+		});
+
+		this.animation1 = RX.Animated.timing(this.animatedScale1, {
+			duration: animatedDuration,
+			toValue: animatedSizeStop,
+			easing: easing,
+			useNativeDriver: true,
+		});
+
+		this.animation2 = RX.Animated.timing(this.animatedScale2, {
+			duration: animatedDuration,
+			toValue: animatedSizeStop,
+			easing: easing,
+			useNativeDriver: true,
+		});
+
+		this.animation3 = RX.Animated.timing(this.animatedScale3, {
+			duration: animatedDuration,
+			toValue: animatedSizeStop,
+			easing: easing,
+			useNativeDriver: true,
+		});
+
+		this.animation4 = RX.Animated.parallel([
+			RX.Animated.timing(this.animatedScale1, {
+				duration: animatedDuration,
+				toValue: animatedSizeStart,
+				easing: easing,
+				useNativeDriver: true,
+			}),
+			RX.Animated.timing(this.animatedScale2, {
+				duration: animatedDuration,
+				toValue: animatedSizeStart,
+				easing: easing,
+				useNativeDriver: true,
+			}),
+			RX.Animated.timing(this.animatedScale3, {
+				duration: animatedDuration,
+				toValue: animatedSizeStart,
+				easing: easing,
+				useNativeDriver: true,
+			}),
+		]);
 	}
 
+	private animateSpinner = () => {
+		this.animation1?.start(() => {
+			this.animation2?.start(() => {
+				this.animation3?.start(() => {
+					this.animation4?.start();
+				});
+			});
+		});
+
+		if (this._isMounted) {
+			setTimeout(() => {
+				this.animateSpinner();
+			}, loopDuration);
+		}
+	};
+
 	public componentDidMount(): void {
-		RX.Animated.timing(this.animatedValue, {
-			duration: 1000,
-			toValue: 1,
-			easing: RX.Animated.Easing.Linear(),
-			loop: this.animatedLoop,
-			useNativeDriver: true,
-		}).start();
+		this._isMounted = true;
+		this.animateSpinner();
+	}
+
+	public componentWillUnmount(): void {
+		this._isMounted = false;
 	}
 
 	public render(): JSX.Element | null {
-		const ringWidth = this.props.size / 4;
-
 		return (
 			<RX.View
 				style={{
-					height: this.props.size,
-					width: this.props.size,
-					borderRadius: this.props.size / 2,
-					overflow: 'hidden',
+					flex: 1,
+					flexDirection: 'row',
+					alignItems: 'center',
+					justifyContent: 'center',
 				}}
 			>
 				<RX.Animated.View
 					style={[
-						this.animatedStyle,
+						this.animatedStyle1,
 						{
-							height: this.props.size,
-							width: this.props.size,
-							borderRadius: this.props.size / 2,
-							borderWidth: 1,
-							borderColor: this.props.color,
-							alignItems: 'center',
+							height: this.props.size / 3,
+							width: this.props.size / 3,
+							borderRadius: this.props.size / 15,
+							margin: this.props.size / 15,
+							backgroundColor: this.props.color,
 						},
 					]}
-				>
-					<RX.View
-						style={{
-							height: ringWidth,
-							width: ringWidth,
-							borderRadius: ringWidth / 2,
+				/>
+				<RX.Animated.View
+					style={[
+						this.animatedStyle2,
+						{
+							height: this.props.size / 3,
+							width: this.props.size / 3,
+							borderRadius: this.props.size / 15,
+							margin: this.props.size / 15,
 							backgroundColor: this.props.color,
-							margin: -ringWidth / 2,
-						}}
-					/>
-				</RX.Animated.View>
+						},
+					]}
+				/>
+				<RX.Animated.View
+					style={[
+						this.animatedStyle3,
+						{
+							height: this.props.size / 3,
+							width: this.props.size / 3,
+							borderRadius: this.props.size / 15,
+							margin: this.props.size / 15,
+							backgroundColor: this.props.color,
+						},
+					]}
+				/>
 			</RX.View>
 		);
 	}
