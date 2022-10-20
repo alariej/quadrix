@@ -151,7 +151,7 @@ class FileHandler {
 
 		const file: FileObject = {
 			size: response.size,
-			name: response.name,
+			name: response.name || '',
 			type: response.type || 'unknown',
 			uri: response.uri,
 			imageWidth: imageSize.width,
