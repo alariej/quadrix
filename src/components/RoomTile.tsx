@@ -337,7 +337,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 			messageText = invitationWaiting[this.language];
 			messageTypeIcon = (
 				<IconSvg
-					source={require('../resources/svg/RI_info.json') as SvgFile}
+					source={require('../resources/svg/RI_invite.json') as SvgFile}
 					style={{ marginRight: SPACING }}
 					fillColor={ICON_INFO_FILL}
 					height={ICON_INFO_SIZE}
@@ -348,7 +348,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 			messageText = archived[this.language];
 			messageTypeIcon = (
 				<IconSvg
-					source={require('../resources/svg/RI_info.json') as SvgFile}
+					source={require('../resources/svg/RI_archive.json') as SvgFile}
 					style={{ marginRight: SPACING }}
 					fillColor={ICON_INFO_FILL}
 					height={ICON_INFO_SIZE}
@@ -359,7 +359,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 			messageText = invitationNotYetAccepted[this.language];
 			messageTypeIcon = (
 				<IconSvg
-					source={require('../resources/svg/RI_info.json') as SvgFile}
+					source={require('../resources/svg/RI_wait.json') as SvgFile}
 					style={{ marginRight: SPACING }}
 					fillColor={ICON_INFO_FILL}
 					height={ICON_INFO_SIZE}
@@ -372,7 +372,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 					messageText = deleted[this.language];
 					messageTypeIcon = (
 						<IconSvg
-							source={require('../resources/svg/RI_info.json') as SvgFile}
+							source={require('../resources/svg/RI_msg_delete.json') as SvgFile}
 							style={{ marginRight: SPACING }}
 							fillColor={ICON_INFO_FILL}
 							height={ICON_INFO_SIZE}
@@ -383,7 +383,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 					messageText = messageEdited[this.language];
 					messageTypeIcon = (
 						<IconSvg
-							source={require('../resources/svg/RI_info.json') as SvgFile}
+							source={require('../resources/svg/RI_msg_edit.json') as SvgFile}
 							style={{ marginRight: SPACING }}
 							fillColor={ICON_INFO_FILL}
 							height={ICON_INFO_SIZE}
@@ -447,7 +447,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 				messageText = encryptedMessage[this.language];
 				messageTypeIcon = (
 					<IconSvg
-						source={require('../resources/svg/RI_info.json') as SvgFile}
+						source={require('../resources/svg/RI_encrypted.json') as SvgFile}
 						style={{ marginRight: SPACING }}
 						fillColor={ICON_INFO_FILL}
 						height={ICON_INFO_SIZE}

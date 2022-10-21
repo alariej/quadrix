@@ -16,7 +16,6 @@ import {
 	APP_BACKGROUND,
 	SENDER_TEXT,
 	ICON_INFO_FILL,
-	ICON_INFO_SIZE,
 } from '../ui';
 import ImageMessage from './ImageMessage';
 import FileMessage from './FileMessage';
@@ -190,11 +189,11 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 			messageType = 'system';
 			const messageIcon = (
 				<IconSvg
-					source={require('../resources/svg/RI_info.json') as SvgFile}
+					source={require('../resources/svg/RI_msg_delete.json') as SvgFile}
 					style={{ marginRight: SPACING }}
 					fillColor={ICON_INFO_FILL}
-					height={ICON_INFO_SIZE}
-					width={ICON_INFO_SIZE}
+					height={16}
+					width={16}
 				/>
 			);
 			message = (
@@ -207,11 +206,11 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 			messageType = 'system';
 			const messageIcon = (
 				<IconSvg
-					source={require('../resources/svg/RI_info.json') as SvgFile}
+					source={require('../resources/svg/RI_encrypted.json') as SvgFile}
 					style={{ marginRight: SPACING }}
 					fillColor={ICON_INFO_FILL}
-					height={ICON_INFO_SIZE}
-					width={ICON_INFO_SIZE}
+					height={16}
+					width={16}
 				/>
 			);
 			message = (
