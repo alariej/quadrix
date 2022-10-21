@@ -477,10 +477,11 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 				<RX.View style={styles.containerHomeButton}>
 					<AnimatedButton
 						buttonStyle={styles.roundButton}
+						iconStyle={{ marginRight: 2 }}
 						iconSource={require('../resources/svg/RI_arrowleft.json') as SvgFile}
 						iconFillColor={BUTTON_FILL}
-						iconHeight={BUTTON_HEADER_WIDTH}
-						iconWidth={BUTTON_HEADER_WIDTH}
+						iconHeight={26}
+						iconWidth={26}
 						animatedColor={BUTTON_FILL}
 						onPress={this.onPressHomeButton}
 					/>
