@@ -155,7 +155,7 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 		const videoCallButton = (
 			<AnimatedButton
 				buttonStyle={styles.buttonDialog}
-				iconSource={require('../resources/svg/RI_videocam.json') as SvgFile}
+				iconSource={require('../resources/svg/RI_videoconf.json') as SvgFile}
 				iconStyle={{ opacity: videoCallButtonDisabled ? 0.3 : 1 }}
 				iconFillColor={ICON_INFO_FILL}
 				iconHeight={ICON_INFO_SIZE}
