@@ -947,6 +947,11 @@ class DataStore extends StoreBase {
 		return this.roomSummaryList[roomIndex].newEvents;
 	}
 
+	public getLatestFilteredEvent(roomId: string): MessageEvent | undefined {
+		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
+		return this.roomSummaryList[roomIndex].latestFilteredEvent;
+	}
+
 	// used in roomlist
 	@autoSubscribeWithKey(RoomListTrigger)
 	public getSortedRoomList(): Array<RoomSummary> {

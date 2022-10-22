@@ -61,7 +61,7 @@ export default class DialogRoomPicker extends RX.Component<DialogRoomPickerProps
 						key={room.id}
 						roomId={room.id}
 						onPressRoom={this.props.onPressRoom}
-						newestRoomEvent={room.newEvents[0]}
+						newestRoomEvent={room.latestFilteredEvent}
 					/>
 				);
 			});

@@ -290,7 +290,7 @@ export default class DialogIncomingContentShare extends RX.Component<
 	};
 
 	public render(): ReactElement | null {
-		const newestRoomEvent = DataStore.getNewRoomEvents(this.props.roomId)[0];
+		const newestRoomEvent = DataStore.getLatestFilteredEvent(this.props.roomId);
 
 		let progressDialog: ReactElement | undefined = undefined;
 		let content: ReactElement | undefined = undefined;
