@@ -155,6 +155,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 	private readMarkerTime = 0;
 	private language: Languages = 'en';
 	private locale: Locale;
+	private roomEvents: MessageEvent[] = [];
 
 	constructor(props: RoomChatProps) {
 		super(props);
@@ -174,26 +175,26 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 		if (initState || this.props.roomId !== nextProps.roomId) {
 			this.readMarkerTime = DataStore.getReadMarker(nextProps.roomId);
 
-			const roomEvents = DataStore.getAllRoomEvents(nextProps.roomId);
+			this.roomEvents = DataStore.getAllRoomEvents(nextProps.roomId);
 			this.eventListItems = [];
 
-			for (let i = 0; i < roomEvents.length; i++) {
-				const event = roomEvents[i];
+			for (let i = 0; i < this.roomEvents.length; i++) {
+				const event = this.roomEvents[i];
 
 				if (event.type === 'm.room.redaction') {
-					const eventIndex = roomEvents.findIndex(event_ => event_.eventId === event.redacts);
+					const eventIndex = this.roomEvents.findIndex(event_ => event_.eventId === event.redacts);
 					if (eventIndex > -1) {
-						roomEvents[eventIndex].isRedacted = true;
+						this.roomEvents[eventIndex].isRedacted = true;
 					}
 				} else if (event.content['m.relates_to']?.rel_type === 'm.replace') {
 					const editedEventId = event.content['m.relates_to'].event_id;
-					const eventIndex = roomEvents.findIndex(event_ => event_.eventId === editedEventId);
+					const eventIndex = this.roomEvents.findIndex(event_ => event_.eventId === editedEventId);
 					if (eventIndex > -1) {
-						if (event.time > (roomEvents[eventIndex].content._time || 0)) {
-							roomEvents[eventIndex].content = event.content['m.new_content']!;
+						if (event.time > (this.roomEvents[eventIndex].content._time || 0)) {
+							this.roomEvents[eventIndex].content = event.content['m.new_content']!;
 						}
-						roomEvents[eventIndex].isEdited = true;
-						roomEvents[eventIndex].content._time = event.time;
+						this.roomEvents[eventIndex].isEdited = true;
+						this.roomEvents[eventIndex].content._time = event.time;
 					}
 				} else {
 					const messageInfo: EventListItemInfo = {
@@ -339,9 +340,11 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 		const newRoomEvents = DataStore.getNewRoomEvents(this.props.roomId);
 		const newEventsLimited = DataStore.getNewEventsLimited(this.props.roomId);
 
-		if (newRoomEvents.length === 0) {
+		if (newRoomEvents.length === 0 || newRoomEvents[0].eventId === this.roomEvents[0].eventId) {
 			return;
 		}
+
+		this.roomEvents = newRoomEvents.concat(this.roomEvents);
 
 		const newEventListItems: EventListItemInfo[] = [];
 
@@ -376,9 +379,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 			}
 		}
 
-		// sometimes, a new event is sent twice by the server, with a delay of up to 10 seconds in between
-		// shouldn't this be picked up in the datastore?
-		if (newEventListItems.length > 0 && newRoomEvents[0].eventId !== this.eventListItems[0].event.eventId) {
+		if (newEventListItems.length > 0) {
 			if (newEventsLimited) {
 				this.eventListItems = newEventListItems;
 				this.endToken = DataStore.getTimelineToken(this.props.roomId)!;
@@ -451,7 +452,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 		const lastReadReceipt = DataStore.getReadReceipt(roomId, ApiClient.credentials.userIdFull);
 		if (this.roomEvents[0].time > lastReadReceipt) {
 			ApiClient.sendReadReceipt(roomId, this.roomEvents[0].eventId).catch(_error => null);
-			}
+		}
 	};
 
 	private gotoMessage = (eventId: string) => {
