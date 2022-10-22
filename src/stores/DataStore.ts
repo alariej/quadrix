@@ -750,7 +750,10 @@ class DataStore extends StoreBase {
 
 		const isNewUnreadCount =
 			this.roomSummaryList[roomIndex].unreadCount !== roomObj.unread_notifications.notification_count;
-		this.roomSummaryList[roomIndex].unreadCount = roomObj.unread_notifications.notification_count;
+
+		if (isNewUnreadCount) {
+			this.roomSummaryList[roomIndex].unreadCount = roomObj.unread_notifications.notification_count;
+		}
 
 		return isNewUnreadCount;
 	}
@@ -787,7 +790,7 @@ class DataStore extends StoreBase {
 			...newReceipts,
 		};
 
-		return newReceipts !== undefined;
+		return Object.keys(newReceipts).length > 0;
 	}
 
 	// HACK: fake presence
@@ -920,12 +923,6 @@ class DataStore extends StoreBase {
 		return unreadTotal;
 	}
 
-	@autoSubscribeWithKey('DummyTrigger')
-	public setUnread(roomId: string, unread: number) {
-		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
-		this.roomSummaryList[roomIndex].unreadCount = unread;
-	}
-
 	// used in room
 	@autoSubscribeWithKey(RoomActiveTrigger)
 	public getRoomActive(roomId: string): boolean {
@@ -993,6 +990,11 @@ class DataStore extends StoreBase {
 		}
 
 		return readMarker;
+	}
+
+	public getReadReceipt(roomId: string, userId: string): number {
+		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
+		return this.roomSummaryList[roomIndex].readReceipts![userId]?.timestamp;
 	}
 
 	private userIsActive_(roomIndex: number, userId: string): boolean {

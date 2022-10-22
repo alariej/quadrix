@@ -238,7 +238,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 			partialState.showMoreButton = false;
 
 			if (!partialState.offline) {
-				this.sendInitialReadReceipt();
+				this.sendInitialReadReceipt(nextProps.roomId);
 			}
 
 			if (!initState && this.virtualListView) {
@@ -412,7 +412,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 			this.eventListItems = this.eventListItems.concat(lastItem!);
 		}
 		if (!this.state.showArrowButton) {
-			ApiClient.sendReadReceipt(this.props.roomId, newRoomEvents[0].eventId).catch(_error => null);
+			ApiClient.sendReadReceipt(this.props.roomId, this.roomEvents[0].eventId).catch(_error => null);
 			this.setState({ eventListItems: this.eventListItems });
 		}
 	};
@@ -447,14 +447,11 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 		}
 	};
 
-	private sendInitialReadReceipt = () => {
-		this.eventListItems.some(item => {
-			if (item.event.senderId !== ApiClient.credentials.userIdFull) {
-				ApiClient.sendReadReceipt(this.props.roomId, item.event.eventId).catch(_error => null);
-				return true;
+	private sendInitialReadReceipt = (roomId: string) => {
+		const lastReadReceipt = DataStore.getReadReceipt(roomId, ApiClient.credentials.userIdFull);
+		if (this.roomEvents[0].time > lastReadReceipt) {
+			ApiClient.sendReadReceipt(roomId, this.roomEvents[0].eventId).catch(_error => null);
 			}
-			return false;
-		});
 	};
 
 	private gotoMessage = (eventId: string) => {
@@ -562,7 +559,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 		if (!this.state.showArrowButton && scrollHeight > 100) {
 			this.setState({ showArrowButton: true });
 		} else if (this.state.showArrowButton && scrollHeight <= 100) {
-			ApiClient.sendReadReceipt(this.props.roomId, this.eventListItems[0].event.eventId).catch(_error => null);
+			ApiClient.sendReadReceipt(this.props.roomId, this.roomEvents[0].eventId).catch(_error => null);
 			this.setState({
 				eventListItems: this.eventListItems,
 				showArrowButton: false,
@@ -585,7 +582,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
 	private onPressArrowButton = () => {
 		this.virtualListView!.scrollToTop(true, 0);
-		ApiClient.sendReadReceipt(this.props.roomId, this.eventListItems[0].event.eventId).catch(_error => null);
+		ApiClient.sendReadReceipt(this.props.roomId, this.roomEvents[0].eventId).catch(_error => null);
 		this.setState({ eventListItems: this.eventListItems });
 	};
 
