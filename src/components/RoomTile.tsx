@@ -192,8 +192,8 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 		let avatarUrl: string | undefined;
 		let name: string | undefined;
 		if (roomSummary.type === 'direct') {
-			name = roomSummary.members[roomSummary.contactId!].name;
-			avatarUrl = roomSummary.members[roomSummary.contactId!].avatarUrl;
+			name = roomSummary.members[roomSummary.contactId!]?.name;
+			avatarUrl = roomSummary.members[roomSummary.contactId!]?.avatarUrl;
 		} else {
 			name = roomSummary.name;
 			avatarUrl = roomSummary.avatarUrl;

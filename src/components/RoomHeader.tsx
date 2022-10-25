@@ -196,8 +196,8 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 		let avatarUrl: string | undefined;
 		let name: string | undefined;
 		if (this.roomSummary.type === 'direct') {
-			name = this.roomSummary.members[this.roomSummary.contactId!].name;
-			avatarUrl = this.roomSummary.members[this.roomSummary.contactId!].avatarUrl;
+			name = this.roomSummary.members[this.roomSummary.contactId!]?.name;
+			avatarUrl = this.roomSummary.members[this.roomSummary.contactId!]?.avatarUrl;
 		} else {
 			name = this.roomSummary.name;
 			avatarUrl = this.roomSummary.avatarUrl;

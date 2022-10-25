@@ -1084,7 +1084,7 @@ class DataStore extends StoreBase {
 
 		let roomName: string | undefined;
 		if (this.roomSummaryList[roomIndex].type === 'direct') {
-			roomName = this.roomSummaryList[roomIndex].members[this.roomSummaryList[roomIndex].contactId!].name;
+			roomName = this.roomSummaryList[roomIndex].members[this.roomSummaryList[roomIndex].contactId!]?.name;
 		} else {
 			roomName = this.roomSummaryList[roomIndex].name || this.roomSummaryList[roomIndex].alias;
 		}
