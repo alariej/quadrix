@@ -57,8 +57,8 @@ const styles = {
 };
 
 const animatedSizeStart = 0;
-const animatedDuration = 500;
-const animatedEasing = RX.Animated.Easing.InOutBack();
+const animatedDuration = 200;
+const animatedEasing = RX.Animated.Easing.Out();
 
 interface DialogMenuComposerProps {
 	layout: LayoutInfo;

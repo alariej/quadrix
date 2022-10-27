@@ -138,8 +138,8 @@ const styles = {
 };
 
 const animatedSizeStart = 0.2;
-const animatedDuration = 500;
-const animatedEasing = RX.Animated.Easing.InOutBack();
+const animatedDuration = 200;
+const animatedEasing = RX.Animated.Easing.Out();
 
 interface DialogMessageTileProps extends RX.CommonProps {
 	roomId: string;
