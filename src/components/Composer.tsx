@@ -17,6 +17,7 @@ import {
 	BUTTON_HEIGHT,
 	OBJECT_MARGIN,
 	TILE_BACKGROUND,
+	PLACEHOLDER_TEXT,
 } from '../ui';
 import FileHandler from '../modules/FileHandler';
 import ApiClient from '../matrix/ApiClient';
@@ -35,6 +36,7 @@ import {
 	pressSend,
 	pressLoad,
 	Languages,
+	writeMessage,
 } from '../translations';
 import IconSvg, { SvgFile } from './IconSvg';
 import EmojiPicker from './EmojiPicker';
@@ -834,6 +836,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 						spellCheck={this.isWeb ? undefined : true}
 						multiline={true}
 						onSelectionChange={this.onSelectionChange}
+						placeholder={writeMessage[this.language]}
+						placeholderTextColor={PLACEHOLDER_TEXT}
 					/>
 				</RX.View>
 				<AnimatedButton

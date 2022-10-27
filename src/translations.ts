@@ -1408,3 +1408,10 @@ export const clearDatastore: Translation = {
 	fr: 'Cette nouvelle version de Quadrix nécessite le renouvellement de vos données de messagerie à partir du serveur. Veuillez être patient.',
 	es: 'Esta nueva versión de Quadrix necesita actualizar sus datos de mensajería desde el servidor. Por favor, tenga paciencia.',
 };
+
+export const writeMessage: Translation = {
+	en: 'Write a message...',
+	de: 'Nachricht schreiben...',
+	fr: 'Écrire un message...',
+	es: 'Escribir un mensaje...',
+};
