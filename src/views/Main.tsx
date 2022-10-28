@@ -81,8 +81,8 @@ interface MainState {
 }
 
 const animatedRoomTranslateX = -2 * PAGE_WIDE_PADDING;
-const animatedRoomDurationIn = 150;
-const animatedRoomDurationOut = 300;
+const animatedRoomDurationIn = 100;
+const animatedRoomDurationOut = 200;
 const animatedContainerDuration = animatedRoomDurationIn + animatedRoomDurationOut + 100;
 
 export default class Main extends ComponentBase<MainProps, MainState> {
