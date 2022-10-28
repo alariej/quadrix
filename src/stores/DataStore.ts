@@ -992,6 +992,7 @@ class DataStore extends StoreBase {
 		return readMarker;
 	}
 
+	@autoSubscribeWithKey('DummyTrigger')
 	public getReadReceipt(roomId: string, userId: string): number {
 		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
 		return this.roomSummaryList[roomIndex].readReceipts![userId]?.timestamp;
