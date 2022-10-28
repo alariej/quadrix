@@ -76,9 +76,11 @@ interface DialogMenuComposerState {
 export default class DialogMenuComposer extends ComponentBase<DialogMenuComposerProps, DialogMenuComposerState> {
 	private language: Languages = 'en';
 	private animatedScale: RX.Animated.Value;
+	private animatedOpacity: RX.Animated.Value;
 	private animatedTranslateX: RX.Animated.Value;
 	private animatedTranslateY: RX.Animated.Value;
 	private animatedStyle: RX.Types.AnimatedViewStyleRuleSet;
+	private animatedStyleOpacity: RX.Types.AnimatedViewStyleRuleSet;
 
 	constructor(props: DialogMenuComposerProps) {
 		super(props);
@@ -94,6 +96,11 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 				{ translateY: this.animatedTranslateY },
 				{ scale: this.animatedScale },
 			],
+		});
+
+		this.animatedOpacity = RX.Animated.createValue(0);
+		this.animatedStyleOpacity = RX.Styles.createAnimatedViewStyle({
+			opacity: this.animatedOpacity,
 		});
 	}
 
@@ -119,6 +126,12 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 			RX.Animated.timing(this.animatedTranslateY, {
 				duration: animatedDuration,
 				toValue: 0,
+				easing: animatedEasing,
+				useNativeDriver: true,
+			}),
+			RX.Animated.timing(this.animatedOpacity, {
+				duration: animatedDuration,
+				toValue: 1,
 				easing: animatedEasing,
 				useNativeDriver: true,
 			}),
@@ -186,13 +199,13 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 		);
 
 		return (
-			<RX.View
-				style={styles.modalScreen}
+			<RX.Animated.View
+				style={[styles.modalScreen, this.animatedStyleOpacity]}
 				onPress={this.dismissDialog}
 				disableTouchOpacityAnimation={true}
 			>
 				{contextMenu}
-			</RX.View>
+			</RX.Animated.View>
 		);
 	}
 }

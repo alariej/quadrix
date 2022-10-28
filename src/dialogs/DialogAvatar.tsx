@@ -104,6 +104,9 @@ const styles = {
 	}),
 };
 
+const animatedDuration = 200;
+const animatedEasing = RX.Animated.Easing.Out();
+
 interface AvatarProps extends RX.CommonProps {
 	avatarUrl: string;
 	roomName: string;
@@ -129,6 +132,8 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
 	private canChange = false;
 	private platform: RX.Types.PlatformType;
 	private isMounted_: boolean | undefined;
+	private animatedOpacity: RX.Animated.Value;
+	private animatedStyleOpacity: RX.Types.AnimatedViewStyleRuleSet;
 
 	constructor(props: AvatarProps) {
 		super(props);
@@ -141,6 +146,11 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
 		this.roomNameRemote = props.roomName;
 
 		this.canChange = props.roomType !== 'direct' && props.roomPhase === 'join' && this.powerLevel === 100;
+
+		this.animatedOpacity = RX.Animated.createValue(0);
+		this.animatedStyleOpacity = RX.Styles.createAnimatedViewStyle({
+			opacity: this.animatedOpacity,
+		});
 	}
 
 	protected _buildState(_props: AvatarProps, initState: boolean): Partial<AvatarState> {
@@ -160,6 +170,13 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
 		super.componentDidMount();
 
 		this.isMounted_ = true;
+
+		RX.Animated.timing(this.animatedOpacity, {
+			duration: animatedDuration,
+			toValue: 1,
+			easing: animatedEasing,
+			useNativeDriver: true,
+		}).start();
 	}
 
 	public componentWillUnmount(): void {
@@ -462,6 +479,8 @@ export default class DialogAvatar extends ComponentBase<AvatarProps, AvatarState
 			/>
 		);
 
-		return <RX.View style={styles.modalScreen}>{dialogAvatar}</RX.View>;
+		return (
+			<RX.Animated.View style={[styles.modalScreen, this.animatedStyleOpacity]}>{dialogAvatar}</RX.Animated.View>
+		);
 	}
 }

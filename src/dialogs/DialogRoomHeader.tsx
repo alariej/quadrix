@@ -3,7 +3,11 @@ import RX from 'reactxp';
 import { User } from '../models/User';
 import ApiClient from '../matrix/ApiClient';
 import UserTile from '../components/UserTile';
-import { VirtualListView, VirtualListViewCellRenderDetails, VirtualListViewItemInfo } from '../components/VirtualListView';
+import {
+	VirtualListView,
+	VirtualListViewCellRenderDetails,
+	VirtualListViewItemInfo,
+} from '../components/VirtualListView';
 import DataStore from '../stores/DataStore';
 import DialogContainer from '../modules/DialogContainer';
 import { ComponentBase } from 'resub';
@@ -128,6 +132,9 @@ interface DialogRoomHeaderProps extends RX.CommonProps {
 	showRoom: (roomID: string) => void;
 }
 
+const animatedDuration = 200;
+const animatedEasing = RX.Animated.Easing.Out();
+
 interface DialogRoomHeaderState {
 	userListItems: UserListItemInfo[];
 	showSpinner: boolean;
@@ -144,6 +151,8 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
 	private alias: string;
 	private powerLevel: number;
 	private language: Languages = 'en';
+	private animatedOpacity: RX.Animated.Value;
+	private animatedStyleOpacity: RX.Types.AnimatedViewStyleRuleSet;
 
 	constructor(props: DialogRoomHeaderProps) {
 		super(props);
@@ -152,6 +161,11 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
 		this.alias = DataStore.getAlias(props.roomId)!;
 		this.powerLevel = DataStore.getPowerLevel(props.roomId, ApiClient.credentials.userIdFull);
 		this.language = UiStore.getLanguage();
+
+		this.animatedOpacity = RX.Animated.createValue(0);
+		this.animatedStyleOpacity = RX.Styles.createAnimatedViewStyle({
+			opacity: this.animatedOpacity,
+		});
 	}
 
 	protected _buildState(
@@ -175,6 +189,17 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
 		partialState.offline = UiStore.getOffline();
 
 		return partialState;
+	}
+
+	public componentDidMount(): void {
+		super.componentDidMount();
+
+		RX.Animated.timing(this.animatedOpacity, {
+			duration: animatedDuration,
+			toValue: 1,
+			easing: animatedEasing,
+			useNativeDriver: true,
+		}).start();
 	}
 
 	private getUserListItems = (members: { [id: string]: User }) => {
@@ -526,8 +551,8 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
 		);
 
 		return (
-			<RX.View
-				style={styles.modalScreen}
+			<RX.Animated.View
+				style={[styles.modalScreen, this.animatedStyleOpacity]}
 				onPress={() => RX.Modal.dismissAll()}
 				disableTouchOpacityAnimation={true}
 			>
@@ -550,7 +575,7 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
 					{addUserButton}
 					{leaveRoomButton}
 				</RX.View>
-			</RX.View>
+			</RX.Animated.View>
 		);
 	}
 }

@@ -165,8 +165,10 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 	private isMobile: boolean;
 	private isMedia: boolean;
 	private animatedScale: RX.Animated.Value;
+	private animatedOpacity: RX.Animated.Value;
 	private animatedTranslateX: RX.Animated.Value;
 	private animatedStyle: RX.Types.AnimatedViewStyleRuleSet;
+	private animatedStyleOpacity: RX.Types.AnimatedViewStyleRuleSet;
 	private confirmationDialog: ReactElement | undefined;
 	private rightAlignment: boolean;
 
@@ -185,6 +187,11 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 		this.animatedTranslateX = RX.Animated.createValue((BUTTON_MENU_WIDTH / 2) * (this.rightAlignment ? 1 : -1));
 		this.animatedStyle = RX.Styles.createAnimatedViewStyle({
 			transform: [{ translateX: this.animatedTranslateX }, { scale: this.animatedScale }],
+		});
+
+		this.animatedOpacity = RX.Animated.createValue(0);
+		this.animatedStyleOpacity = RX.Styles.createAnimatedViewStyle({
+			opacity: this.animatedOpacity,
 		});
 
 		props.setReplyMessage(undefined);
@@ -221,6 +228,12 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 			RX.Animated.timing(this.animatedTranslateX, {
 				duration: animatedDuration,
 				toValue: 0,
+				easing: animatedEasing,
+				useNativeDriver: true,
+			}),
+			RX.Animated.timing(this.animatedOpacity, {
+				duration: animatedDuration,
+				toValue: 1,
 				easing: animatedEasing,
 				useNativeDriver: true,
 			}),
@@ -903,8 +916,8 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 		}
 
 		return (
-			<RX.View
-				style={styles.modalScreen}
+			<RX.Animated.View
+				style={[styles.modalScreen, this.animatedStyleOpacity]}
 				onPress={() => {
 					this.state.showConfirmationDialog || this.state.showSpinner ? null : RX.Modal.dismissAll();
 				}}
@@ -948,7 +961,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 				</RX.View>
 				{this.confirmationDialog}
 				{spinner}
-			</RX.View>
+			</RX.Animated.View>
 		);
 	}
 }
