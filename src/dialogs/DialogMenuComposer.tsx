@@ -12,14 +12,13 @@ import {
 	SPACING,
 	ICON_INFO_SIZE,
 	ICON_INFO_FILL,
-	OBJECT_MARGIN,
 	PAGE_MARGIN,
 	PAGE_WIDE_PADDING,
 	BUTTON_COMPOSER_WIDTH,
 	BUTTON_MENU_COMPOSER_WIDTH,
 	LIGHT_BACKGROUND,
 } from '../ui';
-import { Languages, sendFile, videoconference } from '../translations';
+import { Languages, pickFile, pickImage, videoconference } from '../translations';
 import AppFont from '../modules/AppFont';
 import { SvgFile } from '../components/IconSvg';
 import { RoomType } from '../models/MatrixApi';
@@ -66,6 +65,7 @@ interface DialogMenuComposerProps {
 	roomActive: boolean;
 	jitsiActive: boolean;
 	onPressFile: () => void;
+	onPressImage: () => void;
 	onPressVideoCall: () => void;
 }
 
@@ -154,10 +154,29 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 				animatedColor={LIGHT_BACKGROUND}
 				onPress={this.props.onPressFile}
 				disabled={this.state.offline}
-				text={sendFile[this.language]}
+				text={pickFile[this.language]}
 				textStyle={[styles.buttonText, { opacity: this.state.offline ? 0.3 : 1 }]}
 			/>
 		);
+
+		let imageButton;
+		if (['ios', 'android'].includes(UiStore.getPlatform())) {
+			imageButton = (
+				<AnimatedButton
+					buttonStyle={styles.buttonDialog}
+					iconSource={require('../resources/svg/RI_image.json') as SvgFile}
+					iconStyle={{ opacity: this.state.offline ? 0.3 : 1 }}
+					iconFillColor={ICON_INFO_FILL}
+					iconHeight={ICON_INFO_SIZE}
+					iconWidth={ICON_INFO_SIZE}
+					animatedColor={LIGHT_BACKGROUND}
+					onPress={this.props.onPressImage}
+					disabled={this.state.offline}
+					text={pickImage[this.language]}
+					textStyle={[styles.buttonText, { opacity: this.state.offline ? 0.3 : 1 }]}
+				/>
+			);
+		}
 
 		const videoCallButtonDisabled =
 			this.state.offline ||
@@ -187,13 +206,14 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 			(appLayout.type === 'wide' ? appLayout.screenWidth / 2 + PAGE_WIDE_PADDING : 0) +
 			BUTTON_COMPOSER_WIDTH +
 			PAGE_MARGIN +
-			OBJECT_MARGIN;
+			SPACING;
 
 		const top = this.props.layout.y + BUTTON_COMPOSER_WIDTH / 2;
 
 		const contextMenu = (
 			<RX.Animated.View style={[this.animatedStyle, styles.buttonContainer, { top: top, left: left }]}>
 				{fileButton}
+				{imageButton}
 				{videoCallButton}
 			</RX.Animated.View>
 		);

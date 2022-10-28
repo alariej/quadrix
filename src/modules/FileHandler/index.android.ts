@@ -14,6 +14,7 @@ import { FileSystem } from 'react-native-file-access';
 import { ThumbnailInfo, UploadFileInfo } from '../../models/UploadFileInfo';
 import { createThumbnail } from 'react-native-create-thumbnail';
 import StringUtils from '../../utils/StringUtils';
+import * as ImagePicker from 'react-native-image-picker';
 
 class FileHandler {
 	public cacheAppFolder = '';
@@ -199,8 +200,34 @@ class FileHandler {
 		return Promise.resolve(file);
 	}
 
-	public pickImage(): Promise<FileObject | null> {
-		return Promise.resolve(null);
+	public pickImage(): Promise<FileObject> {
+		return new Promise((resolve, reject) => {
+			const setFile: ImagePicker.Callback = response => {
+				if (response.didCancel) {
+					return reject();
+				}
+
+				const file: FileObject = {
+					size: response.assets![0].fileSize,
+					name: response.assets![0].fileName || '',
+					type: response.assets![0].type?.toLowerCase() || 'unknown',
+					uri: response.assets![0].uri || '',
+					imageWidth: response.assets![0].width,
+					imageHeight: response.assets![0].height,
+				};
+
+				return resolve(file);
+			};
+
+			const options: ImagePicker.ImageLibraryOptions = {
+				maxHeight: 800,
+				maxWidth: 800,
+				selectionLimit: 1,
+				mediaType: 'photo',
+			};
+
+			ImagePicker.launchImageLibrary(options, setFile).catch(_error => null);
+		});
 	}
 
 	public async uploadFile(

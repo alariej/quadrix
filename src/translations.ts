@@ -1355,18 +1355,25 @@ export const logout: Translation = {
 	es: 'Desconexión',
 };
 
-export const sendFile: Translation = {
-	en: 'Send file',
-	de: 'Datei senden',
-	fr: 'Envoi de fichier',
-	es: 'Enviar archivo',
+export const pickFile: Translation = {
+	en: 'Pick file',
+	de: 'Datei auswählen',
+	fr: 'Choisir un fichier',
+	es: 'Elegir un archivo',
+};
+
+export const pickImage: Translation = {
+	en: 'Pick image',
+	de: 'Bild auswählen',
+	fr: 'Choisir une image',
+	es: 'Elegir una imagen',
 };
 
 export const videoconference: Translation = {
-	en: 'Videoconference',
-	de: 'Videokonferenz',
-	fr: 'Vidéoconférence',
-	es: 'Videoconferencia',
+	en: 'Start videoconference',
+	de: 'Videokonferenz starten',
+	fr: 'Lancer la vidéoconférence',
+	es: 'Iniciar videoconferencia',
 };
 
 export const newVersion = (versionInstalled: string, versionAvailable: string, language: string): string => {

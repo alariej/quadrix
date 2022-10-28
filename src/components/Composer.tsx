@@ -415,18 +415,23 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 		}, 250);
 	};
 
-	private onPressAttachment = async () => {
-		const fetchProgress = (_text: string, _progress: number) => {
-			this.progressText = _text;
-			this.setState({ progressValue: _progress });
-		};
-
+	private onPressFile = async () => {
 		const file = await FileHandler.pickFile(false);
 
-		if (!file) {
-			return;
+		if (file) {
+			this.sendFile(file).catch(_error => null);
 		}
+	};
 
+	private onPressImage = async () => {
+		const file = await FileHandler.pickImage();
+
+		if (file) {
+			this.sendFile(file).catch(_error => null);
+		}
+	};
+
+	private sendFile = async (file: FileObject) => {
 		const shouldUpload = await this.showFileDialog(file);
 
 		if (!shouldUpload) {
@@ -441,6 +446,11 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 		this.props.showTempSentMessage({ body: '[' + sending[this.language] + file.name + ']', tempId: tempId });
 
 		this.setState({ showProgress: true });
+
+		const fetchProgress = (_text: string, _progress: number) => {
+			this.progressText = _text;
+			this.setState({ progressValue: _progress });
+		};
 
 		FileHandler.uploadFile(ApiClient.credentials, file, fetchProgress)
 			.then((response: UploadFileInfo) => {
@@ -751,7 +761,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 						roomType={this.props.roomType}
 						roomActive={this.props.roomActive}
 						jitsiActive={this.state.jitsiActive}
-						onPressFile={this.onPressAttachment}
+						onPressFile={this.onPressFile}
+						onPressImage={this.onPressImage}
 						onPressVideoCall={this.onPressVideoCall}
 					/>
 				);
