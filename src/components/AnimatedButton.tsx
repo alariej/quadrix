@@ -72,6 +72,7 @@ export default class AnimatedButton extends RX.Component<AnimatedButtonProps, RX
 				<RX.Text
 					allowFontScaling={false}
 					style={this.props.textStyle}
+					numberOfLines={1}
 				>
 					{this.props.text}
 				</RX.Text>
