@@ -3,7 +3,7 @@
   "productName": "quadrix.chat",
   "private": true,
   "main": "index.js",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "Minimal, simple, multi-platform chat client for the Matrix protocol",
   "author": "Jean-François Alarie <alariej@quadrix.chat>",
   "homepage": "https://quadrix.chat",
