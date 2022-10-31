@@ -11,6 +11,7 @@ import {
 	TRANSPARENT_BACKGROUND,
 	HEADER_HEIGHT,
 	STATUSBAR_BACKGROUND,
+	BUTTON_HEADER_BACKGROUND,
 } from '../ui';
 import DataStore from '../stores/DataStore';
 import { MessageEvent } from '../models/MessageEvent';
@@ -466,10 +467,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 			<RX.View style={[styles.background, { left: offset - backgroundSize / 2 }]}>
 				<IconSvg
 					source={require('../resources/svg/matrix.json') as SvgFile}
-					style={{ opacity: 0.4 }}
-					height={backgroundSize}
-					width={backgroundSize}
-					fillColor={'white'}
+					fillColor={BUTTON_HEADER_BACKGROUND}
 				/>
 			</RX.View>
 		);

@@ -58,8 +58,6 @@ const styles = {
 		flexDirection: 'row',
 		backgroundColor: TILE_BACKGROUND,
 		borderRadius: BORDER_RADIUS,
-		borderWidth: 1,
-		borderColor: TILE_BACKGROUND,
 		marginBottom: 1,
 		padding: 2 * SPACING,
 		height: TILE_HEIGHT,

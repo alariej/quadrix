@@ -49,7 +49,7 @@ export const FONT_EMOJI_LARGE = 26;
 
 export const LOGO_FILL = '#FF8000';
 export const SPINNER_FILL = LOGO_FILL;
-export const APP_BACKGROUND = '#EDEDED';
+export const APP_BACKGROUND = '#F2EEE8';
 export const STATUSBAR_BACKGROUND = 'lightgrey';
 export const OPAQUE_BACKGROUND = 'rgba(0, 0, 0, 0.7)';
 export const OPAQUE_LIGHT_BACKGROUND = 'rgba(0, 0, 0, 0.3)';
@@ -65,7 +65,7 @@ export const TILE_SYSTEM_TEXT = 'grey';
 export const LIGHT_BACKGROUND = 'grey';
 export const BUTTON_FILL = LOGO_FILL;
 export const BUTTON_ROUND_BACKGROUND = 'white';
-export const BUTTON_HEADER_BACKGROUND = '#F5F5F5';
+export const BUTTON_HEADER_BACKGROUND = 'rgba(255, 255, 255, 0.4)';
 export const BUTTON_LONG_BACKGROUND = 'dimgrey';
 export const BUTTON_MODAL_BACKGROUND = 'white';
 export const BUTTON_CANCEL_BACKGROUND = 'grey';
