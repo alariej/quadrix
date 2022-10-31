@@ -86,8 +86,7 @@ const animatedRoomTranslateX = -2 * PAGE_WIDE_PADDING;
 const animatedRoomDurationIn = 100;
 const animatedRoomDurationOut = 200;
 const animatedContainerDuration = animatedRoomDurationIn + animatedRoomDurationOut + 100;
-const matrixSize = 140;
-const decoSize = matrixSize * 2;
+const matrixSize = 160;
 
 export default class Main extends ComponentBase<MainProps, MainState> {
 	private message!: MessageEvent;
@@ -106,7 +105,6 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 	private appLayoutSubscription: number;
 	private appOfflineSubscription: number;
 	private isOffline: boolean;
-	private svgArray: ReactElement[] = [];
 
 	constructor(props: MainProps) {
 		super(props);
@@ -122,64 +120,6 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 				showLogin={this.props.showLogin}
 			/>
 		);
-
-		const svg: SvgFile[] = [];
-		svg.push(require('../resources/svg/art_sun.json') as SvgFile);
-		svg.push(require('../resources/svg/art_moon.json') as SvgFile);
-		svg.push(require('../resources/svg/art_lotus.json') as SvgFile);
-		svg.push(require('../resources/svg/art_paws.json') as SvgFile);
-
-		for (let i = 0; i < 4; i++) {
-			const artSize = 40;
-			const r1 = Math.random();
-			const r2 = Math.random();
-
-			let x;
-			let y;
-			const d1 = (decoSize - matrixSize) / 2;
-			const d2 = decoSize;
-			switch (i) {
-				case 0:
-					x = r1 * d2 - artSize / 2;
-					y = r2 * d1 - artSize;
-					break;
-
-				case 1:
-					x = r1 * d1 - artSize;
-					y = r2 * d2 - artSize / 2;
-					break;
-
-				case 2:
-					x = r1 * d1 + d2 - d1;
-					y = r2 * d2 - artSize / 2;
-					break;
-
-				default:
-					x = r1 * d2 - artSize / 2;
-					y = r2 * d1 + d2 - d1;
-					break;
-			}
-
-			const iconStyle = RX.Styles.createViewStyle(
-				{
-					position: 'absolute',
-					left: x,
-					top: y,
-				},
-				false
-			);
-
-			const svgElement = (
-				<IconSvg
-					style={iconStyle}
-					source={svg[i]}
-					height={artSize}
-					width={artSize}
-					fillColor={BUTTON_HEADER_BACKGROUND}
-				/>
-			);
-			this.svgArray.push(svgElement);
-		}
 
 		this.animatedRoomTranslateXValue = RX.Animated.createValue(animatedRoomTranslateX);
 		this.animatedRoomOpacityValue = RX.Animated.createValue(0);
@@ -526,16 +466,6 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
 		const backgroundImage = (
 			<RX.View style={[styles.background, { left: offset - matrixSize / 2 }]}>
-				<RX.View
-					style={{
-						position: 'absolute',
-						width: decoSize,
-						height: decoSize,
-						overflow: 'visible',
-					}}
-				>
-					{this.svgArray}
-				</RX.View>
 				<IconSvg
 					source={require('../resources/svg/matrix.json') as SvgFile}
 					height={matrixSize}
