@@ -91,6 +91,7 @@ export const INPUT_BACKGROUND = 'white';
 export const INPUT_TEXT = 'black';
 export const INPUT_BORDER = 'lightgrey';
 export const PLACEHOLDER_TEXT = 'darkgrey';
+export const LABEL_TEXT = 'dimgrey';
 export const AVATAR_FOREGROUND = '#0088B3';
 export const AVATAR_BACKGROUND = 'white';
 export const LINK_TEXT = '#1238B3';

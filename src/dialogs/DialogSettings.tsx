@@ -29,6 +29,7 @@ import {
 	ICON_REDUCTION_FACTOR,
 	ICON_INFO_SIZE,
 	BUTTON_WARNING_TEXT,
+	LABEL_TEXT,
 } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
@@ -127,7 +128,7 @@ const styles = {
 	label: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
 		fontSize: FONT_NORMAL,
-		color: PLACEHOLDER_TEXT,
+		color: LABEL_TEXT,
 		width: 96,
 		padding: SPACING,
 	}),
