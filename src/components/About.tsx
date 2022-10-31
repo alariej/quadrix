@@ -94,7 +94,7 @@ export default class About extends RX.Component<unknown, RX.Stateless> {
 		let androidLogo;
 		let windowsLogo;
 		let linuxLogo;
-		if (!(UiStore.getPlatform() === 'web' && UiStore.getDesktopOS() === 'MacOS')) {
+		if (!(UiStore.getIsElectron() && UiStore.getDesktopOS() === 'MacOS')) {
 			sponsorButton = (
 				<RX.Button
 					style={styles.sponsorButton}
