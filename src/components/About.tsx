@@ -88,6 +88,74 @@ export default class About extends RX.Component<unknown, RX.Stateless> {
 	public render(): JSX.Element | null {
 		const storeIconSize = 28;
 		const storeIconColor = 'grey';
+
+		let sponsorButton;
+		let numLogo;
+		let androidLogo;
+		let windowsLogo;
+		let linuxLogo;
+		if (!(UiStore.getPlatform() === 'web' && UiStore.getDesktopOS() === 'MacOS')) {
+			sponsorButton = (
+				<RX.Button
+					style={styles.sponsorButton}
+					onPress={event => this.openUrl(GITHUB_SPONSOR_URL, event)}
+				>
+					<RX.Text
+						allowFontScaling={false}
+						style={styles.sponsorText}
+					>
+						💙 Sponsor
+					</RX.Text>
+				</RX.Button>
+			);
+
+			androidLogo = (
+				<RX.Button
+					style={styles.logostore}
+					onPress={event => this.openUrl(APPSTORES_ANDROID_URL, event)}
+				>
+					<IconSvg
+						source={require('../resources/svg/logo_android.json') as SvgFile}
+						height={storeIconSize}
+						width={storeIconSize}
+						fillColor={storeIconColor}
+					/>
+				</RX.Button>
+			);
+
+			windowsLogo = (
+				<RX.Button
+					style={styles.logostore}
+					onPress={event => this.openUrl(APPSTORES_WINDOWS_URL, event)}
+				>
+					<IconSvg
+						source={require('../resources/svg/logo_windows.json') as SvgFile}
+						height={storeIconSize}
+						width={storeIconSize}
+						fillColor={storeIconColor}
+					/>
+				</RX.Button>
+			);
+
+			linuxLogo = (
+				<RX.Button
+					style={styles.logostore}
+					onPress={event => this.openUrl(APPSTORES_FLATHUB_URL, event)}
+				>
+					<IconSvg
+						source={require('../resources/svg/logo_linux.json') as SvgFile}
+						height={storeIconSize}
+						width={storeIconSize}
+						fillColor={storeIconColor}
+					/>
+				</RX.Button>
+			);
+
+			numLogo = 5;
+		} else {
+			numLogo = 2;
+		}
+
 		return (
 			<RX.View style={styles.containerAbout}>
 				<RX.View style={styles.logo}>
@@ -118,29 +186,9 @@ export default class About extends RX.Component<unknown, RX.Stateless> {
 				>
 					{termsPrivacyLicense[UiStore.getLanguage()]}
 				</RX.Text>
-				<RX.Button
-					style={styles.sponsorButton}
-					onPress={event => this.openUrl(GITHUB_SPONSOR_URL, event)}
-				>
-					<RX.Text
-						allowFontScaling={false}
-						style={styles.sponsorText}
-					>
-						💙 Sponsor
-					</RX.Text>
-				</RX.Button>
-				<RX.View style={[styles.stores, { width: 5 * (storeIconSize + 2 * 5) }]}>
-					<RX.Button
-						style={styles.logostore}
-						onPress={event => this.openUrl(APPSTORES_ANDROID_URL, event)}
-					>
-						<IconSvg
-							source={require('../resources/svg/logo_android.json') as SvgFile}
-							height={storeIconSize}
-							width={storeIconSize}
-							fillColor={storeIconColor}
-						/>
-					</RX.Button>
+				{sponsorButton}
+				<RX.View style={[styles.stores, { width: numLogo * (storeIconSize + 2 * 5) }]}>
+					{androidLogo}
 					<RX.Button
 						style={styles.logostore}
 						onPress={event => this.openUrl(APPSTORES_IOS_URL, event)}
@@ -163,28 +211,8 @@ export default class About extends RX.Component<unknown, RX.Stateless> {
 							fillColor={storeIconColor}
 						/>
 					</RX.Button>
-					<RX.Button
-						style={styles.logostore}
-						onPress={event => this.openUrl(APPSTORES_WINDOWS_URL, event)}
-					>
-						<IconSvg
-							source={require('../resources/svg/logo_windows.json') as SvgFile}
-							height={storeIconSize}
-							width={storeIconSize}
-							fillColor={storeIconColor}
-						/>
-					</RX.Button>
-					<RX.Button
-						style={styles.logostore}
-						onPress={event => this.openUrl(APPSTORES_FLATHUB_URL, event)}
-					>
-						<IconSvg
-							source={require('../resources/svg/logo_linux.json') as SvgFile}
-							height={storeIconSize}
-							width={storeIconSize}
-							fillColor={storeIconColor}
-						/>
-					</RX.Button>
+					{windowsLogo}
+					{linuxLogo}
 				</RX.View>
 			</RX.View>
 		);
