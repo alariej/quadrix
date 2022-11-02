@@ -152,6 +152,10 @@ export default class DialogRegister extends RX.Component<DialogRegisterProps, Di
 			.catch((error: ErrorRegisterResponse_) => {
 				if (error.statusCode === 400 && error.body.errcode === 'M_USER_IN_USE') {
 					this.props.showRegistrationError(userIdInUse[this.language]);
+				} else if (error.statusCode === 400 && error.body.error) {
+					this.props.showRegistrationError(error.body.error);
+				} else if (error.statusCode === 403 && error.body.error) {
+					this.props.showRegistrationError(error.body.error);
 				} else if (error.statusCode === 401 && error.body.session) {
 					const params = error.body.params;
 					this.session = error.body.session;

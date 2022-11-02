@@ -231,6 +231,7 @@ export interface ErrorRegisterResponse_ {
 	statusCode: number;
 	body: {
 		errcode: string;
+		error: string;
 		session: string;
 		params: {
 			'm.login.recaptcha': { public_key: string };
