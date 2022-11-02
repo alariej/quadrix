@@ -361,7 +361,7 @@ class DataStore extends StoreBase {
 	}
 
 	private updateTimeLine(timeline: RoomTimeline_, roomIndex: number) {
-		if (!timeline.events || timeline.events.length === 0) {
+		if (!timeline?.events || timeline?.events.length === 0) {
 			return;
 		}
 
@@ -387,7 +387,7 @@ class DataStore extends StoreBase {
 	}
 
 	private updateNewEvents(timeline: RoomTimeline_, roomIndex: number) {
-		if (!timeline.events || timeline.events.length === 0) {
+		if (!timeline?.events || timeline.events?.length === 0) {
 			return;
 		}
 
@@ -489,13 +489,13 @@ class DataStore extends StoreBase {
 	private updateJoinRoom(roomObj: RoomData_, roomIndex: number): RoomEventTriggers {
 		this.updateTimeLine(roomObj.timeline, roomIndex);
 		this.updateNewEvents(roomObj.timeline, roomIndex);
-		if (roomObj.timeline.events?.length > 0) {
+		if (roomObj.timeline?.events?.length > 0) {
 			this.updateLatestFilteredEvent(roomIndex);
 		}
 
-		const roomEventTriggers1 = this.setRoomInfoFromEvents(roomObj.timeline.events, roomIndex);
+		const roomEventTriggers1 = this.setRoomInfoFromEvents(roomObj.timeline?.events, roomIndex);
 
-		const roomEventTriggers2 = this.setRoomInfoFromEvents(roomObj.state.events, roomIndex);
+		const roomEventTriggers2 = this.setRoomInfoFromEvents(roomObj.state?.events, roomIndex);
 
 		const roomEventTriggers = { ...roomEventTriggers1, ...roomEventTriggers2 };
 
@@ -517,7 +517,7 @@ class DataStore extends StoreBase {
 
 		this.setRoomInfoFromSummary(roomObj.summary, roomIndex);
 
-		this.setRoomInfoFromEvents(roomObj.timeline.events, roomIndex);
+		this.setRoomInfoFromEvents(roomObj.timeline?.events, roomIndex);
 
 		this.trySetRoomType(this.roomSummaryList[roomIndex].id, roomIndex);
 
@@ -548,7 +548,7 @@ class DataStore extends StoreBase {
 
 		this.setRoomInfoFromSummary(roomObj.summary, roomIndex);
 
-		const roomEventTriggers = this.setRoomInfoFromEvents(roomObj.timeline.events, roomIndex);
+		const roomEventTriggers = this.setRoomInfoFromEvents(roomObj.timeline?.events, roomIndex);
 
 		this.roomSummaryList[roomIndex].phase = 'join';
 		this.roomSummaryList[roomIndex].unreadCount = 0;
@@ -579,9 +579,9 @@ class DataStore extends StoreBase {
 
 		this.setRoomInfoFromSummary(roomObj.summary, roomIndex);
 
-		this.setRoomInfoFromEvents(roomObj.state.events, roomIndex);
+		this.setRoomInfoFromEvents(roomObj.state?.events, roomIndex);
 
-		this.setRoomInfoFromEvents(roomObj.timeline.events, roomIndex);
+		this.setRoomInfoFromEvents(roomObj.timeline?.events, roomIndex);
 
 		this.trySetRoomType(roomId, roomIndex);
 
@@ -759,7 +759,7 @@ class DataStore extends StoreBase {
 	}
 
 	private updateReadReceipts(roomObj: RoomData_, roomIndex: number): boolean {
-		if (!roomObj.ephemeral.events || roomObj.ephemeral.events.length === 0) {
+		if (!roomObj.ephemeral?.events || roomObj.ephemeral?.events.length === 0) {
 			return false;
 		}
 

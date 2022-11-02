@@ -450,7 +450,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
 	private sendInitialReadReceipt = (roomId: string) => {
 		const lastReadReceipt = DataStore.getReadReceipt(roomId, ApiClient.credentials.userIdFull);
-		if (this.roomEvents[0].time > lastReadReceipt) {
+		if (this.roomEvents[0]?.time > lastReadReceipt) {
 			ApiClient.sendReadReceipt(roomId, this.roomEvents[0].eventId).catch(_error => null);
 		}
 	};
