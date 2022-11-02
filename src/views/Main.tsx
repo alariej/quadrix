@@ -82,17 +82,15 @@ interface MainState {
 	layout: Layout;
 }
 
-const animatedRoomTranslateX = -2 * PAGE_WIDE_PADDING;
-const animatedRoomDurationIn = 100;
-const animatedRoomDurationOut = 200;
-const animatedContainerDuration = animatedRoomDurationIn + animatedRoomDurationOut + 100;
+const animatedRoomDurationIn = 200;
+const animatedRoomDurationOut = 850;
+const animatedContainerDuration = 250;
 const matrixSize = 160;
 
 export default class Main extends ComponentBase<MainProps, MainState> {
 	private message!: MessageEvent;
 	private tempId = '';
 	private jitsiMeetId = '';
-	private animatedRoomTranslateXValue: RX.Animated.Value;
 	private animatedRoomOpacityValue: RX.Animated.Value;
 	private animatedRoomStyle: RX.Types.AnimatedViewStyleRuleSet;
 	private animatedRoomIn: RX.Types.Animated.CompositeAnimation;
@@ -121,42 +119,24 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 			/>
 		);
 
-		this.animatedRoomTranslateXValue = RX.Animated.createValue(animatedRoomTranslateX);
 		this.animatedRoomOpacityValue = RX.Animated.createValue(0);
 		this.animatedRoomStyle = RX.Styles.createAnimatedViewStyle({
 			opacity: this.animatedRoomOpacityValue,
-			transform: [{ translateX: this.animatedRoomTranslateXValue }],
 		});
 
-		this.animatedRoomIn = RX.Animated.parallel([
-			RX.Animated.timing(this.animatedRoomOpacityValue, {
-				duration: animatedRoomDurationIn,
-				toValue: 0,
-				easing: RX.Animated.Easing.InOut(),
-				useNativeDriver: true,
-			}),
-			RX.Animated.timing(this.animatedRoomTranslateXValue, {
-				duration: animatedRoomDurationIn,
-				toValue: animatedRoomTranslateX,
-				easing: RX.Animated.Easing.InOut(),
-				useNativeDriver: true,
-			}),
-		]);
+		this.animatedRoomIn = RX.Animated.timing(this.animatedRoomOpacityValue, {
+			duration: animatedRoomDurationIn,
+			toValue: 0,
+			easing: RX.Animated.Easing.InOut(),
+			useNativeDriver: true,
+		});
 
-		this.animatedRoomOut = RX.Animated.parallel([
-			RX.Animated.timing(this.animatedRoomOpacityValue, {
-				duration: animatedRoomDurationOut,
-				toValue: 1,
-				easing: RX.Animated.Easing.InOut(),
-				useNativeDriver: true,
-			}),
-			RX.Animated.timing(this.animatedRoomTranslateXValue, {
-				duration: animatedRoomDurationOut,
-				toValue: 0,
-				easing: RX.Animated.Easing.InOut(),
-				useNativeDriver: true,
-			}),
-		]);
+		this.animatedRoomOut = RX.Animated.timing(this.animatedRoomOpacityValue, {
+			duration: animatedRoomDurationOut,
+			toValue: 1,
+			easing: RX.Animated.Easing.InOut(),
+			useNativeDriver: true,
+		});
 
 		this.animatedContainerTranslateXValue = RX.Animated.createValue(0);
 		this.animatedContainerStyle = RX.Styles.createAnimatedViewStyle({
