@@ -351,6 +351,12 @@ export interface DirectorySearch_ {
 	}[];
 }
 
+export interface WellKnown_ {
+	'm.homeserver': {
+		base_url: string;
+	};
+}
+
 export interface EphemeralEvent_ {
 	events: {
 		type: EphemeralEventType;

@@ -19,6 +19,7 @@ import {
 	SyncResponse_,
 	PushRulesGetResponse_,
 	DirectorySearch_,
+	WellKnown_,
 } from '../models/MatrixApi';
 
 export default class RestClient extends GenericRestClient {
@@ -333,5 +334,9 @@ export default class RestClient extends GenericRestClient {
 		};
 
 		return this.performApiPost<void>('rooms/' + roomId + '/kick', data);
+	}
+
+	public getWellKnown(): Promise<WellKnown_> {
+		return this.performApiGet<WellKnown_>('.well-known/matrix/client');
 	}
 }

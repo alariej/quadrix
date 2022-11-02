@@ -29,6 +29,7 @@ import { RoomSummary } from '../models/RoomSummary';
 import EventUtils from '../utils/EventUtils';
 import { MessageEvent } from '../models/MessageEvent';
 import AsyncStorage from '../modules/AsyncStorage';
+import StringUtils from '../utils/StringUtils';
 
 class ApiClient {
 	public credentials!: Credentials;
@@ -36,7 +37,13 @@ class ApiClient {
 	// login + credentials
 
 	public async login(userId: string, password: string, server: string): Promise<void> {
-		const restClient = new RestClient('', server, PREFIX_REST);
+		const restClient_ = new RestClient('', server, '/');
+
+		const wellKnown = await restClient_.getWellKnown().catch(_error => null);
+
+		const baseUrl = wellKnown ? StringUtils.cleanServerName(wellKnown['m.homeserver'].base_url) : undefined;
+
+		const restClient = new RestClient('', baseUrl || server, PREFIX_REST);
 
 		const data: LoginParam_ = {
 			identifier: {
@@ -62,7 +69,7 @@ class ApiClient {
 			userIdFull: response.user_id,
 			accessToken: response.access_token,
 			deviceId: response.device_id,
-			homeServer: server,
+			homeServer: baseUrl || server,
 		};
 
 		await this.storeCredentials(this.credentials).catch(_error => null);

@@ -37,6 +37,7 @@ import { EmailTokenResponse_, ErrorRegisterResponse_, LoginResponse_, RegisterSt
 import Spinner from '../components/Spinner';
 import AppFont from '../modules/AppFont';
 import StringUtils from '../utils/StringUtils';
+import RestClient from '../matrix/RestClient';
 
 const styles = {
 	modalScreen: RX.Styles.createViewStyle({
@@ -115,6 +116,7 @@ export default class DialogRegister extends RX.Component<DialogRegisterProps, Di
 	private emailAddress = '';
 	private emailInputDialog: ReactElement | null = null;
 	private emailConfirmation: ReactElement | null = null;
+	private baseUrl: string | undefined;
 
 	constructor(props: DialogRegisterProps) {
 		super(props);
@@ -131,13 +133,19 @@ export default class DialogRegister extends RX.Component<DialogRegisterProps, Di
 	}
 
 	public componentDidMount(): void {
-		this.registrationStart();
+		this.registrationStart().catch(_error => null);
 	}
 
-	private registrationStart = () => {
+	private registrationStart = async () => {
 		this.setState({ showSpinner: true });
 
-		ApiClient.register(this.props.userId, this.props.password, this.props.server)
+		const restClient_ = new RestClient('', this.props.server, '/');
+
+		const wellKnown = await restClient_.getWellKnown().catch(_error => null);
+
+		this.baseUrl = wellKnown ? StringUtils.cleanServerName(wellKnown['m.homeserver'].base_url) : undefined;
+
+		ApiClient.register(this.props.userId, this.props.password, this.baseUrl || this.props.server)
 			.then((response: LoginResponse_) => {
 				this.login(response);
 			})
@@ -198,7 +206,7 @@ export default class DialogRegister extends RX.Component<DialogRegisterProps, Di
 		ApiClient.register(
 			this.props.userId,
 			this.props.password,
-			this.props.server,
+			this.baseUrl || this.props.server,
 			this.type,
 			this.session,
 			captchaToken
@@ -241,7 +249,14 @@ export default class DialogRegister extends RX.Component<DialogRegisterProps, Di
 	private showTerms = () => {
 		// TODO: actually show terms
 
-		ApiClient.register(this.props.userId, this.props.password, this.props.server, this.type, this.session, '')
+		ApiClient.register(
+			this.props.userId,
+			this.props.password,
+			this.baseUrl || this.props.server,
+			this.type,
+			this.session,
+			''
+		)
 			.then((response: LoginResponse_) => {
 				this.login(response);
 			})
@@ -270,7 +285,14 @@ export default class DialogRegister extends RX.Component<DialogRegisterProps, Di
 	};
 
 	private loginDummy = () => {
-		ApiClient.register(this.props.userId, this.props.password, this.props.server, this.type, this.session, '')
+		ApiClient.register(
+			this.props.userId,
+			this.props.password,
+			this.baseUrl || this.props.server,
+			this.type,
+			this.session,
+			''
+		)
 			.then((response: LoginResponse_) => {
 				this.login(response);
 			})
@@ -364,7 +386,7 @@ export default class DialogRegister extends RX.Component<DialogRegisterProps, Di
 		const clientSecret = StringUtils.getRandomString(12);
 		const sendAttempt = 1;
 
-		ApiClient.requestEmailToken(this.props.server, clientSecret, this.emailAddress, sendAttempt)
+		ApiClient.requestEmailToken(this.baseUrl || this.props.server, clientSecret, this.emailAddress, sendAttempt)
 			.then(async (response: EmailTokenResponse_) => {
 				if (response.submit_url) {
 					this.props.showRegistrationError(clientSideConfNotSupported[this.language]);
@@ -384,7 +406,7 @@ export default class DialogRegister extends RX.Component<DialogRegisterProps, Di
 					ApiClient.register(
 						this.props.userId,
 						this.props.password,
-						this.props.server,
+						this.baseUrl || this.props.server,
 						this.type,
 						this.session,
 						data
@@ -413,7 +435,7 @@ export default class DialogRegister extends RX.Component<DialogRegisterProps, Di
 				userIdFull: serverResponse.user_id,
 				accessToken: serverResponse.access_token,
 				deviceId: serverResponse.device_id,
-				homeServer: this.props.server,
+				homeServer: this.baseUrl || this.props.server,
 			};
 
 			ApiClient.setCredentials(credentials);
