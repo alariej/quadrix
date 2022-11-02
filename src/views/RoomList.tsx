@@ -69,7 +69,6 @@ interface RoomListState {
 }
 
 export default class RoomList extends ComponentBase<RoomListProps, RoomListState> {
-	private prevSelectedRoom = '';
 	private virtualListView: VirtualListView<VirtualListViewItemInfo> | undefined;
 
 	protected _buildState(
@@ -90,12 +89,6 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
 		}
 
 		const sortedRoomList = DataStore.getSortedRoomList();
-
-		const selectedRoom = UiStore.getSelectedRoom();
-		if (selectedRoom === '' && this.prevSelectedRoom !== '') {
-			this.virtualListView?.scrollToTop();
-		}
-		this.prevSelectedRoom = selectedRoom;
 
 		let unreadCount = 0;
 		partialState.roomListItems = sortedRoomList.map(room => {
