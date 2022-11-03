@@ -48,7 +48,7 @@
 
 ## Note for Mobile Linux Users
 
-- The arm64 flatpak build was tested on a PinePhone running Mobian/Phosh, which uses the Wayland display server protocol. Unfortunately, Quadrix and most Electron applications running in Wayland mode are not really usable in that environment, since Electron has a basic compatibility problem with the Wayland text input protocol: The on-screen keyboard doesn't automatically launch when editing text input fields, and some letters and many symbols are simply ignored by the keyboard (squeekboard package in Phosh). This issue is being worked on at the Chromium level, but no target date is yet known.
+- The arm64 flatpak build was tested on a PinePhone running Mobian/Phosh, which uses the Wayland display server protocol. Unfortunately, Quadrix and most Electron applications running in Wayland mode are not really usable in that environment, since Electron has a basic compatibility problem with the Wayland text input protocol: The on-screen keyboard doesn't automatically launch when editing text input fields, and some letters and many symbols are simply ignored by the keyboard (squeekboard package in Phosh). This issue is being worked on at the Chromium level, but no target date is yet known. (The current flatpak build has the Ozone/Wayland switch disabled for Phosh: The app looks blurry on the PinePhone, but at least the on-screen keyboard works)
 
 ## Matrix Protocol Implementation
 
