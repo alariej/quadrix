@@ -2,7 +2,7 @@ import messaging from '@react-native-firebase/messaging';
 import RestClient from '../../matrix/RestClient';
 import { Credentials } from '../../models/Credentials';
 import { PusherParam_ } from '../../models/MatrixApi';
-import { PUSH_GATEWAY_URL, APP_ID_ANDROID, APP_NAME, PREFIX_REST } from '../../appconfig';
+import { PUSH_GATEWAY_URL, APP_ID_ANDROID, APP_NAME, PREFIX_REST, APP_VERSION } from '../../appconfig';
 import UiStore from '../../stores/UiStore';
 
 class Pushers {
@@ -55,7 +55,8 @@ class Pushers {
 
 				if (response.pushers && response.pushers.length > 0) {
 					pusherIsOnServer = response.pushers.some(item => {
-						return item.pushkey === firebaseToken;
+						const appVersion = item.data.client_version || '0.0.1';
+						return item.pushkey === firebaseToken && appVersion === APP_VERSION;
 					});
 				}
 
@@ -64,6 +65,7 @@ class Pushers {
 						format: 'event_id_only',
 						url: PUSH_GATEWAY_URL,
 						lang: language,
+						client_version: APP_VERSION,
 					};
 
 					const pusher: PusherParam_ = {
@@ -71,10 +73,10 @@ class Pushers {
 						app_display_name: APP_NAME,
 						app_id: APP_ID_ANDROID,
 						data: data,
-						device_display_name: 'Android', // not used yet
+						device_display_name: 'Android',
 						kind: 'http',
 						lang: language,
-						profile_tag: 'Android', // not used yet
+						profile_tag: 'Android',
 						pushkey: firebaseToken,
 					};
 

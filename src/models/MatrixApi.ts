@@ -151,6 +151,7 @@ export interface PusherParam_ {
 		url?: string;
 		lang?: string;
 		format?: string;
+		client_version?: string;
 	};
 	device_display_name?: string;
 	kind: string | null;
@@ -160,10 +161,7 @@ export interface PusherParam_ {
 }
 
 export interface PusherGetResponse_ {
-	pushers: {
-		app_id: string;
-		pushkey: string;
-	}[];
+	pushers: PusherParam_[];
 }
 
 export interface PushRulesGetResponse_ {
