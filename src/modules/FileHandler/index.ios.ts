@@ -181,8 +181,7 @@ class FileHandler {
 			};
 
 			const options: ImagePicker.ImageLibraryOptions = {
-				maxHeight: 800,
-				maxWidth: 800,
+				quality: 0.9,
 				selectionLimit: 1,
 				mediaType: 'photo',
 			};

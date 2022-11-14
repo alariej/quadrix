@@ -202,9 +202,14 @@ class FileHandler {
 
 	public pickImage(): Promise<FileObject> {
 		return new Promise((resolve, reject) => {
-			const setFile: ImagePicker.Callback = response => {
+			const setFile: ImagePicker.Callback = async response => {
 				if (response.didCancel) {
 					return reject();
+				}
+
+				let imageSize = { height: 0, width: 0 };
+				if (response?.assets && response.assets[0].uri) {
+					imageSize = await ImageSizeLocal.getSize(response.assets[0].uri);
 				}
 
 				const file: FileObject = {
@@ -212,16 +217,15 @@ class FileHandler {
 					name: response.assets![0].fileName || '',
 					type: response.assets![0].type?.toLowerCase() || 'unknown',
 					uri: response.assets![0].uri || '',
-					imageWidth: response.assets![0].width,
-					imageHeight: response.assets![0].height,
+					imageWidth: imageSize.width || response.assets![0].width,
+					imageHeight: imageSize.height || response.assets![0].height,
 				};
 
 				return resolve(file);
 			};
 
 			const options: ImagePicker.ImageLibraryOptions = {
-				maxHeight: 800,
-				maxWidth: 800,
+				quality: 0.9,
 				selectionLimit: 1,
 				mediaType: 'photo',
 			};
