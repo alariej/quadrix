@@ -4,6 +4,7 @@ import { Credentials } from '../../models/Credentials';
 import { PusherParam_ } from '../../models/MatrixApi';
 import { PUSH_GATEWAY_URL, APP_ID_ANDROID, APP_NAME, PREFIX_REST, APP_VERSION } from '../../appconfig';
 import UiStore from '../../stores/UiStore';
+import Locale from '../Locale';
 
 class Pushers {
 	public async removeFromDevice(credentials: Credentials): Promise<void> {
@@ -43,6 +44,7 @@ class Pushers {
 
 	public async set(credentials: Credentials): Promise<void> {
 		const language = UiStore.getLanguage();
+		const locale = await Locale.getLocale().catch(_error => null);
 
 		const firebaseToken = await messaging().getToken();
 
@@ -65,6 +67,7 @@ class Pushers {
 						format: 'event_id_only',
 						url: PUSH_GATEWAY_URL,
 						lang: language,
+						locale: locale || 'unknown',
 						client_version: APP_VERSION,
 					};
 

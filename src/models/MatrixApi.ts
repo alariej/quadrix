@@ -150,6 +150,7 @@ export interface PusherParam_ {
 	data: {
 		url?: string;
 		lang?: string;
+		locale?: string;
 		format?: string;
 		client_version?: string;
 	};
