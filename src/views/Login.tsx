@@ -17,6 +17,8 @@ import {
 	TRANSPARENT_BACKGROUND,
 	FONT_NORMAL,
 	LOGO_FILL,
+	LINK_TEXT,
+	BUTTON_LOGIN_INFO,
 } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
@@ -38,6 +40,11 @@ import {
 	Languages,
 	termsPrivacyLicense,
 	deviceOfflineLogin,
+	serverInfo_1,
+	serverInfo_2,
+	serverInfo_3,
+	serverInfo_4,
+	serverInfo_5,
 } from '../translations';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { ErrorResponse_ } from '../models/MatrixApi';
@@ -94,9 +101,18 @@ const styles = {
 	}),
 	expandButton: RX.Styles.createViewStyle({
 		position: 'absolute',
-		width: 28,
-		height: 48,
-		top: -(48 - BUTTON_HEIGHT) / 2,
+		width: BUTTON_LOGIN_INFO,
+		height: 32,
+		top: -(32 - BUTTON_HEIGHT) / 2,
+		left: BUTTON_LONG_WIDTH,
+		alignContent: 'center',
+		alignItems: 'center',
+	}),
+	serverInfoButton: RX.Styles.createViewStyle({
+		position: 'absolute',
+		width: BUTTON_LOGIN_INFO,
+		height: 32,
+		top: BUTTON_HEIGHT + SPACING - (32 - BUTTON_HEIGHT) / 2,
 		left: BUTTON_LONG_WIDTH,
 		alignContent: 'center',
 		alignItems: 'center',
@@ -116,6 +132,19 @@ const styles = {
 		textAlign: 'center',
 		padding: 12,
 		backgroundColor: TRANSPARENT_BACKGROUND,
+	}),
+	serverInfoDialog: RX.Styles.createTextStyle({
+		fontFamily: AppFont.fontFamily,
+		fontSize: FONT_LARGE,
+		textAlign: 'center',
+		color: MODAL_CONTENT_TEXT,
+		margin: 12,
+	}),
+	url: RX.Styles.createTextStyle({
+		fontFamily: AppFont.fontFamily,
+		fontSize: FONT_LARGE,
+		color: LINK_TEXT,
+		textDecorationLine: 'underline',
 	}),
 };
 
@@ -319,6 +348,30 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 		}
 	};
 
+	private showServerInfo = () => {
+		const text = (
+			<RX.Text style={styles.serverInfoDialog}>
+				<RX.Text>{serverInfo_1[this.language]}</RX.Text>
+				<RX.Text style={{ fontStyle: 'italic' }}>https://myserver.domain{'\n\n'}</RX.Text>
+				<RX.Text>{serverInfo_2[this.language]}</RX.Text>
+				<RX.Text style={{ fontStyle: 'italic' }}>myserver.domain{'\n\n'}</RX.Text>
+				<RX.Text>{serverInfo_3[this.language]}</RX.Text>
+				<RX.Text style={{ fontWeight: 'bold' }}>{serverInfo_4[this.language]}</RX.Text>
+				<RX.Text>{serverInfo_5[this.language]}</RX.Text>
+				<RX.Text
+					style={styles.url}
+					onPress={event => this.openUrl('https://joinmatrix.org/servers/', event)}
+				>
+					https://joinmatrix.org/servers/
+				</RX.Text>
+			</RX.Text>
+		);
+
+		const serverInfo = <DialogContainer content={text} />;
+
+		RX.Modal.show(serverInfo, 'serverInfoDialog');
+	};
+
 	public render(): JSX.Element | null {
 		const userIdInput = (
 			<RX.TextInput
@@ -352,6 +405,23 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 			>
 				<IconSvg
 					source={require('../resources/svg/RI_expand.json') as SvgFile}
+					fillColor={BUTTON_LONG_BACKGROUND}
+					height={20}
+					width={20}
+				/>
+			</RX.Button>
+		);
+
+		const registerServerInfoButton = (
+			<RX.Button
+				style={styles.serverInfoButton}
+				onPress={this.showServerInfo}
+				disableTouchOpacityAnimation={true}
+				activeOpacity={1}
+				tabIndex={-1}
+			>
+				<IconSvg
+					source={require('../resources/svg/RI_info.json') as SvgFile}
 					fillColor={BUTTON_LONG_BACKGROUND}
 					height={20}
 					width={20}
@@ -408,10 +478,8 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 				</RX.View>
 				<RX.View style={styles.containerUserInput}>
 					{userIdInput}
-
 					{this.state.loginExpanded || this.state.register ? serverInput : null}
-
-					{this.state.register ? null : loginExpandedButton}
+					{this.state.register ? registerServerInfoButton : loginExpandedButton}
 				</RX.View>
 				<RX.TextInput
 					style={styles.inputBox}

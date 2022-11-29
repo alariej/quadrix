@@ -1429,3 +1429,38 @@ export const writeMessage: Translation = {
 	fr: 'Écrire un message...',
 	es: 'Escribir un mensaje...',
 };
+
+export const serverInfo_1: Translation = {
+	en: 'You can enter the Matrix server name as:\n\n',
+	de: 'Sie können den Namen des Matrix-Servers wie folgt eingeben:\n\n',
+	fr: 'Vous pouvez entrer le nom du serveur Matrix comme suit:\n\n',
+	es: 'Puede introducir el nombre del servidor Matrix así:\n\n',
+};
+
+export const serverInfo_2: Translation = {
+	en: 'or simply:\n\n',
+	de: 'oder einfach:\n\n',
+	fr: 'ou simplement:\n\n',
+	es: 'o simplemente:\n\n',
+};
+
+export const serverInfo_3: Translation = {
+	en: 'If you do not have access to a private Matrix server, you can try to register on a public one, but please note that Quadrix ',
+	de: 'Wenn Sie keinen Zugang zu einem privaten Matrix-Server haben, können Sie versuchen, sich auf einem öffentlichen Server zu registrieren. Bitte beachten Sie jedoch, dass Quadrix noch ',
+	fr: "Si vous n'avez pas accès à un serveur Matrix privé, vous pouvez essayer de vous inscrire sur un serveur public, mais veuillez noter que Quadrix ",
+	es: 'Si no tiene acceso a un servidor privado de Matrix, puede intentar registrarse en uno público, pero tenga en cuenta que Quadrix todavía ',
+};
+
+export const serverInfo_4: Translation = {
+	en: 'does not yet support end-to-end-encryption (E2EE).\n\n',
+	de: 'keine Ende-zu-Ende-Verschlüsselung (E2EE) unterstützt.\n\n',
+	fr: 'ne supporte pas encore le cryptage bout-en-bout (E2EE).\n\n',
+	es: 'no soporta el cifrado extremo-a-extremo (E2EE).\n\n',
+};
+
+export const serverInfo_5: Translation = {
+	en: 'An unofficial list of public Matrix servers is available at:\n\n',
+	de: 'Eine inoffizielle Liste öffentlicher Matrix-Server finden Sie unter:\n\n',
+	fr: "Une liste non officielle de serveurs Matrix publics est disponible à l'adresse suivante:\n\n",
+	es: 'Una lista no oficial de servidores públicos de Matrix está disponible en:\n\n',
+};
