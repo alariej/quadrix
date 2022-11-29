@@ -198,7 +198,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 					}
 				} else {
 					const messageInfo: EventListItemInfo = {
-						key: event.eventId + '_' + Math.random(),
+						key: event.eventId,
 						height: MESSAGE_HEIGHT_DEFAULT,
 						template: 'event',
 						measureHeight: true,
@@ -367,7 +367,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 				}
 			} else {
 				const messageInfo: EventListItemInfo = {
-					key: event.tempId || event.eventId + '_' + Math.random(),
+					key: event.tempId || event.eventId,
 					height: MESSAGE_HEIGHT_DEFAULT,
 					template: 'event',
 					measureHeight: true,
@@ -625,7 +625,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 						// just ignore edits, and assume edited content is already in the original message?
 					} else {
 						const messageInfo: EventListItemInfo = {
-							key: event.eventId + '_' + Math.random(),
+							key: event.eventId,
 							height: MESSAGE_HEIGHT_DEFAULT,
 							template: 'event',
 							measureHeight: true,
