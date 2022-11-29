@@ -278,6 +278,13 @@ export const userPassword: Translation = {
 	es: 'Contraseña',
 };
 
+export const passwordChange: Translation = {
+	en: 'Change password',
+	de: 'Passwort ändern',
+	fr: 'Changer le mot de passe',
+	es: 'Cambiar contraseña',
+};
+
 export const currentPassword: Translation = {
 	en: 'Current password',
 	de: 'Aktuelles Passwort',

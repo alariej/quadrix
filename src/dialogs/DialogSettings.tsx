@@ -42,7 +42,6 @@ import {
 	displayName,
 	enterYourName,
 	profilePicture,
-	userPassword,
 	currentPassword,
 	newPassword,
 	repeatNewPassword,
@@ -59,6 +58,7 @@ import {
 	enterPassword,
 	errorInvalidPassword,
 	deleteAccount,
+	passwordChange,
 } from '../translations';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { AuthResponse_, ErrorResponse_ } from '../models/MatrixApi';
@@ -1071,7 +1071,7 @@ export default class DialogSettings extends ComponentBase<DialogSettingsProps, D
 							allowFontScaling={false}
 							style={styles.label}
 						>
-							{userPassword[this.language]}
+							{passwordChange[this.language]}
 						</RX.Text>
 						<RX.View style={styles.inputField}>
 							<RX.TextInput
