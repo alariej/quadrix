@@ -30,6 +30,17 @@ class StringUtils {
 		return s;
 	}
 
+	public getRandomToken(length: number): string {
+		const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+		let s = '';
+		for (let i = 0; i < length; i++) {
+			const n = Math.floor(Math.random() * chars.length);
+			s += chars.substring(n, n + 1);
+		}
+
+		return s;
+	}
+
 	public getOnlyUrl(textInput: string): LinkifyElement | undefined {
 		const linkifyArray: LinkifyElement[] = linkify.find(textInput);
 

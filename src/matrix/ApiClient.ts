@@ -709,6 +709,18 @@ class ApiClient {
 			}
 		}
 	};
+
+	public storePushToken(token: string) {
+		return AsyncStorage.setItem('pushToken', token);
+	}
+
+	public getStoredPushToken(): Promise<string | undefined> {
+		return AsyncStorage.getItem('pushToken');
+	}
+
+	public clearStoredPushToken(): Promise<void> {
+		return AsyncStorage.removeItem('pushToken');
+	}
 }
 
 export default new ApiClient();
