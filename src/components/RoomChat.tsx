@@ -156,6 +156,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 	private language: Languages = 'en';
 	private locale: Locale;
 	private roomEvents: MessageEvent[] = [];
+	private eventIds: { [eventId: string]: string } = {};
 
 	constructor(props: RoomChatProps) {
 		super(props);
@@ -177,6 +178,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
 			this.roomEvents = DataStore.getAllRoomEvents(nextProps.roomId);
 			this.eventListItems = [];
+			this.eventIds = {};
 
 			for (let i = 0; i < this.roomEvents.length; i++) {
 				const event = this.roomEvents[i];
@@ -197,18 +199,21 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 						this.roomEvents[eventIndex].content._time = event.time;
 					}
 				} else {
-					const messageInfo: EventListItemInfo = {
-						key: event.eventId,
-						height: MESSAGE_HEIGHT_DEFAULT,
-						template: 'event',
-						measureHeight: true,
-						event: event,
-						readMarkerType: event.time > this.readMarkerTime ? 'sent' : 'read',
-						isRedacted: event.isRedacted,
-						body: event.content.body,
-					};
+					if (!this.eventIds[event.eventId]) {
+						const messageInfo: EventListItemInfo = {
+							key: event.eventId,
+							height: MESSAGE_HEIGHT_DEFAULT,
+							template: 'event',
+							measureHeight: true,
+							event: event,
+							readMarkerType: event.time > this.readMarkerTime ? 'sent' : 'read',
+							isRedacted: event.isRedacted,
+							body: event.content.body,
+						};
 
-					this.eventListItems.push(messageInfo);
+						this.eventListItems.push(messageInfo);
+						this.eventIds[event.eventId] = event.eventId;
+					}
 				}
 			}
 
@@ -321,7 +326,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 			type: 'm.room.message',
 			time: Date.now(),
 			senderId: ApiClient.credentials.userIdFull,
-			tempId: 'tempSentMessage',
+			tempId: 'temp_sent_message' + '_' + Math.random(),
 		};
 
 		const tempMessageInfo: EventListItemInfo = {
@@ -366,16 +371,19 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 					this.eventListItems[eventIndex].event.content._time = event.time;
 				}
 			} else {
-				const messageInfo: EventListItemInfo = {
-					key: event.tempId || event.eventId,
-					height: MESSAGE_HEIGHT_DEFAULT,
-					template: 'event',
-					measureHeight: true,
-					event: event,
-					readMarkerType: event.time > this.readMarkerTime ? 'sent' : 'read',
-				};
+				if (!this.eventIds[event.tempId || event.eventId]) {
+					const messageInfo: EventListItemInfo = {
+						key: event.tempId || event.eventId,
+						height: MESSAGE_HEIGHT_DEFAULT,
+						template: 'event',
+						measureHeight: true,
+						event: event,
+						readMarkerType: event.time > this.readMarkerTime ? 'sent' : 'read',
+					};
 
-				newEventListItems.push(messageInfo);
+					newEventListItems.push(messageInfo);
+					this.eventIds[event.tempId || event.eventId] = event.tempId || event.eventId;
+				}
 			}
 		}
 
@@ -624,17 +632,20 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 					if (event.content['m.relates_to']?.rel_type === 'm.replace') {
 						// just ignore edits, and assume edited content is already in the original message?
 					} else {
-						const messageInfo: EventListItemInfo = {
-							key: event.eventId,
-							height: MESSAGE_HEIGHT_DEFAULT,
-							template: 'event',
-							measureHeight: true,
-							event: event,
-							readMarkerType: event.time > this.readMarkerTime ? 'sent' : 'read',
-							isRedacted: event.isRedacted,
-							body: event.content.body,
-						};
-						olderEventListItems.push(messageInfo);
+						if (!this.eventIds[event.eventId]) {
+							const messageInfo: EventListItemInfo = {
+								key: event.eventId,
+								height: MESSAGE_HEIGHT_DEFAULT,
+								template: 'event',
+								measureHeight: true,
+								event: event,
+								readMarkerType: event.time > this.readMarkerTime ? 'sent' : 'read',
+								isRedacted: event.isRedacted,
+								body: event.content.body,
+							};
+							olderEventListItems.push(messageInfo);
+							this.eventIds[event.eventId] = event.eventId;
+						}
 					}
 				}
 
