@@ -65,6 +65,15 @@ const styles = {
 		marginTop: 2,
 		marginRight: 2,
 	}),
+	infoButton: RX.Styles.createViewStyle({
+		borderRadius: (BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN) / 2,
+		width: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
+		height: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginTop: 2,
+		marginRight: 2,
+	}),
 	infoContainer: RX.Styles.createViewStyle({
 		position: 'absolute',
 		width: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
@@ -257,7 +266,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 			infoButton = (
 				<RX.View style={styles.infoContainer}>
 					<AnimatedButton
-						buttonStyle={styles.roundButton}
+						buttonStyle={styles.infoButton}
 						iconSource={require('../resources/svg/RI_info.json') as SvgFile}
 						iconFillColor={TILE_SYSTEM_TEXT}
 						iconHeight={BUTTON_HEADER_WIDTH}
