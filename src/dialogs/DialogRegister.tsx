@@ -143,7 +143,7 @@ export default class DialogRegister extends RX.Component<DialogRegisterProps, Di
 
 		const wellKnown = await restClient_.getWellKnown().catch(_error => null);
 
-		this.baseUrl = wellKnown ? StringUtils.cleanServerName(wellKnown['m.homeserver'].base_url) : undefined;
+		this.baseUrl = wellKnown ? StringUtils.cleanServerName(wellKnown['m.homeserver']?.base_url) : undefined;
 
 		ApiClient.register(this.props.userId, this.props.password, this.baseUrl || this.props.server)
 			.then((response: LoginResponse_) => {

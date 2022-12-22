@@ -41,7 +41,7 @@ class ApiClient {
 
 		const wellKnown = await restClient_.getWellKnown().catch(_error => null);
 
-		const baseUrl = wellKnown ? StringUtils.cleanServerName(wellKnown['m.homeserver'].base_url) : undefined;
+		const baseUrl = wellKnown ? StringUtils.cleanServerName(wellKnown['m.homeserver']?.base_url) : undefined;
 
 		const restClient = new RestClient('', baseUrl || server, PREFIX_REST);
 
