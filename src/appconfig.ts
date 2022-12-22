@@ -38,7 +38,7 @@ export const JITSI_SERVER_URL = 'https://jitsi.riot.im';
 
 // push notification gateway
 
-export const PUSH_GATEWAY_URL = 'https://quadrix.chat/_matrix/push/v1/notify';
+export const PUSH_GATEWAY_URL = 'https://push.quadrix.chat/_matrix/push/v1/notify';
 
 // other
 

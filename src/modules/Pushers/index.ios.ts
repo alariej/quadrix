@@ -76,7 +76,11 @@ class Pushers {
 				if (response.pushers && response.pushers.length > 0) {
 					pusherIsOnServer = response.pushers.some(item => {
 						const appVersion = item.data.client_version || '0.0.1';
-						return item.pushkey === firebaseToken && appVersion === APP_VERSION;
+						return (
+							item.pushkey === firebaseToken &&
+							appVersion === APP_VERSION &&
+							item.data.url === PUSH_GATEWAY_URL
+						);
 					});
 				}
 
