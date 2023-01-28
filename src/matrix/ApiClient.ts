@@ -37,9 +37,7 @@ class ApiClient {
 	// login + credentials
 
 	public async login(userId: string, password: string, server: string): Promise<void> {
-		const restClient_ = new RestClient('', server, '/');
-
-		const wellKnown = await restClient_.getWellKnown().catch(_error => null);
+		const wellKnown = await this.getWellKnown(server).catch(_error => null);
 
 		const baseUrl = wellKnown ? StringUtils.cleanServerName(wellKnown['m.homeserver']?.base_url) : undefined;
 
@@ -199,6 +197,11 @@ class ApiClient {
 		};
 
 		return restClient.deactivateAccount(data);
+	}
+
+	public getWellKnown(server: string): Promise<WellKnown_> {
+		const restClient = new RestClient('', server, '/');
+		return restClient.getWellKnown();
 	}
 
 	// pushers

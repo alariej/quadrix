@@ -375,6 +375,11 @@ export interface WellKnown_ {
 	'm.homeserver': {
 		base_url: string;
 	};
+	'chat.quadrix.elementcall': {
+		preferredDomain: string;
+	};
+}
+
 }
 
 export interface EphemeralEvent_ {

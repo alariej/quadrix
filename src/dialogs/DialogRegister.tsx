@@ -37,7 +37,6 @@ import { EmailTokenResponse_, ErrorRegisterResponse_, LoginResponse_, RegisterSt
 import Spinner from '../components/Spinner';
 import AppFont from '../modules/AppFont';
 import StringUtils from '../utils/StringUtils';
-import RestClient from '../matrix/RestClient';
 
 const styles = {
 	modalScreen: RX.Styles.createViewStyle({
@@ -139,9 +138,7 @@ export default class DialogRegister extends RX.Component<DialogRegisterProps, Di
 	private registrationStart = async () => {
 		this.setState({ showSpinner: true });
 
-		const restClient_ = new RestClient('', this.props.server, '/');
-
-		const wellKnown = await restClient_.getWellKnown().catch(_error => null);
+		const wellKnown = await ApiClient.getWellKnown(this.props.server).catch(_error => undefined);
 
 		this.baseUrl = wellKnown ? StringUtils.cleanServerName(wellKnown['m.homeserver']?.base_url) : undefined;
 
