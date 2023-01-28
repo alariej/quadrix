@@ -36,6 +36,10 @@ export const APPSTORES_FLATHUB_URL = StoreJson.flathub.url;
 
 export const JITSI_SERVER_URL = 'https://jitsi.riot.im';
 
+// element call
+
+export const ELEMENT_CALL_URL = 'https://call.element.io';
+
 // push notification gateway
 
 export const PUSH_GATEWAY_URL = 'https://push.quadrix.chat/_matrix/push/v1/notify';
