@@ -24,6 +24,7 @@ import { SvgFile } from '../components/IconSvg';
 import { RoomType } from '../models/MatrixApi';
 import AnimatedButton from '../components/AnimatedButton';
 import { LayoutInfo } from 'reactxp/dist/common/Types';
+import ElementCall from '../components/ElementCall';
 
 const styles = {
 	modalScreen: RX.Styles.createViewStyle({
@@ -61,6 +62,7 @@ const animatedEasing = RX.Animated.Easing.Out();
 
 interface DialogMenuComposerProps {
 	layout: LayoutInfo;
+	roomId: string;
 	roomType: RoomType;
 	roomActive: boolean;
 	jitsiActive: boolean;
@@ -142,6 +144,10 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 		RX.Modal.dismiss('dialog_menu_composer');
 	};
 
+	private onPressElementCall = () => {
+		RX.Modal.show(<ElementCall roomId={this.props.roomId} />, 'element_call');
+	};
+
 	public render(): JSX.Element | null {
 		const fileButton = (
 			<AnimatedButton
@@ -200,6 +206,23 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 			/>
 		);
 
+		const elementCallButton = (
+			<AnimatedButton
+				buttonStyle={styles.buttonDialog}
+				iconSource={require('../resources/svg/RI_videoconf.json') as SvgFile}
+				// iconStyle={{ opacity: videoCallButtonDisabled ? 0.3 : 1 }}
+				iconFillColor={ICON_INFO_FILL}
+				iconHeight={ICON_INFO_SIZE}
+				iconWidth={ICON_INFO_SIZE}
+				animatedColor={LIGHT_BACKGROUND}
+				onPress={this.onPressElementCall}
+				// disabled={videoCallButtonDisabled}
+				text={'Start Element Call'}
+				// textStyle={[styles.buttonText, { opacity: videoCallButtonDisabled ? 0.3 : 1 }]}
+				textStyle={styles.buttonText}
+			/>
+		);
+
 		const appLayout = UiStore.getAppLayout_();
 
 		const left =
@@ -215,6 +238,7 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 				{fileButton}
 				{imageButton}
 				{videoCallButton}
+				{elementCallButton}
 			</RX.Animated.View>
 		);
 

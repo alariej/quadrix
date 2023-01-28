@@ -758,6 +758,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 				const dialogMenuComposer = (
 					<DialogMenuComposer
 						layout={layout}
+						roomId={this.props.roomId}
 						roomType={this.props.roomType}
 						roomActive={this.props.roomActive}
 						jitsiActive={this.state.jitsiActive}
