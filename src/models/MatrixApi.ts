@@ -130,11 +130,35 @@ export interface MessageEventContent_ {
 	alias?: string;
 	join_rule?: string;
 	topic?: string;
-	display_name?: string;
-	displayname?: string;
-	avatar_url?: string;
-	is_direct?: boolean;
-	third_party_signed?: string;
+
+export interface IGroupCallDataChannelOptions {
+	ordered: boolean;
+	maxPacketLifeTime: number;
+	maxRetransmits: number;
+	protocol: string;
+}
+
+export enum GroupCallType {
+	Video = 'm.video',
+	Voice = 'm.voice',
+}
+
+export enum GroupCallIntent {
+	Ring = 'm.ring',
+	Prompt = 'm.prompt',
+	Room = 'm.room',
+}
+
+interface IGroupCallRoomState {
+	'm.intent': GroupCallIntent;
+	'm.type': GroupCallType;
+	'io.element.ptt'?: boolean;
+	dataChannelsEnabled?: boolean;
+	dataChannelOptions?: IGroupCallDataChannelOptions;
+}
+
+export type CallEventContent_ = IGroupCallRoomState;
+
 	last_active_ago?: number;
 	users?: { [id: string]: number };
 	is_notepad?: string; // custom field
