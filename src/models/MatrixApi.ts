@@ -159,12 +159,8 @@ interface IGroupCallRoomState {
 
 export type CallEventContent_ = IGroupCallRoomState;
 
+export interface PresenceEventContent_ {
 	last_active_ago?: number;
-	users?: { [id: string]: number };
-	is_notepad?: string; // custom field
-	jitsi_started?: boolean; // custom field
-	url_preview?: LinkPreview_; // custom field
-	_time?: number; // custom field
 }
 
 export interface PusherParam_ {
