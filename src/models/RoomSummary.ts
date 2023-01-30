@@ -1,5 +1,5 @@
-import { MessageEvent_, RoomPhase, RoomType } from './MatrixApi';
-import { MessageEvent } from './MessageEvent';
+import { FilteredChatEvent } from './FilteredChatEvent';
+import { ClientEvent_, RoomPhase, RoomType } from './MatrixApi';
 import { User } from './User';
 
 export interface RoomSummary {
@@ -7,6 +7,7 @@ export interface RoomSummary {
 	phase: RoomPhase;
 	unreadCount: number;
 	members: { [id: string]: User };
+	timelineEvents: ClientEvent_[];
 	stateEvents: ClientEvent_[];
 	newEvents: FilteredChatEvent[];
 	active?: boolean;
@@ -26,5 +27,5 @@ export interface RoomSummary {
 	thirdPartyInviteId?: string;
 	topic?: string;
 	newEventsLimited?: boolean;
-	latestFilteredEvent?: MessageEvent;
+	latestFilteredEvent?: FilteredChatEvent;
 }

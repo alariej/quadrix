@@ -1,12 +1,26 @@
-// move this somewhere else
+// TODO: move this somewhere else
 export type RoomType = 'direct' | 'group' | 'community' | 'notepad';
 
-export type RoomPhase = 'join' | 'invite' | 'leave';
+export type RoomPhase = 'join' | 'invite' | 'leave' | 'knock' | 'ban';
+
 export type LoginIdentifierType = 'm.id.user' | 'm.id.thirdparty' | 'm.id.phone';
+
 export type LoginParamType = 'm.login.password' | 'm.login.token';
+
 export type RegisterStageType = 'm.login.recaptcha' | 'm.login.terms' | 'm.login.dummy' | 'm.login.email.identity';
+
+export type StateEventType =
+	| 'm.room.create'
+	| 'm.room.name'
+	| 'm.room.avatar'
+	| 'm.room.topic'
+	| 'm.room.join_rules'
+	| 'm.room.canonical_alias'
+	| 'm.room.encryption'
 	| 'org.matrix.msc3401.call'
 	| 'org.matrix.msc3401.call.member';
+
+export type ClientEventType =
 	| 'm.room.third_party_invite'
 	| 'm.room.redaction'
 	| 'm.room.message'
@@ -19,6 +33,7 @@ export type RegisterStageType = 'm.login.recaptcha' | 'm.login.terms' | 'm.login
 	| 'm.room.topic'
 	| 'm.room.encrypted'
 	| 'm.room.create'
+	| 'm.room.encryption'
 	| 'm.receipt'
 	| 'm.direct'
 	| 'm.push_rules'
@@ -26,6 +41,7 @@ export type RegisterStageType = 'm.login.recaptcha' | 'm.login.terms' | 'm.login
 	| 'org.matrix.msc3401.call'
 	| 'org.matrix.msc3401.call.member';
 
+export type MessageContentType = 'm.text' | 'm.image' | 'm.video' | 'm.file';
 
 export type EphemeralEventType = 'm.receipt';
 
@@ -73,26 +89,35 @@ export interface PreviewUrl_ {
 	'og:site_name': string;
 }
 
-export interface MessageEvent_ {
-	event_id: string;
-	content: MessageEventContent_;
-	type: MessageEventType;
-	origin_server_ts: number;
-	sender: string;
-	state_key?: string;
-	unsigned?: {
-		age?: number;
-		prev_content?: MessageEventContent_;
-		transaction_id?: string;
-		membership?: RoomPhase;
-		'm.relations'?: {
-			'm.replace'?: {
-				event_id?: string;
-				origin_server_ts?: number;
-				sender?: string;
-			};
+export interface UnsignedData_ {
+	age?: number;
+	prev_content?:
+		| MessageEventContent_
+		| RoomEventContent_
+		| MemberEventContent_
+		| CallEventContent_
+		| PresenceEventContent_;
+	redacted_because?: ClientEvent_;
+	transaction_id?: string;
+	membership?: RoomPhase;
+	'm.relations'?: {
+		'm.replace'?: {
+			event_id?: string;
+			origin_server_ts?: number;
+			sender?: string;
 		};
 	};
+}
+
+export interface ClientEvent_ {
+	type: ClientEventType;
+	content: MessageEventContent_ | RoomEventContent_ | MemberEventContent_ | CallEventContent_ | PresenceEventContent_;
+	event_id: string;
+	origin_server_ts: number;
+	room_id: string;
+	sender: string;
+	state_key?: string;
+	unsigned?: UnsignedData_;
 	redacts?: string;
 }
 
@@ -103,24 +128,60 @@ export interface ThumbnailInfo_ {
 	w: number;
 }
 
-export interface MessageEventContentInfo_ {
+export interface ImageInfo_ {
 	mimetype?: string;
 	size?: number;
 	h?: number;
 	w?: number;
 	thumbnail_url?: string;
 	thumbnail_info?: ThumbnailInfo_;
+	thumbnail_file?: unknown; // encrypted file
+}
+
+export interface VideoInfo_ {
+	mimetype?: string;
+	duration?: number;
+	size?: number;
+	h?: number;
+	w?: number;
+	thumbnail_url?: string;
+	thumbnail_info?: ThumbnailInfo_;
+	thumbnail_file?: unknown; // encrypted file
+}
+
+export interface FileInfo_ {
+	mimetype?: string;
+	size?: number;
+	thumbnail_url?: string;
+	thumbnail_info?: ThumbnailInfo_;
+	thumbnail_file?: unknown; // encrypted file
+}
+
+export interface AudioInfo_ {
+	mimetype?: string;
+	size?: number;
+	duration?: number;
+}
+
+export interface LocationInfo_ {
+	thumbnail_url?: string;
+	thumbnail_info?: ThumbnailInfo_;
+	thumbnail_file?: unknown; // encrypted file
 }
 
 export interface MessageEventContent_ {
-	msgtype?: string;
+	msgtype?: MessageContentType;
 	body?: string;
-	info?: MessageEventContentInfo_;
+	format?: string;
+	formatted_body?: string;
+	info?: ImageInfo_ | VideoInfo_ | FileInfo_ | AudioInfo_ | LocationInfo_;
 	url?: string;
-	membership?: RoomPhase;
+	filename?: string;
+	file?: unknown; // encrypted file
+	geo_uri?: string;
 	'm.new_content'?: {
 		body?: string;
-		msgtype?: string;
+		msgtype?: MessageContentType;
 		_time?: number; // custom field
 	};
 	'm.relates_to'?: {
@@ -129,10 +190,40 @@ export interface MessageEventContent_ {
 		rel_type?: string;
 		'm.in_reply_to'?: { [event_id: string]: string };
 	};
+	_jitsi_started?: boolean; // custom field
+	_url_preview?: LinkPreview_; // custom field
+	_time?: number; // custom field
+}
+
+export interface MemberEventContent_ {
+	avatar_url?: string;
+	displayname?: string;
+	display_name?: string;
+	membership?: RoomPhase;
+	is_direct?: boolean;
+	join_authorised_via_users_server?: string;
+	reason?: string;
+	third_party_signed?: string;
+	third_party_invite?: {
+		display_name: string;
+		signed: {
+			mxid: string;
+			signatures: unknown;
+			token: string;
+		};
+	};
+}
+
+export interface RoomEventContent_ {
 	name?: string;
 	alias?: string;
+	url?: string;
+	info?: ImageInfo_;
 	join_rule?: string;
 	topic?: string;
+	users?: { [id: string]: number };
+	_is_notepad?: string; // custom field
+}
 
 export interface IGroupCallDataChannelOptions {
 	ordered: boolean;
@@ -283,7 +374,7 @@ export interface NewRoomOptions_ {
 			guest_access?: 'forbidden';
 		};
 	}[];
-	creation_content?: { is_notepad: boolean };
+	creation_content?: { _is_notepad: boolean };
 }
 
 export interface PublicRoom_ {
@@ -334,7 +425,7 @@ export interface GetRoomMembersResponse_ {
 }
 
 export interface EventsFilter_ {
-	types: MessageEventType[];
+	types: ClientEventType[];
 	lazy_load_members?: boolean;
 	limit?: number;
 }
@@ -360,7 +451,7 @@ export interface RoomSummary_ {
 }
 
 export interface RoomTimeline_ {
-	events: MessageEvent_[];
+	events: ClientEvent_[];
 	limited: boolean;
 	prev_batch: string;
 }
@@ -383,6 +474,8 @@ export interface WellKnown_ {
 	};
 }
 
+export interface SendStateEvent_ {
+	event_id: string;
 }
 
 export interface EphemeralEvent_ {
@@ -402,10 +495,10 @@ export interface EphemeralEvent_ {
 
 export interface RoomData_ {
 	state: {
-		events: MessageEvent_[];
+		events: ClientEvent_[];
 	};
 	invite_state: {
-		events: MessageEvent_[];
+		events: ClientEvent_[];
 	};
 	summary: RoomSummary_;
 	ephemeral: EphemeralEvent_;
@@ -419,7 +512,7 @@ export interface SyncResponse_ {
 	next_batch?: string;
 	account_data?: {
 		events: {
-			type: MessageEventType;
+			type: ClientEventType;
 			content: { [id: string]: string[] };
 		}[];
 	};
@@ -429,6 +522,6 @@ export interface SyncResponse_ {
 		leave: { [id: string]: RoomData_ };
 	};
 	presence?: {
-		events: MessageEvent_[];
+		events: ClientEvent_[];
 	};
 }

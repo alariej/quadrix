@@ -23,13 +23,16 @@ import {
 	PusherParam_,
 	PushRulesGetResponse_,
 	DirectorySearch_,
-	MessageEvent_,
+	SendStateEvent_,
+	WellKnown_,
+	ClientEvent_,
+	CallEventContent_,
 } from '../models/MatrixApi';
 import { RoomSummary } from '../models/RoomSummary';
 import EventUtils from '../utils/EventUtils';
-import { MessageEvent } from '../models/MessageEvent';
 import AsyncStorage from '../modules/AsyncStorage';
 import StringUtils from '../utils/StringUtils';
+import { FilteredChatEvent } from '../models/FilteredChatEvent';
 
 class ApiClient {
 	public credentials!: Credentials;
@@ -313,7 +316,7 @@ class ApiClient {
 				name: name,
 				is_direct: false,
 				creation_content: {
-					is_notepad: true,
+					_is_notepad: true,
 				},
 			};
 		} else if (type === 'group') {
@@ -369,12 +372,17 @@ class ApiClient {
 	public sendStateEvent(
 		roomId: string,
 		type: StateEventType,
-		content: StateEventContent_,
+		content: StateEventContent_ | CallEventContent_,
 		stateKey?: string
-	): Promise<void> {
+	): Promise<SendStateEvent_> {
 		const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
 
 		return restClient.sendStateEvent(roomId, type, content, stateKey);
+	}
+
+	public getStateEvents(roomId: string): Promise<ClientEvent_[]> {
+		const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
+		return restClient.getStateEvents(roomId);
 	}
 
 	public async getRoomEvents(
@@ -383,7 +391,7 @@ class ApiClient {
 		messageCountAdd: number,
 		from: string,
 		previousEventTime: number
-	): Promise<{ events: MessageEvent[]; endToken: string; timelineLimited: boolean }> {
+	): Promise<{ events: FilteredChatEvent[]; endToken: string; timelineLimited: boolean }> {
 		let filter: { types: string[] };
 		if (roomType === 'community') {
 			filter = {
@@ -414,7 +422,7 @@ class ApiClient {
 		roomId: string,
 		messageCountAdd: number,
 		from: string
-	): Promise<{ events: MessageEvent_[]; endToken: string; timelineLimited: boolean }> {
+	): Promise<{ events: ClientEvent_[]; endToken: string; timelineLimited: boolean }> {
 		const filter = {
 			types: ['m.room.message'],
 			contains_url: true,
@@ -429,13 +437,10 @@ class ApiClient {
 		if (response) {
 			const timelineLimited = messageCountAdd === response.chunk.length;
 			const events = response.chunk
-				.filter(
-					event =>
-						event.type === 'm.room.message' &&
-						event.content &&
-						event.content.msgtype === 'm.image' &&
-						event.content.url
-				)
+				.filter(event => {
+					const content = event.content as MessageEventContent_;
+					return event.type === 'm.room.message' && content && content.msgtype === 'm.image' && content.url;
+				})
 				.sort((a, b) => b.origin_server_ts - a.origin_server_ts);
 			return Promise.resolve({ events: events, endToken: response.end, timelineLimited: timelineLimited });
 		} else {

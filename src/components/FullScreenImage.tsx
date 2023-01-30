@@ -12,11 +12,11 @@ import ScreenOrientation from '../modules/ScreenOrientation';
 import DataStore from '../stores/DataStore';
 import StringUtils from '../utils/StringUtils';
 import ApiClient from '../matrix/ApiClient';
-import { MessageEvent_ } from '../models/MatrixApi';
 import IconSvg, { SvgFile } from './IconSvg';
 import Spinner from './Spinner';
 import { MESSAGE_COUNT_ADD } from '../appconfig';
 import CachedImage from '../modules/CachedImage';
+import { ClientEvent_, ImageInfo_, MessageEventContent_ } from '../models/MatrixApi';
 
 const styles = {
 	modalView: RX.Styles.createViewStyle({
@@ -92,7 +92,7 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
 	private positionH = 0;
 	private positionV = 0;
 	private imageRatio: number;
-	private imageTimeline: MessageEvent_[];
+	private imageTimeline: ClientEvent_[];
 	private endToken: string;
 	private timelineLimited = true;
 	private eventId: string;
@@ -425,11 +425,14 @@ export default class FullScreenImage extends RX.Component<FullScreenImageProps, 
 			return;
 		}
 
-		this.imageRatio = nextImage.content.info!.w! / nextImage.content.info!.h!;
+		const content = nextImage.content as MessageEventContent_;
+		const info = content.info as ImageInfo_;
+
+		this.imageRatio = info.w! / (info.h! || 200);
 
 		this.setImageSize();
 
-		const url = StringUtils.mxcToHttp(nextImage.content.url!, ApiClient.credentials.homeServer);
+		const url = StringUtils.mxcToHttp(content.url!, ApiClient.credentials.homeServer);
 
 		this.animatedTransform = RX.Animated.createValue(
 			(isLandscape ? this.screenHeight : this.screenWidth) * inc * direction

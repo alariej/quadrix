@@ -9,7 +9,6 @@ import {
 	PusherParam_,
 	NewRoomOptions_,
 	GetPublicRoomsResponse_,
-	MessageEvent_,
 	StateEventContent_,
 	StateEventType,
 	GetJoinedMembersResponse_,
@@ -20,6 +19,9 @@ import {
 	PushRulesGetResponse_,
 	DirectorySearch_,
 	WellKnown_,
+	SendStateEvent_,
+	ClientEvent_,
+	CallEventContent_,
 } from '../models/MatrixApi';
 
 export default class RestClient extends GenericRestClient {
@@ -115,8 +117,11 @@ export default class RestClient extends GenericRestClient {
 	public sendStateEvent(
 		roomId: string,
 		type: StateEventType,
-		content: StateEventContent_,
+		content: StateEventContent_ | CallEventContent_,
 		stateKey?: string
+	): Promise<SendStateEvent_> {
+		return this.performApiPut<SendStateEvent_>('rooms/' + roomId + '/state/' + type + '/' + stateKey, content);
+	}
 
 	public getStateEvents(roomId: string): Promise<ClientEvent_[]> {
 		return this.performApiGet<ClientEvent_[]>('rooms/' + roomId + '/state');
@@ -226,10 +231,10 @@ export default class RestClient extends GenericRestClient {
 		from?: string,
 		to?: string,
 		filter?: { types: string[] }
-	): Promise<{ chunk: MessageEvent_[]; end: string }> {
+	): Promise<{ chunk: ClientEvent_[]; end: string }> {
 		const filter_ = JSON.stringify(filter);
 
-		return this.performApiGet<{ chunk: MessageEvent_[]; end: string }>(
+		return this.performApiGet<{ chunk: ClientEvent_[]; end: string }>(
 			'rooms/' +
 				roomId +
 				'/messages?' +

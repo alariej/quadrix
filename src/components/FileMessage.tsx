@@ -10,13 +10,14 @@ import {
 	ICON_INFO_SIZE,
 } from '../ui';
 import FileHandler from '../modules/FileHandler';
-import { MessageEvent } from '../models/MessageEvent';
 import DialogContainer from '../modules/DialogContainer';
 import UiStore from '../stores/UiStore';
 import { noApplicationWasFound, fileCouldNotAccess } from '../translations';
 import { ProgressIndicator } from './ProgressIndicator';
 import IconSvg, { SvgFile } from './IconSvg';
 import AppFont from '../modules/AppFont';
+import { FilteredChatEvent } from '../models/FilteredChatEvent';
+import { FileInfo_, MessageEventContent_ } from '../models/MatrixApi';
 
 const styles = {
 	containerMessage: RX.Styles.createViewStyle({
@@ -61,7 +62,7 @@ const styles = {
 };
 
 interface FileMessageProps {
-	message: MessageEvent;
+	message: FilteredChatEvent;
 	showContextDialog: () => void;
 }
 
@@ -124,14 +125,16 @@ export default class FileMessage extends RX.Component<FileMessageProps, FileMess
 
 	public render(): JSX.Element | null {
 		let fileSize: string;
-		if (this.props.message.content.info!.size! > 1000000) {
-			fileSize = Math.round(this.props.message.content.info!.size! / 100000) / 10 + ' MB';
+		const content = this.props.message.content as MessageEventContent_;
+		const info = content.info as FileInfo_;
+		if (info && info.size! > 1000000) {
+			fileSize = Math.round(info.size! / 100000) / 10 + ' MB';
 		} else {
-			fileSize = Math.round(this.props.message.content.info!.size! / 1000) + ' KB';
+			fileSize = Math.round(info.size! / 1000) + ' KB';
 		}
 		const linkText = (
 			<RX.Text style={[styles.link, { opacity: this.state.linkOpacity }]}>
-				<RX.Text style={styles.fileName}>{this.props.message.content.body}</RX.Text>
+				<RX.Text style={styles.fileName}>{content.body}</RX.Text>
 				<RX.Text style={styles.fileSize}>{' (' + fileSize + ')'}</RX.Text>
 			</RX.Text>
 		);

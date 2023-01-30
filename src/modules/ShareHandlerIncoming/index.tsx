@@ -1,4 +1,4 @@
-import { MessageEvent } from '../../models/MessageEvent';
+import { FilteredChatEvent } from '../../models/FilteredChatEvent';
 
 class ShareHandlerIncoming {
 	public launchedFromSharedContent(_sharedContent: string, _shareContent: (event: { url: string }) => void): void {
@@ -15,7 +15,7 @@ class ShareHandlerIncoming {
 
 	public shareContent(
 		_sharedContent_: string,
-		_showTempForwardedMessage: (roomId: string, message: MessageEvent, tempId: string) => void
+		_showTempForwardedMessage: (roomId: string, message: FilteredChatEvent, tempId: string) => void
 	): void {
 		// do nothing in web / desktop
 	}

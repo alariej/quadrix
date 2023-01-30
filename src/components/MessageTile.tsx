@@ -21,19 +21,19 @@ import ImageMessage from './ImageMessage';
 import FileMessage from './FileMessage';
 import TextMessage from './TextMessage';
 import ApiClient from '../matrix/ApiClient';
-import { MessageEvent } from '../models/MessageEvent';
 import DialogMessageTile from '../dialogs/DialogMessageTile';
 import { encryptedMessage, deleted } from '../translations';
 import UiStore from '../stores/UiStore';
 import IconSvg, { SvgFile } from './IconSvg';
 import { format } from 'date-fns';
-import { RoomType } from '../models/MatrixApi';
+import { MessageEventContent_, RoomType } from '../models/MatrixApi';
 import Spinner from './Spinner';
 import AppFont from '../modules/AppFont';
 import VideoMessage from './VideoMessage';
 import DataStore from '../stores/DataStore';
 import ReplyMessage from './ReplyMessage';
 import Shadow from '../modules/Shadow';
+import { FilteredChatEvent } from '../models/FilteredChatEvent';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -116,13 +116,13 @@ const styles = {
 
 interface MessageTileProps {
 	roomId: string;
-	event: MessageEvent;
+	event: FilteredChatEvent;
 	roomType: RoomType;
 	readMarkerType?: string;
-	replyMessage?: MessageEvent;
-	setReplyMessage: (message: MessageEvent) => void;
+	replyMessage?: FilteredChatEvent;
+	setReplyMessage: (message: FilteredChatEvent) => void;
 	onPressReply?: (eventId: string) => void;
-	showTempForwardedMessage?: (roomId: string, message?: MessageEvent, tempId?: string) => void;
+	showTempForwardedMessage?: (roomId: string, message?: FilteredChatEvent, tempId?: string) => void;
 	canPress?: boolean;
 	isRedacted: boolean;
 	body?: string;
@@ -185,6 +185,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 			);
 		}
 
+		const content = this.props.event.content as MessageEventContent_;
 		if (this.props.isRedacted) {
 			messageType = 'system';
 			const messageIcon = (
@@ -219,7 +220,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 					<RX.Text style={styles.containerText}>{encryptedMessage[UiStore.getLanguage()]}</RX.Text>
 				</RX.View>
 			);
-		} else if (this.props.event.content.msgtype === 'm.image') {
+		} else if (content.msgtype === 'm.image') {
 			messageType = 'media';
 			message = (
 				<ImageMessage
@@ -230,7 +231,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 					// body={this.props.body || ''}
 				/>
 			);
-		} else if (this.props.event.content.msgtype === 'm.video') {
+		} else if (content.msgtype === 'm.video') {
 			messageType = 'media';
 			message = (
 				<VideoMessage
@@ -240,7 +241,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 					// body={this.props.body || ''}
 				/>
 			);
-		} else if (this.props.event.content.msgtype === 'm.file') {
+		} else if (content.msgtype === 'm.file') {
 			messageType = 'file';
 			message = (
 				<FileMessage

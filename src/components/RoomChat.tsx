@@ -31,7 +31,6 @@ import {
 import MessageTile from './MessageTile';
 import ApiClient from '../matrix/ApiClient';
 import EventUtils from '../utils/EventUtils';
-import { MessageEvent, TemporaryMessage } from '../models/MessageEvent';
 import { MessageEventContent_, RoomType } from '../models/MatrixApi';
 import SystemMessage from './SystemMessage';
 import DialogContainer from '../modules/DialogContainer';
@@ -43,6 +42,7 @@ import Spinner from './Spinner';
 import AppFont from '../modules/AppFont';
 import StringUtils from '../utils/StringUtils';
 import FloatingSendButton from '../modules/FloatingSendButton';
+import { FilteredChatEvent, TemporaryMessage } from '../models/FilteredChatEvent';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -120,7 +120,7 @@ const styles = {
 };
 
 interface EventListItemInfo extends VirtualListViewItemInfo {
-	event: MessageEvent;
+	event: FilteredChatEvent;
 	readMarkerType: string;
 	isRedacted?: boolean;
 	body?: string;
@@ -139,9 +139,9 @@ interface RoomChatProps extends RX.CommonProps {
 	roomId: string;
 	roomType: RoomType;
 	tempSentMessage: TemporaryMessage;
-	setReplyMessage: (message: MessageEvent) => void;
-	showTempForwardedMessage: (roomId: string, message: MessageEvent, tempId: string) => void;
-	tempForwardedMessage: { message: MessageEvent; tempId: string };
+	setReplyMessage: (message: FilteredChatEvent) => void;
+	showTempForwardedMessage: (roomId: string, message: FilteredChatEvent, tempId: string) => void;
+	tempForwardedMessage: { message: FilteredChatEvent; tempId: string };
 	onPressSendButton: (() => void) | undefined;
 }
 
@@ -155,7 +155,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 	private readMarkerTime = 0;
 	private language: Languages = 'en';
 	private locale: Locale;
-	private roomEvents: MessageEvent[] = [];
+	private roomEvents: FilteredChatEvent[] = [];
 	private eventIds: { [eventId: string]: string } = {};
 
 	constructor(props: RoomChatProps) {
@@ -182,21 +182,22 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
 			for (let i = 0; i < this.roomEvents.length; i++) {
 				const event = this.roomEvents[i];
+				const content = event.content as MessageEventContent_;
 
 				if (event.type === 'm.room.redaction') {
 					const eventIndex = this.roomEvents.findIndex(event_ => event_.eventId === event.redacts);
 					if (eventIndex > -1) {
 						this.roomEvents[eventIndex].isRedacted = true;
 					}
-				} else if (event.content['m.relates_to']?.rel_type === 'm.replace') {
-					const editedEventId = event.content['m.relates_to'].event_id;
+				} else if (content['m.relates_to']?.rel_type === 'm.replace') {
+					const editedEventId = content['m.relates_to'].event_id;
 					const eventIndex = this.roomEvents.findIndex(event_ => event_.eventId === editedEventId);
 					if (eventIndex > -1) {
-						if (event.time > (this.roomEvents[eventIndex].content._time || 0)) {
-							this.roomEvents[eventIndex].content = event.content['m.new_content']!;
+						if (event.time > ((this.roomEvents[eventIndex].content as MessageEventContent_)._time || 0)) {
+							this.roomEvents[eventIndex].content = content['m.new_content']!;
 						}
 						this.roomEvents[eventIndex].isEdited = true;
-						this.roomEvents[eventIndex].content._time = event.time;
+						(this.roomEvents[eventIndex].content as MessageEventContent_)._time = event.time;
 					}
 				} else {
 					if (!this.eventIds[event.eventId]) {
@@ -208,7 +209,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 							event: event,
 							readMarkerType: event.time > this.readMarkerTime ? 'sent' : 'read',
 							isRedacted: event.isRedacted,
-							body: event.content.body,
+							body: (event.content as MessageEventContent_).body,
 						};
 
 						this.eventListItems.push(messageInfo);
@@ -221,7 +222,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 			this.timelineLimited = DataStore.getTimelineLimited(nextProps.roomId)!;
 
 			if (nextProps.tempForwardedMessage && nextProps.tempForwardedMessage.message) {
-				const content = nextProps.tempForwardedMessage.message.content;
+				const content = nextProps.tempForwardedMessage.message.content as MessageEventContent_;
 
 				let body: string | undefined;
 				if (content.msgtype === 'm.text') {
@@ -265,7 +266,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 			nextProps.tempForwardedMessage &&
 			nextProps.tempForwardedMessage !== this.props.tempForwardedMessage
 		) {
-			const content = nextProps.tempForwardedMessage.message.content;
+			const content = nextProps.tempForwardedMessage.message.content as MessageEventContent_;
 			const tempId = nextProps.tempForwardedMessage.tempId;
 			const content_ = this.props.tempForwardedMessage
 				? this.props.tempForwardedMessage.message.content
@@ -320,7 +321,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 			body: body,
 		};
 
-		const tempMessageEvent: MessageEvent = {
+		const tempMessageEvent: FilteredChatEvent = {
 			eventId: tempId,
 			content: eventContent,
 			type: 'm.room.message',
@@ -355,20 +356,21 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
 		for (let i = 0; i < newRoomEvents.length; i++) {
 			const event = newRoomEvents[i];
+			const content = event.content as MessageEventContent_;
 
 			if (event.type === 'm.room.redaction') {
 				const eventIndex = this.eventListItems.findIndex(item => item.event.eventId === event.redacts);
 				if (eventIndex > -1) {
 					this.eventListItems[eventIndex].isRedacted = true;
 				}
-			} else if (event.content['m.relates_to']?.rel_type === 'm.replace') {
-				const editedEventId = event.content['m.relates_to'].event_id;
+			} else if (content['m.relates_to']?.rel_type === 'm.replace') {
+				const editedEventId = content['m.relates_to'].event_id;
 				const eventIndex = this.eventListItems.findIndex(item => item.event.eventId === editedEventId);
 				if (eventIndex > -1) {
-					this.eventListItems[eventIndex].event.content = event.content['m.new_content']!;
-					this.eventListItems[eventIndex].body = event.content['m.new_content']?.body;
+					this.eventListItems[eventIndex].event.content = content['m.new_content']!;
+					this.eventListItems[eventIndex].body = content['m.new_content']?.body;
 					this.eventListItems[eventIndex].event.isEdited = true;
-					this.eventListItems[eventIndex].event.content._time = event.time;
+					(this.eventListItems[eventIndex].event.content as MessageEventContent_)._time = event.time;
 				}
 			} else {
 				if (!this.eventIds[event.tempId || event.eventId]) {
@@ -493,9 +495,10 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 		let MessageWrapper: ReactElement;
 
 		if (['m.room.message', 'm.room.encrypted'].includes(cellRender.item.event.type)) {
-			let replyEvent: MessageEvent | undefined;
+			let replyEvent: FilteredChatEvent | undefined;
+			const content = cellRender.item.event.content as MessageEventContent_;
 
-			const replyEventId = cellRender.item.event.content['m.relates_to']?.['m.in_reply_to']?.event_id;
+			const replyEventId = content['m.relates_to']?.['m.in_reply_to']?.event_id;
 
 			if (replyEventId) {
 				const eventIndex = this.eventListItems.findIndex(
@@ -504,7 +507,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 				replyEvent = this.eventListItems[eventIndex]?.event;
 
 				if (!replyEvent) {
-					const fallback = StringUtils.getReplyFallback(cellRender.item.event.content.body!);
+					const fallback = StringUtils.getReplyFallback(content.body!);
 
 					if (fallback.senderId && fallback.message) {
 						replyEvent = {
@@ -513,7 +516,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 								body: fallback.message,
 								msgtype: 'm.text',
 							},
-							type: 'm.message',
+							type: 'm.room.message',
 							time: 0,
 							senderId: fallback.senderId,
 						};
@@ -540,7 +543,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 						showTempForwardedMessage={this.props.showTempForwardedMessage}
 						canPress={true}
 						isRedacted={cellRender.item.isRedacted || false}
-						body={cellRender.item.event.content?.body}
+						body={content?.body}
 						animatedImage={true}
 					/>
 				</RX.View>
@@ -628,8 +631,9 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
 				for (let i = 0; i < response.events.length; i++) {
 					const event = response.events[i];
+					const content = event.content as MessageEventContent_;
 
-					if (event.content['m.relates_to']?.rel_type === 'm.replace') {
+					if (content['m.relates_to']?.rel_type === 'm.replace') {
 						// just ignore edits, and assume edited content is already in the original message?
 					} else {
 						if (!this.eventIds[event.eventId]) {
@@ -641,7 +645,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 								event: event,
 								readMarkerType: event.time > this.readMarkerTime ? 'sent' : 'read',
 								isRedacted: event.isRedacted,
-								body: event.content.body,
+								body: content.body,
 							};
 							olderEventListItems.push(messageInfo);
 							this.eventIds[event.eventId] = event.eventId;

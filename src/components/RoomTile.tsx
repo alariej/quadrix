@@ -39,14 +39,14 @@ import {
 import UiStore from '../stores/UiStore';
 import IconSvg, { SvgFile } from './IconSvg';
 import { StyleRuleSet, TextStyle } from 'reactxp/dist/common/Types';
-import { RoomPhase, RoomType } from '../models/MatrixApi';
-import { MessageEvent } from '../models/MessageEvent';
+import { MessageEventContent_, RoomPhase, RoomType } from '../models/MatrixApi';
 import AppFont from '../modules/AppFont';
 import CachedImage from '../modules/CachedImage';
 import { format, isSameWeek, isToday, isYesterday, Locale } from 'date-fns';
 import StringUtils from '../utils/StringUtils';
 import { RoomSummary } from '../models/RoomSummary';
 import { User } from '../models/User';
+import { FilteredChatEvent } from '../models/FilteredChatEvent';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -132,7 +132,7 @@ const styles = {
 interface RoomTileProps extends RX.CommonProps {
 	onPressRoom?: (roomId: string) => void;
 	roomId: string;
-	newestRoomEvent?: MessageEvent;
+	newestRoomEvent?: FilteredChatEvent;
 }
 
 interface RoomTileState {
@@ -330,6 +330,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 
 		let messageTypeIcon: ReactElement | undefined;
 		let messageText: string | undefined;
+		const content = this.props.newestRoomEvent?.content as MessageEventContent_;
 
 		if (this.state.phase === 'invite') {
 			messageText = invitationWaiting[this.language];
@@ -377,7 +378,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 							width={ICON_INFO_SIZE}
 						/>
 					);
-				} else if (this.props.newestRoomEvent.content['m.relates_to']?.rel_type === 'm.replace') {
+				} else if (content['m.relates_to']?.rel_type === 'm.replace') {
 					messageText = messageEdited[this.language];
 					messageTypeIcon = (
 						<IconSvg
@@ -388,8 +389,8 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 							width={ICON_INFO_SIZE}
 						/>
 					);
-				} else if (this.props.newestRoomEvent.content.msgtype === 'm.file') {
-					messageText = this.props.newestRoomEvent.content.body;
+				} else if (content.msgtype === 'm.file') {
+					messageText = content.body;
 					messageTypeIcon = (
 						<IconSvg
 							source={require('../resources/svg/RI_file.json') as SvgFile}
@@ -399,7 +400,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 							width={ICON_INFO_SIZE}
 						/>
 					);
-				} else if (this.props.newestRoomEvent.content.msgtype === 'm.image') {
+				} else if (content.msgtype === 'm.image') {
 					messageText = image[this.language];
 
 					messageTypeIcon = (
@@ -411,7 +412,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 							width={ICON_INFO_SIZE}
 						/>
 					);
-				} else if (this.props.newestRoomEvent.content.msgtype === 'm.video') {
+				} else if (content.msgtype === 'm.video') {
 					messageText = video[this.language];
 
 					messageTypeIcon = (
@@ -423,8 +424,8 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 							width={ICON_INFO_SIZE}
 						/>
 					);
-				} else if (this.props.newestRoomEvent.content.body) {
-					if (this.props.newestRoomEvent.content.jitsi_started) {
+				} else if (content.body) {
+					if (content._jitsi_started) {
 						messageText = jitsiStartedShort[this.language];
 
 						messageTypeIcon = (
@@ -437,7 +438,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 							/>
 						);
 					} else {
-						const stripped = StringUtils.stripReplyMessage(this.props.newestRoomEvent.content.body);
+						const stripped = StringUtils.stripReplyMessage(content.body);
 						messageText = StringUtils.flattenString(stripped);
 					}
 				}

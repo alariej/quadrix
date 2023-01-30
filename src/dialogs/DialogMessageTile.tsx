@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
-import { MessageEvent } from '../models/MessageEvent';
 import { ComponentBase } from 'resub';
 import UiStore from '../stores/UiStore';
 import MessageTile from '../components/MessageTile';
@@ -56,12 +55,13 @@ import {
 } from '../translations';
 import FileHandler from '../modules/FileHandler';
 import ShareHandlerOutgoing from '../modules/ShareHandlerOutgoing';
-import { ErrorResponse_, MessageEventContentInfo_, MessageEventContent_, RoomType } from '../models/MatrixApi';
+import { ErrorResponse_, FileInfo_, ImageInfo_, MessageEventContent_, RoomType, VideoInfo_ } from '../models/MatrixApi';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import Spinner from '../components/Spinner';
 import AppFont from '../modules/AppFont';
 import StringUtils from '../utils/StringUtils';
 import IconSvg, { SvgFile } from '../components/IconSvg';
+import { FilteredChatEvent } from '../models/FilteredChatEvent';
 
 const styles = {
 	modalScreen: RX.Styles.createViewStyle({
@@ -143,12 +143,12 @@ const animatedEasing = RX.Animated.Easing.Out();
 
 interface DialogMessageTileProps extends RX.CommonProps {
 	roomId: string;
-	event: MessageEvent;
+	event: FilteredChatEvent;
 	roomType: RoomType;
 	readMarkerType?: string;
-	replyMessage?: MessageEvent;
-	setReplyMessage: (message: MessageEvent | undefined) => void;
-	showTempForwardedMessage?: (roomId: string, message?: MessageEvent, tempId?: string) => void;
+	replyMessage?: FilteredChatEvent;
+	setReplyMessage: (message: FilteredChatEvent | undefined) => void;
+	showTempForwardedMessage?: (roomId: string, message?: FilteredChatEvent, tempId?: string) => void;
 	layout: LayoutInfo;
 }
 
@@ -178,10 +178,11 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 		this.language = UiStore.getLanguage();
 		this.isElectron = UiStore.getIsElectron();
 		this.isMobile = ['android', 'ios'].includes(UiStore.getPlatform());
-		this.isMedia = ['m.file', 'm.image', 'm.video'].includes(this.props.event.content.msgtype!);
+		this.isMedia = ['m.file', 'm.image', 'm.video'].includes(
+			(props.event.content as MessageEventContent_).msgtype!
+		);
 
-		this.rightAlignment =
-			this.props.roomType === 'notepad' || this.props.event.senderId !== ApiClient.credentials.userIdFull;
+		this.rightAlignment = props.roomType === 'notepad' || props.event.senderId !== ApiClient.credentials.userIdFull;
 
 		this.animatedScale = RX.Animated.createValue(animatedSizeStart);
 		this.animatedTranslateX = RX.Animated.createValue((BUTTON_MENU_WIDTH / 2) * (this.rightAlignment ? 1 : -1));
@@ -306,12 +307,13 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 			this.props.showTempForwardedMessage!(roomId, undefined, '');
 		};
 
-		if (this.props.event.content.msgtype === 'm.text') {
+		const content = this.props.event.content as MessageEventContent_;
+		if (content.msgtype === 'm.text') {
 			const tempId = 'text' + Date.now();
 
 			this.props.showTempForwardedMessage!(roomId, this.props.event, tempId);
 
-			ApiClient.sendMessage(roomId, this.props.event.content, tempId).catch(_error => {
+			ApiClient.sendMessage(roomId, content, tempId).catch(_error => {
 				showError();
 			});
 		} else {
@@ -319,20 +321,51 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 
 			this.props.showTempForwardedMessage!(roomId, this.props.event, tempId);
 
-			const messageContentInfo: MessageEventContentInfo_ = {
-				h: this.props.event.content.info!.h,
-				w: this.props.event.content.info!.w,
-				size: this.props.event.content.info!.size,
-				mimetype: this.props.event.content.info!.mimetype,
-				thumbnail_info: this.props.event.content.info!.thumbnail_info,
-				thumbnail_url: this.props.event.content.info!.thumbnail_url,
-			};
+			let contentInfo;
+			let info;
+
+			switch (content.msgtype) {
+				case 'm.image':
+					info = content.info as ImageInfo_;
+					contentInfo = {
+						mimetype: info.mimetype,
+						size: info.size,
+						h: info.h,
+						w: info.w,
+						thumbnail_url: info.thumbnail_info,
+						thumbnail_info: info.thumbnail_url,
+					} as ImageInfo_;
+					break;
+
+				case 'm.video':
+					info = content.info as VideoInfo_;
+					contentInfo = {
+						mimetype: info.mimetype,
+						duration: undefined,
+						size: info.size,
+						h: info.h,
+						w: info.w,
+						thumbnail_url: info.thumbnail_info,
+						thumbnail_info: info.thumbnail_url,
+					} as VideoInfo_;
+					break;
+
+				default:
+					info = content.info as FileInfo_;
+					contentInfo = {
+						mimetype: info.mimetype,
+						size: info.size,
+						thumbnail_url: info.thumbnail_info,
+						thumbnail_info: info.thumbnail_url,
+					} as FileInfo_;
+					break;
+			}
 
 			const messageContent: MessageEventContent_ = {
-				msgtype: StringUtils.messageMediaType(this.props.event.content.info!.mimetype!),
-				body: this.props.event.content.body,
-				info: messageContentInfo,
-				url: this.props.event.content.url,
+				msgtype: StringUtils.messageMediaType(info.mimetype!),
+				body: content.body,
+				info: contentInfo,
+				url: content.url,
 			};
 
 			ApiClient.sendMessage(roomId, messageContent, tempId).catch(_error => {
@@ -944,7 +977,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 						withSenderDetails={this.state.withSenderDetails}
 						setReplyMessage={() => null}
 						animatedImage={false}
-						body={this.props.event.content.body}
+						body={(this.props.event.content as MessageEventContent_).body}
 					/>
 					<RX.View
 						style={[

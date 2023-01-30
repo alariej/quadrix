@@ -6,9 +6,9 @@ import RoomChat from '../components/RoomChat';
 import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
 import InviteRoom from '../components/InviteRoom';
-import { MessageEvent, TemporaryMessage } from '../models/MessageEvent';
 import { RoomPhase, RoomType } from '../models/MatrixApi';
 import SpinnerUtils from '../utils/SpinnerUtils';
+import { FilteredChatEvent, TemporaryMessage } from '../models/FilteredChatEvent';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -21,7 +21,7 @@ interface RoomState {
 	roomPhase: RoomPhase;
 	roomType: RoomType;
 	roomActive: boolean;
-	replyMessage: MessageEvent | undefined;
+	replyMessage: FilteredChatEvent | undefined;
 	onPressSendButton: (() => void) | undefined;
 }
 
@@ -29,8 +29,8 @@ interface RoomProps extends RX.CommonProps {
 	roomId: string;
 	showLogin: () => void;
 	showRoomList: () => void;
-	showTempForwardedMessage: (roomId: string, message: MessageEvent, tempId: string) => void;
-	tempForwardedMessage?: { message: MessageEvent; tempId: string };
+	showTempForwardedMessage: (roomId: string, message: FilteredChatEvent, tempId: string) => void;
+	tempForwardedMessage?: { message: FilteredChatEvent; tempId: string };
 	showJitsiMeet: (jitsiMeetId: string) => void;
 	showRoom: (roomID: string) => void;
 }
@@ -64,7 +64,7 @@ export default class Room extends ComponentBase<RoomProps, RoomState> {
 		});
 	};
 
-	private setReplyMessage = (message: MessageEvent) => {
+	private setReplyMessage = (message: FilteredChatEvent) => {
 		this.setState({ replyMessage: message });
 	};
 

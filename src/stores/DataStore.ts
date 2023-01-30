@@ -3,10 +3,13 @@ import { RoomSummary } from '../models/RoomSummary';
 import { User } from '../models/User';
 import ApiClient from '../matrix/ApiClient';
 import EventUtils from '../utils/EventUtils';
-import { MessageEvent } from '../models/MessageEvent';
 import {
-	MessageEvent_,
+	ClientEvent_,
+	MemberEventContent_,
+	MessageEventContent_,
+	PresenceEventContent_,
 	RoomData_,
+	RoomEventContent_,
 	RoomPhase,
 	RoomSummary_,
 	RoomTimeline_,
@@ -15,6 +18,7 @@ import {
 } from '../models/MatrixApi';
 import { differenceInDays } from 'date-fns';
 import { INACTIVE_DAYS } from '../appconfig';
+import { FilteredChatEvent } from '../models/FilteredChatEvent';
 
 interface RoomEventTriggers {
 	isNewMessageEvent?: boolean;
@@ -161,13 +165,14 @@ class DataStore extends StoreBase {
 		}
 	}
 
-	private setRoomInfoFromEvents(events: MessageEvent_[], roomIndex: number): RoomEventTriggers {
+	private setRoomInfoFromEvents(events: ClientEvent_[], roomIndex: number): RoomEventTriggers {
 		if (!events || events.length === 0) {
 			return {};
 		}
 
 		const roomEventTriggers: RoomEventTriggers = {};
 		events.map(event => {
+			const content = event.content;
 			switch (event.type) {
 				case 'm.room.message':
 					roomEventTriggers.isNewMessageEvent = true;
@@ -204,22 +209,22 @@ class DataStore extends StoreBase {
 
 				case 'm.room.name':
 					roomEventTriggers.isNewRoomNameEvent = true;
-					this.roomSummaryList[roomIndex].name = event.content.name;
+					this.roomSummaryList[roomIndex].name = (<RoomEventContent_>content).name;
 					break;
 
 				case 'm.room.avatar':
 					roomEventTriggers.isNewRoomAvatarEvent = true;
-					this.roomSummaryList[roomIndex].avatarUrl = event.content.url;
+					this.roomSummaryList[roomIndex].avatarUrl = (<RoomEventContent_>content).url;
 					break;
 
 				case 'm.room.canonical_alias':
 					roomEventTriggers.isNewRoomAliasEvent = true;
-					this.roomSummaryList[roomIndex].alias = event.content.alias;
+					this.roomSummaryList[roomIndex].alias = (<RoomEventContent_>content).alias;
 					break;
 
 				case 'm.room.join_rules':
 					roomEventTriggers.isNewJoinRuleEvent = true;
-					this.roomSummaryList[roomIndex].joinRule = event.content.join_rule;
+					this.roomSummaryList[roomIndex].joinRule = (<RoomEventContent_>content).join_rule;
 					break;
 
 				case 'm.room.power_levels':
@@ -228,16 +233,16 @@ class DataStore extends StoreBase {
 					break;
 
 				case 'm.room.topic':
-					this.roomSummaryList[roomIndex].topic = event.content.topic;
+					this.roomSummaryList[roomIndex].topic = (<RoomEventContent_>content).topic;
 					break;
 
 				case 'm.room.third_party_invite':
 					roomEventTriggers.isNewMemberEvent = true;
-					this.roomSummaryList[roomIndex].thirdPartyInviteId = event.content.display_name;
+					this.roomSummaryList[roomIndex].thirdPartyInviteId = (<MemberEventContent_>content).display_name;
 					break;
 
 				case 'm.room.create':
-					if (event.content && event.content.is_notepad) {
+					if (content && (<RoomEventContent_>content)._is_notepad) {
 						this.roomSummaryList[roomIndex].type = 'notepad';
 						this.roomSummaryList[roomIndex].active = true;
 						roomEventTriggers.isNewRoomType = true;
@@ -249,12 +254,13 @@ class DataStore extends StoreBase {
 		return roomEventTriggers;
 	}
 
-	private setPowerLevel(event: MessageEvent_, roomIndex: number) {
-		Object.keys(event.content.users!).map(user => {
+	private setPowerLevel(event: ClientEvent_, roomIndex: number) {
+		const content = event.content as RoomEventContent_;
+		Object.keys(content.users!).map(user => {
 			const member: User = {
 				id: user,
-				powerLevel: event.content.users![user],
-				membership: event.content.users![user] === 100 ? 'join' : undefined,
+				powerLevel: content.users![user],
+				membership: content.users![user] === 100 ? 'join' : undefined,
 			};
 
 			this.roomSummaryList[roomIndex].members[user] = {
@@ -264,13 +270,14 @@ class DataStore extends StoreBase {
 		});
 	}
 
-	private setRoomMember(event: MessageEvent_, roomIndex: number) {
+	private setRoomMember(event: ClientEvent_, roomIndex: number) {
+		const content = event.content as MemberEventContent_;
 		const member: User = {
 			id: event.state_key!,
-			name: event.content.displayname!,
-			avatarUrl: event.content.avatar_url!,
-			membership: event.content.membership,
-			...(event.content.is_direct && { isDirect: true }),
+			name: content.displayname!,
+			avatarUrl: content.avatar_url!,
+			membership: content.membership,
+			...(content.is_direct && { isDirect: true }),
 		};
 
 		// TODO: doesn't powerlevel get lost here?
@@ -281,7 +288,7 @@ class DataStore extends StoreBase {
 
 		// in case a 3rd party invite has been accepted, need to reset contactid
 		// is this the right place?
-		if (this.roomSummaryList[roomIndex].thirdPartyInviteId && event.content.third_party_signed) {
+		if (this.roomSummaryList[roomIndex].thirdPartyInviteId && content.third_party_signed) {
 			this.setContactId(roomIndex);
 			this.roomSummaryList[roomIndex].thirdPartyInviteId = undefined;
 		}
@@ -440,6 +447,7 @@ class DataStore extends StoreBase {
 					redactedEventIds.push(event.redacts);
 				}
 			} else if (isFilteredEvent && event.type !== 'm.room.redaction') {
+				const content = event.content as MessageEventContent_;
 				this.roomSummaryList[roomIndex].latestFilteredEvent = {
 					eventId: event.event_id,
 					content: event.content,
@@ -450,8 +458,8 @@ class DataStore extends StoreBase {
 					userId: event.state_key,
 					isRedacted:
 						redactedEventIds.includes(event.event_id) ||
-						(event.content['m.relates_to']?.rel_type === 'm.replace'
-							? redactedEventIds.includes(event.content['m.relates_to'].event_id!)
+						(content['m.relates_to']?.rel_type === 'm.replace'
+							? redactedEventIds.includes(content['m.relates_to'].event_id!)
 							: false) ||
 						Object.keys(event.content).length === 0,
 					isEdited: Boolean(event.unsigned?.['m.relations']?.['m.replace']),
@@ -473,9 +481,10 @@ class DataStore extends StoreBase {
 
 		syncData.presence.events.map(event => {
 			if (event.type === 'm.presence' && event.content) {
+				const content = event.content as PresenceEventContent_;
 				this.lastSeenTime[event.sender] = Math.max(
 					this.lastSeenTime[event.sender] || 0,
-					time - event.content.last_active_ago!
+					time - content.last_active_ago!
 				);
 				isNewPresence = true;
 			}
@@ -496,6 +505,7 @@ class DataStore extends StoreBase {
 
 			if (roomIndex > -1 && this.roomSummaryList[roomIndex].phase === 'join') {
 				this.updateTimeLine(syncData.rooms.join[roomId].timeline, roomIndex);
+				this.updateState(syncData.rooms.join[roomId].state.events, roomIndex);
 
 				this.updateLatestFilteredEvent(roomIndex);
 
@@ -512,6 +522,7 @@ class DataStore extends StoreBase {
 
 	private updateJoinRoom(roomObj: RoomData_, roomIndex: number): RoomEventTriggers {
 		this.updateTimeLine(roomObj.timeline, roomIndex);
+		this.updateState(roomObj.state.events, roomIndex);
 		this.updateNewEvents(roomObj.timeline, roomIndex);
 		if (roomObj.timeline?.events?.length > 0) {
 			this.updateLatestFilteredEvent(roomIndex);
@@ -546,6 +557,7 @@ class DataStore extends StoreBase {
 		this.trySetRoomType(this.roomSummaryList[roomIndex].id, roomIndex);
 
 		this.updateTimeLine(roomObj.timeline, roomIndex);
+		this.updateState(roomObj.state.events, roomIndex);
 
 		this.updateNewEvents(roomObj.timeline, roomIndex);
 		this.updateLatestFilteredEvent(roomIndex);
@@ -821,7 +833,7 @@ class DataStore extends StoreBase {
 	}
 
 	// HACK: fake presence
-	private setPresenceFromEvent(event: MessageEvent_): boolean {
+	private setPresenceFromEvent(event: ClientEvent_): boolean {
 		const userId = event.sender;
 		const timestamp = event.origin_server_ts;
 		const isNewPresence = timestamp > this.lastSeenTime[userId];
@@ -870,7 +882,7 @@ class DataStore extends StoreBase {
 	}
 
 	@autoSubscribeWithKey('DummyTrigger')
-	public getAllRoomEvents(roomId: string): MessageEvent[] {
+	public getAllRoomEvents(roomId: string): FilteredChatEvent[] {
 		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
 
 		return EventUtils.filterRoomEvents(
@@ -879,18 +891,20 @@ class DataStore extends StoreBase {
 		);
 	}
 
-	public getImageTimeline(roomId: string): { timeline: MessageEvent_[]; endToken: string } {
+	public getImageTimeline(roomId: string): { timeline: ClientEvent_[]; endToken: string } {
 		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
 
 		const timeline = this.roomSummaryList[roomIndex].timelineEvents
-			.filter(
-				event =>
+			.filter(event => {
+				const content = event.content as MessageEventContent_;
+				return (
 					event.type === 'm.room.message' &&
-					event.content &&
-					event.content.msgtype === 'm.image' &&
-					!event.content.body?.toLowerCase().includes('.svg') &&
-					event.content.url
-			)
+					content &&
+					content.msgtype === 'm.image' &&
+					!content.body?.toLowerCase().includes('.svg') &&
+					content.url
+				);
+			})
 			.sort((a, b) => b.origin_server_ts - a.origin_server_ts);
 
 		return {
@@ -966,12 +980,12 @@ class DataStore extends StoreBase {
 
 	// used in roomchat
 	@autoSubscribeWithKey(MessageTrigger)
-	public getNewRoomEvents(roomId: string): MessageEvent[] {
+	public getNewRoomEvents(roomId: string): FilteredChatEvent[] {
 		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
 		return this.roomSummaryList[roomIndex].newEvents;
 	}
 
-	public getLatestFilteredEvent(roomId: string): MessageEvent | undefined {
+	public getLatestFilteredEvent(roomId: string): FilteredChatEvent | undefined {
 		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
 		return this.roomSummaryList[roomIndex].latestFilteredEvent;
 	}

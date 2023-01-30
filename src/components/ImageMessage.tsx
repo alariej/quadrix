@@ -2,7 +2,6 @@ import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import StringUtils from '../utils/StringUtils';
 import ApiClient from '../matrix/ApiClient';
-import { MessageEvent } from '../models/MessageEvent';
 import FullScreenImage from './FullScreenImage';
 import { SPACING, BUTTON_ROUND_WIDTH, PAGE_MARGIN, BORDER_RADIUS, TILE_SYSTEM_TEXT } from '../ui';
 import UiStore from '../stores/UiStore';
@@ -10,6 +9,8 @@ import Spinner from './Spinner';
 import CachedImage from '../modules/CachedImage';
 import FileMessage from './FileMessage';
 import AppFont from '../modules/AppFont';
+import { FilteredChatEvent } from '../models/FilteredChatEvent';
+import { ImageInfo_, MessageEventContent_ } from '../models/MatrixApi';
 
 const styles = {
 	containerMessage: RX.Styles.createViewStyle({
@@ -49,7 +50,7 @@ interface ImageMessageState {
 
 interface ImageMessageProps {
 	roomId: string;
-	message: MessageEvent;
+	message: FilteredChatEvent;
 	animated: boolean;
 	showContextDialog: () => void;
 }
@@ -69,18 +70,16 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 		const width =
 			UiStore.getAppLayout_().pageWidth - 2 * PAGE_MARGIN - (BUTTON_ROUND_WIDTH + SPACING) - 2 * SPACING;
 
-		if (props.message.content.info?.thumbnail_url) {
-			this.url = StringUtils.mxcToHttp(
-				this.props.message.content.info!.thumbnail_url!,
-				ApiClient.credentials.homeServer
-			);
+		const content = props.message.content as MessageEventContent_;
+		const info = content.info as ImageInfo_;
 
-			if (props.message.content.info.thumbnail_info!.w && props.message.content.info.thumbnail_info!.h) {
+		if (info?.thumbnail_url) {
+			this.url = StringUtils.mxcToHttp(info.thumbnail_url, ApiClient.credentials.homeServer);
+
+			if (info.thumbnail_info!.w && info.thumbnail_info!.h) {
 				this.heightStyle = RX.Styles.createViewStyle(
 					{
-						height:
-							(width * props.message.content.info.thumbnail_info!.h) /
-							props.message.content.info.thumbnail_info!.w,
+						height: (width * info.thumbnail_info!.h) / info.thumbnail_info!.w,
 					},
 					false
 				);
@@ -93,14 +92,14 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 				);
 			}
 
-			this.urlFull = StringUtils.mxcToHttp(props.message.content.url!, ApiClient.credentials.homeServer);
+			this.urlFull = StringUtils.mxcToHttp(content.url!, ApiClient.credentials.homeServer);
 		} else {
-			this.url = StringUtils.mxcToHttp(props.message.content.url!, ApiClient.credentials.homeServer);
+			this.url = StringUtils.mxcToHttp(content.url!, ApiClient.credentials.homeServer);
 
-			if (props.message.content.info?.w && props.message.content.info?.h) {
+			if (info?.w && info?.h) {
 				this.heightStyle = RX.Styles.createViewStyle(
 					{
-						height: (width * props.message.content.info?.h) / props.message.content.info?.w,
+						height: (width * info?.h) / info?.w,
 					},
 					false
 				);
@@ -134,7 +133,8 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 	private showFullScreenImage = () => {
 		if (
 			this.state.showSpinner ||
-			(this.props.message.content.info?.mimetype?.includes('svg') && UiStore.getPlatform() !== 'web')
+			(((this.props.message.content as MessageEventContent_).info as ImageInfo_).mimetype?.includes('svg') &&
+				UiStore.getPlatform() !== 'web')
 		) {
 			return;
 		}
@@ -174,10 +174,8 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 
 		let svg: ReactElement | undefined;
 		let content: ReactElement;
-		if (
-			this.props.message.content.info?.mimetype?.includes('svg') &&
-			!this.props.message.content.info?.thumbnail_url
-		) {
+		const info = (this.props.message.content as MessageEventContent_).info as ImageInfo_;
+		if (info?.mimetype?.includes('svg') && !info?.thumbnail_url) {
 			content = (
 				<FileMessage
 					message={this.props.message}
@@ -186,8 +184,7 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 			);
 		} else {
 			svg =
-				this.props.message.content.info?.mimetype?.includes('svg') &&
-				this.props.message.content.info?.thumbnail_url ? (
+				info?.mimetype?.includes('svg') && info?.thumbnail_url ? (
 					<RX.Text style={styles.svg}>SVG</RX.Text>
 				) : undefined;
 			content = (
@@ -203,7 +200,7 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 						style={styles.image}
 						source={this.url}
 						onLoad={this.onLoad}
-						mimeType={this.props.message.content.info?.mimetype}
+						mimeType={info?.mimetype}
 						animated={this.props.animated}
 					/>
 					{spinner}

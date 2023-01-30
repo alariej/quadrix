@@ -2,7 +2,6 @@ import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import DialogContainer from '../modules/DialogContainer';
 import ApiClient from '../matrix/ApiClient';
-import { MessageEvent } from '../models/MessageEvent';
 import FileHandler from '../modules/FileHandler';
 import {
 	DIALOG_WIDTH,
@@ -18,7 +17,14 @@ import { messageCouldNotBeSent, cancel, pressSend, fileCouldNotUpload, pressLoad
 import RoomTile from '../components/RoomTile';
 import { SharedContent } from '../models/SharedContent';
 import DataStore from '../stores/DataStore';
-import { MessageEventContentInfo_, MessageEventContent_, ThumbnailInfo_ } from '../models/MatrixApi';
+import {
+	FileInfo_,
+	ImageInfo_,
+	MessageContentType,
+	MessageEventContent_,
+	ThumbnailInfo_,
+	VideoInfo_,
+} from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
 import ImageSizeLocal from '../modules/ImageSizeLocal';
 import AppFont from '../modules/AppFont';
@@ -26,6 +32,7 @@ import VideoPlayer from '../modules/VideoPlayer';
 import ProgressDialog from '../modules/ProgressDialog';
 import { UploadFileInfo } from '../models/UploadFileInfo';
 import StringUtils from '../utils/StringUtils';
+import { FilteredChatEvent } from '../models/FilteredChatEvent';
 
 const styles = {
 	modalScreen: RX.Styles.createViewStyle({
@@ -63,7 +70,7 @@ const styles = {
 interface DialogIncomingContentShareProps {
 	roomId: string;
 	sharedContent: SharedContent;
-	showTempForwardedMessage: (roomId: string, message: MessageEvent, tempId: string) => void;
+	showTempForwardedMessage: (roomId: string, message: FilteredChatEvent, tempId: string) => void;
 }
 
 interface DialogIncomingContentShareState {
@@ -76,7 +83,7 @@ export default class DialogIncomingContentShare extends RX.Component<
 	DialogIncomingContentShareProps,
 	DialogIncomingContentShareState
 > {
-	private contentType = '';
+	private contentType: MessageContentType = undefined!;
 	private imageHeight = 0;
 	private imageWidth = 0;
 	private language: Languages = 'en';
@@ -117,10 +124,10 @@ export default class DialogIncomingContentShare extends RX.Component<
 
 	private shareContent = async () => {
 		const showError = (tempId: string, errorMessage: string) => {
-			const message: MessageEvent = {
+			const message: FilteredChatEvent = {
 				eventId: tempId,
 				content: undefined!,
-				type: '',
+				type: undefined!,
 				time: 0,
 				senderId: '',
 			};
@@ -146,10 +153,10 @@ export default class DialogIncomingContentShare extends RX.Component<
 				msgtype: 'm.text',
 			};
 
-			const message: MessageEvent = {
+			const message: FilteredChatEvent = {
 				eventId: tempId,
 				content: messageContent,
-				type: '',
+				type: 'm.room.message',
 				time: Date.now(),
 				senderId: ApiClient.credentials.userIdFull,
 			};
@@ -169,7 +176,7 @@ export default class DialogIncomingContentShare extends RX.Component<
 				if (previewData) {
 					urlMessageContent = {
 						...urlMessageContent,
-						url_preview: previewData,
+						_url_preview: previewData,
 					};
 				}
 
@@ -191,15 +198,15 @@ export default class DialogIncomingContentShare extends RX.Component<
 				this.setState({ progressValue: _progress });
 			};
 
-			const content = {
+			const content: MessageEventContent_ = {
 				body: this.props.sharedContent.fileName,
 				msgtype: this.contentType,
 			};
 
-			const message: MessageEvent = {
+			const message: FilteredChatEvent = {
 				eventId: tempId,
 				content: content,
-				type: '',
+				type: 'm.room.message',
 				time: Date.now(),
 				senderId: ApiClient.credentials.userIdFull,
 			};
@@ -229,25 +236,6 @@ export default class DialogIncomingContentShare extends RX.Component<
 
 					if (response.uri) {
 						const messageType = StringUtils.messageMediaType(file.type);
-						let mediaHeight: number | undefined;
-						let mediaWidth: number | undefined;
-
-						switch (messageType) {
-							case 'm.image':
-								mediaHeight = file.imageHeight;
-								mediaWidth = file.imageWidth;
-								break;
-
-							case 'm.video':
-								mediaHeight = this.videoHeight;
-								mediaWidth = this.videoWidth;
-								break;
-
-							default:
-								mediaHeight = undefined;
-								mediaWidth = undefined;
-								break;
-						}
 
 						let thumbnailInfo: ThumbnailInfo_ | undefined;
 						if (response.thumbnailInfo) {
@@ -259,19 +247,46 @@ export default class DialogIncomingContentShare extends RX.Component<
 							};
 						}
 
-						const messageContentInfo: MessageEventContentInfo_ = {
-							h: mediaHeight,
-							w: mediaWidth,
-							size: response.fileSize || file.size!,
-							mimetype: response.mimeType || file.type,
-							thumbnail_url: response.thumbnailUrl || undefined,
-							thumbnail_info: thumbnailInfo || undefined,
-						};
+						let contentInfo;
+
+						switch (messageType) {
+							case 'm.image':
+								contentInfo = {
+									mimetype: response.mimeType || file.type,
+									size: response.fileSize || file.size!,
+									h: file.imageHeight,
+									w: file.imageWidth,
+									thumbnail_url: response.thumbnailUrl || undefined,
+									thumbnail_info: thumbnailInfo || undefined,
+								} as ImageInfo_;
+								break;
+
+							case 'm.video':
+								contentInfo = {
+									mimetype: response.mimeType || file.type,
+									duration: undefined,
+									size: response.fileSize || file.size!,
+									h: this.videoHeight,
+									w: this.videoWidth,
+									thumbnail_url: response.thumbnailUrl || undefined,
+									thumbnail_info: thumbnailInfo || undefined,
+								} as VideoInfo_;
+								break;
+
+							default:
+								contentInfo = {
+									mimetype: response.mimeType || file.type,
+									size: response.fileSize || file.size!,
+									thumbnail_url: response.thumbnailUrl || undefined,
+									thumbnail_info: thumbnailInfo || undefined,
+								} as FileInfo_;
+								break;
+						}
 
 						const messageContent: MessageEventContent_ = {
 							msgtype: messageType,
 							body: response.fileName || file.name,
-							info: messageContentInfo,
+							info: contentInfo,
 							url: response.uri,
 						};
 

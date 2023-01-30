@@ -1,7 +1,8 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import ApiClient from '../matrix/ApiClient';
-import { MessageEvent } from '../models/MessageEvent';
+import { FilteredChatEvent } from '../models/FilteredChatEvent';
+import { ImageInfo_, MessageEventContent_, VideoInfo_ } from '../models/MatrixApi';
 import AppFont from '../modules/AppFont';
 import CachedImage from '../modules/CachedImage';
 import DataStore from '../stores/DataStore';
@@ -73,7 +74,7 @@ const styles = {
 };
 
 interface ReplyMessageProps {
-	replyEvent: MessageEvent;
+	replyEvent: FilteredChatEvent;
 	roomId: string;
 	onPress?: (eventId: string) => void;
 	onCancelButton?: () => void;
@@ -111,8 +112,9 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
 		);
 
 		let replyContent: ReactElement;
-		if (this.props.replyEvent.content.msgtype === 'm.image') {
-			const source = StringUtils.mxcToHttp(this.props.replyEvent.content.url!, ApiClient.credentials.homeServer);
+		const content = this.props.replyEvent.content as MessageEventContent_;
+		if (content.msgtype === 'm.image') {
+			const source = StringUtils.mxcToHttp(content.url!, ApiClient.credentials.homeServer);
 			replyContent = (
 				<RX.View style={styles.replyImageContainer}>
 					{userName}
@@ -120,13 +122,14 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
 						resizeMode={'cover'}
 						style={styles.replyImage}
 						source={source}
-						mimeType={this.props.replyEvent.content.info?.mimetype}
+						mimeType={(content.info as ImageInfo_).mimetype}
 						animated={false}
 					/>
 				</RX.View>
 			);
-		} else if (this.props.replyEvent.content.msgtype === 'm.video') {
-			const thumbnailUrl = this.props.replyEvent.content.info?.thumbnail_url;
+		} else if (content.msgtype === 'm.video') {
+			const info = content.info as VideoInfo_;
+			const thumbnailUrl = info.thumbnail_url;
 
 			if (thumbnailUrl) {
 				replyContent = (
@@ -136,7 +139,7 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
 							resizeMode={'cover'}
 							style={styles.replyImage}
 							source={StringUtils.mxcToHttp(thumbnailUrl, ApiClient.credentials.homeServer)}
-							mimeType={this.props.replyEvent.content.info?.mimetype}
+							mimeType={info.mimetype}
 							animated={false}
 						/>
 					</RX.View>
@@ -148,11 +151,11 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
 						numberOfLines={this.props.onCancelButton ? 1 : undefined}
 					>
 						{userName}
-						{this.props.replyEvent.content.body!}
+						{content.body!}
 					</RX.Text>
 				);
 			}
-		} else if (this.props.replyEvent.content.jitsi_started) {
+		} else if (content._jitsi_started) {
 			const language = UiStore.getLanguage();
 
 			replyContent = (
@@ -165,7 +168,7 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
 				</RX.Text>
 			);
 		} else {
-			const stripped = StringUtils.stripReplyMessage(this.props.replyEvent.content.body!);
+			const stripped = StringUtils.stripReplyMessage(content.body!);
 			const strippedFlattened = StringUtils.flattenString(stripped);
 			replyContent = (
 				<RX.Text

@@ -1,13 +1,14 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import ApiClient from '../matrix/ApiClient';
-import { MessageEvent } from '../models/MessageEvent';
 import { SPACING, BUTTON_ROUND_WIDTH, PAGE_MARGIN, BORDER_RADIUS, TILE_BACKGROUND, STATUSBAR_BACKGROUND } from '../ui';
 import UiStore from '../stores/UiStore';
 import FullScreenVideo from './FullScreenVideo';
 import CachedImage from '../modules/CachedImage';
 import IconSvg, { SvgFile } from './IconSvg';
 import StringUtils from '../utils/StringUtils';
+import { FilteredChatEvent } from '../models/FilteredChatEvent';
+import { MessageEventContent_, VideoInfo_ } from '../models/MatrixApi';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -36,7 +37,7 @@ const styles = {
 };
 
 interface VideoMessageProps {
-	message: MessageEvent;
+	message: FilteredChatEvent;
 	animated: boolean;
 	showContextDialog: () => void;
 }
@@ -49,15 +50,18 @@ export default class VideoMessage extends RX.Component<VideoMessageProps, RX.Sta
 	constructor(props: VideoMessageProps) {
 		super(props);
 
-		this.isThumbnail = !!props.message.content.info?.thumbnail_url;
+		const content = props.message.content as MessageEventContent_;
+		const info = content.info as VideoInfo_;
+
+		this.isThumbnail = !!info?.thumbnail_url;
 
 		const width =
 			UiStore.getAppLayout_().pageWidth - 2 * PAGE_MARGIN - (BUTTON_ROUND_WIDTH + SPACING) - 2 * SPACING;
 
-		this.url = StringUtils.mxcToHttp(props.message.content.url!, ApiClient.credentials.homeServer);
+		this.url = StringUtils.mxcToHttp(content.url!, ApiClient.credentials.homeServer);
 
-		const w = props.message.content.info?.thumbnail_info?.w || props.message.content.info?.w || 100;
-		const h = props.message.content.info?.thumbnail_info?.h || props.message.content.info?.h || 100;
+		const w = info?.thumbnail_info?.w || info?.w || 100;
+		const h = info?.thumbnail_info?.h || info?.h || 100;
 
 		this.heightStyle = RX.Styles.createViewStyle(
 			{
@@ -72,10 +76,13 @@ export default class VideoMessage extends RX.Component<VideoMessageProps, RX.Sta
 
 		RX.UserInterface.dismissKeyboard();
 
+		const content = this.props.message.content as MessageEventContent_;
+		const info = content.info as VideoInfo_;
+
 		const fullScreenVideo = (
 			<FullScreenVideo
 				url={this.url}
-				mimeType={this.props.message.content.info?.mimetype || 'video/mp4'}
+				mimeType={info?.mimetype || 'video/mp4'}
 			/>
 		);
 
@@ -85,11 +92,11 @@ export default class VideoMessage extends RX.Component<VideoMessageProps, RX.Sta
 	public render(): JSX.Element | null {
 		let video: ReactElement;
 
+		const content = this.props.message.content as MessageEventContent_;
+		const info = content.info as VideoInfo_;
+
 		if (this.isThumbnail) {
-			const thumbnailUrl = StringUtils.mxcToHttp(
-				this.props.message.content.info!.thumbnail_url!,
-				ApiClient.credentials.homeServer
-			);
+			const thumbnailUrl = StringUtils.mxcToHttp(info.thumbnail_url!, ApiClient.credentials.homeServer);
 
 			video = (
 				<RX.View style={styles.imageContainer}>
@@ -97,7 +104,7 @@ export default class VideoMessage extends RX.Component<VideoMessageProps, RX.Sta
 						resizeMode={'contain'}
 						style={styles.image}
 						source={thumbnailUrl}
-						mimeType={this.props.message.content.info?.thumbnail_info?.mimetype}
+						mimeType={info?.thumbnail_info?.mimetype}
 						animated={this.props.animated}
 					/>
 					<RX.View style={styles.playIcon}>

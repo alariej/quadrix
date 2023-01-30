@@ -41,9 +41,8 @@ import {
 import IconSvg, { SvgFile } from './IconSvg';
 import EmojiPicker from './EmojiPicker';
 import StringUtils from '../utils/StringUtils';
-import { MessageEventContentInfo_, MessageEventContent_, RoomType, ThumbnailInfo_ } from '../models/MatrixApi';
+import { FileInfo_, ImageInfo_, MessageEventContent_, RoomType, ThumbnailInfo_, VideoInfo_ } from '../models/MatrixApi';
 import { FileObject } from '../models/FileObject';
-import { MessageEvent, TemporaryMessage } from '../models/MessageEvent';
 import AppFont from '../modules/AppFont';
 import VideoPlayer from '../modules/VideoPlayer';
 import ProgressDialog from '../modules/ProgressDialog';
@@ -52,6 +51,7 @@ import ReplyMessage from './ReplyMessage';
 import AsyncStorage from '../modules/AsyncStorage';
 import DialogMenuComposer from '../dialogs/DialogMenuComposer';
 import AnimatedButton from './AnimatedButton';
+import { FilteredChatEvent, TemporaryMessage } from '../models/FilteredChatEvent';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -153,7 +153,7 @@ interface ComposerProps extends RX.CommonProps {
 	roomId: string;
 	roomType: RoomType;
 	showTempSentMessage: (message: TemporaryMessage) => void;
-	replyMessage: MessageEvent;
+	replyMessage: FilteredChatEvent;
 	showJitsiMeet: (id: string) => void;
 	roomActive: boolean;
 	floatingSendButton: (onPressSendButton: (() => void) | undefined) => void;
@@ -196,7 +196,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 	private videoHeight: number | undefined;
 	private videoWidth: number | undefined;
 	private progressText = '';
-	private replyEvent: MessageEvent | undefined;
+	private replyEvent: FilteredChatEvent | undefined;
 	private containerView: RX.View | undefined;
 	private isNativeMobile: boolean;
 
@@ -370,12 +370,14 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 			const previewData = await StringUtils.getLinkPreview(linkifyElement).catch();
 
 			if (previewData) {
-				messageContent.url_preview = previewData;
+				messageContent._url_preview = previewData;
 			}
 		}
 
 		if (this.state.showReplyMessage) {
-			const strippedReplyMessage = StringUtils.stripReplyMessage(this.replyEvent!.content.body || '');
+			const strippedReplyMessage = StringUtils.stripReplyMessage(
+				(this.replyEvent!.content as MessageEventContent_).body || ''
+			);
 
 			const codeReplyMessage = (body: string): string => {
 				return body.replace(/^(.*)$/gm, '> $&');
@@ -463,25 +465,6 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
 				if (response.uri) {
 					const messageType = StringUtils.messageMediaType(file.type);
-					let mediaHeight: number | undefined;
-					let mediaWidth: number | undefined;
-
-					switch (messageType) {
-						case 'm.image':
-							mediaHeight = file.imageHeight;
-							mediaWidth = file.imageWidth;
-							break;
-
-						case 'm.video':
-							mediaHeight = this.videoHeight;
-							mediaWidth = this.videoWidth;
-							break;
-
-						default:
-							mediaHeight = undefined;
-							mediaWidth = undefined;
-							break;
-					}
 
 					let thumbnailInfo: ThumbnailInfo_ | undefined;
 					if (response.thumbnailInfo) {
@@ -493,19 +476,46 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 						};
 					}
 
-					const messageContentInfo: MessageEventContentInfo_ = {
-						h: mediaHeight,
-						w: mediaWidth,
-						size: response.fileSize || file.size!,
-						mimetype: response.mimeType || file.type,
-						thumbnail_url: response.thumbnailUrl || undefined,
-						thumbnail_info: thumbnailInfo || undefined,
-					};
+					let contentInfo;
+
+					switch (messageType) {
+						case 'm.image':
+							contentInfo = {
+								mimetype: response.mimeType || file.type,
+								size: response.fileSize || file.size!,
+								h: file.imageHeight,
+								w: file.imageWidth,
+								thumbnail_url: response.thumbnailUrl || undefined,
+								thumbnail_info: thumbnailInfo || undefined,
+							} as ImageInfo_;
+							break;
+
+						case 'm.video':
+							contentInfo = {
+								mimetype: response.mimeType || file.type,
+								duration: undefined,
+								size: response.fileSize || file.size!,
+								h: this.videoHeight,
+								w: this.videoWidth,
+								thumbnail_url: response.thumbnailUrl || undefined,
+								thumbnail_info: thumbnailInfo || undefined,
+							} as VideoInfo_;
+							break;
+
+						default:
+							contentInfo = {
+								mimetype: response.mimeType || file.type,
+								size: response.fileSize || file.size!,
+								thumbnail_url: response.thumbnailUrl || undefined,
+								thumbnail_info: thumbnailInfo || undefined,
+							} as FileInfo_;
+							break;
+					}
 
 					const messageContent: MessageEventContent_ = {
 						msgtype: messageType,
 						body: response.fileName || file.name,
-						info: messageContentInfo,
+						info: contentInfo,
 						url: response.uri,
 					};
 
@@ -680,7 +690,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 		const messageContent: MessageEventContent_ = {
 			msgtype: 'm.text',
 			body: jitsiStartedExternal[this.language] + '/' + jitsiMeetId,
-			jitsi_started: true,
+			_jitsi_started: true,
 		};
 
 		ApiClient.sendMessage(this.props.roomId, messageContent, tempId).catch(_error => {

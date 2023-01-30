@@ -1,29 +1,33 @@
 import Share from 'react-native-share';
-import { MessageEvent } from '../../models/MessageEvent';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 import ApiClient from '../../matrix/ApiClient';
 import { shareWith } from '../../translations';
 import UiStore from '../../stores/UiStore';
 import StringUtils from '../../utils/StringUtils';
+import { FilteredChatEvent } from '../../models/FilteredChatEvent';
+import { FileInfo_, ImageInfo_, MessageEventContent_, VideoInfo_ } from '../../models/MatrixApi';
 
 class ShareHandlerOutgoing {
-	public async shareContent(message: MessageEvent, onSuccess: (success: boolean) => void): Promise<void> {
+	public async shareContent(message: FilteredChatEvent, onSuccess: (success: boolean) => void): Promise<void> {
 		let options;
 		let filePath: string;
 
-		if (message.content.msgtype === 'm.text') {
+		const content = message.content as MessageEventContent_;
+
+		if (content.msgtype === 'm.text') {
 			onSuccess(true);
 
 			options = {
 				title: shareWith[UiStore.getLanguage()],
-				message: message.content.body,
+				message: content.body,
 			};
 
 			await Share.open(options).catch(_error => null);
 		} else {
-			const url = StringUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
-			const fileName = message.content.body;
-			const mimeType = message.content.info!.mimetype;
+			const info = content.info as ImageInfo_ | VideoInfo_ | FileInfo_;
+			const url = StringUtils.mxcToHttp(content.url!, ApiClient.credentials.homeServer);
+			const fileName = content.body;
+			const mimeType = info.mimetype;
 
 			ReactNativeBlobUtil.config({
 				overwrite: true,

@@ -1,7 +1,7 @@
-import { MessageEvent } from '../../models/MessageEvent';
+import { FilteredChatEvent } from '../../models/FilteredChatEvent';
 
 class ShareHandlerOutgoing {
-	public shareContent(_event: MessageEvent, _onSuccess: (success: boolean) => void): void {
+	public shareContent(_event: FilteredChatEvent, _onSuccess: (success: boolean) => void): void {
 		// do nothing
 	}
 }

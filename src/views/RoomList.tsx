@@ -22,10 +22,11 @@ import {
 	VirtualListViewItemInfo,
 } from '../components/VirtualListView';
 import UiStore from '../stores/UiStore';
-import { MessageEvent } from '../models/MessageEvent';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { RoomSummary } from '../models/RoomSummary';
+import { FilteredChatEvent } from '../models/FilteredChatEvent';
+import { MessageEventContent_ } from '../models/MatrixApi';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -55,7 +56,7 @@ interface RoomListProps extends RX.CommonProps {
 
 interface RoomListItemInfo extends VirtualListViewItemInfo {
 	room: RoomSummary;
-	latestFilteredEvent: MessageEvent;
+	latestFilteredEvent: FilteredChatEvent;
 	isRedacted: boolean;
 	body: string;
 }
@@ -101,7 +102,7 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
 				room: room,
 				latestFilteredEvent: room.latestFilteredEvent!,
 				isRedacted: room.latestFilteredEvent?.isRedacted || false,
-				body: room.latestFilteredEvent?.content.body || '',
+				body: (room.latestFilteredEvent?.content as MessageEventContent_)?.body || '',
 				measureHeight: false,
 			};
 

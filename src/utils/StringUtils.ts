@@ -1,9 +1,9 @@
 import * as linkify from 'linkifyjs';
 import ApiClient from '../matrix/ApiClient';
-import { LinkPreview_ } from '../models/MatrixApi';
+import { LinkPreview_, MessageContentType, MessageEventContent_ } from '../models/MatrixApi';
 import { LinkifyElement } from '../models/LinkifyElement';
 import { PREFIX_DOWNLOAD } from '../appconfig';
-import { MessageEvent } from '../models/MessageEvent';
+import { FilteredChatEvent } from '../models/FilteredChatEvent';
 
 class StringUtils {
 	public mxcToHttp(mxcUrl: string, server: string): string {
@@ -15,8 +15,9 @@ class StringUtils {
 		return http;
 	}
 
-	public getCachedFileName(message: MessageEvent, server: string): string {
-		return message.content.url?.replace('mxc://' + server + '/', '') + '_' + message.content.body;
+	public getCachedFileName(event: FilteredChatEvent, server: string): string {
+		const content = event.content as MessageEventContent_;
+		return content.url?.replace('mxc://' + server + '/', '') + '_' + content.body;
 	}
 
 	public getRandomString(length: number): string {
@@ -117,7 +118,7 @@ class StringUtils {
 		return { user: user, server: server };
 	}
 
-	public messageMediaType(fileType: string): string {
+	public messageMediaType(fileType: string): MessageContentType {
 		if (fileType.includes('image')) {
 			return 'm.image';
 		} else if (fileType.includes('video')) {

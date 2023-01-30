@@ -1,4 +1,3 @@
-import { MessageEvent } from '../models/MessageEvent';
 import {
 	hasCreatedTheRoom,
 	hasJoinedTheRoom,
@@ -9,17 +8,20 @@ import {
 	hasChangedAvatar,
 } from '../translations';
 import UiStore from '../stores/UiStore';
-import { MessageEvent_, RoomType } from '../models/MatrixApi';
+import { ClientEvent_, MemberEventContent_, RoomType } from '../models/MatrixApi';
+import { FilteredChatEvent } from '../models/FilteredChatEvent';
 
 class EventUtils {
-	public filterEvent(event: MessageEvent_, roomType: RoomType): boolean {
+	public filterEvent(event: ClientEvent_, roomType: RoomType): boolean {
 		if (!event) {
 			return false;
 		}
 
+		const content = event.content as MemberEventContent_;
+		const prevContent = event.unsigned?.prev_content as MemberEventContent_;
+
 		return (
 			Boolean(
-				// (event.type === 'm.room.message' && event.content.body)
 				event.type === 'm.room.message' ||
 					event.type === 'm.room.redaction' ||
 					event.type === 'm.room.encrypted' ||
@@ -39,17 +41,17 @@ class EventUtils {
 			!(
 				event.type === 'm.room.member' &&
 				event.unsigned &&
-				event.unsigned.prev_content &&
-				event.unsigned.prev_content.membership === event.content.membership
+				prevContent &&
+				prevContent.membership === content.membership
 			)
 		);
 	}
 
 	public filterRoomEvents(
-		timelineEvents: MessageEvent_[],
+		timelineEvents: ClientEvent_[],
 		roomType: RoomType,
 		previousEventTime?: number
-	): MessageEvent[] {
+	): FilteredChatEvent[] {
 		if (!timelineEvents) {
 			return [];
 		}
@@ -93,39 +95,41 @@ class EventUtils {
 		return timelineEvents_;
 	}
 
-	public getSystemMessage(event: MessageEvent, roomType: RoomType) {
+	public getSystemMessage(event: FilteredChatEvent, roomType: RoomType) {
 		let systemMessage = '';
 		const language = UiStore.getLanguage();
 
+		const content = event.content as MemberEventContent_;
+		const prevContent = event.previousContent as MemberEventContent_;
+
 		if (event.type === 'm.room.member') {
-			if (event.content.membership && event.content.membership === 'join' && !event.previousContent) {
+			if (content.membership && content.membership === 'join' && !event.previousContent) {
 				systemMessage = event.senderId + hasCreatedTheRoom[language + '_' + roomType.substr(0, 2)];
 			} else if (
-				event.content.membership &&
-				event.content.membership === 'join' &&
-				event.previousContent &&
-				event.previousContent.membership === 'invite'
+				content.membership &&
+				content.membership === 'join' &&
+				prevContent &&
+				prevContent.membership === 'invite'
 			) {
 				systemMessage = event.senderId + hasJoinedTheRoom[language + '_' + roomType.substr(0, 2)];
 			} else if (
-				event.content.membership &&
-				event.content.membership === 'leave' &&
-				event.previousContent &&
-				event.previousContent.membership === 'join'
+				content.membership &&
+				content.membership === 'leave' &&
+				prevContent &&
+				prevContent.membership === 'join'
 			) {
 				systemMessage = event.senderId + hasLeftTheRoom[language + '_' + roomType.substr(0, 2)];
 			} else if (
-				event.content.membership &&
-				event.content.membership === 'leave' &&
-				event.previousContent &&
-				event.previousContent.membership === 'invite'
+				content.membership &&
+				content.membership === 'leave' &&
+				prevContent &&
+				prevContent.membership === 'invite'
 			) {
 				systemMessage = event.senderId + hasDeclinedTheInvitation[language];
 			} else if (
-				event.content.membership &&
-				event.content.membership === 'invite' &&
-				(!event.previousContent ||
-					(event.previousContent.membership && event.previousContent.membership === 'leave'))
+				content.membership &&
+				content.membership === 'invite' &&
+				(!event.previousContent || (prevContent.membership && prevContent.membership === 'leave'))
 			) {
 				systemMessage =
 					event.senderId + hasInvitedToRoom(event.userId!, language + '_' + roomType.substr(0, 2));

@@ -2,7 +2,6 @@ import ReactNativeBlobUtil from 'react-native-blob-util';
 import DocumentPicker from 'react-native-document-picker';
 import { PREFIX_UPLOAD } from '../../appconfig';
 import { Credentials } from '../../models/Credentials';
-import { MessageEvent } from '../../models/MessageEvent';
 import ApiClient from '../../matrix/ApiClient';
 import { FileObject } from '../../models/FileObject';
 import ImageSizeLocal from '../ImageSizeLocal';
@@ -13,6 +12,8 @@ import { Video, Image } from 'react-native-compressor';
 import { ThumbnailInfo, UploadFileInfo } from '../../models/UploadFileInfo';
 import { createThumbnail } from 'react-native-create-thumbnail';
 import StringUtils from '../../utils/StringUtils';
+import { FilteredChatEvent } from '../../models/FilteredChatEvent';
+import { MessageEventContent_ } from '../../models/MatrixApi';
 
 class FileHandler {
 	public cacheAppFolder = '';
@@ -43,11 +44,14 @@ class FileHandler {
 	}
 
 	private async downloadFile(
-		message: MessageEvent,
+		message: FilteredChatEvent,
 		filePath: string,
 		fetchProgress: (progress: number) => void
 	): Promise<void> {
-		const url = StringUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
+		const url = StringUtils.mxcToHttp(
+			(message.content as MessageEventContent_).url!,
+			ApiClient.credentials.homeServer
+		);
 
 		await ReactNativeBlobUtil.config({
 			overwrite: true,
@@ -65,7 +69,7 @@ class FileHandler {
 			});
 	}
 
-	private async cacheFile(message: MessageEvent, fetchProgress: (progress: number) => void): Promise<string> {
+	private async cacheFile(message: FilteredChatEvent, fetchProgress: (progress: number) => void): Promise<string> {
 		const cachedFileName = StringUtils.getCachedFileName(message, ApiClient.credentials.homeServer);
 		const cachedFilePath = this.cacheAppFolder + '/' + cachedFileName;
 
@@ -81,7 +85,7 @@ class FileHandler {
 	}
 
 	public async saveFile(
-		message: MessageEvent,
+		message: FilteredChatEvent,
 		onSuccess: (success: boolean, fileName?: string) => void,
 		_onAbort: () => void
 	): Promise<void> {
@@ -92,7 +96,7 @@ class FileHandler {
 			return Promise.reject();
 		});
 
-		const fileName = message.content.body;
+		const fileName = (message.content as MessageEventContent_).body;
 		const homePath = ReactNativeBlobUtil.fs.dirs.DocumentDir;
 		const homeFilePath = homePath + '/' + fileName;
 
@@ -114,7 +118,7 @@ class FileHandler {
 	}
 
 	public viewFile(
-		message: MessageEvent,
+		message: FilteredChatEvent,
 		fetchProgress: (progress: number) => void,
 		onSuccess: (success: boolean) => void,
 		_onNoAppFound: () => void

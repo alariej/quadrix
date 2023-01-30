@@ -6,9 +6,9 @@ import { EmitterSubscription, Linking } from 'react-native';
 import { sendTo } from '../../translations';
 import UiStore from '../../stores/UiStore';
 import { SharedContent } from '../../models/SharedContent';
-import { MessageEvent } from '../../models/MessageEvent';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 import { PermissionsAndroid, PermissionStatus } from 'react-native';
+import { FilteredChatEvent } from '../../models/FilteredChatEvent';
 
 class ShareHandlerIncoming {
 	private linkingListener: EmitterSubscription | undefined;
@@ -42,7 +42,7 @@ class ShareHandlerIncoming {
 
 	public async shareContent(
 		sharedContent_: string,
-		showTempForwardedMessage: (roomId: string, message: MessageEvent, tempId: string) => void
+		showTempForwardedMessage: (roomId: string, message: FilteredChatEvent, tempId: string) => void
 	): Promise<void> {
 		const sharedContent = JSON.parse(sharedContent_) as SharedContent;
 
@@ -69,7 +69,7 @@ class ShareHandlerIncoming {
 	private async askSendContent(
 		roomId: string,
 		sharedContent: SharedContent,
-		showTempForwardedMessage: (roomId: string, message: MessageEvent, tempId: string) => void
+		showTempForwardedMessage: (roomId: string, message: FilteredChatEvent, tempId: string) => void
 	): Promise<void> {
 		RX.Modal.dismiss('DialogRoomPicker');
 

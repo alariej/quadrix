@@ -14,7 +14,6 @@ import {
 	BUTTON_HEADER_BACKGROUND,
 } from '../ui';
 import DataStore from '../stores/DataStore';
-import { MessageEvent } from '../models/MessageEvent';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
 import ShareHandlerIncoming from '../modules/ShareHandlerIncoming';
@@ -27,6 +26,7 @@ import SpinnerUtils from '../utils/SpinnerUtils';
 import AppFont from '../modules/AppFont';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { APP_VERSION, CLEAR_DATASTORE } from '../appconfig';
+import { FilteredChatEvent } from '../models/FilteredChatEvent';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -88,7 +88,7 @@ const animatedContainerDuration = 250;
 const matrixSize = 160;
 
 export default class Main extends ComponentBase<MainProps, MainState> {
-	private message!: MessageEvent;
+	private message!: FilteredChatEvent;
 	private tempId = '';
 	private jitsiMeetId = '';
 	private animatedRoomOpacityValue: RX.Animated.Value;
@@ -326,7 +326,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 		return true;
 	};
 
-	private showTempForwardedMessage = (roomId: string, message: MessageEvent, tempId: string) => {
+	private showTempForwardedMessage = (roomId: string, message: FilteredChatEvent, tempId: string) => {
 		SpinnerUtils.dismissModalSpinner('forwardmessagespinner');
 
 		this.message = message;

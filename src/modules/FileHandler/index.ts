@@ -4,7 +4,6 @@ import axios from 'axios';
 import UiStore from '../../stores/UiStore';
 import { save, uploadingFile } from '../../translations';
 import ApiClient from '../../matrix/ApiClient';
-import { MessageEvent } from '../../models/MessageEvent';
 import Resizer from 'react-image-file-resizer';
 import { shell, SaveDialogSyncOptions } from 'electron';
 import path from 'path';
@@ -14,6 +13,8 @@ import ImageSizeLocal from '../ImageSizeLocal';
 import { ThumbnailInfo, UploadFileInfo } from '../../models/UploadFileInfo';
 import VideoThumbnail from '../VideoThumbnail';
 import StringUtils from '../../utils/StringUtils';
+import { FilteredChatEvent } from '../../models/FilteredChatEvent';
+import { FileInfo_, ImageInfo_, MessageEventContent_, VideoInfo_ } from '../../models/MatrixApi';
 
 declare global {
 	interface Window {
@@ -65,11 +66,14 @@ class FileHandler {
 
 	// electron only
 	private async downloadFile(
-		message: MessageEvent,
+		message: FilteredChatEvent,
 		filePath: string,
 		fetchProgress: (progress: number) => void
 	): Promise<void> {
-		const url = StringUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
+		const url = StringUtils.mxcToHttp(
+			(message.content as MessageEventContent_).url!,
+			ApiClient.credentials.homeServer
+		);
 
 		const response = await axios
 			.request({
@@ -99,7 +103,7 @@ class FileHandler {
 	}
 
 	// electron only
-	private async cacheFile(message: MessageEvent, fetchProgress: (progress: number) => void): Promise<string> {
+	private async cacheFile(message: FilteredChatEvent, fetchProgress: (progress: number) => void): Promise<string> {
 		const cachedFileName = StringUtils.getCachedFileName(message, ApiClient.credentials.homeServer);
 		const path = window.require('path');
 		const cachedFilePath = path.join(this.cacheAppFolder, cachedFileName);
@@ -116,7 +120,7 @@ class FileHandler {
 
 	// electron only
 	public async saveFile(
-		message: MessageEvent,
+		message: FilteredChatEvent,
 		onSuccess: (success: boolean, fileName?: string) => void,
 		onAbort: () => void
 	): Promise<void> {
@@ -127,7 +131,7 @@ class FileHandler {
 			return Promise.reject();
 		});
 
-		const fileName = message.content.body;
+		const fileName = (message.content as MessageEventContent_).body;
 
 		const { ipcRenderer } = window.require('electron');
 		const path = window.require('path');
@@ -167,7 +171,7 @@ class FileHandler {
 	}
 
 	public viewFile(
-		message: MessageEvent,
+		message: FilteredChatEvent,
 		fetchProgress: (progress: number) => void,
 		onSuccess: (success: boolean) => void,
 		onNoAppFound: () => void
@@ -182,9 +186,11 @@ class FileHandler {
 				})
 				.catch(_error => onSuccess(false));
 		} else {
-			const url = StringUtils.mxcToHttp(message.content.url!, ApiClient.credentials.homeServer);
-			const fileName = message.content.body;
-			const mimeType = message.content.info!.mimetype;
+			const content = message.content as MessageEventContent_;
+			const info = content.info as ImageInfo_ | VideoInfo_ | FileInfo_;
+			const url = StringUtils.mxcToHttp(content.url!, ApiClient.credentials.homeServer);
+			const fileName = content.body;
+			const mimeType = info.mimetype;
 
 			axios
 				.request({

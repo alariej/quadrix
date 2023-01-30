@@ -12,13 +12,14 @@ import {
 	FONT_NORMAL,
 	TILE_SYSTEM_TEXT,
 } from '../ui';
-import { MessageEvent } from '../models/MessageEvent';
 import UiStore from '../stores/UiStore';
 import * as linkify from 'linkifyjs';
 import { edited, jitsiStartedInternal } from '../translations';
 import { LinkifyElement } from '../models/LinkifyElement';
 import AppFont from '../modules/AppFont';
 import StringUtils from '../utils/StringUtils';
+import { FilteredChatEvent } from '../models/FilteredChatEvent';
+import { MessageEventContent_ } from '../models/MatrixApi';
 
 const styles = {
 	containerMessage: RX.Styles.createViewStyle({
@@ -78,7 +79,7 @@ const styles = {
 
 interface TextMessageProps {
 	roomId: string;
-	message: MessageEvent;
+	message: FilteredChatEvent;
 	body: string;
 	showContextDialog: () => void;
 }
@@ -91,7 +92,7 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 	private onPreviewImageFail = (_error: Error) => {
 		const linkifyElement: LinkifyElement = {
 			type: '',
-			href: this.props.message.content.url_preview!.url,
+			href: (this.props.message.content as MessageEventContent_)._url_preview!.url,
 			value: '',
 		};
 
@@ -142,28 +143,28 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 		let renderContent: ReactElement;
 
 		let messageBody: string;
-		const replyEventId = this.props.message.content['m.relates_to']?.['m.in_reply_to']?.event_id;
+		const content = this.props.message.content as MessageEventContent_;
+		const replyEventId = content['m.relates_to']?.['m.in_reply_to']?.event_id;
 		if (replyEventId) {
 			messageBody = StringUtils.stripReplyMessage(this.props.body);
 		} else {
 			messageBody = this.props.body;
 		}
 
-		if (this.props.message.content.url_preview) {
+		if (content._url_preview) {
 			const linkifyElement: LinkifyElement = {
 				type: 'url',
-				value: this.props.message.content.url_preview.text!,
-				href: this.props.message.content.url_preview.url,
+				value: content._url_preview.text!,
+				href: content._url_preview.url,
 			};
 
 			const width =
 				UiStore.getAppLayout_().pageWidth - 2 * PAGE_MARGIN - (BUTTON_ROUND_WIDTH + SPACING) - 2 * SPACING;
 
 			let urlPreviewImage;
-			if (this.props.message.content.url_preview.image_url) {
+			if (content._url_preview.image_url) {
 				const urlPreviewHeight =
-					(width * this.props.message.content.url_preview.image_height!) /
-					(this.props.message.content.url_preview.image_width || 100);
+					(width * content._url_preview.image_height!) / (content._url_preview.image_width || 100);
 
 				urlPreviewImage = (
 					<RX.View
@@ -176,7 +177,7 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 						<RX.Image
 							resizeMode={'contain'}
 							style={styles.image}
-							source={this.state?.previewUrl || this.props.message.content.url_preview?.image_url}
+							source={this.state?.previewUrl || content._url_preview?.image_url}
 							headers={UiStore.getPlatform() === 'ios' ? { 'Cache-Control': 'max-stale' } : undefined}
 							onError={this.onPreviewImageFail}
 						/>
@@ -196,21 +197,21 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 							styles.text,
 							{
 								marginTop: SPACING,
-								paddingLeft: this.props.message.content.url_preview.image_url ? 0 : SPACING,
-								paddingRight: this.props.message.content.url_preview.image_url ? 0 : SPACING,
+								paddingLeft: content._url_preview.image_url ? 0 : SPACING,
+								paddingRight: content._url_preview.image_url ? 0 : SPACING,
 							},
 						]}
 						selectable={isSelectable}
 					>
-						{this.props.message.content.url_preview.title}
+						{content._url_preview.title}
 					</RX.Text>
 					<RX.Text
 						style={[
 							styles.link,
 							{
 								marginTop: SPACING * 2,
-								paddingLeft: this.props.message.content.url_preview.image_url ? 0 : SPACING,
-								paddingRight: this.props.message.content.url_preview.image_url ? 0 : SPACING,
+								paddingLeft: content._url_preview.image_url ? 0 : SPACING,
+								paddingRight: content._url_preview.image_url ? 0 : SPACING,
 								maxWidth: width,
 							},
 						]}
@@ -218,7 +219,7 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 						onContextMenu={() => this.props.showContextDialog()}
 						numberOfLines={UiStore.getPlatform() === 'web' ? 1 : 2}
 					>
-						{this.props.message.content.url_preview.text}
+						{content._url_preview.text}
 					</RX.Text>
 				</RX.View>
 			);
@@ -235,7 +236,7 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 					</RX.Text>
 				</RX.Text>
 			);
-		} else if (this.props.message.content.jitsi_started) {
+		} else if (content._jitsi_started) {
 			const language = UiStore.getLanguage();
 
 			renderContent = (
