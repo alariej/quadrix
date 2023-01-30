@@ -117,8 +117,9 @@ export default class RestClient extends GenericRestClient {
 		type: StateEventType,
 		content: StateEventContent_,
 		stateKey?: string
-	): Promise<void> {
-		return this.performApiPut<void>('rooms/' + roomId + '/state/' + type + '/' + stateKey, content);
+
+	public getStateEvents(roomId: string): Promise<ClientEvent_[]> {
+		return this.performApiGet<ClientEvent_[]>('rooms/' + roomId + '/state');
 	}
 
 	public sendReadReceipt(roomId: string, eventId: string): Promise<void> {
