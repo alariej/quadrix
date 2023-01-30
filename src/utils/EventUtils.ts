@@ -24,6 +24,8 @@ class EventUtils {
 					event.type === 'm.room.redaction' ||
 					event.type === 'm.room.encrypted' ||
 					event.type === 'm.room.third_party_invite' ||
+					event.type === 'org.matrix.msc3401.call' ||
+					event.type === 'org.matrix.msc3401.call.member' ||
 					(event.type === 'm.room.member' && roomType !== 'community') ||
 					(event.type === 'm.room.name' &&
 						event.unsigned &&
@@ -132,6 +134,10 @@ class EventUtils {
 			systemMessage = event.senderId + hasRenamedTheRoom[language + '_' + roomType.substr(0, 2)];
 		} else if (event.type === 'm.room.avatar') {
 			systemMessage = event.senderId + hasChangedAvatar[language + '_' + roomType.substr(0, 2)];
+		} else if (event.type === 'org.matrix.msc3401.call') {
+			systemMessage = event.senderId + ' has launched a videoconference';
+		} else if (event.type === 'org.matrix.msc3401.call.member') {
+			systemMessage = event.senderId + ' has joined the videoconference';
 		}
 
 		return systemMessage;

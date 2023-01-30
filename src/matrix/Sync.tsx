@@ -45,6 +45,8 @@ const roomFilter: RoomFilter_ = {
 			'm.room.topic',
 			'm.room.encrypted',
 			'm.room.create',
+			'org.matrix.msc3401.call',
+			'org.matrix.msc3401.call.member',
 		],
 	},
 	state: {
@@ -58,6 +60,8 @@ const roomFilter: RoomFilter_ = {
 			'm.room.power_levels',
 			'm.room.topic',
 			'm.room.create',
+			'org.matrix.msc3401.call',
+			'org.matrix.msc3401.call.member',
 		],
 	},
 	ephemeral: {
@@ -135,6 +139,8 @@ class Sync {
 					'm.room.power_levels',
 					'm.room.topic',
 					'm.room.create',
+					'org.matrix.msc3401.call',
+					'org.matrix.msc3401.call.member',
 				],
 			},
 			ephemeral: {

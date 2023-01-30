@@ -176,6 +176,20 @@ class DataStore extends StoreBase {
 					}
 					break;
 
+				case 'org.matrix.msc3401.call':
+					roomEventTriggers.isNewMessageEvent = true;
+					if (this.roomSummaryList[roomIndex].type !== 'community') {
+						roomEventTriggers.isNewUserPresence = this.setPresenceFromEvent(event);
+					}
+					break;
+
+				case 'org.matrix.msc3401.call.member':
+					roomEventTriggers.isNewMessageEvent = true;
+					if (this.roomSummaryList[roomIndex].type !== 'community') {
+						roomEventTriggers.isNewUserPresence = this.setPresenceFromEvent(event);
+					}
+					break;
+
 				case 'm.room.member':
 					if (this.roomSummaryList[roomIndex].type !== 'community') {
 						roomEventTriggers.isNewMemberEvent = true;

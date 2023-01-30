@@ -5,8 +5,8 @@ export type RoomPhase = 'join' | 'invite' | 'leave';
 export type LoginIdentifierType = 'm.id.user' | 'm.id.thirdparty' | 'm.id.phone';
 export type LoginParamType = 'm.login.password' | 'm.login.token';
 export type RegisterStageType = 'm.login.recaptcha' | 'm.login.terms' | 'm.login.dummy' | 'm.login.email.identity';
-export type StateEventType = 'm.room.avatar' | 'm.room.name';
-export type MessageEventType =
+	| 'org.matrix.msc3401.call'
+	| 'org.matrix.msc3401.call.member';
 	| 'm.room.third_party_invite'
 	| 'm.room.redaction'
 	| 'm.room.message'
@@ -22,7 +22,10 @@ export type MessageEventType =
 	| 'm.receipt'
 	| 'm.direct'
 	| 'm.push_rules'
-	| 'm.presence';
+	| 'm.presence'
+	| 'org.matrix.msc3401.call'
+	| 'org.matrix.msc3401.call.member';
+
 
 export type EphemeralEventType = 'm.receipt';
 
