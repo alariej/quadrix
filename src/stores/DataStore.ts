@@ -102,6 +102,7 @@ class DataStore extends StoreBase {
 				phase: 'invite',
 				members: {},
 				timelineEvents: [],
+				stateEvents: [],
 				unreadCount: 1,
 				active: false,
 				readReceipts: {},
@@ -119,6 +120,7 @@ class DataStore extends StoreBase {
 				phase: 'join',
 				members: {},
 				timelineEvents: [],
+				stateEvents: [],
 				unreadCount: 0,
 				readReceipts: {},
 				newEvents: [],
@@ -137,6 +139,7 @@ class DataStore extends StoreBase {
 
 		if (phase === 'join') {
 			this.setRoomInfoFromEvents(roomObj.state.events, roomIndex);
+			this.updateState(roomObj.state.events, roomIndex);
 		} else if (phase === 'invite') {
 			this.setRoomInfoFromEvents(roomObj.invite_state.events, roomIndex);
 		}
@@ -386,6 +389,13 @@ class DataStore extends StoreBase {
 		}
 	}
 
+	private updateState(events: ClientEvent_[], roomIndex: number) {
+		if (!events || events.length === 0) {
+			return;
+		}
+		this.roomSummaryList[roomIndex].stateEvents = this.roomSummaryList[roomIndex].stateEvents.concat(events);
+	}
+
 	private updateNewEvents(timeline: RoomTimeline_, roomIndex: number) {
 		if (!timeline?.events || timeline.events?.length === 0) {
 			return;
@@ -568,6 +578,7 @@ class DataStore extends StoreBase {
 			phase: 'join',
 			members: {},
 			timelineEvents: [],
+			stateEvents: [],
 			unreadCount: 0,
 			readReceipts: {},
 			newEvents: [],
@@ -586,6 +597,7 @@ class DataStore extends StoreBase {
 		this.trySetRoomType(roomId, roomIndex);
 
 		this.updateTimeLine(roomObj.timeline, roomIndex);
+		this.updateState(roomObj.state.events, roomIndex);
 
 		this.updateNewEvents(roomObj.timeline, roomIndex);
 		this.updateLatestFilteredEvent(roomIndex);
@@ -612,6 +624,7 @@ class DataStore extends StoreBase {
 			phase: 'invite',
 			members: {},
 			timelineEvents: [],
+			stateEvents: [],
 			unreadCount: 1,
 			readReceipts: {},
 			newEvents: [],

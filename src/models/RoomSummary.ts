@@ -7,8 +7,8 @@ export interface RoomSummary {
 	phase: RoomPhase;
 	unreadCount: number;
 	members: { [id: string]: User };
-	timelineEvents: MessageEvent_[]; // raw
-	newEvents: MessageEvent[]; // filtered
+	stateEvents: ClientEvent_[];
+	newEvents: FilteredChatEvent[];
 	active?: boolean;
 	type?: RoomType;
 	isEncrypted?: boolean;
