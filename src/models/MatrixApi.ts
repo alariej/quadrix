@@ -249,9 +249,38 @@ interface IGroupCallRoomState {
 	'io.element.ptt'?: boolean;
 	dataChannelsEnabled?: boolean;
 	dataChannelOptions?: IGroupCallDataChannelOptions;
+	'm.terminated'?: string;
 }
 
 export type CallEventContent_ = IGroupCallRoomState;
+
+enum SDPStreamMetadataPurpose {
+	Usermedia = 'm.usermedia',
+	Screenshare = 'm.screenshare',
+}
+
+interface IGroupCallRoomMemberFeed {
+	purpose: SDPStreamMetadataPurpose;
+}
+
+interface IGroupCallRoomMemberDevice {
+	device_id: string;
+	session_id: string;
+	expires_ts: number;
+	feeds: IGroupCallRoomMemberFeed[];
+}
+
+interface IGroupCallRoomMemberCallState {
+	'm.call_id': string;
+	'm.foci'?: string[];
+	'm.devices': IGroupCallRoomMemberDevice[];
+}
+
+interface IGroupCallRoomMemberState {
+	'm.calls': IGroupCallRoomMemberCallState[];
+}
+
+export type CallMemberEventContent_ = IGroupCallRoomMemberState;
 
 export interface PresenceEventContent_ {
 	last_active_ago?: number;
