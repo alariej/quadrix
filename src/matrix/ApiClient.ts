@@ -27,6 +27,7 @@ import {
 	WellKnown_,
 	ClientEvent_,
 	CallEventContent_,
+	CallMemberEventContent_,
 } from '../models/MatrixApi';
 import { RoomSummary } from '../models/RoomSummary';
 import EventUtils from '../utils/EventUtils';
@@ -372,7 +373,7 @@ class ApiClient {
 	public sendStateEvent(
 		roomId: string,
 		type: StateEventType,
-		content: StateEventContent_ | CallEventContent_,
+		content: StateEventContent_ | CallEventContent_ | CallMemberEventContent_,
 		stateKey?: string
 	): Promise<SendStateEvent_> {
 		const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);

@@ -22,6 +22,7 @@ import {
 	SendStateEvent_,
 	ClientEvent_,
 	CallEventContent_,
+	CallMemberEventContent_,
 } from '../models/MatrixApi';
 
 export default class RestClient extends GenericRestClient {
@@ -117,7 +118,7 @@ export default class RestClient extends GenericRestClient {
 	public sendStateEvent(
 		roomId: string,
 		type: StateEventType,
-		content: StateEventContent_ | CallEventContent_,
+		content: StateEventContent_ | CallEventContent_ | CallMemberEventContent_,
 		stateKey?: string
 	): Promise<SendStateEvent_> {
 		return this.performApiPut<SendStateEvent_>('rooms/' + roomId + '/state/' + type + '/' + stateKey, content);
