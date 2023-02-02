@@ -8,7 +8,7 @@ import {
 	hasChangedAvatar,
 } from '../translations';
 import UiStore from '../stores/UiStore';
-import { ClientEvent_, MemberEventContent_, RoomType } from '../models/MatrixApi';
+import { ClientEvent_, MemberEventContent_, RoomType, CallMemberEventContent_ } from '../models/MatrixApi';
 import { FilteredChatEvent } from '../models/FilteredChatEvent';
 
 class EventUtils {
@@ -99,10 +99,9 @@ class EventUtils {
 		let systemMessage = '';
 		const language = UiStore.getLanguage();
 
-		const content = event.content as MemberEventContent_;
-		const prevContent = event.previousContent as MemberEventContent_;
-
 		if (event.type === 'm.room.member') {
+			const content = event.content as MemberEventContent_;
+			const prevContent = event.previousContent as MemberEventContent_;
 			if (content.membership && content.membership === 'join' && !event.previousContent) {
 				systemMessage = event.senderId + hasCreatedTheRoom[language + '_' + roomType.substr(0, 2)];
 			} else if (
@@ -141,7 +140,12 @@ class EventUtils {
 		} else if (event.type === 'org.matrix.msc3401.call') {
 			systemMessage = event.senderId + ' has launched a videoconference';
 		} else if (event.type === 'org.matrix.msc3401.call.member') {
-			systemMessage = event.senderId + ' has joined the videoconference';
+			const content = event.content as CallMemberEventContent_;
+			if (content['m.calls'].length === 0) {
+				systemMessage = event.senderId + ' has left the videoconference';
+			} else {
+				systemMessage = event.senderId + ' has joined the videoconference';
+			}
 		}
 
 		return systemMessage;
