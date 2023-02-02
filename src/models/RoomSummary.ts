@@ -1,5 +1,5 @@
 import { FilteredChatEvent } from './FilteredChatEvent';
-import { ClientEvent_, RoomPhase, RoomType } from './MatrixApi';
+import { CallEventContent_, ClientEvent_, RoomPhase, RoomType } from './MatrixApi';
 import { User } from './User';
 
 export interface RoomSummary {
@@ -28,4 +28,10 @@ export interface RoomSummary {
 	topic?: string;
 	newEventsLimited?: boolean;
 	latestFilteredEvent?: FilteredChatEvent;
+	msc3401Call?: {
+		startTime?: number;
+		callId?: string;
+		callEventContent?: CallEventContent_;
+		participants?: { [id: string]: boolean };
+	};
 }
