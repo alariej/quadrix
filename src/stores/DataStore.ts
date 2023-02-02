@@ -4,6 +4,8 @@ import { User } from '../models/User';
 import ApiClient from '../matrix/ApiClient';
 import EventUtils from '../utils/EventUtils';
 import {
+	CallEventContent_,
+	CallMemberEventContent_,
 	ClientEvent_,
 	MemberEventContent_,
 	MessageEventContent_,
@@ -35,6 +37,7 @@ interface RoomEventTriggers {
 	isNewRoomPhase?: boolean;
 	isNewRoomType?: boolean;
 	isNewUserPresence?: boolean;
+	isNewCallEvent?: boolean;
 }
 
 const ReadReceiptTrigger = 'ReadReceiptTrigger';
@@ -181,20 +184,6 @@ class DataStore extends StoreBase {
 					}
 					break;
 
-				case 'org.matrix.msc3401.call':
-					roomEventTriggers.isNewMessageEvent = true;
-					if (this.roomSummaryList[roomIndex].type !== 'community') {
-						roomEventTriggers.isNewUserPresence = this.setPresenceFromEvent(event);
-					}
-					break;
-
-				case 'org.matrix.msc3401.call.member':
-					roomEventTriggers.isNewMessageEvent = true;
-					if (this.roomSummaryList[roomIndex].type !== 'community') {
-						roomEventTriggers.isNewUserPresence = this.setPresenceFromEvent(event);
-					}
-					break;
-
 				case 'm.room.member':
 					if (this.roomSummaryList[roomIndex].type !== 'community') {
 						roomEventTriggers.isNewMemberEvent = true;
@@ -205,6 +194,33 @@ class DataStore extends StoreBase {
 
 				case 'm.room.redaction':
 					roomEventTriggers.isNewMessageEvent = true;
+					break;
+
+				case 'org.matrix.msc3401.call':
+					if (!(<CallEventContent_>content)['m.terminated']) {
+						roomEventTriggers.isNewCallEvent = true;
+						this.roomSummaryList[roomIndex].msc3401Call = {
+							callId: event.state_key!,
+							startTime: event.origin_server_ts,
+							callEventContent: content as CallEventContent_,
+							participants: {},
+						};
+					}
+					break;
+
+				case 'org.matrix.msc3401.call.member':
+					if (this.roomSummaryList[roomIndex].msc3401Call) {
+						roomEventTriggers.isNewCallEvent = true;
+						if (
+							(<CallMemberEventContent_>content)['m.calls'][0] &&
+							(<CallMemberEventContent_>content)['m.calls'][0]['m.call_id'] ===
+								this.roomSummaryList[roomIndex].msc3401Call?.callId
+						) {
+							this.roomSummaryList[roomIndex].msc3401Call!.participants![event.state_key!] = true;
+						} else {
+							this.roomSummaryList[roomIndex].msc3401Call!.participants![event.state_key!] = false;
+						}
+					}
 					break;
 
 				case 'm.room.name':
@@ -728,7 +744,8 @@ class DataStore extends StoreBase {
 			roomEventTriggers.isNewMessageEvent ||
 			roomEventTriggers.isNewMemberEvent ||
 			roomEventTriggers.isNewRoomNameEvent ||
-			roomEventTriggers.isNewRoomAvatarEvent
+			roomEventTriggers.isNewRoomAvatarEvent ||
+			roomEventTriggers.isNewCallEvent
 		) {
 			this.trigger(MessageTrigger);
 		}
@@ -751,7 +768,8 @@ class DataStore extends StoreBase {
 			roomEventTriggers.isNewRoomPhase ||
 			roomEventTriggers.isNewMemberEvent ||
 			roomEventTriggers.isNewRoomNameEvent ||
-			roomEventTriggers.isNewRoomAvatarEvent
+			roomEventTriggers.isNewRoomAvatarEvent ||
+			roomEventTriggers.isNewCallEvent
 		) {
 			this.trigger(RoomListTrigger);
 		}
@@ -768,7 +786,8 @@ class DataStore extends StoreBase {
 			roomEventTriggers.isNewRoom ||
 			roomEventTriggers.isNewRoomAvatarEvent ||
 			roomEventTriggers.isNewRoomNameEvent ||
-			roomEventTriggers.isNewMemberEvent
+			roomEventTriggers.isNewMemberEvent ||
+			roomEventTriggers.isNewCallEvent
 		) {
 			this.trigger(RoomSummaryTrigger);
 		}
@@ -1148,6 +1167,10 @@ class DataStore extends StoreBase {
 
 	public setLastSeenTimeFromStorage(lastSeenTime: { [id: string]: number }) {
 		this.lastSeenTime = lastSeenTime;
+	}
+
+	public getMsc3401Call(_roomId: string) {
+		// do something
 	}
 }
 
