@@ -509,6 +509,12 @@ class ApiClient {
 		return restClient.sendMessage(roomId, messageContent, tempId);
 	}
 
+	public sendToDevice(eventType: string, transactionId: string, contentMap: unknown): Promise<void> {
+		const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
+
+		return restClient.sendToDevice(eventType, transactionId, contentMap);
+	}
+
 	public getPreviewUrl(url: string): Promise<PreviewUrl_> {
 		const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_MEDIA);
 

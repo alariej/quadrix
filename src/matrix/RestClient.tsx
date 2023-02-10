@@ -115,6 +115,13 @@ export default class RestClient extends GenericRestClient {
 		return this.performApiPut<void>('rooms/' + roomId + '/send/m.room.message/' + tempId, messageContent);
 	}
 
+	public sendToDevice(eventType: string, transactionId: string, contentMap: unknown): Promise<void> {
+		const body = {
+			messages: contentMap,
+		};
+		return this.performApiPut<void>('sendToDevice/' + eventType + '/' + transactionId, body);
+	}
+
 	public sendStateEvent(
 		roomId: string,
 		type: StateEventType,
