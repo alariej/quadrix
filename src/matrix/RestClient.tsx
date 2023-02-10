@@ -23,6 +23,8 @@ import {
 	ClientEvent_,
 	CallEventContent_,
 	CallMemberEventContent_,
+	IQueryKeysRequest,
+	IDownloadKeyResult,
 } from '../models/MatrixApi';
 
 export default class RestClient extends GenericRestClient {
@@ -120,6 +122,17 @@ export default class RestClient extends GenericRestClient {
 			messages: contentMap,
 		};
 		return this.performApiPut<void>('sendToDevice/' + eventType + '/' + transactionId, body);
+	}
+
+	public queryKeys(userId: string): Promise<IDownloadKeyResult> {
+		const content: IQueryKeysRequest = {
+			device_keys: {},
+			timeout: 10000,
+		};
+
+		content.device_keys[userId] = [];
+
+		return this.performApiPost<IDownloadKeyResult>('keys/query', content);
 	}
 
 	public sendStateEvent(

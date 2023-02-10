@@ -28,6 +28,7 @@ import {
 	ClientEvent_,
 	CallEventContent_,
 	CallMemberEventContent_,
+	IDownloadKeyResult,
 } from '../models/MatrixApi';
 import { RoomSummary } from '../models/RoomSummary';
 import EventUtils from '../utils/EventUtils';
@@ -513,6 +514,12 @@ class ApiClient {
 		const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
 
 		return restClient.sendToDevice(eventType, transactionId, contentMap);
+	}
+
+	public queryKeys(userId: string): Promise<IDownloadKeyResult> {
+		const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
+
+		return restClient.queryKeys(userId);
 	}
 
 	public getPreviewUrl(url: string): Promise<PreviewUrl_> {

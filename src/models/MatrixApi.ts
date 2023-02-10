@@ -560,3 +560,49 @@ export interface SyncResponse_ {
 		events: ClientEvent_[];
 	};
 }
+
+export interface IQueryKeysRequest {
+	device_keys: { [userId: string]: string[] };
+	timeout?: number;
+	token?: string;
+}
+
+export interface ISignatures {
+	[entity: string]: {
+		[keyId: string]: string;
+	};
+}
+
+export interface IDeviceKeys {
+	algorithms: Array<string>;
+	device_id: string;
+	user_id: string;
+	keys: Record<string, string>;
+	signatures?: ISignatures;
+}
+
+export interface DeviceKeys {
+	[deviceId: string]: IDeviceKeys & {
+		unsigned?: {
+			device_display_name: string;
+		};
+	};
+}
+
+export interface Keys {
+	keys: { [keyId: string]: string };
+	usage: string[];
+	user_id: string;
+}
+
+export interface SigningKeys extends Keys {
+	signatures: ISignatures;
+}
+
+export interface IDownloadKeyResult {
+	failures: { [serverName: string]: object };
+	device_keys: { [userId: string]: DeviceKeys };
+	master_keys?: { [userId: string]: Keys };
+	self_signing_keys?: { [userId: string]: SigningKeys };
+	user_signing_keys?: { [userId: string]: SigningKeys };
+}
