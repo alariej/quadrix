@@ -197,7 +197,6 @@ class DataStore extends StoreBase {
 					break;
 
 				case 'org.matrix.msc3401.call':
-					if (!(<CallEventContent_>content)['m.terminated']) {
 						roomEventTriggers.isNewCallEvent = true;
 						this.roomSummaryList[roomIndex].msc3401Call = {
 							callId: event.state_key!,
@@ -205,7 +204,6 @@ class DataStore extends StoreBase {
 							callEventContent: content as CallEventContent_,
 							participants: {},
 						};
-					}
 					break;
 
 				case 'org.matrix.msc3401.call.member':
