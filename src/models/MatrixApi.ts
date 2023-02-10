@@ -403,6 +403,12 @@ export interface NewRoomOptions_ {
 			guest_access?: 'forbidden';
 		};
 	}[];
+	power_level_content_override?: {
+		events: {
+			'org.matrix.msc3401.call': number;
+			'org.matrix.msc3401.call.member': number;
+		};
+	};
 	creation_content?: { _is_notepad: boolean };
 }
 

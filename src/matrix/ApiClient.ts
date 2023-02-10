@@ -345,6 +345,12 @@ class ApiClient {
 						},
 					},
 				],
+				power_level_content_override: {
+					events: {
+						'org.matrix.msc3401.call': 0,
+						'org.matrix.msc3401.call.member': 0,
+					},
+				},
 				name: name,
 				is_direct: false,
 			};
