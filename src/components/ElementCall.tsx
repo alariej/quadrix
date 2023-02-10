@@ -24,6 +24,7 @@ import {
 } from '../models/MatrixApi';
 import UiStore from '../stores/UiStore';
 import { ELEMENT_CALL_URL } from '../appconfig';
+import { ComponentBase } from 'resub';
 
 const styles = {
 	modalView: RX.Styles.createViewStyle({
@@ -139,6 +140,29 @@ class WidgetDriver_ extends WidgetDriver {
 		console.log(eventType);
 		console.log(encrypted);
 		console.log(contentMap);
+
+		/* 		
+		const batch = Object.entries(contentMap).flatMap(([userId, userContentMap]) =>
+		Object.entries(userContentMap).map(([deviceId, content]) => ({
+			userId,
+			deviceId,
+			payload: content,
+		})));
+
+		console.log(batch)
+ */
+
+		const transactionId = StringUtils.getRandomString(8);
+		ApiClient.sendToDevice(eventType, transactionId, contentMap)
+			.then(response => {
+				console.log('...............RESPONSE');
+				console.log(response);
+			})
+			.catch(error => {
+				console.log('...............ERROR');
+				console.log(error);
+			});
+
 		return Promise.resolve();
 	}
 
@@ -174,8 +198,34 @@ class WidgetDriver_ extends WidgetDriver {
 
 		let stateEvents: IRoomEvent[] = [];
 		if (eventType === 'm.room.member') {
-			// stateEvents = roomSummary.stateEvents.filter(event => event.type === eventType) as IRoomEvent[];
+			// will need to tinker something using stateevents and timelineevents
+			// sort that shit by timestamp to get the newest versions
 
+			// stateEvents = roomSummary.timelineEvents.filter(event => event.type === eventType) as IRoomEvent[];
+			// for (let i = 0; i < stateEvents.length; i++) {
+			// 	stateEvents[i].room_id = roomIds[0];
+			// }
+
+			Object.values(roomSummary.members).map(member => {
+				if (member.membership === 'join') {
+					const memberEvent: IRoomEvent = {
+						event_id: StringUtils.getRandomString(8),
+						origin_server_ts: Date.now(),
+						room_id: roomIds[0],
+						sender: member.id,
+						state_key: member.id,
+						type: 'm.room.member',
+						content: {
+							displayname: member.id,
+							membership: 'join',
+						},
+						unsigned: {},
+					};
+					stateEvents.push(memberEvent);
+				}
+			});
+
+			/* 
 			// just sending back a standardized m.room.member event of the user
 			// not all the real m.room.member events in the room
 			const memberEvent: IRoomEvent = {
@@ -193,6 +243,7 @@ class WidgetDriver_ extends WidgetDriver {
 			};
 
 			stateEvents = [memberEvent];
+ */
 		} else if (eventType === 'org.matrix.msc3401.call') {
 			// there is a race condition here for the user launching the call
 			// this hopefully executes after the sync has received the call event
@@ -205,7 +256,6 @@ class WidgetDriver_ extends WidgetDriver {
 			this.callId = stateEvent.state_key!;
 			console.log(this.callId);
 		} else if (eventType === 'org.matrix.msc3401.call.member') {
-
 			// sending only the call member events which match the callId
 			stateEvents = timelineEvents.filter(event => {
 				const content = event.content as CallMemberEventContent_;
@@ -215,6 +265,9 @@ class WidgetDriver_ extends WidgetDriver {
 					content['m.calls'][0]['m.call_id'] === this.callId
 				);
 			}) as IRoomEvent[];
+			for (let i = 0; i < stateEvents.length; i++) {
+				stateEvents[i].room_id = roomIds[0];
+			}
 		}
 
 		console.log(stateEvents);
@@ -256,10 +309,10 @@ class WidgetDriver_ extends WidgetDriver {
 	}
 
 	public async *getTurnServers(): AsyncGenerator<ITurnServer> {
-		console.log('##############_getTurnServers')
+		console.log('##############_getTurnServers');
 
 		const turnServer: ITurnServer = {
-			uris: [],
+			uris: ['stun:turn.matrix.org'],
 			username: '',
 			password: '',
 		};
@@ -276,30 +329,44 @@ interface ElementCallState {
 	parsedUrl: URL;
 }
 
-export default class ElementCall extends RX.Component<ElementCallProps, ElementCallState> {
+export default class ElementCall extends ComponentBase<ElementCallProps, ElementCallState> {
 	private widgetUrl = '';
 	private widgetApi?: ClientWidgetApi;
 	private widget!: Widget;
 	private widgetDriver!: WidgetDriver_;
 	private widgetIframe: React.RefObject<HTMLIFrameElement> = React.createRef();
 	private completeUrl = '';
-	public callEventId = '';
+	private newMessageSubscription: number;
 
 	constructor(props: ElementCallProps) {
 		super(props);
 
 		console.log('---------------------CONSTRUCTOR');
 		console.log(props);
+
+		this.newMessageSubscription = DataStore.subscribe(this.newMessages, DataStore.MessageTrigger);
+
+		ApiClient.queryKeys('@test001:al4.re')
+			.then(response => {
+				console.log('...............RESPONSE');
+				console.log(ApiClient.credentials.deviceId);
+				console.log(response);
+			})
+			.catch(error => {
+				console.log('...............ERROR');
+				console.log(error);
+			});
 	}
 
 	public async componentDidMount(): Promise<void> {
+		super.componentDidMount();
 		RX.Modal.dismiss('dialog_menu_composer');
 
 		console.log('---------------------COMPONENTDIDMOUNT');
 
 		if (!this.isActiveCall()) {
 			const content: CallEventContent_ = {
-				'm.intent': GroupCallIntent.Room,
+				'm.intent': GroupCallIntent.Prompt,
 				'm.type': GroupCallType.Video,
 				'io.element.ptt': false,
 				// 'dataChannelsEnabled': true,
@@ -308,27 +375,21 @@ export default class ElementCall extends RX.Component<ElementCallProps, ElementC
 
 			const callId = StringUtils.getRandomString(8);
 
-			const response = await ApiClient.sendStateEvent(
-				this.props.roomId,
-				CallEvents.GroupCallPrefix,
-				content,
-				callId
-			).catch(_error => null);
-
-			console.log('****************SENDCALLEVENTRESPONSE');
-			console.log(response?.event_id);
+			ApiClient.sendStateEvent(this.props.roomId, CallEvents.GroupCallPrefix, content, callId).catch(
+				_error => null
+			);
 		}
 
 		const params = new URLSearchParams({
-			embed: 'true', // doesn't seem to do anything
-			preload: 'true', // without this, element call starts in the lobby
+			embed: 'true', // without this, element call starts in the lobby
+			preload: 'true', // what does this do?
 			hideHeader: 'true',
 			hideScreensharing: 'true',
 			userId: ApiClient.credentials.userIdFull,
 			deviceId: ApiClient.credentials.deviceId,
 			roomId: this.props.roomId,
 			baseUrl: 'https://' + ApiClient.credentials.homeServer,
-			// enableE2e: 'false',
+			enableE2e: 'false',
 			lang: UiStore.getLanguage(),
 		});
 
@@ -346,6 +407,7 @@ export default class ElementCall extends RX.Component<ElementCallProps, ElementC
 
 		// const url = new URL('https://call.al4.re');
 		// const url = new URL('https://call.element.io');
+		// const url = new URL('https://element-call.netlify.app/');
 		const url = new URL(elementCallUrl);
 		url.pathname = '/room';
 		url.hash = `#?${params.toString()}`;
@@ -372,7 +434,7 @@ export default class ElementCall extends RX.Component<ElementCallProps, ElementC
 
 		// what is this
 		this.completeUrl = this.widget?.getCompleteUrl({
-			// widgetRoomId: this.props.roomId,
+			widgetRoomId: this.props.roomId,
 			currentUserId: ApiClient.credentials.userIdFull,
 			// userDisplayName: ApiClient.credentials.userIdFull,
 			// clientId: APP_ID,
@@ -390,7 +452,10 @@ export default class ElementCall extends RX.Component<ElementCallProps, ElementC
 	}
 
 	public componentWillUnmount(): void {
+		super.componentWillUnmount();
 		console.log('---------------------COMPONENTWILLUNMOUNT');
+
+		DataStore.unsubscribe(this.newMessageSubscription);
 
 		this.widgetApi!.off(`action:${CallWidgetActions.HangupCall}`, this.onHangup);
 		this.widgetApi!.off(`action:${CallWidgetActions.TileLayout}`, this.onTileLayout);
@@ -400,15 +465,55 @@ export default class ElementCall extends RX.Component<ElementCallProps, ElementC
 		this.widgetApi!.stop();
 	}
 
+	private newMessages = () => {
+		console.log('---------------------NEWMESSAGES');
+		const newRoomEvents = DataStore.getNewRoomEvents(this.props.roomId);
+
+		console.log(newRoomEvents);
+
+		if (newRoomEvents.length === 0) {
+			return;
+		}
+
+		if (newRoomEvents[0].type === CallEvents.GroupCallMemberPrefix) {
+			const event_: IRoomEvent = {
+				room_id: this.props.roomId,
+				event_id: newRoomEvents[0].eventId,
+				content: newRoomEvents[0].content,
+				type: newRoomEvents[0].type,
+				origin_server_ts: newRoomEvents[0].time,
+				sender: newRoomEvents[0].senderId,
+				state_key: newRoomEvents[0].senderId,
+				unsigned: {},
+			};
+
+			this.widgetApi!.feedEvent(event_, this.props.roomId)
+				.then(response => {
+					console.log('---------------------FEEDEVENTRESPONSE');
+					console.log(response);
+				})
+				.catch(error => {
+					console.log('---------------------FEEDEVENTERROR');
+					console.log(error);
+				});
+		}
+	};
+
 	private isActiveCall = (): boolean => {
 		const roomSummary = DataStore.getRoomSummary(this.props.roomId);
 		const participants = roomSummary.msc3401Call?.participants;
 
-		if (!participants) {
+		console.log('---------------------ISACTIVECALL');
+		console.log(participants);
+
+		if (roomSummary.msc3401Call?.callEventContent?.['m.terminated'] || !participants) {
 			return false;
 		}
 
 		const activeParticipants = Object.entries(participants).filter(participant => participant[1] === true);
+
+		console.log(activeParticipants);
+		console.log(activeParticipants.length.toString());
 
 		return activeParticipants.length > 0;
 	};
@@ -418,14 +523,15 @@ export default class ElementCall extends RX.Component<ElementCallProps, ElementC
 	};
 
 	private onPreparing = () => {
+		console.log('---------------------ONPREPARING');
 		// not used
 	};
 
 	private onReady = async () => {
 		console.log('---------------------ONREADY');
 
-		this.widgetApi?.updateVisibility(true).catch(_error => null);
-
+		// this.widgetApi?.updateVisibility(true).catch(_error => null);
+		/* 
 		const devices = await navigator.mediaDevices.enumerateDevices();
 
 		const devices_: { [kind: MediaDeviceKind | string]: MediaDeviceInfo[] } = {
@@ -435,39 +541,88 @@ export default class ElementCall extends RX.Component<ElementCallProps, ElementC
 		};
 
 		devices.forEach(device => devices_[device.kind].push(device));
-
+ */
 		await this.widgetApi!.transport.send(CallWidgetActions.JoinCall, {
-			audioInput: null, // devices_[DeviceKind.audioInput][0].label, // null for starting muted
-			videoInput: null, // devices_[DeviceKind.videoInput][0].label, // null for starting muted
+			audioInput: null, // 'default', // devices_[DeviceKind.audioInput][0].label, // null for starting muted
+			videoInput: null, // 'default', // devices_[DeviceKind.videoInput][0].label, // null for starting muted
 		});
 
 		this.widgetApi!.on(`action:${CallWidgetActions.HangupCall}`, this.onHangup);
 		this.widgetApi!.on(`action:${CallWidgetActions.TileLayout}`, this.onTileLayout);
 		this.widgetApi!.on(`action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`, this.onAlwaysOnScreen);
 		this.widgetApi!.on(`action:${CallWidgetActions.JoinCall}`, this.onJoin);
+
+		this.widgetApi!.on(`action:io.element.view_room`, this.onViewRoom);
+
+		this.widgetApi?.on('event', this.onEvent);
+	};
+
+	private onViewRoom = (ev: CustomEvent<IWidgetApiRequest>) => {
+		console.log('++++++++++++++++++++++ONVIEWROOM');
+		console.log(ev);
+	};
+
+	private onEvent = (ev: CustomEvent<IWidgetApiRequest>) => {
+		console.log('++++++++++++++++++++++ONEVENT');
+		console.log(ev);
 	};
 
 	private onJoin = (ev: CustomEvent<IWidgetApiRequest>) => {
-		console.log('++++++++++++++++++++++ ON JOIN');
+		ev.preventDefault();
 		console.log(ev);
-
-		// ev.preventDefault();
+		console.log('++++++++++++++++++++++ONJOIN');
 		// await this.widgetApi!.transport.reply(ev.detail, {});
 	};
 
-	private onTileLayout = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
+	private onTileLayout = (ev: CustomEvent<IWidgetApiRequest>) => {
 		ev.preventDefault();
-		await this.widgetApi!.transport.reply(ev.detail, {});
+		console.log('++++++++++++++++++++++ONTILELAYOUT');
+		this.widgetApi!.transport.reply(ev.detail, {});
 	};
 
-	private onAlwaysOnScreen = async (ev: CustomEvent<IStickyActionRequest>) => {
+	private onAlwaysOnScreen = (ev: CustomEvent<IStickyActionRequest>) => {
 		ev.preventDefault();
-		await this.widgetApi!.transport.reply(ev.detail, {});
+		console.log('++++++++++++++++++++++ONALWAYSONSCREEN');
+		this.widgetApi!.transport.reply(ev.detail, {});
 	};
 
 	private onHangup = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
 		ev.preventDefault();
+		console.log('++++++++++++++++++++++ONHANGUP');
+		// console.log(this.isActiveCall())
+
+		// if last user, send a state event to end the call
+		const roomSummary = DataStore.getRoomSummary(this.props.roomId);
+		const participants = roomSummary.msc3401Call?.participants;
+
+		if (roomSummary.msc3401Call && participants) {
+			const remainingParticipant = Object.entries(participants).find(
+				participant => participant[1] === true && participant[0] !== ApiClient.credentials.userIdFull
+			);
+			if (!remainingParticipant) {
+				const content: CallEventContent_ = {
+					'm.intent': GroupCallIntent.Room,
+					'm.type': GroupCallType.Video,
+					'io.element.ptt': false,
+					'm.terminated': 'call_ended',
+					// 'dataChannelsEnabled': true,
+					// 'dataChannelOptions': undefined,
+				};
+
+				const response = await ApiClient.sendStateEvent(
+					this.props.roomId,
+					CallEvents.GroupCallPrefix,
+					content,
+					roomSummary.msc3401Call.callId
+				).catch(_error => null);
+
+				console.log('****************SENDCALLEVENTRESPONSE');
+				console.log(response?.event_id);
+			}
+		}
+
 		await this.widgetApi!.transport.reply(ev.detail, {});
+
 		RX.Modal.dismiss('element_call');
 	};
 
