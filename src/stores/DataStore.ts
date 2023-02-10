@@ -197,13 +197,13 @@ class DataStore extends StoreBase {
 					break;
 
 				case 'org.matrix.msc3401.call':
-						roomEventTriggers.isNewCallEvent = true;
-						this.roomSummaryList[roomIndex].msc3401Call = {
-							callId: event.state_key!,
-							startTime: event.origin_server_ts,
-							callEventContent: content as CallEventContent_,
-							participants: {},
-						};
+					roomEventTriggers.isNewCallEvent = true;
+					this.roomSummaryList[roomIndex].msc3401Call = {
+						callId: event.state_key!,
+						startTime: event.origin_server_ts,
+						callEventContent: content as CallEventContent_,
+						participants: {},
+					};
 					break;
 
 				case 'org.matrix.msc3401.call.member':
@@ -243,7 +243,7 @@ class DataStore extends StoreBase {
 
 				case 'm.room.power_levels':
 					roomEventTriggers.isNewPowerLevelEvent = true;
-					this.setPowerLevel(event, roomIndex);
+					this.setUserPowerLevel(event, roomIndex);
 					break;
 
 				case 'm.room.topic':
@@ -268,9 +268,12 @@ class DataStore extends StoreBase {
 		return roomEventTriggers;
 	}
 
-	private setPowerLevel(event: ClientEvent_, roomIndex: number) {
+	private setUserPowerLevel(event: ClientEvent_, roomIndex: number) {
 		const content = event.content as RoomEventContent_;
-		Object.keys(content.users!).map(user => {
+		if (!content.users) {
+			return;
+		}
+		Object.keys(content.users).map(user => {
 			const member: User = {
 				id: user,
 				powerLevel: content.users![user],
