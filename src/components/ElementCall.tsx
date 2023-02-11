@@ -25,6 +25,7 @@ import {
 import UiStore from '../stores/UiStore';
 import { ELEMENT_CALL_URL } from '../appconfig';
 import { ComponentBase } from 'resub';
+import { Msc3401Call } from '../models/Msc3401Call';
 
 const styles = {
 	modalView: RX.Styles.createViewStyle({
@@ -98,8 +99,9 @@ interface IStickyActionRequest extends IWidgetApiRequest {
 class WidgetDriver_ extends WidgetDriver {
 	private callId = '';
 
-	constructor() {
+	constructor(callId: string) {
 		super();
+		this.callId = callId;
 	}
 
 	public validateCapabilities(requested: Set<Capability>): Promise<Set<Capability>> {
@@ -140,17 +142,6 @@ class WidgetDriver_ extends WidgetDriver {
 		console.log(eventType);
 		console.log(encrypted);
 		console.log(contentMap);
-
-		/* 		
-		const batch = Object.entries(contentMap).flatMap(([userId, userContentMap]) =>
-		Object.entries(userContentMap).map(([deviceId, content]) => ({
-			userId,
-			deviceId,
-			payload: content,
-		})));
-
-		console.log(batch)
- */
 
 		const transactionId = StringUtils.getRandomString(8);
 		ApiClient.sendToDevice(eventType, transactionId, contentMap)
@@ -193,19 +184,10 @@ class WidgetDriver_ extends WidgetDriver {
 		console.log(roomIds);
 
 		const roomSummary = DataStore.getRoomSummary(roomIds[0]);
-		const timelineEvents = roomSummary.timelineEvents.slice(0).reverse();
 		console.log(roomSummary);
 
 		let stateEvents: IRoomEvent[] = [];
 		if (eventType === 'm.room.member') {
-			// will need to tinker something using stateevents and timelineevents
-			// sort that shit by timestamp to get the newest versions
-
-			// stateEvents = roomSummary.timelineEvents.filter(event => event.type === eventType) as IRoomEvent[];
-			// for (let i = 0; i < stateEvents.length; i++) {
-			// 	stateEvents[i].room_id = roomIds[0];
-			// }
-
 			Object.values(roomSummary.members).map(member => {
 				if (member.membership === 'join') {
 					const memberEvent: IRoomEvent = {
@@ -224,39 +206,40 @@ class WidgetDriver_ extends WidgetDriver {
 					stateEvents.push(memberEvent);
 				}
 			});
-
-			/* 
-			// just sending back a standardized m.room.member event of the user
-			// not all the real m.room.member events in the room
-			const memberEvent: IRoomEvent = {
-				room_id: roomIds[0],
-				event_id: StringUtils.getRandomString(8),
-				content: {
-					displayname: ApiClient.credentials.userIdFull,
-					membership: 'join',
-				},
-				type: 'm.room.member',
-				origin_server_ts: Date.now(),
-				sender: ApiClient.credentials.userIdFull,
-				state_key: ApiClient.credentials.userIdFull,
-				unsigned: {},
-			};
-
-			stateEvents = [memberEvent];
- */
-		} else if (eventType === 'org.matrix.msc3401.call') {
+		} else if (eventType === CallEvents.GroupCallPrefix) {
 			// there is a race condition here for the user launching the call
 			// this hopefully executes after the sync has received the call event
 			// sent at componentdidmount
 
-			const stateEvent = timelineEvents.find(event => event.type === eventType) as IRoomEvent;
-			stateEvent.room_id = roomIds[0]; // need to fill in room_id property, why???
+			// const stateEvent = timelineEvents.find(event => event.type === eventType) as IRoomEvent;
+			// stateEvent.room_id = roomIds[0]; // need to fill in room_id property, why???
+
+			const content: CallEventContent_ = {
+				'm.intent': GroupCallIntent.Prompt,
+				'm.type': GroupCallType.Video,
+				'io.element.ptt': false,
+				// 'dataChannelsEnabled': true,
+				// 'dataChannelOptions': undefined,
+			};
+
+			const stateEvent: IRoomEvent = {
+				type: eventType,
+				sender: ApiClient.credentials.userIdFull,
+				event_id: StringUtils.getRandomString(8),
+				room_id: roomIds[0],
+				state_key: this.callId,
+				origin_server_ts: Date.now(),
+				content: content,
+				unsigned: {},
+			};
+
 			stateEvents = [stateEvent];
 
-			this.callId = stateEvent.state_key!;
-			console.log(this.callId);
-		} else if (eventType === 'org.matrix.msc3401.call.member') {
+			// this.callId = stateEvent.state_key!;
+			// console.log('callId: ', this.callId);
+		} else if (eventType === CallEvents.GroupCallMemberPrefix) {
 			// sending only the call member events which match the callId
+			const timelineEvents = roomSummary.timelineEvents.slice(0).reverse();
 			stateEvents = timelineEvents.filter(event => {
 				const content = event.content as CallMemberEventContent_;
 				return (
@@ -345,17 +328,6 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		console.log(props);
 
 		this.newMessageSubscription = DataStore.subscribe(this.newMessages, DataStore.MessageTrigger);
-
-		ApiClient.queryKeys('@test001:al4.re')
-			.then(response => {
-				console.log('...............RESPONSE');
-				console.log(ApiClient.credentials.deviceId);
-				console.log(response);
-			})
-			.catch(error => {
-				console.log('...............ERROR');
-				console.log(error);
-			});
 	}
 
 	public async componentDidMount(): Promise<void> {
@@ -364,7 +336,13 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 
 		console.log('---------------------COMPONENTDIDMOUNT');
 
-		if (!this.isActiveCall()) {
+		const msc3401Call = DataStore.getRoomSummary(this.props.roomId).msc3401Call;
+
+		console.log('msc3401Call: ', msc3401Call);
+
+		let callId = '';
+
+		if (!msc3401Call || !this.isActiveCall(msc3401Call)) {
 			const content: CallEventContent_ = {
 				'm.intent': GroupCallIntent.Prompt,
 				'm.type': GroupCallType.Video,
@@ -373,11 +351,15 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 				// 'dataChannelOptions': undefined,
 			};
 
-			const callId = StringUtils.getRandomString(8);
+			callId = StringUtils.getRandomString(8);
+
+			console.log('callId: ', callId);
 
 			ApiClient.sendStateEvent(this.props.roomId, CallEvents.GroupCallPrefix, content, callId).catch(
 				_error => null
 			);
+		} else {
+			callId = msc3401Call.callId;
 		}
 
 		const params = new URLSearchParams({
@@ -429,7 +411,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		};
 
 		this.widget = new Widget(callWidget);
-		this.widgetDriver = new WidgetDriver_();
+		this.widgetDriver = new WidgetDriver_(callId);
 		this.widgetApi = new ClientWidgetApi(this.widget, this.widgetIframe.current!, this.widgetDriver);
 
 		// what is this
@@ -499,21 +481,16 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		}
 	};
 
-	private isActiveCall = (): boolean => {
-		const roomSummary = DataStore.getRoomSummary(this.props.roomId);
-		const participants = roomSummary.msc3401Call?.participants;
-
+	private isActiveCall = (msc3401Call: Msc3401Call): boolean => {
 		console.log('---------------------ISACTIVECALL');
-		console.log(participants);
 
-		if (roomSummary.msc3401Call?.callEventContent?.['m.terminated'] || !participants) {
+		if (msc3401Call.callEventContent?.['m.terminated'] || !msc3401Call.participants) {
 			return false;
 		}
 
-		const activeParticipants = Object.entries(participants).filter(participant => participant[1] === true);
-
-		console.log(activeParticipants);
-		console.log(activeParticipants.length.toString());
+		const activeParticipants = Object.entries(msc3401Call.participants).filter(
+			participant => participant[1] === true
+		);
 
 		return activeParticipants.length > 0;
 	};
@@ -552,9 +529,16 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		this.widgetApi!.on(`action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`, this.onAlwaysOnScreen);
 		this.widgetApi!.on(`action:${CallWidgetActions.JoinCall}`, this.onJoin);
 
-		this.widgetApi!.on(`action:io.element.view_room`, this.onViewRoom);
+		// this.widgetApi!.on(`action:io.element.view_room`, this.onViewRoom);
 
-		this.widgetApi?.on('event', this.onEvent);
+		// this.widgetApi!.on('event', this.onEvent);
+
+		this.widgetApi!.on('toDeviceEvent', this.onToDeviceEvent);
+	};
+
+	private onToDeviceEvent = (ev: CustomEvent<IWidgetApiRequest>) => {
+		console.log('++++++++++++++++++++++ONTODEVICEEVENT');
+		console.log(ev);
 	};
 
 	private onViewRoom = (ev: CustomEvent<IWidgetApiRequest>) => {
