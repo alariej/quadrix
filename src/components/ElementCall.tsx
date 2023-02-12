@@ -320,6 +320,8 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 	private widgetIframe: React.RefObject<HTMLIFrameElement> = React.createRef();
 	private completeUrl = '';
 	private newMessageSubscription: number;
+	private newCallEventSubscription: number;
+	private callId = '';
 
 	constructor(props: ElementCallProps) {
 		super(props);
@@ -328,6 +330,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		console.log(props);
 
 		this.newMessageSubscription = DataStore.subscribe(this.newMessages, DataStore.MessageTrigger);
+		this.newCallEventSubscription = DataStore.subscribe(this.newCallEvents, DataStore.CallEventTrigger);
 	}
 
 	public async componentDidMount(): Promise<void> {
@@ -340,8 +343,6 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 
 		console.log('msc3401Call: ', msc3401Call);
 
-		let callId = '';
-
 		if (!msc3401Call || !this.isActiveCall(msc3401Call)) {
 			const content: CallEventContent_ = {
 				'm.intent': GroupCallIntent.Prompt,
@@ -351,15 +352,15 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 				// 'dataChannelOptions': undefined,
 			};
 
-			callId = StringUtils.getRandomString(8);
+			this.callId = StringUtils.getRandomString(8);
 
-			console.log('callId: ', callId);
+			console.log('callId: ', this.callId);
 
-			ApiClient.sendStateEvent(this.props.roomId, CallEvents.GroupCallPrefix, content, callId).catch(
+			ApiClient.sendStateEvent(this.props.roomId, CallEvents.GroupCallPrefix, content, this.callId).catch(
 				_error => null
 			);
 		} else {
-			callId = msc3401Call.callId;
+			this.callId = msc3401Call.callId;
 		}
 
 		const params = new URLSearchParams({
@@ -411,7 +412,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		};
 
 		this.widget = new Widget(callWidget);
-		this.widgetDriver = new WidgetDriver_(callId);
+		this.widgetDriver = new WidgetDriver_(this.callId);
 		this.widgetApi = new ClientWidgetApi(this.widget, this.widgetIframe.current!, this.widgetDriver);
 
 		// what is this
@@ -438,6 +439,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		console.log('---------------------COMPONENTWILLUNMOUNT');
 
 		DataStore.unsubscribe(this.newMessageSubscription);
+		DataStore.unsubscribe(this.newCallEventSubscription);
 
 		this.widgetApi!.off(`action:${CallWidgetActions.HangupCall}`, this.onHangup);
 		this.widgetApi!.off(`action:${CallWidgetActions.TileLayout}`, this.onTileLayout);
@@ -480,6 +482,30 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 				});
 		}
 	};
+
+	private newCallEvents = () => {
+
+		// do something
+		const callEvents = DataStore.getCallEvents();
+		console.log('---------------------NEWCALLEVENTS');
+		console.log(callEvents)
+
+		callEvents.map(event => {
+			console.log(event.content.conf_id)
+			console.log(this.callId)
+			if (event.content.conf_id === this.callId) {
+				this.widgetApi!.feedToDevice(event as IRoomEvent, false)
+				.then(response => {
+					console.log('---------------------FEEDEVENTRESPONSE');
+					console.log(response);
+				})
+				.catch(error => {
+					console.log('---------------------FEEDEVENTERROR');
+					console.log(error);
+				});
+			}
+		})
+	}
 
 	private isActiveCall = (msc3401Call: Msc3401Call): boolean => {
 		console.log('---------------------ISACTIVECALL');
