@@ -17,10 +17,12 @@ import {
 	RoomTimeline_,
 	RoomType,
 	SyncResponse_,
+	ToDeviceEvent_,
 } from '../models/MatrixApi';
 import { differenceInDays } from 'date-fns';
 import { INACTIVE_DAYS } from '../appconfig';
 import { FilteredChatEvent } from '../models/FilteredChatEvent';
+import * as _ from 'lodash';
 
 interface RoomEventTriggers {
 	isNewMessageEvent?: boolean;
@@ -50,6 +52,7 @@ const RoomListTrigger = 'RoomListTrigger';
 const UnreadTotalTrigger = 'UnreadTotalTrigger';
 const RoomSummaryTrigger = 'RoomSummaryTrigger';
 const UserPresenceTrigger = 'UserPresenceTrigger';
+const CallEventTrigger = 'CallEventTrigger';
 
 @AutoSubscribeStore
 class DataStore extends StoreBase {
@@ -60,6 +63,7 @@ class DataStore extends StoreBase {
 	private directRoomList: { [id: string]: string } = {};
 	private lastSeenTime: { [id: string]: number } = {};
 	private syncComplete = false;
+	private callEvents: ToDeviceEvent_[] = [];
 
 	public ReadReceiptTrigger = ReadReceiptTrigger;
 	public MessageTrigger = MessageTrigger;
@@ -71,6 +75,7 @@ class DataStore extends StoreBase {
 	public UnreadTotalTrigger = UnreadTotalTrigger;
 	public RoomSummaryTrigger = RoomSummaryTrigger;
 	public UserPresenceTrigger = UserPresenceTrigger;
+	public CallEventTrigger = CallEventTrigger;
 
 	public buildRoomSummaryList(syncData: SyncResponse_) {
 		this.roomSummaryList = [];
@@ -510,6 +515,40 @@ class DataStore extends StoreBase {
 		if (isNewPresence) {
 			this.trigger(UserPresenceTrigger);
 		}
+	}
+
+	public handleToDevice(syncData: SyncResponse_) {
+		if (!syncData.to_device) {
+			return;
+		}
+
+		console.log('=============DATASTORE HANDLETODEVICE');
+		console.log(syncData);
+
+		syncData.to_device.events.map(event => {
+			switch (event.type) {
+				case 'm.call.invite':
+					this.callEvents.push(event);
+					break;
+
+				case 'm.call.candidates':
+					this.callEvents.push(event);
+					break;
+
+				case 'm.call.answer':
+					this.callEvents.push(event);
+					break;
+
+				case 'm.call.hangup':
+					this.callEvents.push(event);
+					break;
+
+				default:
+					break;
+			}
+		});
+
+		this.trigger(CallEventTrigger);
 	}
 
 	public updateRoomSummaryListInitial(syncData: SyncResponse_) {
@@ -1172,6 +1211,15 @@ class DataStore extends StoreBase {
 
 	public getMsc3401Call(_roomId: string) {
 		// do something
+	}
+
+	@autoSubscribeWithKey(CallEventTrigger)
+	public getCallEvents(): ToDeviceEvent_[] {
+		const callEvents = _.cloneDeep(this.callEvents);
+
+		this.callEvents = [];
+
+		return callEvents;
 	}
 }
 
