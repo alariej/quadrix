@@ -45,6 +45,7 @@ export type ToDeviceEventType =
 	| 'm.call.invite'
 	| 'm.call.candidates'
 	| 'm.call.answer'
+	| 'm.call.select_answer'
 	| 'm.call.hangup'
 	| 'm.call.reject'
 	| 'm.call.negotiate'
