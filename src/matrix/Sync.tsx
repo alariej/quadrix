@@ -174,6 +174,12 @@ class Sync {
 		this.restClient
 			.getSyncFiltered(syncToken, filter, timeout, false)
 			.then(syncData => {
+
+
+				console.log('=============SYNC')
+				console.log(syncData)
+
+
 				if (UiStore.getOffline()) {
 					UiStore.setOffline(false);
 				}
@@ -187,6 +193,8 @@ class Sync {
 					}
 
 					DataStore.updateUserPresence(syncData);
+
+					DataStore.handleToDevice(syncData);
 
 					this.nextSyncToken = syncData.next_batch!;
 
