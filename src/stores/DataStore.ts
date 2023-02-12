@@ -539,6 +539,18 @@ class DataStore extends StoreBase {
 					this.callEvents.push(event);
 					break;
 
+				case 'm.call.select_answer':
+					this.callEvents.push(event);
+					break;
+
+				case 'org.matrix.call.sdp_stream_metadata_changed':
+					this.callEvents.push(event);
+					break;
+
+				case 'm.call.negotiate':
+					this.callEvents.push(event);
+					break;
+
 				case 'm.call.hangup':
 					this.callEvents.push(event);
 					break;
