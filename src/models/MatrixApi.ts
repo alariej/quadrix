@@ -41,6 +41,15 @@ export type ClientEventType =
 	| 'org.matrix.msc3401.call'
 	| 'org.matrix.msc3401.call.member';
 
+export type ToDeviceEventType =
+	| 'm.call.invite'
+	| 'm.call.candidates'
+	| 'm.call.answer'
+	| 'm.call.hangup'
+	| 'm.call.reject'
+	| 'm.call.negotiate'
+	| 'org.matrix.call.sdp_stream_metadata_changed';
+
 export type MessageContentType = 'm.text' | 'm.image' | 'm.video' | 'm.file';
 
 export type EphemeralEventType = 'm.receipt';
@@ -559,6 +568,66 @@ export interface SyncResponse_ {
 	presence?: {
 		events: ClientEvent_[];
 	};
+	to_device?: {
+		events: ToDeviceEvent_[];
+	};
+}
+
+export interface ToDeviceEvent_ {
+	content: MCallInviteNegotiate | MCallCandidates | MCallAnswer;
+	sender: string;
+	type: ToDeviceEventType;
+}
+
+export interface MCallBase {
+	call_id: string;
+	conf_id: string;
+	version: string | number;
+	party_id?: string;
+	sender_session_id?: string;
+	dest_session_id?: string;
+}
+
+export interface CallCapabilities {
+	'm.call.transferee': boolean;
+	'm.call.dtmf': boolean;
+}
+
+export const SDPStreamMetadataKey = 'org.matrix.msc3077.sdp_stream_metadata';
+
+export interface SDPStreamMetadataObject {
+	purpose: SDPStreamMetadataPurpose;
+	audio_muted: boolean;
+	video_muted: boolean;
+}
+
+export interface SDPStreamMetadata {
+	[key: string]: SDPStreamMetadataObject;
+}
+
+export interface MCallInviteNegotiate extends MCallBase {
+	offer: RTCSessionDescription;
+	description: RTCSessionDescription;
+	lifetime: number;
+	capabilities?: CallCapabilities;
+	invitee?: string;
+	sender_session_id?: string;
+	dest_session_id?: string;
+	[SDPStreamMetadataKey]: SDPStreamMetadata;
+}
+
+export interface MCallCandidates extends MCallBase {
+	candidates: RTCIceCandidate[];
+}
+
+export interface MCallAnswer extends MCallBase {
+	answer: RTCSessionDescription;
+	capabilities?: CallCapabilities;
+	[SDPStreamMetadataKey]: SDPStreamMetadata;
+}
+
+export interface MCallHangupReject extends MCallBase {
+	reason?: string;
 }
 
 export interface IQueryKeysRequest {
