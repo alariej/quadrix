@@ -549,7 +549,9 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 				</RX.View>
 			);
 		} else {
-			const systemMessage = EventUtils.getSystemMessage(cellRender.item.event, this.props.roomType);
+			const timestamp = format(cellRender.item.event.time, 'HH:mm');
+			const systemMessage =
+				timestamp + ' - ' + EventUtils.getSystemMessage(cellRender.item.event, this.props.roomType);
 
 			MessageWrapper = (
 				<RX.View
