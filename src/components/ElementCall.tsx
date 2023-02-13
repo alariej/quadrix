@@ -1,6 +1,6 @@
 import React from 'react';
 import RX from 'reactxp';
-import { BORDER_RADIUS, OPAQUE_BACKGROUND, OPAQUE_DARK_BACKGROUND, TRANSPARENT_BACKGROUND } from '../ui';
+import { BORDER_RADIUS, OPAQUE_BACKGROUND } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import {
 	WidgetDriver,
@@ -32,7 +32,7 @@ const styles = {
 		flex: 1,
 		alignSelf: 'stretch',
 		justifyContent: 'flex-end',
-		// backgroundColor: OPAQUE_BACKGROUND,
+		backgroundColor: OPAQUE_BACKGROUND,
 	}),
 	closeButton: RX.Styles.createButtonStyle({
 		position: 'absolute',
@@ -75,12 +75,6 @@ interface ISendEventDetails {
 	eventId: string;
 }
 
-interface IReadEventRelationsResult {
-	chunk: IRoomEvent[];
-	nextBatch?: string;
-	prevBatch?: string;
-}
-
 interface ITurnServer {
 	uris: string[];
 	username: string;
@@ -96,7 +90,7 @@ interface IStickyActionRequest extends IWidgetApiRequest {
 	data: IStickyActionRequestData;
 }
 
-class WidgetDriver_ extends WidgetDriver {
+class CallWidgetDriver extends WidgetDriver {
 	private callId = '';
 
 	constructor(callId: string) {
@@ -105,8 +99,6 @@ class WidgetDriver_ extends WidgetDriver {
 	}
 
 	public validateCapabilities(requested: Set<Capability>): Promise<Set<Capability>> {
-		console.log('##############_validateCapabilities');
-		console.log(requested);
 		return Promise.resolve(requested);
 	}
 
@@ -116,75 +108,30 @@ class WidgetDriver_ extends WidgetDriver {
 		stateKey: string,
 		roomId: string
 	): Promise<ISendEventDetails> {
-		console.log('##############_sendEvent');
-		console.log(eventType);
-		console.log(content);
-		console.log(stateKey);
-		console.log(roomId);
-
-		// seems to only get org.matrix.msc3401.call.member events here
-
 		type type_ = CallMemberEventContent_;
-
 		const response = await ApiClient.sendStateEvent(roomId, eventType, content as type_, stateKey);
-
-		console.log(response);
 
 		return Promise.resolve({ eventId: response.event_id, roomId: roomId });
 	}
 
 	public sendToDevice(
 		eventType: string,
-		encrypted: boolean,
+		_encrypted: boolean,
 		contentMap: { [userId: string]: { [deviceId: string]: object } }
 	): Promise<void> {
-		console.log('##############_sendToDevice');
-		console.log(eventType);
-		console.log(encrypted);
-		console.log(contentMap);
-
 		const transactionId = StringUtils.getRandomString(8);
-		ApiClient.sendToDevice(eventType, transactionId, contentMap)
-			.then(response => {
-				console.log('...............RESPONSE');
-				console.log(response);
-			})
-			.catch(error => {
-				console.log('...............ERROR');
-				console.log(error);
-			});
+		ApiClient.sendToDevice(eventType, transactionId, contentMap).catch(_error => null);
 
 		return Promise.resolve();
 	}
 
-	public readRoomEvents(
-		eventType: string,
-		msgtype: string | undefined,
-		limit: number,
-		roomIds: string[]
-	): Promise<IRoomEvent[]> {
-		console.log('##############_readRoomEvents');
-		console.log(eventType);
-		console.log(msgtype);
-		console.log(limit);
-		console.log(roomIds);
-		return Promise.resolve([]);
-	}
-
 	public readStateEvents(
 		eventType: ClientEventType,
-		stateKey: string | undefined,
-		limit: number,
+		_stateKey: string | undefined,
+		_limit: number,
 		roomIds: string[]
 	): Promise<IRoomEvent[]> {
-		console.log('##############_readStateEvents');
-		console.log(eventType);
-		console.log(stateKey);
-		console.log(limit);
-		console.log(roomIds);
-
 		const roomSummary = DataStore.getRoomSummary(roomIds[0]);
-		console.log(roomSummary);
 
 		let stateEvents: IRoomEvent[] = [];
 		if (eventType === 'm.room.member') {
@@ -207,19 +154,10 @@ class WidgetDriver_ extends WidgetDriver {
 				}
 			});
 		} else if (eventType === CallEvents.GroupCallPrefix) {
-			// there is a race condition here for the user launching the call
-			// this hopefully executes after the sync has received the call event
-			// sent at componentdidmount
-
-			// const stateEvent = timelineEvents.find(event => event.type === eventType) as IRoomEvent;
-			// stateEvent.room_id = roomIds[0]; // need to fill in room_id property, why???
-
 			const content: CallEventContent_ = {
 				'm.intent': GroupCallIntent.Prompt,
 				'm.type': GroupCallType.Video,
 				'io.element.ptt': false,
-				// 'dataChannelsEnabled': true,
-				// 'dataChannelOptions': undefined,
 			};
 
 			const stateEvent: IRoomEvent = {
@@ -234,11 +172,7 @@ class WidgetDriver_ extends WidgetDriver {
 			};
 
 			stateEvents = [stateEvent];
-
-			// this.callId = stateEvent.state_key!;
-			// console.log('callId: ', this.callId);
 		} else if (eventType === CallEvents.GroupCallMemberPrefix) {
-			// sending only the call member events which match the callId
 			const timelineEvents = roomSummary.timelineEvents.slice(0).reverse();
 			stateEvents = timelineEvents.filter(event => {
 				const content = event.content as CallMemberEventContent_;
@@ -253,47 +187,10 @@ class WidgetDriver_ extends WidgetDriver {
 			}
 		}
 
-		console.log(stateEvents);
-
 		return Promise.resolve(stateEvents);
 	}
 
-	public readEventRelations(
-		eventId: string,
-		roomId?: string,
-		relationType?: string,
-		eventType?: string,
-		from?: string,
-		to?: string,
-		limit?: number,
-		direction?: 'f' | 'b'
-	): Promise<IReadEventRelationsResult> {
-		console.log('##############_readEventRelations');
-		console.log(eventId);
-		console.log(roomId);
-		console.log(limit);
-		console.log(relationType);
-		console.log(eventType);
-		console.log(from);
-		console.log(to);
-		console.log(direction);
-		return Promise.resolve({ chunk: [] });
-	}
-
-	public askOpenID(observer: unknown) {
-		console.log('##############_askOpenID');
-		console.log(observer);
-	}
-
-	public navigate(uri: string): Promise<void> {
-		console.log('##############_navigate');
-		console.log(uri);
-		return Promise.resolve();
-	}
-
 	public async *getTurnServers(): AsyncGenerator<ITurnServer> {
-		console.log('##############_getTurnServers');
-
 		const turnServer: ITurnServer = {
 			uris: ['stun:turn.matrix.org'],
 			username: '',
@@ -316,7 +213,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 	private widgetUrl = '';
 	private widgetApi?: ClientWidgetApi;
 	private widget!: Widget;
-	private widgetDriver!: WidgetDriver_;
+	private widgetDriver!: CallWidgetDriver;
 	private widgetIframe: React.RefObject<HTMLIFrameElement> = React.createRef();
 	private completeUrl = '';
 	private newMessageSubscription: number;
@@ -326,9 +223,6 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 	constructor(props: ElementCallProps) {
 		super(props);
 
-		console.log('---------------------CONSTRUCTOR');
-		console.log(props);
-
 		this.newMessageSubscription = DataStore.subscribe(this.newMessages, DataStore.MessageTrigger);
 		this.newCallEventSubscription = DataStore.subscribe(this.newCallEvents, DataStore.CallEventTrigger);
 	}
@@ -337,24 +231,16 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		super.componentDidMount();
 		RX.Modal.dismiss('dialog_menu_composer');
 
-		console.log('---------------------COMPONENTDIDMOUNT');
-
 		const msc3401Call = DataStore.getRoomSummary(this.props.roomId).msc3401Call;
-
-		console.log('msc3401Call: ', msc3401Call);
 
 		if (!msc3401Call || !this.isActiveCall(msc3401Call)) {
 			const content: CallEventContent_ = {
 				'm.intent': GroupCallIntent.Prompt,
 				'm.type': GroupCallType.Video,
 				'io.element.ptt': false,
-				// 'dataChannelsEnabled': true,
-				// 'dataChannelOptions': undefined,
 			};
 
 			this.callId = StringUtils.getRandomString(8);
-
-			console.log('callId: ', this.callId);
 
 			ApiClient.sendStateEvent(this.props.roomId, CallEvents.GroupCallPrefix, content, this.callId).catch(
 				_error => null
@@ -364,8 +250,8 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		}
 
 		const params = new URLSearchParams({
-			embed: 'true', // without this, element call starts in the lobby
-			preload: 'true', // what does this do?
+			embed: 'true',
+			preload: 'true',
 			hideHeader: 'true',
 			hideScreensharing: 'true',
 			userId: ApiClient.credentials.userIdFull,
@@ -376,21 +262,10 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 			lang: UiStore.getLanguage(),
 		});
 
-		// here we get the well-known based on the homeserver of the user
-		// wouldn't it be better to get the well-known based on the homeserver of the room?
-		// for example, alice is on matrix.org and bob is on mozilla.org
-		// they have a dm chat hosted on matrix.org (i.e. roomid is 12345xyz:matrix.org)
-		// the element call instance when any of them starts a call should probably be matrix.org
-		// instead of being mozilla.org if bob initiates the call
 		const wellKnown = await ApiClient.getWellKnown(ApiClient.credentials.homeServer).catch(_error => undefined);
 		const preferredDomain = wellKnown ? wellKnown['chat.quadrix.elementcall']?.preferredDomain : undefined;
 		const elementCallUrl = preferredDomain ? 'https://' + preferredDomain : ELEMENT_CALL_URL;
 
-		console.log(elementCallUrl);
-
-		// const url = new URL('https://call.al4.re');
-		// const url = new URL('https://call.element.io');
-		// const url = new URL('https://element-call.netlify.app/');
 		const url = new URL(elementCallUrl);
 		url.pathname = '/room';
 		url.hash = `#?${params.toString()}`;
@@ -404,7 +279,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		}
 
 		const callWidget: ICallWidget = {
-			id: 'quadrixelementcallwidget', // StringUtils.getRandomString(8),
+			id: 'quadrixelementcallwidget',
 			creatorUserId: ApiClient.credentials.userIdFull,
 			type: 'm.custom',
 			url: this.widgetUrl,
@@ -412,15 +287,12 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		};
 
 		this.widget = new Widget(callWidget);
-		this.widgetDriver = new WidgetDriver_(this.callId);
+		this.widgetDriver = new CallWidgetDriver(this.callId);
 		this.widgetApi = new ClientWidgetApi(this.widget, this.widgetIframe.current!, this.widgetDriver);
 
-		// what is this
 		this.completeUrl = this.widget?.getCompleteUrl({
 			widgetRoomId: this.props.roomId,
 			currentUserId: ApiClient.credentials.userIdFull,
-			// userDisplayName: ApiClient.credentials.userIdFull,
-			// clientId: APP_ID,
 		});
 
 		const parsedUrl = new URL(this.completeUrl);
@@ -430,13 +302,11 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 
 		this.setState({ parsedUrl: parsedUrl });
 
-		this.widgetApi.once('preparing', this.onPreparing);
 		this.widgetApi.once('ready', this.onReady);
 	}
 
 	public componentWillUnmount(): void {
 		super.componentWillUnmount();
-		console.log('---------------------COMPONENTWILLUNMOUNT');
 
 		DataStore.unsubscribe(this.newMessageSubscription);
 		DataStore.unsubscribe(this.newCallEventSubscription);
@@ -444,16 +314,12 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		this.widgetApi!.off(`action:${CallWidgetActions.HangupCall}`, this.onHangup);
 		this.widgetApi!.off(`action:${CallWidgetActions.TileLayout}`, this.onTileLayout);
 		this.widgetApi!.off(`action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`, this.onAlwaysOnScreen);
-		this.widgetApi!.off(`action:${CallWidgetActions.JoinCall}`, this.onJoin);
 		this.widgetApi!.removeAllListeners();
 		this.widgetApi!.stop();
 	}
 
 	private newMessages = () => {
-		console.log('---------------------NEWMESSAGES');
 		const newRoomEvents = DataStore.getNewRoomEvents(this.props.roomId);
-
-		console.log(newRoomEvents);
 
 		if (newRoomEvents.length === 0) {
 			return;
@@ -471,45 +337,21 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 				unsigned: {},
 			};
 
-			this.widgetApi!.feedEvent(event_, this.props.roomId)
-				.then(response => {
-					console.log('---------------------FEEDEVENTRESPONSE');
-					console.log(response);
-				})
-				.catch(error => {
-					console.log('---------------------FEEDEVENTERROR');
-					console.log(error);
-				});
+			this.widgetApi!.feedEvent(event_, this.props.roomId).catch(_error => null);
 		}
 	};
 
 	private newCallEvents = () => {
-
-		// do something
 		const callEvents = DataStore.getCallEvents();
-		console.log('---------------------NEWCALLEVENTS');
-		console.log(callEvents)
 
 		callEvents.map(event => {
-			console.log(event.content.conf_id)
-			console.log(this.callId)
 			if (event.content.conf_id === this.callId) {
-				this.widgetApi!.feedToDevice(event as IRoomEvent, false)
-				.then(response => {
-					console.log('---------------------FEEDEVENTRESPONSE');
-					console.log(response);
-				})
-				.catch(error => {
-					console.log('---------------------FEEDEVENTERROR');
-					console.log(error);
-				});
+				this.widgetApi!.feedToDevice(event as IRoomEvent, false).catch(_error => null);
 			}
-		})
-	}
+		});
+	};
 
 	private isActiveCall = (msc3401Call: Msc3401Call): boolean => {
-		console.log('---------------------ISACTIVECALL');
-
 		if (msc3401Call.callEventContent?.['m.terminated'] || !msc3401Call.participants) {
 			return false;
 		}
@@ -521,20 +363,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		return activeParticipants.length > 0;
 	};
 
-	private onPressCloseButton = () => {
-		RX.Modal.dismiss('element_call');
-	};
-
-	private onPreparing = () => {
-		console.log('---------------------ONPREPARING');
-		// not used
-	};
-
 	private onReady = async () => {
-		console.log('---------------------ONREADY');
-
-		// this.widgetApi?.updateVisibility(true).catch(_error => null);
-		/* 
 		const devices = await navigator.mediaDevices.enumerateDevices();
 
 		const devices_: { [kind: MediaDeviceKind | string]: MediaDeviceInfo[] } = {
@@ -544,64 +373,46 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		};
 
 		devices.forEach(device => devices_[device.kind].push(device));
- */
+
 		await this.widgetApi!.transport.send(CallWidgetActions.JoinCall, {
-			audioInput: null, // 'default', // devices_[DeviceKind.audioInput][0].label, // null for starting muted
-			videoInput: null, // 'default', // devices_[DeviceKind.videoInput][0].label, // null for starting muted
+			audioInput: 'default', // devices_[DeviceKind.audioInput][0].label, // null for starting muted
+			videoInput: 'default', // devices_[DeviceKind.videoInput][0].label, // null for starting muted
 		});
 
 		this.widgetApi!.on(`action:${CallWidgetActions.HangupCall}`, this.onHangup);
 		this.widgetApi!.on(`action:${CallWidgetActions.TileLayout}`, this.onTileLayout);
 		this.widgetApi!.on(`action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`, this.onAlwaysOnScreen);
-		this.widgetApi!.on(`action:${CallWidgetActions.JoinCall}`, this.onJoin);
-
-		// this.widgetApi!.on(`action:io.element.view_room`, this.onViewRoom);
-
-		// this.widgetApi!.on('event', this.onEvent);
-
-		this.widgetApi!.on('toDeviceEvent', this.onToDeviceEvent);
-	};
-
-	private onToDeviceEvent = (ev: CustomEvent<IWidgetApiRequest>) => {
-		console.log('++++++++++++++++++++++ONTODEVICEEVENT');
-		console.log(ev);
-	};
-
-	private onViewRoom = (ev: CustomEvent<IWidgetApiRequest>) => {
-		console.log('++++++++++++++++++++++ONVIEWROOM');
-		console.log(ev);
-	};
-
-	private onEvent = (ev: CustomEvent<IWidgetApiRequest>) => {
-		console.log('++++++++++++++++++++++ONEVENT');
-		console.log(ev);
-	};
-
-	private onJoin = (ev: CustomEvent<IWidgetApiRequest>) => {
-		ev.preventDefault();
-		console.log(ev);
-		console.log('++++++++++++++++++++++ONJOIN');
-		// await this.widgetApi!.transport.reply(ev.detail, {});
 	};
 
 	private onTileLayout = (ev: CustomEvent<IWidgetApiRequest>) => {
 		ev.preventDefault();
-		console.log('++++++++++++++++++++++ONTILELAYOUT');
 		this.widgetApi!.transport.reply(ev.detail, {});
 	};
 
 	private onAlwaysOnScreen = (ev: CustomEvent<IStickyActionRequest>) => {
 		ev.preventDefault();
-		console.log('++++++++++++++++++++++ONALWAYSONSCREEN');
 		this.widgetApi!.transport.reply(ev.detail, {});
 	};
 
-	private onHangup = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
+	private onHangup = (ev: CustomEvent<IWidgetApiRequest>): void => {
 		ev.preventDefault();
-		console.log('++++++++++++++++++++++ONHANGUP');
-		// console.log(this.isActiveCall())
 
-		// if last user, send a state event to end the call
+		this.TerminateCall();
+
+		this.widgetApi!.transport.reply(ev.detail, {});
+
+		RX.Modal.dismiss('element_call');
+	};
+
+	private onPressCloseButton = async () => {
+		await this.widgetApi!.transport.send('im.vector.hangup', {});
+
+		this.TerminateCall();
+
+		RX.Modal.dismiss('element_call');
+	};
+
+	private TerminateCall = () => {
 		const roomSummary = DataStore.getRoomSummary(this.props.roomId);
 		const participants = roomSummary.msc3401Call?.participants;
 
@@ -615,52 +426,35 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 					'm.type': GroupCallType.Video,
 					'io.element.ptt': false,
 					'm.terminated': 'call_ended',
-					// 'dataChannelsEnabled': true,
-					// 'dataChannelOptions': undefined,
 				};
 
-				const response = await ApiClient.sendStateEvent(
+				ApiClient.sendStateEvent(
 					this.props.roomId,
 					CallEvents.GroupCallPrefix,
 					content,
 					roomSummary.msc3401Call.callId
 				).catch(_error => null);
-
-				console.log('****************SENDCALLEVENTRESPONSE');
-				console.log(response?.event_id);
 			}
 		}
-
-		await this.widgetApi!.transport.reply(ev.detail, {});
-
-		RX.Modal.dismiss('element_call');
-	};
-
-	private onLoad = () => {
-		// not used
 	};
 
 	public render(): JSX.Element | null {
 		const widgetUrl = this.state?.parsedUrl?.toString().replace(/%24/g, '$');
 
-		const iframeRatio = 2; // 1;
-		const height = 260; // 220;
-		const width = height * iframeRatio;
-
 		return (
 			<RX.View style={styles.modalView}>
-				<RX.View style={{ margin: 20 }}>
-					<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-						<iframe
-							style={{ height: height, width: width, borderWidth: 0, borderRadius: BORDER_RADIUS }}
-							// title={'Video Call'}
-							ref={this.widgetIframe}
-							// sandbox={'allow-forms allow-scripts allow-same-origin'}
-							src={widgetUrl}
-							onLoad={this.onLoad}
-							allow={'camera;microphone'}
-						/>
-					</div>
+				<RX.View style={{ flex: 1, margin: 48 }}>
+					<iframe
+						style={{
+							height: '100%',
+							width: '100%',
+							borderWidth: 0,
+							borderRadius: BORDER_RADIUS,
+						}}
+						ref={this.widgetIframe}
+						src={widgetUrl}
+						allow={'camera;microphone'}
+					/>
 					<RX.View
 						style={styles.closeButton}
 						onPress={this.onPressCloseButton}
