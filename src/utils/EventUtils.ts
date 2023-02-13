@@ -6,6 +6,9 @@ import {
 	hasInvitedToRoom,
 	hasRenamedTheRoom,
 	hasChangedAvatar,
+	lauchedVideoConference,
+	leftVideoConference,
+	joinedVideoConference,
 } from '../translations';
 import UiStore from '../stores/UiStore';
 import {
@@ -144,13 +147,13 @@ class EventUtils {
 		} else if (event.type === 'm.room.avatar') {
 			systemMessage = event.senderId + hasChangedAvatar[language + '_' + roomType.substr(0, 2)];
 		} else if (event.type === 'org.matrix.msc3401.call') {
-			systemMessage = event.senderId + ' has launched a videoconference';
+			systemMessage = event.senderId + ' ' + lauchedVideoConference[language];
 		} else if (event.type === 'org.matrix.msc3401.call.member') {
 			const content = event.content as CallMemberEventContent_;
 			if (content['m.calls'].length === 0) {
-				systemMessage = event.senderId + ' has left the videoconference';
+				systemMessage = event.senderId + ' ' + leftVideoConference[language];
 			} else {
-				systemMessage = event.senderId + ' has joined the videoconference';
+				systemMessage = event.senderId + ' ' + joinedVideoConference[language];
 			}
 		}
 

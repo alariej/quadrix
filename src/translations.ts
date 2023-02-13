@@ -1235,6 +1235,27 @@ export const jitsiStartedShort: Translation = {
 	es: 'Videoconferencia iniciada...',
 };
 
+export const lauchedVideoConference: Translation = {
+	en: 'has launched a videoconference',
+	de: 'hat eine Videokonferenz gestartet',
+	fr: 'a lancé une vidéoconférence',
+	es: 'ha iniciado una videoconferencia',
+};
+
+export const joinedVideoConference: Translation = {
+	en: 'has joined the videoconference',
+	de: 'ist der Videokonferenz beigetreten',
+	fr: "s'est joint à la vidéoconférence",
+	es: 'se ha conectado a la videoconferencia',
+};
+
+export const leftVideoConference: Translation = {
+	en: 'has left the videoconference',
+	de: 'hat die Videokonferenz verlassen',
+	fr: 'a quitté la vidéoconférence',
+	es: 'ha dejado la videoconferencia',
+};
+
 export const youHaveLeftRoom1: Translation = {
 	en_di: 'You have now left the private conversation with ',
 	en_gr: 'You have now left the group ',
