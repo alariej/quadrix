@@ -34,15 +34,6 @@ const styles = {
 		justifyContent: 'flex-end',
 		backgroundColor: OPAQUE_BACKGROUND,
 	}),
-	closeButton: RX.Styles.createButtonStyle({
-		position: 'absolute',
-		width: 20,
-		height: 20,
-		bottom: 0,
-		right: 0,
-		backgroundColor: 'red',
-		cursor: 'pointer',
-	}),
 };
 
 enum CallWidgetActions {
