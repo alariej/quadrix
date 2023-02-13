@@ -522,9 +522,6 @@ class DataStore extends StoreBase {
 			return;
 		}
 
-		console.log('=============DATASTORE HANDLETODEVICE');
-		console.log(syncData);
-
 		syncData.to_device.events.map(event => {
 			switch (event.type) {
 				case 'm.call.invite':
