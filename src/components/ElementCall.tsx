@@ -404,14 +404,6 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		RX.Modal.dismiss('element_call');
 	};
 
-	private onPressCloseButton = async () => {
-		await this.widgetApi!.transport.send('im.vector.hangup', {});
-
-		this.TerminateCall();
-
-		RX.Modal.dismiss('element_call');
-	};
-
 	private TerminateCall = () => {
 		const roomSummary = DataStore.getRoomSummary(this.props.roomId);
 		const participants = roomSummary.msc3401Call?.participants;
@@ -454,12 +446,6 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 						ref={this.widgetIframe}
 						src={widgetUrl}
 						allow={'camera;microphone'}
-					/>
-					<RX.View
-						style={styles.closeButton}
-						onPress={this.onPressCloseButton}
-						disableTouchOpacityAnimation={true}
-						activeOpacity={1}
 					/>
 				</RX.View>
 			</RX.View>
