@@ -375,8 +375,8 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		devices.forEach(device => devices_[device.kind].push(device));
 
 		await this.widgetApi!.transport.send(CallWidgetActions.JoinCall, {
-			audioInput: 'default', // devices_[DeviceKind.audioInput][0].label, // null for starting muted
-			videoInput: 'default', // devices_[DeviceKind.videoInput][0].label, // null for starting muted
+			audioInput: 'Default', // devices_[DeviceKind.audioInput][0].label, // null for starting muted
+			videoInput: 'Default', // devices_[DeviceKind.videoInput][0].label, // null for starting muted
 		});
 
 		this.widgetApi!.on(`action:${CallWidgetActions.HangupCall}`, this.onHangup);
