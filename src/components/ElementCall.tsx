@@ -1,6 +1,16 @@
 import React from 'react';
 import RX from 'reactxp';
-import { BORDER_RADIUS, OPAQUE_BACKGROUND } from '../ui';
+import {
+	BORDER_RADIUS,
+	BUTTON_FILL,
+	BUTTON_JITSI_BACKGROUND,
+	BUTTON_ROUND_WIDTH,
+	JITSI_BORDER,
+	OPAQUE_BACKGROUND,
+	PAGE_MARGIN,
+	SPACING,
+	TRANSPARENT_BACKGROUND,
+} from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import {
 	WidgetDriver,
@@ -26,13 +36,54 @@ import UiStore from '../stores/UiStore';
 import { ELEMENT_CALL_URL } from '../appconfig';
 import { ComponentBase } from 'resub';
 import { Msc3401Call } from '../models/Msc3401Call';
+import IconSvg, { SvgFile } from './IconSvg';
 
 const styles = {
-	modalView: RX.Styles.createViewStyle({
+	container: RX.Styles.createViewStyle({
 		flex: 1,
 		alignSelf: 'stretch',
-		justifyContent: 'flex-end',
+		justifyContent: 'center',
 		backgroundColor: OPAQUE_BACKGROUND,
+	}),
+	containerMinimized: RX.Styles.createViewStyle({
+		position: 'absolute',
+		bottom: PAGE_MARGIN + SPACING,
+		right: PAGE_MARGIN + SPACING,
+		width: 80,
+		height: 100,
+		backgroundColor: TRANSPARENT_BACKGROUND,
+		alignItems: 'center',
+		justifyContent: 'center',
+		borderRadius: BORDER_RADIUS,
+		borderWidth: 1,
+		borderColor: JITSI_BORDER,
+		overflow: 'hidden',
+	}),
+	callContainer: RX.Styles.createViewStyle({
+		flex: 1,
+		margin: 48,
+	}),
+	callContainerMinimized: RX.Styles.createViewStyle({
+		width: 80,
+		height: 100,
+	}),
+	buttonMinimize: RX.Styles.createViewStyle({
+		position: 'absolute',
+		left: 2 * SPACING,
+		top: 2 * SPACING,
+		width: BUTTON_ROUND_WIDTH,
+		height: BUTTON_ROUND_WIDTH,
+	}),
+	buttonMaximize: RX.Styles.createViewStyle({
+		position: 'absolute',
+		width: 80,
+		height: 100,
+		backgroundColor: BUTTON_JITSI_BACKGROUND,
+	}),
+	containerIcon: RX.Styles.createViewStyle({
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
 	}),
 };
 
@@ -197,7 +248,8 @@ interface ElementCallProps {
 }
 
 interface ElementCallState {
-	parsedUrl: URL;
+	parsedUrl: URL | undefined;
+	isMinimized: boolean;
 }
 
 export default class ElementCall extends ComponentBase<ElementCallProps, ElementCallState> {
@@ -421,12 +473,52 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		}
 	};
 
+	private setMinimized = (isMinimized: boolean) => {
+		this.setState({ isMinimized: isMinimized });
+	};
+
 	public render(): JSX.Element | null {
+		let buttonMinimize;
+		let buttonMaximize;
+
+		if (this.state.isMinimized) {
+			buttonMinimize = null;
+
+			buttonMaximize = (
+				<RX.Button
+					style={styles.buttonMaximize}
+					onPress={() => this.setMinimized(false)}
+					disableTouchOpacityAnimation={true}
+					activeOpacity={1}
+				></RX.Button>
+			);
+		} else {
+			buttonMaximize = null;
+
+			buttonMinimize = (
+				<RX.Button
+					style={styles.buttonMinimize}
+					onPress={() => this.setMinimized(true)}
+					disableTouchOpacityAnimation={true}
+					activeOpacity={1}
+				>
+					<RX.View style={styles.containerIcon}>
+						<IconSvg
+							source={require('../resources/svg/RI_arrowdown.json') as SvgFile}
+							fillColor={BUTTON_FILL}
+							height={BUTTON_ROUND_WIDTH}
+							width={BUTTON_ROUND_WIDTH}
+						/>
+					</RX.View>
+				</RX.Button>
+			);
+		}
+
 		const widgetUrl = this.state?.parsedUrl?.toString().replace(/%24/g, '$');
 
 		return (
-			<RX.View style={styles.modalView}>
-				<RX.View style={{ flex: 1, margin: 48 }}>
+			<RX.View style={this.state.isMinimized ? styles.containerMinimized : styles.container}>
+				<RX.View style={this.state.isMinimized ? styles.callContainerMinimized : styles.callContainer}>
 					<iframe
 						style={{
 							height: '100%',
@@ -438,7 +530,9 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 						src={widgetUrl}
 						allow={'camera;microphone'}
 					/>
+					{buttonMinimize}
 				</RX.View>
+				{buttonMaximize}
 			</RX.View>
 		);
 	}
