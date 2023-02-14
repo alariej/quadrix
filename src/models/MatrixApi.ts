@@ -676,3 +676,70 @@ export interface IDownloadKeyResult {
 	self_signing_keys?: { [userId: string]: SigningKeys };
 	user_signing_keys?: { [userId: string]: SigningKeys };
 }
+
+export interface IOneTimeKey {
+	key: string;
+	fallback?: boolean;
+	signatures?: ISignatures;
+}
+
+export interface IUploadKeysRequest {
+	device_keys?: Required<IDeviceKeys>;
+	one_time_keys?: Record<string, IOneTimeKey>;
+	'org.matrix.msc2732.fallback_keys'?: Record<string, IOneTimeKey>;
+}
+
+export interface IKeysUploadResponse {
+	one_time_key_counts: {
+		[algorithm: string]: number;
+	};
+}
+
+export interface ISignedKey {
+	keys: Record<string, string>;
+	signatures: ISignatures;
+	user_id: string;
+	algorithms: string[];
+	device_id: string;
+}
+
+export type KeySignatures = Record<string, Record<string, ICrossSigningKey | ISignedKey>>;
+
+export interface ICrossSigningKey {
+	keys: { [algorithm: string]: string };
+	signatures?: ISignatures;
+	usage: string[];
+	user_id: string;
+}
+
+export interface IUploadKeySignaturesResponse {
+	failures: Record<
+		string,
+		Record<
+			string,
+			{
+				errcode: string;
+				error: string;
+			}
+		>
+	>;
+}
+
+export interface IClaimOTKsResult {
+	failures: { [serverName: string]: object };
+	one_time_keys: {
+		[userId: string]: {
+			[deviceId: string]: {
+				[keyId: string]: {
+					key: string;
+					signatures: ISignatures;
+				};
+			};
+		};
+	};
+}
+
+export interface IClaimKeysRequest {
+	one_time_keys: { [userId: string]: { [deviceId: string]: string } };
+	timeout?: number;
+}

@@ -25,6 +25,12 @@ import {
 	CallMemberEventContent_,
 	IQueryKeysRequest,
 	IDownloadKeyResult,
+	IUploadKeysRequest,
+	IKeysUploadResponse,
+	KeySignatures,
+	IUploadKeySignaturesResponse,
+	IClaimOTKsResult,
+	IClaimKeysRequest,
 } from '../models/MatrixApi';
 
 export default class RestClient extends GenericRestClient {
@@ -133,6 +139,18 @@ export default class RestClient extends GenericRestClient {
 		content.device_keys[userId] = [];
 
 		return this.performApiPost<IDownloadKeyResult>('keys/query', content);
+	}
+
+	public uploadKeys(content: IUploadKeysRequest, _opts?: void): Promise<IKeysUploadResponse> {
+		return this.performApiPost<IKeysUploadResponse>('keys/upload', content);
+	}
+
+	public uploadKeySignatures(content: KeySignatures): Promise<IUploadKeySignaturesResponse> {
+		return this.performApiPost<IUploadKeySignaturesResponse>('keys/signatures/upload', content);
+	}
+
+	public claimKeys(content: IClaimKeysRequest): Promise<IClaimOTKsResult> {
+		return this.performApiPost<IClaimOTKsResult>('keys/claim', content);
 	}
 
 	public sendStateEvent(

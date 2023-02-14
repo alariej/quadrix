@@ -29,6 +29,12 @@ import {
 	CallEventContent_,
 	CallMemberEventContent_,
 	IDownloadKeyResult,
+	IClaimOTKsResult,
+	IClaimKeysRequest,
+	IUploadKeysRequest,
+	IKeysUploadResponse,
+	KeySignatures,
+	IUploadKeySignaturesResponse,
 } from '../models/MatrixApi';
 import { RoomSummary } from '../models/RoomSummary';
 import EventUtils from '../utils/EventUtils';
@@ -520,6 +526,40 @@ class ApiClient {
 		const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
 
 		return restClient.queryKeys(userId);
+	}
+
+	public uploadKeys(content: IUploadKeysRequest, _opts?: void): Promise<IKeysUploadResponse> {
+		const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
+
+		return restClient.uploadKeys(content);
+	}
+
+	public uploadKeySignatures(content: KeySignatures): Promise<IUploadKeySignaturesResponse> {
+		const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
+
+		return restClient.uploadKeySignatures(content);
+	}
+
+	public claimKeys(devices: [string, string][], keyAlgorithm?: string, timeout?: number): Promise<IClaimOTKsResult> {
+		const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
+
+		const queries: Record<string, Record<string, string>> = {};
+
+		if (!keyAlgorithm) {
+			keyAlgorithm = 'signed_curve25519';
+		}
+
+		for (const [userId, deviceId] of devices) {
+			const query = queries[userId] || {};
+			queries[userId] = query;
+			query[deviceId] = keyAlgorithm;
+		}
+		const content: IClaimKeysRequest = { one_time_keys: queries };
+		if (timeout) {
+			content.timeout = timeout;
+		}
+
+		return restClient.claimKeys(content);
 	}
 
 	public getPreviewUrl(url: string): Promise<PreviewUrl_> {
