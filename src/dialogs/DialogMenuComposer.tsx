@@ -210,16 +210,15 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 			<AnimatedButton
 				buttonStyle={styles.buttonDialog}
 				iconSource={require('../resources/svg/RI_videoconf.json') as SvgFile}
-				// iconStyle={{ opacity: videoCallButtonDisabled ? 0.3 : 1 }}
+				iconStyle={{ opacity: videoCallButtonDisabled ? 0.3 : 1 }}
 				iconFillColor={ICON_INFO_FILL}
 				iconHeight={ICON_INFO_SIZE}
 				iconWidth={ICON_INFO_SIZE}
 				animatedColor={LIGHT_BACKGROUND}
 				onPress={this.onPressElementCall}
-				// disabled={videoCallButtonDisabled}
-				text={'Start Element Call'}
-				// textStyle={[styles.buttonText, { opacity: videoCallButtonDisabled ? 0.3 : 1 }]}
-				textStyle={styles.buttonText}
+				disabled={videoCallButtonDisabled}
+				text={videoconference[this.language]}
+				textStyle={[styles.buttonText, { opacity: videoCallButtonDisabled ? 0.3 : 1 }]}
 			/>
 		);
 
