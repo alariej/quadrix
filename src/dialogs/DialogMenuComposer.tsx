@@ -24,7 +24,7 @@ import { SvgFile } from '../components/IconSvg';
 import { RoomType } from '../models/MatrixApi';
 import AnimatedButton from '../components/AnimatedButton';
 import { LayoutInfo } from 'reactxp/dist/common/Types';
-import ElementCall from '../components/ElementCall';
+import ElementCall from '../modules/ElementCall';
 
 const styles = {
 	modalScreen: RX.Styles.createViewStyle({

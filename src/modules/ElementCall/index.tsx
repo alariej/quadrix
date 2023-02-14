@@ -10,8 +10,8 @@ import {
 	PAGE_MARGIN,
 	SPACING,
 	TRANSPARENT_BACKGROUND,
-} from '../ui';
-import ApiClient from '../matrix/ApiClient';
+} from '../../ui';
+import ApiClient from '../../matrix/ApiClient';
 import {
 	WidgetDriver,
 	ClientWidgetApi,
@@ -22,8 +22,8 @@ import {
 	IRoomEvent,
 	IWidgetApiRequestData,
 } from 'matrix-widget-api';
-import StringUtils from '../utils/StringUtils';
-import DataStore from '../stores/DataStore';
+import StringUtils from '../../utils/StringUtils';
+import DataStore from '../../stores/DataStore';
 import {
 	GroupCallIntent,
 	GroupCallType,
@@ -31,12 +31,12 @@ import {
 	ClientEventType,
 	StateEventType,
 	CallMemberEventContent_,
-} from '../models/MatrixApi';
-import UiStore from '../stores/UiStore';
-import { ELEMENT_CALL_URL } from '../appconfig';
+} from '../../models/MatrixApi';
+import UiStore from '../../stores/UiStore';
+import { ELEMENT_CALL_URL } from '../../appconfig';
 import { ComponentBase } from 'resub';
-import { Msc3401Call } from '../models/Msc3401Call';
-import IconSvg, { SvgFile } from './IconSvg';
+import { Msc3401Call } from '../../models/Msc3401Call';
+import IconSvg, { SvgFile } from '../../components/IconSvg';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -504,7 +504,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 				>
 					<RX.View style={styles.containerIcon}>
 						<IconSvg
-							source={require('../resources/svg/RI_arrowdown.json') as SvgFile}
+							source={require('../../resources/svg/RI_arrowdown.json') as SvgFile}
 							fillColor={BUTTON_FILL}
 							height={BUTTON_ROUND_WIDTH}
 							width={BUTTON_ROUND_WIDTH}
