@@ -514,7 +514,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 			);
 		}
 
-		const widgetUrl = this.state?.parsedUrl?.toString().replace(/%24/g, '$');
+		const iFrameSrc = this.state?.parsedUrl?.toString().replace(/%24/g, '$');
 
 		return (
 			<RX.View style={this.state.isMinimized ? styles.containerMinimized : styles.container}>
@@ -527,7 +527,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 							borderRadius: BORDER_RADIUS,
 						}}
 						ref={this.widgetIframe}
-						src={widgetUrl}
+						src={iFrameSrc}
 						allow={'camera;microphone'}
 					/>
 					{buttonMinimize}
