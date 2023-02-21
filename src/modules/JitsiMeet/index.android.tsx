@@ -121,9 +121,10 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                 <head>
                     <meta charset="utf-8">
                     <meta http-equiv="content-type" content="text/html;charset=utf-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=${this.scale}, maximum-scale=${
-			this.scale
-		}">
+                    <meta
+						name="viewport"
+						content="width=device-width;initial-scale=${this.scale};maximum-scale=${this.scale}"
+					>
                 </head>
                 <body style="height: 100%; width: 100%; display: flex; justify-content: center; align-items: center">
 
@@ -223,7 +224,7 @@ export default class JitsiMeet extends RX.Component<JitsiMeetProps, JitsiMeetSta
                     </script>
                 </body>
             </html>
-            `;
+        `;
 
 		let buttonMinimize;
 		let buttonMaximize;
