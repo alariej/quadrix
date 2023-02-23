@@ -150,8 +150,12 @@ class CallWidgetDriver extends WidgetDriver {
 		stateKey: string,
 		roomId: string
 	): Promise<ISendEventDetails> {
-		type type_ = CallMemberEventContent_;
-		const response = await ApiClient.sendStateEvent(roomId, eventType, content as type_, stateKey);
+		const response = await ApiClient.sendStateEvent(
+			roomId,
+			eventType,
+			content as CallMemberEventContent_,
+			stateKey
+		);
 
 		return Promise.resolve({ eventId: response.event_id, roomId: roomId });
 	}
@@ -524,7 +528,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 							height: '100%',
 							width: '100%',
 							borderWidth: 0,
-							borderRadius: BORDER_RADIUS,
+							borderRadius: 0,
 						}}
 						ref={this.widgetIframe}
 						src={iFrameSrc}
