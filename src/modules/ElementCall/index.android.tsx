@@ -12,46 +12,16 @@ import {
 	TRANSPARENT_BACKGROUND,
 } from '../../ui';
 import ApiClient from '../../matrix/ApiClient';
-import {
-	WidgetDriver,
-	ClientWidgetApi,
-	Widget,
-	IWidget,
-	Capability,
-	IWidgetApiRequest,
-	IRoomEvent,
-	IWidgetApiRequestData,
-} from 'matrix-widget-api';
 import StringUtils from '../../utils/StringUtils';
 import DataStore from '../../stores/DataStore';
-import {
-	GroupCallIntent,
-	GroupCallType,
-	CallEventContent_,
-	ClientEventType,
-	StateEventType,
-	CallMemberEventContent_,
-} from '../../models/MatrixApi';
+import { GroupCallIntent, GroupCallType, CallEventContent_, CallMemberEventContent_ } from '../../models/MatrixApi';
 import UiStore from '../../stores/UiStore';
-import { ELEMENT_CALL_URL } from '../../appconfig';
+import { APP_WEBSITE_URL } from '../../appconfig';
 import { ComponentBase } from 'resub';
 import { Msc3401Call } from '../../models/Msc3401Call';
 import IconSvg, { SvgFile } from '../../components/IconSvg';
-import WebView, { WebViewProps } from 'react-native-webview';
-// import { EventRegister } from 'react-native-event-listeners';
-import { EventEmitter } from 'events';
+import WebView from 'react-native-webview';
 import { WebViewMessageEvent } from 'react-native-webview/lib/WebViewTypes';
-// import { URL as URL_ } from 'whatwg-url';
-// import { URL as URL_, URLSearchParams } from 'react-native-url-polyfill';
-
-// see https://github.com/facebook/react-native/issues/14796
-// import { Buffer } from 'buffer';
-// global.Buffer = Buffer;
-
-// see https://github.com/facebook/react-native/issues/16434
-// import { URL as URL_, URLSearchParams as URLSearchParams_ } from 'whatwg-url';
-// global.URL = URL_ as unknown as typeof global.URL;
-// global.URLSearchParams = URLSearchParams_ as unknown as typeof global.URLSearchParams;
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -76,7 +46,8 @@ const styles = {
 	}),
 	callContainer: RX.Styles.createViewStyle({
 		flex: 1,
-		margin: 48,
+		margin: 8,
+		backgroundColor: TRANSPARENT_BACKGROUND,
 	}),
 	callContainerMinimized: RX.Styles.createViewStyle({
 		width: 80,
@@ -102,219 +73,29 @@ const styles = {
 	}),
 };
 
-enum CallWidgetActions {
-	JoinCall = 'io.element.join',
-	HangupCall = 'im.vector.hangup',
-	TileLayout = 'io.element.tile_layout',
-	SpotlightLayout = 'io.element.spotlight_layout',
-	ScreenshareRequest = 'io.element.screenshare_request',
-	ScreenshareStart = 'io.element.screenshare_start',
-	ScreenshareStop = 'io.element.screenshare_stop',
-}
-
-enum WidgetApiFromWidgetAction {
-	UpdateAlwaysOnScreen = 'set_always_on_screen',
-}
-
-enum DeviceKind {
-	audioOutput = 'audiooutput',
-	audioInput = 'audioinput',
-	videoInput = 'videoinput',
-}
-
 enum CallEvents {
 	GroupCallPrefix = 'org.matrix.msc3401.call',
 	GroupCallMemberPrefix = 'org.matrix.msc3401.call.member',
 }
 
-interface ISendEventDetails {
-	roomId: string;
-	eventId: string;
+interface IRoomEvent {
+	type: string;
+	sender: string;
+	event_id: string;
+	room_id: string;
+	state_key?: string;
+	origin_server_ts: number;
+	content: unknown;
+	unsigned: unknown;
 }
 
-interface ITurnServer {
-	uris: string[];
-	username: string;
-	password: string;
-}
-
-interface IStickyActionRequestData extends IWidgetApiRequestData {
-	value: boolean;
-}
-
-interface IStickyActionRequest extends IWidgetApiRequest {
-	action: WidgetApiFromWidgetAction.UpdateAlwaysOnScreen;
-	data: IStickyActionRequestData;
-}
-
-class CallWidgetDriver extends WidgetDriver {
-	private callId = '';
-
-	constructor(callId: string) {
-		super();
-		this.callId = callId;
-	}
-
-	public validateCapabilities(requested: Set<Capability>): Promise<Set<Capability>> {
-		console.log('-----------------------VALIDATECAPABILITIES');
-		return Promise.resolve(requested);
-	}
-
-	public async sendEvent(
-		eventType: StateEventType,
-		content: unknown,
-		stateKey: string,
-		roomId: string
-	): Promise<ISendEventDetails> {
-		type type_ = CallMemberEventContent_;
-		const response = await ApiClient.sendStateEvent(roomId, eventType, content as type_, stateKey);
-
-		return Promise.resolve({ eventId: response.event_id, roomId: roomId });
-	}
-
-	public sendToDevice(
-		eventType: string,
-		_encrypted: boolean,
-		contentMap: { [userId: string]: { [deviceId: string]: object } }
-	): Promise<void> {
-		const transactionId = StringUtils.getRandomString(8);
-		ApiClient.sendToDevice(eventType, transactionId, contentMap).catch(_error => null);
-
-		return Promise.resolve();
-	}
-
-	public readStateEvents(
-		eventType: ClientEventType,
-		_stateKey: string | undefined,
-		_limit: number,
-		roomIds: string[]
-	): Promise<IRoomEvent[]> {
-		const roomSummary = DataStore.getRoomSummary(roomIds[0]);
-
-		let stateEvents: IRoomEvent[] = [];
-		if (eventType === 'm.room.member') {
-			Object.values(roomSummary.members).map(member => {
-				if (member.membership === 'join') {
-					const memberEvent: IRoomEvent = {
-						event_id: StringUtils.getRandomString(8),
-						origin_server_ts: Date.now(),
-						room_id: roomIds[0],
-						sender: member.id,
-						state_key: member.id,
-						type: 'm.room.member',
-						content: {
-							displayname: member.id,
-							membership: 'join',
-						},
-						unsigned: {},
-					};
-					stateEvents.push(memberEvent);
-				}
-			});
-		} else if (eventType === CallEvents.GroupCallPrefix) {
-			const content: CallEventContent_ = {
-				'm.intent': GroupCallIntent.Prompt,
-				'm.type': GroupCallType.Video,
-				'io.element.ptt': false,
-			};
-
-			const stateEvent: IRoomEvent = {
-				type: eventType,
-				sender: ApiClient.credentials.userIdFull,
-				event_id: StringUtils.getRandomString(8),
-				room_id: roomIds[0],
-				state_key: this.callId,
-				origin_server_ts: Date.now(),
-				content: content,
-				unsigned: {},
-			};
-
-			stateEvents = [stateEvent];
-		} else if (eventType === CallEvents.GroupCallMemberPrefix) {
-			const timelineEvents = roomSummary.timelineEvents.slice(0).reverse();
-			stateEvents = timelineEvents.filter(event => {
-				const content = event.content as CallMemberEventContent_;
-				return (
-					event.type === eventType &&
-					content['m.calls'][0] &&
-					content['m.calls'][0]['m.call_id'] === this.callId
-				);
-			}) as IRoomEvent[];
-			for (let i = 0; i < stateEvents.length; i++) {
-				stateEvents[i].room_id = roomIds[0];
-			}
-		}
-
-		return Promise.resolve(stateEvents);
-	}
-
-	public async *getTurnServers(): AsyncGenerator<ITurnServer> {
-		const turnServer: ITurnServer = {
-			uris: ['stun:turn.matrix.org'],
-			username: '',
-			password: '',
-		};
-
-		yield await Promise.resolve(turnServer);
-	}
-}
-
-class WebView_ extends React.Component<WebViewProps> {
-	public contentWindow: WebView_;
-	// public listener!: string | boolean;
-	private eventEmitter: EventEmitter;
-	private webView: WebView | null;
-
-	constructor(props: WebViewProps) {
-		super(props);
-
-		this.contentWindow = this;
-		this.eventEmitter = new EventEmitter();
-		this.webView = null;
-	}
-
-	public componentDidMount(): void {
-		// do something
-	}
-
-	componentWillUnmount() {
-		// if (this.listener) {
-		// EventRegister.removeEventListener(this.listener as string)
-		// }
-		this.eventEmitter.removeAllListeners();
-	}
-
-	public addEventListener = (type: string, callback: () => void, _options?: boolean | AddEventListenerOptions) => {
-		// this.listener = EventRegister.addEventListener(type, callback);
-
-		console.log('---------------------IFRAME ADDEVENTLISTENER');
-		console.log(type);
-
-		this.eventEmitter.addListener(type, callback);
-	};
-
-	public postMessage = (message: string, targetOrigin?: string) => {
-		console.log('---------------------POSTMESSAGE');
-		console.log(message);
-		console.log(targetOrigin);
-
-		const jscode = `
-			window.ReactNativeWebView.postMessage("message", ${message});
-			true;
-		`;
-		this.webView!.injectJavaScript(jscode);
-	};
-
-	public render(): JSX.Element | null {
-		return (
-			<WebView
-				{...this.props}
-				ref={ref => {
-					this.webView = ref;
-				}}
-			/>
-		);
-	}
+interface ElementCallMessageEvent {
+	type: string;
+	eventType?: string;
+	content?: CallMemberEventContent_;
+	contentMap?: { [userId: string]: { [deviceId: string]: object } };
+	stateKey?: string;
+	roomId?: string;
 }
 
 interface ElementCallProps {
@@ -322,50 +103,59 @@ interface ElementCallProps {
 }
 
 interface ElementCallState {
-	parsedUrl: URL | undefined;
 	isMinimized: boolean;
 }
 
 export default class ElementCall extends ComponentBase<ElementCallProps, ElementCallState> {
-	private widgetUrl = '';
-	private widgetApi?: ClientWidgetApi;
-	private widget!: Widget;
-	private widgetDriver!: CallWidgetDriver;
-	// private widgetIframe: React.RefObject<HTMLIFrameElement> = React.createRef();
-	// private widgetIframe: React.RefObject<WebView> = React.createRef();
-	private widgetIframe!: WebView_ | null;
-	// private webView_!: WebView_ | null;
-	private completeUrl = '';
 	private newMessageSubscription: number;
 	private newCallEventSubscription: number;
 	private callId = '';
+	private elementCallUrl = 'https://call.al4.re';
+	private baseUrl = 'https://' + ApiClient.credentials.homeServer;
+	private widgetId = 'quadrixelementcallwidget';
+	private webviewHtml = '';
+	private webView!: WebView | null;
+	private viewportScale = 1;
 
 	constructor(props: ElementCallProps) {
 		super(props);
 
-		console.log('---------------------CONSTRUCTOR');
-
 		this.newMessageSubscription = DataStore.subscribe(this.newMessages, DataStore.MessageTrigger);
 		this.newCallEventSubscription = DataStore.subscribe(this.newCallEvents, DataStore.CallEventTrigger);
-	}
 
-	public async componentDidMount(): Promise<void> {
-		super.componentDidMount();
-		RX.Modal.dismiss('dialog_menu_composer');
+		const roomSummary = DataStore.getRoomSummary(this.props.roomId);
 
-		console.log('---------------------COMPONENTDIDMOUNT 1');
-		console.log(this.widgetIframe);
+		const stateEventsMember: IRoomEvent[] = [];
+		Object.values(roomSummary.members).map(member => {
+			if (member.membership === 'join') {
+				const memberEvent: IRoomEvent = {
+					event_id: StringUtils.getRandomString(8),
+					origin_server_ts: Date.now(),
+					room_id: this.props.roomId,
+					sender: member.id,
+					state_key: member.id,
+					type: 'm.room.member',
+					content: {
+						displayname: member.id,
+						membership: 'join',
+					},
+					unsigned: {},
+				};
+				stateEventsMember.push(memberEvent);
+			}
+		});
+		const memberPayload = JSON.stringify(stateEventsMember);
 
-		const msc3401Call = DataStore.getRoomSummary(this.props.roomId).msc3401Call;
+		const msc3401Call = roomSummary.msc3401Call;
 
 		if (!msc3401Call || !this.isActiveCall(msc3401Call)) {
+			this.callId = StringUtils.getRandomString(8);
+
 			const content: CallEventContent_ = {
 				'm.intent': GroupCallIntent.Prompt,
 				'm.type': GroupCallType.Video,
 				'io.element.ptt': false,
 			};
-
-			this.callId = StringUtils.getRandomString(8);
 
 			ApiClient.sendStateEvent(this.props.roomId, CallEvents.GroupCallPrefix, content, this.callId).catch(
 				_error => null
@@ -374,193 +164,236 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 			this.callId = msc3401Call.callId;
 		}
 
-		const params = new URLSearchParams({
-			embed: 'true',
-			preload: 'true',
-			hideHeader: 'true',
-			hideScreensharing: 'true',
-			userId: ApiClient.credentials.userIdFull,
-			deviceId: ApiClient.credentials.deviceId,
-			roomId: this.props.roomId,
-			baseUrl: 'https://' + ApiClient.credentials.homeServer,
-			enableE2e: 'false',
-			lang: UiStore.getLanguage(),
-		});
+		const content: CallEventContent_ = {
+			'm.intent': GroupCallIntent.Prompt,
+			'm.type': GroupCallType.Video,
+			'io.element.ptt': false,
+		};
 
-		const wellKnown = await ApiClient.getWellKnown(ApiClient.credentials.homeServer).catch(_error => undefined);
-		const preferredDomain = wellKnown ? wellKnown['chat.quadrix.elementcall']?.preferredDomain : undefined;
-		const elementCallUrl = preferredDomain ? 'https://' + preferredDomain : ELEMENT_CALL_URL;
+		const stateEventCall: IRoomEvent = {
+			type: CallEvents.GroupCallPrefix,
+			sender: ApiClient.credentials.userIdFull,
+			event_id: StringUtils.getRandomString(8),
+			room_id: this.props.roomId,
+			state_key: this.callId,
+			origin_server_ts: Date.now(),
+			content: content,
+			unsigned: {},
+		};
+		const callPayload = JSON.stringify([stateEventCall]);
 
-		console.log('---------------------COMPONENTDIDMOUNT A');
-		console.log(elementCallUrl);
-
-		const url = new URL(elementCallUrl);
-
-		console.log('---------------------COMPONENTDIDMOUNT B');
-		console.log(url);
-
-		url.pathname = '/room';
-
-		console.log('---------------------COMPONENTDIDMOUNT C');
-
-		url.hash = `#?${params.toString()}`;
-
-		console.log('---------------------COMPONENTDIDMOUNT D');
-
-		this.widgetUrl = url.toString();
-
-		console.log('---------------------COMPONENTDIDMOUNT 2');
-		console.log(this.widgetUrl);
-
-		interface ICallWidget extends IWidget {
-			roomId: string;
-			eventId?: string;
-			avatar_url?: string;
+		const timelineEvents = roomSummary.timelineEvents.slice(0).reverse();
+		const stateEventsCallMember = timelineEvents.filter(event => {
+			const content = event.content as CallMemberEventContent_;
+			return (
+				event.type === CallEvents.GroupCallMemberPrefix &&
+				content['m.calls'][0] &&
+				content['m.calls'][0]['m.call_id'] === this.callId
+			);
+		}) as IRoomEvent[];
+		for (let i = 0; i < stateEventsCallMember.length; i++) {
+			stateEventsCallMember[i].room_id = this.props.roomId;
 		}
+		const callMemberPayload = JSON.stringify(stateEventsCallMember);
 
-		const callWidget: ICallWidget = {
-			id: 'quadrixelementcallwidget',
-			creatorUserId: ApiClient.credentials.userIdFull,
-			type: 'm.custom',
-			url: this.widgetUrl,
-			roomId: this.props.roomId,
-		};
+		this.webviewHtml = `
+			<!DOCTYPE html>
+			<html style="background-color: transparent; height: 100%; width: 100%; margin: 0px; padding: 0px">
+				<head>
+					<meta charset="utf-8" />
+					<meta
+						http-equiv="content-type"
+						content="text/html;charset=utf-8"
+					/>
+                    <meta
+						name="viewport"
+						content="width=device-width;initial-scale=${this.viewportScale};maximum-scale=${this.viewportScale}"
+					>
+				</head>
+				<body style="background-color: transparent; height: 100%; display: flex; justify-content: center; align-items: center; width: 100%; margin: 0px; padding: 0px">
+					<script type="text/javascript" src="https://unpkg.com/matrix-widget-api@1.1.1/dist/api.js"></script>
+					<script type="text/javascript">
+						var widgetApi;
 
-		// this.widgetIframe!.postMessage('hello');
-		// this.widgetIframe.props.onLoad(e => onLoad_(e))
-		// this.widgetIframe
-		/* 
-		const callback = () => {
-			//do something
-		};
+						const roomId = "${this.props.roomId}";
+						const callId = "${this.callId}";
+						const userId = "${ApiClient.credentials.userIdFull}";
+						const deviceId = "${ApiClient.credentials.deviceId}";
+						const widgetId = "${this.widgetId}";
+						const language = "${UiStore.getLanguage()}";
+						const baseUrl = "${this.baseUrl}";
+						const elementCallUrl = "${this.elementCallUrl}";
+			
+						const params = new URLSearchParams({
+							embed: "true",
+							preload: "true",
+							hideHeader: "true",
+							hideScreensharing: "true",
+							userId: userId,
+							deviceId: deviceId,
+							roomId: roomId,
+							baseUrl: baseUrl,
+							enableE2e: "false",
+							lang: language,
+						});
+			
+						const url = new URL(elementCallUrl);
+						url.pathname = "/room";
+						url.hash = "#?" + params.toString();
+						const widgetUrl = url.toString();
+			
+						const parsedUrl = new URL(widgetUrl);
+						parsedUrl.searchParams.set("widgetId", widgetId);
+						parsedUrl.searchParams.set("parentUrl", window.location.href.split("#", 2)[0]);
+						const iFrameSrc = parsedUrl.toString().replace(/%24/g, "$");
+			
+						class CallWidgetDriver {
+							validateCapabilities(requested) {
+								return Promise.resolve(requested);
+							}
+			
+							sendEvent(eventType, content, stateKey, roomId) {
+								const payload = {
+									type: "sendEvent",
+									eventType: eventType,
+									content: content,
+									stateKey: stateKey,
+									roomId: roomId,
+								};
+								window.ReactNativeWebView.postMessage(JSON.stringify(payload));
+								const eventId = "event" + Math.round(Math.random() * 1000000);
+								return Promise.resolve({ eventId: eventId, roomId: roomId });
+							}
+			
+							sendToDevice(eventType, encrypted, contentMap) {
+								const payload = {
+									type: "sendToDevice",
+									eventType: eventType,
+									encrypted: encrypted,
+									contentMap: contentMap,
+								};
+								window.ReactNativeWebView.postMessage(JSON.stringify(payload));
+								return Promise.resolve();
+							}
+			
+							readStateEvents(eventType, stateKey, limit, roomIds) {
+								var stateEvents;
+								var payload;
+								if (eventType === "m.room.member") {
+									payload = '${memberPayload}';
+									stateEvents = JSON.parse(payload);
+								} else if (eventType === "org.matrix.msc3401.call") {
+									payload = '${callPayload}';
+									stateEvents = JSON.parse(payload);
+								} else if (eventType === "org.matrix.msc3401.call.member") {
+									payload = '${callMemberPayload}';
+									stateEvents = JSON.parse(payload);
+								}
+								return Promise.resolve(stateEvents);
+							}
+			
+							async *getTurnServers() {
+								const turnServer = {
+									uris: ["stun:turn.matrix.org"],
+									username: "",
+									password: "",
+								};
+								yield await Promise.resolve(turnServer);
+							}
+						}
+			
+						const onTileLayout = ev => {
+							ev.preventDefault();
+							widgetApi.transport.reply(ev.detail, {});
+						};
+			
+						const onAlwaysOnScreen = ev => {
+							ev.preventDefault();
+							widgetApi.transport.reply(ev.detail, {});
+						};
+			
+						const onHangup = ev => {
+							ev.preventDefault();
+							widgetApi.transport.reply(ev.detail, {});
+			
+							widgetApi.off("action:im.vector.hangup", onHangup);
+							widgetApi.off("action:io.element.tile_layout", onTileLayout);
+							widgetApi.off("action:set_always_on_screen", onAlwaysOnScreen);
+							widgetApi.removeAllListeners();
+							widgetApi.stop();
+			
+							const payload = {
+								type: "onHangup",
+							};
+							window.ReactNativeWebView.postMessage(JSON.stringify(payload));
+							document.removeEventListener("message", handleWebviewRequest);
+						};
+			
+						const onReady = async () => {
+							await widgetApi.transport.send("io.element.join", {
+								audioInput: "Default",
+								videoInput: "Default",
+							});
+							widgetApi.on("action:im.vector.hangup", onHangup);
+							widgetApi.on("action:io.element.tile_layout", onTileLayout);
+							widgetApi.on("action:set_always_on_screen", onAlwaysOnScreen);
+						};
 
-		this.widgetIframe?.contentWindow.addEventListener('load', callback);
- */
+						const handleWebviewRequest = (ev) => {
+							const event_ = JSON.parse(ev.data);
+							if (event_.type === "org.matrix.msc3401.call.member") {
+								widgetApi.feedEvent(event_, event_.room_id);
+							} else {
+								widgetApi.feedToDevice(event_, false);
+							}
+						}
 
-		// this.widgetIframe?.contentWindow.postMessage('hello');
+						const onIframeLoad = () => {
+							const callWidget = {
+								id: "quadrixelementcallwidget",
+								creatorUserId: userId,
+								type: "m.custom",
+								url: widgetUrl,
+								roomId: roomId,
+							};
+			
+							const widget = new mxwidgets.Widget(callWidget);
+			
+							const callWidgetIframe = document.getElementById("call-widget-iframe");
+							callWidgetIframe.src = iFrameSrc;
+							callWidgetIframe.onload = "";
+			
+							const widgetDriver = new CallWidgetDriver();
+							widgetApi = new mxwidgets.ClientWidgetApi(widget, callWidgetIframe, widgetDriver);
+			
+							widgetApi.once("ready", onReady);
 
-		this.widget = new Widget(callWidget);
-
-		console.log('---------------------COMPONENTDIDMOUNT 3');
-		console.log(this.widget);
-		// console.log(this.widget.origin || 'NOT FOUND')
-
-		this.widgetDriver = new CallWidgetDriver(this.callId);
-		// this.widgetApi = new ClientWidgetApi(this.widget, this.widgetIframe!, this.widgetDriver);
-
-		console.log('---------------------COMPONENTDIDMOUNT 4');
-		console.log(this.widgetDriver);
-		console.log(this.widgetIframe);
-		console.log(this.widgetIframe?.contentWindow);
-
-		this.widgetApi = new ClientWidgetApi(
-			this.widget,
-			this.widgetIframe as unknown as HTMLIFrameElement,
-			this.widgetDriver
-		);
-
-		console.log('---------------------COMPONENTDIDMOUNT 5');
-		console.log(this.widgetApi);
-
-		this.completeUrl = this.widget?.getCompleteUrl({
-			widgetRoomId: this.props.roomId,
-			currentUserId: ApiClient.credentials.userIdFull,
-		});
-
-		const parsedUrl = new URL(this.completeUrl);
-
-		parsedUrl.searchParams.set('widgetId', this.widget.id);
-		// parsedUrl.searchParams.set('parentUrl', window.location.href.split('#', 2)[0]);
-		parsedUrl.searchParams.set('parentUrl', 'https://app.quadrix.chat');
-
-		this.setState({ parsedUrl: parsedUrl });
-
-		this.widgetApi.once('ready', this.onReady);
+							document.addEventListener("message", handleWebviewRequest);
+						};
+					</script>
+			
+					<iframe
+						id="call-widget-iframe"
+						style="height: 100%; width: 100%; border-width: 0px; border-radius: 0px;"
+						allow="camera;microphone"
+						onload="onIframeLoad()"
+					>
+					</iframe>
+				</body>
+			</html>
+		`;
 	}
 
-	private onLoad = () => {
-		console.log('-----------------------ONLOAD');
-		// EventRegister.emit('load');
-		const eventEmitter = new EventEmitter();
-		eventEmitter.emit('load');
-	};
-
-	private onMessage = (message: WebViewMessageEvent) => {
-		console.log('-----------------------ONMESSAGE');
-		console.log(message);
-
-		const messageEvent: MessageEvent = {
-			data: undefined,
-			lastEventId: '',
-			origin: '',
-			ports: [],
-			source: null,
-			initMessageEvent: function (
-				_type: string,
-				_bubbles?: boolean | undefined,
-				_cancelable?: boolean | undefined,
-				_data?: any,
-				_origin?: string | undefined,
-				_lastEventId?: string | undefined,
-				_source?: MessageEventSource | null | undefined,
-				_ports?: MessagePort[] | undefined
-			): void {
-				throw new Error('Function not implemented.');
-			},
-			bubbles: false,
-			cancelBubble: false,
-			cancelable: false,
-			composed: false,
-			currentTarget: null,
-			defaultPrevented: false,
-			eventPhase: 0,
-			isTrusted: false,
-			returnValue: false,
-			srcElement: null,
-			target: null,
-			timeStamp: 0,
-			type: 'xxxxxxx',
-			composedPath: function (): EventTarget[] {
-				throw new Error('Function not implemented.');
-			},
-			initEvent: function (
-				_type: string,
-				_bubbles?: boolean | undefined,
-				_cancelable?: boolean | undefined
-			): void {
-				throw new Error('Function not implemented.');
-			},
-			preventDefault: function (): void {
-				throw new Error('Function not implemented.');
-			},
-			stopImmediatePropagation: function (): void {
-				throw new Error('Function not implemented.');
-			},
-			stopPropagation: function (): void {
-				throw new Error('Function not implemented.');
-			},
-			AT_TARGET: 0,
-			BUBBLING_PHASE: 0,
-			CAPTURING_PHASE: 0,
-			NONE: 0,
-		};
-
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-		this.widgetApi?.handleInboundMessage(messageEvent);
-		// this.widgetIframe?.postMessage(message, )
-	};
+	public componentDidMount(): void {
+		super.componentDidMount();
+		RX.Modal.dismiss('dialog_menu_composer');
+	}
 
 	public componentWillUnmount(): void {
 		super.componentWillUnmount();
 
 		DataStore.unsubscribe(this.newMessageSubscription);
 		DataStore.unsubscribe(this.newCallEventSubscription);
-
-		this.widgetApi?.off(`action:${CallWidgetActions.HangupCall}`, this.onHangup);
-		this.widgetApi?.off(`action:${CallWidgetActions.TileLayout}`, this.onTileLayout);
-		this.widgetApi?.off(`action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`, this.onAlwaysOnScreen);
-		this.widgetApi?.removeAllListeners();
-		this.widgetApi?.stop();
 	}
 
 	private newMessages = () => {
@@ -582,7 +415,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 				unsigned: {},
 			};
 
-			this.widgetApi!.feedEvent(event_, this.props.roomId).catch(_error => null);
+			this.webView?.postMessage(JSON.stringify(event_));
 		}
 	};
 
@@ -591,7 +424,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 
 		callEvents.map(event => {
 			if (event.content.conf_id === this.callId) {
-				this.widgetApi!.feedToDevice(event as IRoomEvent, false).catch(_error => null);
+				this.webView?.postMessage(JSON.stringify(event));
 			}
 		});
 	};
@@ -606,47 +439,6 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		);
 
 		return activeParticipants.length > 0;
-	};
-
-	private onReady = async () => {
-		const devices = await navigator.mediaDevices.enumerateDevices();
-
-		const devices_: { [kind: MediaDeviceKind | string]: MediaDeviceInfo[] } = {
-			[DeviceKind.audioOutput]: [],
-			[DeviceKind.audioInput]: [],
-			[DeviceKind.videoInput]: [],
-		};
-
-		devices.forEach(device => devices_[device.kind].push(device));
-
-		await this.widgetApi!.transport.send(CallWidgetActions.JoinCall, {
-			audioInput: 'Default', // devices_[DeviceKind.audioInput][0].label, // null for starting muted
-			videoInput: 'Default', // devices_[DeviceKind.videoInput][0].label, // null for starting muted
-		});
-
-		this.widgetApi!.on(`action:${CallWidgetActions.HangupCall}`, this.onHangup);
-		this.widgetApi!.on(`action:${CallWidgetActions.TileLayout}`, this.onTileLayout);
-		this.widgetApi!.on(`action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`, this.onAlwaysOnScreen);
-	};
-
-	private onTileLayout = (ev: CustomEvent<IWidgetApiRequest>) => {
-		ev.preventDefault();
-		this.widgetApi!.transport.reply(ev.detail, {});
-	};
-
-	private onAlwaysOnScreen = (ev: CustomEvent<IStickyActionRequest>) => {
-		ev.preventDefault();
-		this.widgetApi!.transport.reply(ev.detail, {});
-	};
-
-	private onHangup = (ev: CustomEvent<IWidgetApiRequest>): void => {
-		ev.preventDefault();
-
-		this.TerminateCall();
-
-		this.widgetApi!.transport.reply(ev.detail, {});
-
-		RX.Modal.dismiss('element_call');
 	};
 
 	private TerminateCall = () => {
@@ -676,12 +468,31 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 	};
 
 	private setMinimized = (isMinimized: boolean) => {
-		RX.Modal.dismissAll() // remove this
 		this.setState({ isMinimized: isMinimized });
 	};
 
+	private onMessage = (message: WebViewMessageEvent) => {
+		const message_ = JSON.parse(message.nativeEvent.data) as ElementCallMessageEvent;
+
+		if (message_.type === 'onHangup') {
+			this.TerminateCall();
+			RX.Modal.dismiss('element_call');
+		} else if (
+			message_.type === 'sendEvent' &&
+			message_.eventType === CallEvents.GroupCallMemberPrefix &&
+			message_.content
+		) {
+			ApiClient.sendStateEvent(this.props.roomId, message_.eventType, message_.content, message_.stateKey).catch(
+				_error => null
+			);
+		} else if (message_.type === 'sendToDevice' && message_.eventType) {
+			const transactionId = StringUtils.getRandomString(8);
+			ApiClient.sendToDevice(message_.eventType, transactionId, message_.contentMap).catch(_error => null);
+		}
+	};
+
 	public render(): JSX.Element | null {
-		console.log('---------------------RENDER');
+		const url = APP_WEBSITE_URL;
 
 		let buttonMinimize;
 		let buttonMaximize;
@@ -719,30 +530,27 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 			);
 		}
 
-		const widgetUrl = this.state?.parsedUrl?.toString().replace(/%24/g, '$');
-
 		return (
-			<RX.View
-				style={this.state.isMinimized ? styles.containerMinimized : styles.container}
-				// onLongPress={() => RX.Modal.dismissAll()}
-			>
+			<RX.View style={this.state.isMinimized ? styles.containerMinimized : styles.container}>
 				<RX.View style={this.state.isMinimized ? styles.callContainerMinimized : styles.callContainer}>
-					<WebView_
-						style={{
-							height: '100%',
-							width: '100%',
-							borderWidth: 0,
-							borderRadius: BORDER_RADIUS,
-						}}
+					<WebView
 						ref={ref => {
-							this.widgetIframe = ref;
+							this.webView = ref;
 						}}
+						style={{
+							backgroundColor: TRANSPARENT_BACKGROUND,
+						}}
+						scrollEnabled={false}
+						scalesPageToFit={false}
+						originWhitelist={['*']}
 						source={{
-							uri: widgetUrl!,
+							html: this.webviewHtml,
+							baseUrl: `${url}`,
 						}}
-						// allow={'camera;microphone'}
-						onLoad={this.onLoad}
 						onMessage={this.onMessage}
+						mediaPlaybackRequiresUserAction={false}
+						allowsInlineMediaPlayback={true}
+						javaScriptEnabled={true}
 					/>
 					{buttonMinimize}
 				</RX.View>
