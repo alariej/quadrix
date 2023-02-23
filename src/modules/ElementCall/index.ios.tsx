@@ -29,6 +29,7 @@ const styles = {
 		alignSelf: 'stretch',
 		justifyContent: 'center',
 		backgroundColor: OPAQUE_BACKGROUND,
+        // marginTop: 32,
 	}),
 	containerMinimized: RX.Styles.createViewStyle({
 		position: 'absolute',
@@ -114,8 +115,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 	private baseUrl = 'https://' + ApiClient.credentials.homeServer;
 	private widgetId = 'quadrixelementcallwidget';
 	private webviewHtml = '';
-	private webView!: WebView | null;
-	private viewportScale = 1;
+	private webView: React.RefObject<WebView> = React.createRef();
 
 	constructor(props: ElementCallProps) {
 		super(props);
@@ -207,7 +207,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 					/>
                     <meta
 						name="viewport"
-						content="width=device-width;initial-scale=${this.viewportScale};maximum-scale=${this.viewportScale}"
+						content="initial-scale=1.0;maximum-scale=1.0"
 					>
 				</head>
 				<body style="background-color: transparent; height: 100%; display: flex; justify-content: center; align-items: center; width: 100%; margin: 0px; padding: 0px">
@@ -326,7 +326,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 								type: "onHangup",
 							};
 							window.ReactNativeWebView.postMessage(JSON.stringify(payload));
-							document.removeEventListener("message", handleWebviewRequest);
+							window.removeEventListener("message", handleWebviewRequest);
 						};
 			
 						const onReady = async () => {
@@ -339,11 +339,12 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 							widgetApi.on("action:set_always_on_screen", onAlwaysOnScreen);
 						};
 
-						const handleWebviewRequest = (ev) => {
+						var handleWebviewRequest = (ev) => {
+                            if (!ev.data) { return; }
 							const event_ = JSON.parse(ev.data);
 							if (event_.type === "org.matrix.msc3401.call.member") {
 								widgetApi.feedEvent(event_, event_.room_id);
-							} else {
+							} else if (event_.type) {
 								widgetApi.feedToDevice(event_, false);
 							}
 						}
@@ -368,7 +369,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 			
 							widgetApi.once("ready", onReady);
 
-							document.addEventListener("message", handleWebviewRequest);
+							window.addEventListener("message", handleWebviewRequest);
 						};
 					</script>
 			
@@ -415,7 +416,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 				unsigned: {},
 			};
 
-			this.webView?.postMessage(JSON.stringify(event_));
+			this.webView?.current?.postMessage(JSON.stringify(event_));
 		}
 	};
 
@@ -424,7 +425,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 
 		callEvents.map(event => {
 			if (event.content.conf_id === this.callId) {
-				this.webView?.postMessage(JSON.stringify(event));
+				this.webView?.current?.postMessage(JSON.stringify(event));
 			}
 		});
 	};
@@ -474,7 +475,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 	private onMessage = (message: WebViewMessageEvent) => {
 		const message_ = JSON.parse(message.nativeEvent.data) as ElementCallMessageEvent;
 
-		if (message_.type === 'onHangup') {
+        if (message_.type === 'onHangup') {
 			this.TerminateCall();
 			RX.Modal.dismiss('element_call');
 		} else if (
@@ -534,14 +535,11 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 			<RX.View style={this.state.isMinimized ? styles.containerMinimized : styles.container}>
 				<RX.View style={this.state.isMinimized ? styles.callContainerMinimized : styles.callContainer}>
 					<WebView
-						ref={ref => {
-							this.webView = ref;
-						}}
+						ref={this.webView}
 						style={{
 							backgroundColor: TRANSPARENT_BACKGROUND,
 						}}
 						scrollEnabled={false}
-						scalesPageToFit={false}
 						originWhitelist={['*']}
 						source={{
 							html: this.webviewHtml,
@@ -551,6 +549,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 						mediaPlaybackRequiresUserAction={false}
 						allowsInlineMediaPlayback={true}
 						javaScriptEnabled={true}
+                        mediaCapturePermissionGrantType={'grant'}
 					/>
 					{buttonMinimize}
 				</RX.View>
