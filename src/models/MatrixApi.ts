@@ -200,7 +200,6 @@ export interface MessageEventContent_ {
 		rel_type?: string;
 		'm.in_reply_to'?: { [event_id: string]: string };
 	};
-	_jitsi_started?: boolean; // custom field
 	_url_preview?: LinkPreview_; // custom field
 	_time?: number; // custom field
 }

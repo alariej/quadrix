@@ -28,7 +28,6 @@ import {
 	archived,
 	invitationNotYetAccepted,
 	encryptedMessage,
-	jitsiStartedShort,
 	image,
 	video,
 	yesterdayWord,
@@ -144,7 +143,6 @@ interface RoomTileState {
 	contactId: string;
 	type: RoomType;
 	isSelected: boolean;
-	isJitsiMaximised: boolean;
 }
 
 export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState> {
@@ -219,7 +217,6 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 			contactId: roomSummary.contactId!,
 			type: roomSummary.type!,
 			isSelected: selectedRoom === this.props.roomId,
-			isJitsiMaximised: UiStore.getJitsiMaximised(),
 		};
 	}
 
@@ -425,22 +422,8 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 						/>
 					);
 				} else if (content.body) {
-					if (content._jitsi_started) {
-						messageText = jitsiStartedShort[this.language];
-
-						messageTypeIcon = (
-							<IconSvg
-								source={require('../resources/svg/RI_videoconf.json') as SvgFile}
-								style={{ marginRight: SPACING }}
-								fillColor={ICON_INFO_FILL}
-								height={ICON_INFO_SIZE}
-								width={ICON_INFO_SIZE}
-							/>
-						);
-					} else {
-						const stripped = StringUtils.stripReplyMessage(content.body);
-						messageText = StringUtils.flattenString(stripped);
-					}
+					const stripped = StringUtils.stripReplyMessage(content.body);
+					messageText = StringUtils.flattenString(stripped);
 				}
 			} else if (this.props.newestRoomEvent.type === 'm.room.encrypted') {
 				messageText = encryptedMessage[this.language];
@@ -498,7 +481,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 						styles.containerTile,
 						{ backgroundColor: this.state.isSelected ? TILE_BACKGROUND_SELECTED : TILE_BACKGROUND },
 					]}
-					onPress={() => (this.state.isJitsiMaximised ? null : this.props.onPressRoom!(this.props.roomId))}
+					onPress={() => this.props.onPressRoom!(this.props.roomId)}
 					disableTouchOpacityAnimation={false}
 					activeOpacity={0.8}
 				>

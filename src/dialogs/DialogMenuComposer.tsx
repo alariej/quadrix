@@ -24,7 +24,6 @@ import { SvgFile } from '../components/IconSvg';
 import { RoomType } from '../models/MatrixApi';
 import AnimatedButton from '../components/AnimatedButton';
 import { LayoutInfo } from 'reactxp/dist/common/Types';
-import ElementCall from '../modules/ElementCall';
 
 const styles = {
 	modalScreen: RX.Styles.createViewStyle({
@@ -65,7 +64,7 @@ interface DialogMenuComposerProps {
 	roomId: string;
 	roomType: RoomType;
 	roomActive: boolean;
-	jitsiActive: boolean;
+	videoCallActive: boolean;
 	onPressFile: () => void;
 	onPressImage: () => void;
 	onPressVideoCall: () => void;
@@ -144,10 +143,6 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 		RX.Modal.dismiss('dialog_menu_composer');
 	};
 
-	private onPressElementCall = () => {
-		RX.Modal.show(<ElementCall roomId={this.props.roomId} />, 'element_call');
-	};
-
 	public render(): JSX.Element | null {
 		const fileButton = (
 			<AnimatedButton
@@ -186,7 +181,7 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 
 		const videoCallButtonDisabled =
 			this.state.offline ||
-			this.props.jitsiActive ||
+			this.props.videoCallActive ||
 			['community', 'notepad'].includes(this.props.roomType) ||
 			!this.props.roomActive;
 
@@ -200,22 +195,6 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 				iconWidth={ICON_INFO_SIZE}
 				animatedColor={LIGHT_BACKGROUND}
 				onPress={this.props.onPressVideoCall}
-				disabled={videoCallButtonDisabled}
-				text={videoconference[this.language]}
-				textStyle={[styles.buttonText, { opacity: videoCallButtonDisabled ? 0.3 : 1 }]}
-			/>
-		);
-
-		const elementCallButton = (
-			<AnimatedButton
-				buttonStyle={styles.buttonDialog}
-				iconSource={require('../resources/svg/RI_videoconf.json') as SvgFile}
-				iconStyle={{ opacity: videoCallButtonDisabled ? 0.3 : 1 }}
-				iconFillColor={ICON_INFO_FILL}
-				iconHeight={ICON_INFO_SIZE}
-				iconWidth={ICON_INFO_SIZE}
-				animatedColor={LIGHT_BACKGROUND}
-				onPress={this.onPressElementCall}
 				disabled={videoCallButtonDisabled}
 				text={videoconference[this.language]}
 				textStyle={[styles.buttonText, { opacity: videoCallButtonDisabled ? 0.3 : 1 }]}
@@ -237,7 +216,6 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 				{fileButton}
 				{imageButton}
 				{videoCallButton}
-				{elementCallButton}
 			</RX.Animated.View>
 		);
 

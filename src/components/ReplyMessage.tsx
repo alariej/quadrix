@@ -6,8 +6,6 @@ import { ImageInfo_, MessageEventContent_, VideoInfo_ } from '../models/MatrixAp
 import AppFont from '../modules/AppFont';
 import CachedImage from '../modules/CachedImage';
 import DataStore from '../stores/DataStore';
-import UiStore from '../stores/UiStore';
-import { jitsiStartedInternal } from '../translations';
 import {
 	BORDER_RADIUS,
 	BUTTON_FILL,
@@ -155,18 +153,6 @@ export default class ReplyMessage extends RX.Component<ReplyMessageProps, RX.Sta
 					</RX.Text>
 				);
 			}
-		} else if (content._jitsi_started) {
-			const language = UiStore.getLanguage();
-
-			replyContent = (
-				<RX.Text
-					style={styles.textReplyMessage}
-					numberOfLines={this.props.onCancelButton ? 1 : undefined}
-				>
-					{userName}
-					{jitsiStartedInternal[language]}
-				</RX.Text>
-			);
 		} else {
 			const stripped = StringUtils.stripReplyMessage(content.body!);
 			const strippedFlattened = StringUtils.flattenString(stripped);

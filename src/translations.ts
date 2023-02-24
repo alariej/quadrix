@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { APP_NAME, JITSI_SERVER_URL } from './appconfig';
+import { APP_NAME } from './appconfig';
 
 export type Languages = 'en' | 'de' | 'fr' | 'es';
 
@@ -1185,54 +1185,6 @@ export const encryptedMessage: Translation = {
 	de: '[verschlüsselte Nachricht]',
 	fr: '[message encrypté]',
 	es: '[mensaje encriptado]',
-};
-
-export const pressOKJitsi: Translation = {
-	en_di: 'Press OK to start or join a videoconference with the user in this conversation.',
-	en_gr: 'Press OK to start or join a videoconference with the members of this group.',
-	de_di: 'Drücken Sie OK, um eine Videokonferenz mit dem Benutzer in diesem Chat zu starten oder daran teilzunehmen.',
-	de_gr: 'Drücken Sie OK, um eine Videokonferenz mit den Mitgliedern dieser Gruppe zu starten oder daran teilzunehmen.',
-	fr_di: "Appuyez sur OK pour lancer ou joindre une vidéoconférence avec l'usager dans cette conversation.",
-	fr_gr: 'Appuyez sur OK pour lancer ou joindre une vidéoconférence avec les membres de ce groupe.',
-	es_di: 'Pulse OK para iniciar o unirse a una videoconferencia con el usuario en esta conversación.',
-	es_gr: 'Pulse OK para iniciar o unirse a una videoconferencia con los miembros de este grupo.',
-};
-
-export const jitsiStartedExternal: Translation = {
-	en:
-		'Videoconference started / joined. Join on ' +
-		APP_NAME +
-		' by pressing the video icon, or in an external browser by using this link:\n\n' +
-		JITSI_SERVER_URL,
-	de:
-		'Videokonferenz gestartet / beigetreten. Nehmen Sie bei ' +
-		APP_NAME +
-		' teil, indem Sie das Videosymbol drücken, oder in einem externen Browser über diesen Link:\n\n' +
-		JITSI_SERVER_URL,
-	fr:
-		'Vidéoconférence lancée / jointe. Participez sur ' +
-		APP_NAME +
-		" en appuyant sur l'icône vidéo, ou dans un navigateur externe en utilisant ce lien:\n\n" +
-		JITSI_SERVER_URL,
-	es:
-		'Videoconferencia iniciada / conectada. Participa en ' +
-		APP_NAME +
-		' pulsando el icono del vídeo, o en un navegador externo utilizando este enlace:\n\n' +
-		JITSI_SERVER_URL,
-};
-
-export const jitsiStartedInternal: Translation = {
-	en: 'Videoconference started / joined. Join by using the menu on the left of the message input field.',
-	de: 'Videokonferenz gestartet / beigetreten. Nehmen Sie teil, indem Sie das Menü links neben dem Texteingabefeld verwenden.',
-	fr: 'Vidéoconférence lancée / jointe. Joignez vous en utilisant le menu à gauche du champ de saisie du message.',
-	es: 'Videoconferencia iniciada / conectada. Únase utilizando el menú a la izquierda del campo de entrada de mensajes.',
-};
-
-export const jitsiStartedShort: Translation = {
-	en: 'Videoconference started...',
-	de: 'Videokonferenz gestartet...',
-	fr: 'Vidéoconférence lancée...',
-	es: 'Videoconferencia iniciada...',
 };
 
 export const lauchedVideoConference: Translation = {

@@ -19,7 +19,6 @@ import DialogContainer from '../modules/DialogContainer';
 import ShareHandlerIncoming from '../modules/ShareHandlerIncoming';
 import UiStore, { Layout } from '../stores/UiStore';
 import { clearDatastore, deviceOffline } from '../translations';
-import JitsiMeet from '../modules/JitsiMeet';
 import { ComponentBase } from 'resub';
 import Pushers from '../modules/Pushers';
 import SpinnerUtils from '../utils/SpinnerUtils';
@@ -27,6 +26,7 @@ import AppFont from '../modules/AppFont';
 import IconSvg, { SvgFile } from '../components/IconSvg';
 import { APP_VERSION, CLEAR_DATASTORE } from '../appconfig';
 import { FilteredChatEvent } from '../models/FilteredChatEvent';
+import ElementCall from '../modules/ElementCall';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -78,7 +78,7 @@ interface MainProps {
 
 interface MainState {
 	showRoom: boolean;
-	showJitsiMeet: boolean;
+	showVideoCall: boolean;
 	layout: Layout;
 }
 
@@ -90,7 +90,7 @@ const matrixSize = 160;
 export default class Main extends ComponentBase<MainProps, MainState> {
 	private message!: FilteredChatEvent;
 	private tempId = '';
-	private jitsiMeetId = '';
+	private videoCallRoomId = '';
 	private animatedRoomOpacityValue: RX.Animated.Value;
 	private animatedRoomStyle: RX.Types.AnimatedViewStyleRuleSet;
 	private animatedRoomIn: RX.Types.Animated.CompositeAnimation;
@@ -339,7 +339,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 				showRoomList={this.showRoomList}
 				showTempForwardedMessage={this.showTempForwardedMessage}
 				tempForwardedMessage={{ message: this.message, tempId: this.tempId }}
-				showJitsiMeet={this.showJitsiMeet}
+				showVideoCall={this.showVideoCall}
 				showRoom={this.showRoom}
 			/>
 		);
@@ -373,7 +373,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 				showLogin={this.props.showLogin}
 				showRoomList={this.showRoomList}
 				showTempForwardedMessage={this.showTempForwardedMessage}
-				showJitsiMeet={this.showJitsiMeet}
+				showVideoCall={this.showVideoCall}
 				showRoom={this.showRoom}
 			/>
 		);
@@ -420,15 +420,15 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 		UiStore.setSelectedRoom('');
 	};
 
-	private showJitsiMeet = (jitsiMeetId: string) => {
-		this.jitsiMeetId = jitsiMeetId;
-		UiStore.setJitsiActive(true);
-		this.setState({ showJitsiMeet: true });
+	private showVideoCall = (roomId: string) => {
+		this.videoCallRoomId = roomId;
+		UiStore.setVideoCallActive(true);
+		this.setState({ showVideoCall: true });
 	};
 
-	private closeJitsiMeet = () => {
-		UiStore.setJitsiActive(false);
-		this.setState({ showJitsiMeet: false }, () => {
+	private closeVideoCall = () => {
+		UiStore.setVideoCallActive(false);
+		this.setState({ showVideoCall: false }, () => {
 			setTimeout(() => {
 				RX.StatusBar.setBackgroundColor(STATUSBAR_BACKGROUND, true);
 				RX.StatusBar.setBarStyle('dark-content', true);
@@ -476,12 +476,12 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 			</RX.View>
 		);
 
-		let jitsiMeet: ReactElement | undefined;
-		if (this.state.showJitsiMeet) {
-			jitsiMeet = (
-				<JitsiMeet
-					jitsiMeetId={this.jitsiMeetId}
-					closeJitsiMeet={this.closeJitsiMeet}
+		let videoCall: ReactElement | undefined;
+		if (this.state.showVideoCall) {
+			videoCall = (
+				<ElementCall
+					roomId={this.videoCallRoomId}
+					closeVideoCall={this.closeVideoCall}
 				/>
 			);
 		}
@@ -515,7 +515,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 						{roomPage}
 					</RX.Animated.View>
 				</RX.Animated.View>
-				{jitsiMeet}
+				{videoCall}
 			</RX.View>
 		);
 	}

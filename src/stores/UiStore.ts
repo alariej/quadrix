@@ -9,8 +9,7 @@ import { PAGE_WIDTH_DEFAULT, PAGE_WIDE_PADDING } from '../ui';
 
 const UnknownAccessToken = 'UnknownAccessToken';
 const OfflineTrigger = 'OfflineTrigger';
-const JitsiActiveTrigger = 'JitsiActiveTrigger';
-const JitsiMaximisedTrigger = 'JitsiMaximisedTrigger';
+const VideoCallActiveTrigger = 'VideoCallActiveTrigger';
 const SelectedRoomTrigger = 'SelectedRoomTrigger';
 const LayoutTrigger = 'LayoutTrigger';
 type DeviceType = 'mobile' | 'desktop';
@@ -37,8 +36,7 @@ class UiStore extends StoreBase {
 	private locale: LocaleType = enUS;
 	private language: Languages = 'en';
 	private isElectron = false;
-	private isJitsiActive = false;
-	private isJitsiMaximised = false;
+	private isVideoCallActive = false;
 	private appLayout: Layout | undefined;
 	private selectedRoom = '';
 
@@ -145,24 +143,14 @@ class UiStore extends StoreBase {
 		return this.locale;
 	}
 
-	public setJitsiActive(isJitsiActive: boolean) {
-		this.isJitsiActive = isJitsiActive;
-		this.trigger(JitsiActiveTrigger);
+	public setVideoCallActive(isVideoCallActive: boolean) {
+		this.isVideoCallActive = isVideoCallActive;
+		this.trigger(VideoCallActiveTrigger);
 	}
 
-	@autoSubscribeWithKey(JitsiActiveTrigger)
-	public getJitsiActive(): boolean {
-		return this.isJitsiActive;
-	}
-
-	public setJitsiMaximised(isJitsiMaximised: boolean) {
-		this.isJitsiMaximised = isJitsiMaximised;
-		this.trigger(JitsiMaximisedTrigger);
-	}
-
-	@autoSubscribeWithKey(JitsiMaximisedTrigger)
-	public getJitsiMaximised(): boolean {
-		return this.isJitsiMaximised;
+	@autoSubscribeWithKey(VideoCallActiveTrigger)
+	public getVideoCallActive(): boolean {
+		return this.isVideoCallActive;
 	}
 
 	public setAppLayout(layout: ViewOnLayoutEvent) {

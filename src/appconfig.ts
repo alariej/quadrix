@@ -32,10 +32,6 @@ export const APPSTORES_ANDROID_URL = StoreJson.googleplay.url;
 export const APPSTORES_WINDOWS_URL = StoreJson.microsoft.url;
 export const APPSTORES_FLATHUB_URL = StoreJson.flathub.url;
 
-// jitsi server
-
-export const JITSI_SERVER_URL = 'https://jitsi.riot.im';
-
 // element call
 
 export const ELEMENT_CALL_URL = 'https://call.element.io';

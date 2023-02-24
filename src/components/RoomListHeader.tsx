@@ -123,7 +123,6 @@ interface RoomListHeaderProps extends RX.CommonProps {
 
 interface RoomListHeaderState {
 	offline: boolean;
-	isJitsiMaximised: boolean;
 	showInfoButton: boolean;
 }
 
@@ -153,7 +152,6 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 		}
 
 		partialState.offline = UiStore.getOffline();
-		partialState.isJitsiMaximised = UiStore.getJitsiMaximised();
 
 		return partialState;
 	}
@@ -272,7 +270,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 						iconHeight={BUTTON_HEADER_WIDTH}
 						iconWidth={BUTTON_HEADER_WIDTH}
 						animatedColor={TILE_SYSTEM_TEXT}
-						onPress={() => (this.state.isJitsiMaximised ? null : StoreVersion.showDialog())}
+						onPress={StoreVersion.showDialog}
 					/>
 				</RX.View>
 			);
@@ -315,7 +313,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 					iconHeight={BUTTON_HEADER_WIDTH}
 					iconWidth={BUTTON_HEADER_WIDTH}
 					animatedColor={BUTTON_FILL}
-					onPress={() => (this.state.isJitsiMaximised ? null : this.showMenu())}
+					onPress={this.showMenu}
 				/>
 				{disconnected}
 				{infoButton}

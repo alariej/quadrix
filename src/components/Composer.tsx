@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
-import { APP_ID } from '../appconfig';
 import {
 	EMOJI_TEXT,
 	INPUT_TEXT,
@@ -29,9 +28,6 @@ import {
 	messageCouldNotBeSent,
 	cancel,
 	sending,
-	pressOKJitsi,
-	jitsiStartedExternal,
-	jitsiStartedInternal,
 	fileCouldNotUpload,
 	pressSend,
 	pressLoad,
@@ -154,7 +150,7 @@ interface ComposerProps extends RX.CommonProps {
 	roomType: RoomType;
 	showTempSentMessage: (message: TemporaryMessage) => void;
 	replyMessage: FilteredChatEvent;
-	showJitsiMeet: (id: string) => void;
+	showVideoCall: (roomId: string) => void;
 	roomActive: boolean;
 	floatingSendButton: (onPressSendButton: (() => void) | undefined) => void;
 }
@@ -162,7 +158,7 @@ interface ComposerProps extends RX.CommonProps {
 interface ComposerState {
 	textInput: string | undefined;
 	offline: boolean;
-	jitsiActive: boolean;
+	videoCallActive: boolean;
 	sendDisabled: boolean;
 	showProgress: boolean;
 	progressValue: number;
@@ -248,7 +244,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 		}
 
 		partialState.offline = UiStore.getOffline();
-		partialState.jitsiActive = UiStore.getJitsiActive();
+		partialState.videoCallActive = UiStore.getVideoCallActive();
 
 		return partialState;
 	}
@@ -651,55 +647,9 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 	};
 
 	private onPressVideoCall = (): void => {
-		RX.Modal.dismissAll();
-
-		const text = (
-			<RX.Text style={styles.textDialog}>
-				<RX.Text>{pressOKJitsi[this.language + '_' + this.props.roomType.substr(0, 2)]}</RX.Text>
-			</RX.Text>
-		);
-
-		const videoCallDialog = (
-			<DialogContainer
-				content={text}
-				confirmButton={true}
-				confirmButtonText={'OK'}
-				cancelButton={true}
-				cancelButtonText={cancel[this.language]}
-				onConfirm={this.startVideoCall}
-				onCancel={() => RX.Modal.dismiss('video_call_dialog')}
-			/>
-		);
-
-		RX.Modal.show(videoCallDialog, 'video_call_dialog');
-	};
-
-	private startVideoCall = () => {
 		this.textInputComponent?.blur();
 
-		RX.Modal.dismiss('video_call_dialog');
-
-		const jitsiMeetId = APP_ID + '.' + this.props.roomId.substr(1, 15).toLowerCase();
-
-		const tempId = 'text' + Date.now();
-
-		const tempMessage = jitsiStartedInternal[this.language];
-
-		this.props.showTempSentMessage({ body: tempMessage, tempId: tempId });
-
-		const messageContent: MessageEventContent_ = {
-			msgtype: 'm.text',
-			body: jitsiStartedExternal[this.language] + '/' + jitsiMeetId,
-			_jitsi_started: true,
-		};
-
-		ApiClient.sendMessage(this.props.roomId, messageContent, tempId).catch(_error => {
-			const text = <RX.Text style={styles.textDialog}>{messageCouldNotBeSent[this.language]}</RX.Text>;
-
-			RX.Modal.show(<DialogContainer content={text} />, 'errordialog');
-		});
-
-		this.props.showJitsiMeet(jitsiMeetId);
+		this.props.showVideoCall(this.props.roomId);
 	};
 
 	private onSelectionChange = (start: number, end: number) => {
@@ -771,7 +721,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 						roomId={this.props.roomId}
 						roomType={this.props.roomType}
 						roomActive={this.props.roomActive}
-						jitsiActive={this.state.jitsiActive}
+						videoCallActive={this.state.videoCallActive}
 						onPressFile={this.onPressFile}
 						onPressImage={this.onPressImage}
 						onPressVideoCall={this.onPressVideoCall}

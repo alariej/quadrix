@@ -14,7 +14,7 @@ import {
 } from '../ui';
 import UiStore from '../stores/UiStore';
 import * as linkify from 'linkifyjs';
-import { edited, jitsiStartedInternal } from '../translations';
+import { edited } from '../translations';
 import { LinkifyElement } from '../models/LinkifyElement';
 import AppFont from '../modules/AppFont';
 import StringUtils from '../utils/StringUtils';
@@ -234,14 +234,6 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 					>
 						{messageBody}
 					</RX.Text>
-				</RX.Text>
-			);
-		} else if (content._jitsi_started) {
-			const language = UiStore.getLanguage();
-
-			renderContent = (
-				<RX.Text style={styles.containerText}>
-					<RX.Text style={styles.text}>{jitsiStartedInternal[language]}</RX.Text>
 				</RX.Text>
 			);
 		} else {
