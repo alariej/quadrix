@@ -146,7 +146,7 @@ interface RoomHeaderState {
 interface RoomHeaderProps extends RX.CommonProps {
 	showLogin: () => void;
 	showRoomList: () => void;
-	showRoom: (roomID: string) => void;
+	showRoom: (roomId: string) => void;
 	roomId: string;
 }
 
@@ -480,8 +480,8 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 						iconStyle={{ marginRight: 2 }}
 						iconSource={require('../resources/svg/RI_arrowleft.json') as SvgFile}
 						iconFillColor={BUTTON_FILL}
-						iconHeight={BUTTON_HEADER_WIDTH * 4 / 3}
-						iconWidth={BUTTON_HEADER_WIDTH * 4 / 3}
+						iconHeight={(BUTTON_HEADER_WIDTH * 4) / 3}
+						iconWidth={(BUTTON_HEADER_WIDTH * 4) / 3}
 						animatedColor={BUTTON_FILL}
 						onPress={this.onPressHomeButton}
 					/>

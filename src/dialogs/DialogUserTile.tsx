@@ -128,7 +128,7 @@ interface DialogUserTileProps extends RX.CommonProps {
 	roomId: string;
 	roomType: RoomType;
 	layout: LayoutInfo;
-	showRoom?: (roomID: string) => void;
+	showRoom?: (roomId: string) => void;
 }
 
 interface DialogUserTileState {

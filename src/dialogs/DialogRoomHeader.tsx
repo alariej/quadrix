@@ -129,7 +129,7 @@ interface DialogRoomHeaderProps extends RX.CommonProps {
 	roomPhase: RoomPhase;
 	members: { [id: string]: User };
 	showRoomList: () => void;
-	showRoom: (roomID: string) => void;
+	showRoom: (roomId: string) => void;
 }
 
 const animatedDuration = 200;

@@ -116,7 +116,7 @@ const styles = {
 };
 
 interface DialogNewDirectConversationProps {
-	showRoom: (roomID: string) => void;
+	showRoom: (roomId: string) => void;
 }
 
 interface DialogNewDirectConversationState {

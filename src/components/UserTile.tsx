@@ -96,7 +96,7 @@ interface UserTileProps {
 	hideMembership?: boolean;
 	roomId?: string;
 	roomType?: RoomType;
-	showRoom?: (roomID: string) => void;
+	showRoom?: (roomId: string) => void;
 }
 
 export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> {
