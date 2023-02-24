@@ -3,13 +3,14 @@ import RX from 'reactxp';
 import {
 	BORDER_RADIUS,
 	BUTTON_FILL,
-	BUTTON_JITSI_BACKGROUND,
+	BUTTON_VIDEOCALL_BACKGROUND,
 	BUTTON_ROUND_WIDTH,
-	JITSI_BORDER,
+	VIDEOCALL_BORDER,
 	OPAQUE_BACKGROUND,
 	PAGE_MARGIN,
 	SPACING,
 	TRANSPARENT_BACKGROUND,
+	HEADER_HEIGHT,
 } from '../../ui';
 import ApiClient from '../../matrix/ApiClient';
 import StringUtils from '../../utils/StringUtils';
@@ -25,9 +26,11 @@ import { WebViewMessageEvent } from 'react-native-webview/lib/WebViewTypes';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
-		flex: 1,
-		alignSelf: 'stretch',
-		justifyContent: 'center',
+		position: 'absolute',
+		top: 0,
+		bottom: 0,
+		left: 0,
+		right: 0,
 		backgroundColor: OPAQUE_BACKGROUND,
 	}),
 	containerMinimized: RX.Styles.createViewStyle({
@@ -41,12 +44,13 @@ const styles = {
 		justifyContent: 'center',
 		borderRadius: BORDER_RADIUS,
 		borderWidth: 1,
-		borderColor: JITSI_BORDER,
+		borderColor: VIDEOCALL_BORDER,
 		overflow: 'hidden',
 	}),
 	callContainer: RX.Styles.createViewStyle({
 		flex: 1,
-		margin: 8,
+		margin: PAGE_MARGIN,
+		marginTop: HEADER_HEIGHT / 2,
 		backgroundColor: TRANSPARENT_BACKGROUND,
 	}),
 	callContainerMinimized: RX.Styles.createViewStyle({
@@ -55,7 +59,7 @@ const styles = {
 	}),
 	buttonMinimize: RX.Styles.createViewStyle({
 		position: 'absolute',
-		left: 2 * SPACING,
+		left: 3 * SPACING,
 		top: 2 * SPACING,
 		width: BUTTON_ROUND_WIDTH,
 		height: BUTTON_ROUND_WIDTH,
@@ -64,7 +68,7 @@ const styles = {
 		position: 'absolute',
 		width: 80,
 		height: 100,
-		backgroundColor: BUTTON_JITSI_BACKGROUND,
+		backgroundColor: BUTTON_VIDEOCALL_BACKGROUND,
 	}),
 	containerIcon: RX.Styles.createViewStyle({
 		flex: 1,
@@ -100,6 +104,7 @@ interface ElementCallMessageEvent {
 
 interface ElementCallProps {
 	roomId: string;
+	closeVideoCall: () => void;
 }
 
 interface ElementCallState {
@@ -115,7 +120,6 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 	private widgetId = 'quadrixelementcallwidget';
 	private webviewHtml = '';
 	private webView!: WebView | null;
-	private viewportScale = 1;
 
 	constructor(props: ElementCallProps) {
 		super(props);
@@ -207,7 +211,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 					/>
                     <meta
 						name="viewport"
-						content="width=device-width;initial-scale=${this.viewportScale};maximum-scale=${this.viewportScale}"
+						content="initial-scale=1.0;maximum-scale=1.0"
 					>
 				</head>
 				<body style="background-color: transparent; height: 100%; display: flex; justify-content: center; align-items: center; width: 100%; margin: 0px; padding: 0px">
@@ -468,6 +472,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 	};
 
 	private setMinimized = (isMinimized: boolean) => {
+		RX.UserInterface.dismissKeyboard();
 		this.setState({ isMinimized: isMinimized });
 	};
 
@@ -476,7 +481,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 
 		if (message_.type === 'onHangup') {
 			this.TerminateCall();
-			RX.Modal.dismiss('element_call');
+			this.props.closeVideoCall();
 		} else if (
 			message_.type === 'sendEvent' &&
 			message_.eventType === CallEvents.GroupCallMemberPrefix &&
@@ -541,7 +546,6 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 							backgroundColor: TRANSPARENT_BACKGROUND,
 						}}
 						scrollEnabled={false}
-						scalesPageToFit={false}
 						originWhitelist={['*']}
 						source={{
 							html: this.webviewHtml,

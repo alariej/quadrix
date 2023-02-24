@@ -3,13 +3,14 @@ import RX from 'reactxp';
 import {
 	BORDER_RADIUS,
 	BUTTON_FILL,
-	BUTTON_JITSI_BACKGROUND,
+	BUTTON_VIDEOCALL_BACKGROUND,
 	BUTTON_ROUND_WIDTH,
-	JITSI_BORDER,
+	VIDEOCALL_BORDER,
 	OPAQUE_BACKGROUND,
 	PAGE_MARGIN,
 	SPACING,
 	TRANSPARENT_BACKGROUND,
+	HEADER_HEIGHT,
 } from '../../ui';
 import ApiClient from '../../matrix/ApiClient';
 import StringUtils from '../../utils/StringUtils';
@@ -25,11 +26,13 @@ import { WebViewMessageEvent } from 'react-native-webview/lib/WebViewTypes';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
-		flex: 1,
-		alignSelf: 'stretch',
-		justifyContent: 'center',
+		position: 'absolute',
+		top: 0,
+		bottom: 0,
+		left: 0,
+		right: 0,
 		backgroundColor: OPAQUE_BACKGROUND,
-        // marginTop: 32,
+		// marginTop: 32,
 	}),
 	containerMinimized: RX.Styles.createViewStyle({
 		position: 'absolute',
@@ -42,12 +45,13 @@ const styles = {
 		justifyContent: 'center',
 		borderRadius: BORDER_RADIUS,
 		borderWidth: 1,
-		borderColor: JITSI_BORDER,
+		borderColor: VIDEOCALL_BORDER,
 		overflow: 'hidden',
 	}),
 	callContainer: RX.Styles.createViewStyle({
 		flex: 1,
-		margin: 8,
+		margin: PAGE_MARGIN,
+		marginTop: HEADER_HEIGHT / 2,
 		backgroundColor: TRANSPARENT_BACKGROUND,
 	}),
 	callContainerMinimized: RX.Styles.createViewStyle({
@@ -56,7 +60,7 @@ const styles = {
 	}),
 	buttonMinimize: RX.Styles.createViewStyle({
 		position: 'absolute',
-		left: 2 * SPACING,
+		left: 3 * SPACING,
 		top: 2 * SPACING,
 		width: BUTTON_ROUND_WIDTH,
 		height: BUTTON_ROUND_WIDTH,
@@ -65,7 +69,7 @@ const styles = {
 		position: 'absolute',
 		width: 80,
 		height: 100,
-		backgroundColor: BUTTON_JITSI_BACKGROUND,
+		backgroundColor: BUTTON_VIDEOCALL_BACKGROUND,
 	}),
 	containerIcon: RX.Styles.createViewStyle({
 		flex: 1,
@@ -101,6 +105,7 @@ interface ElementCallMessageEvent {
 
 interface ElementCallProps {
 	roomId: string;
+	closeVideoCall: () => void;
 }
 
 interface ElementCallState {
@@ -469,15 +474,16 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 	};
 
 	private setMinimized = (isMinimized: boolean) => {
+		RX.UserInterface.dismissKeyboard();
 		this.setState({ isMinimized: isMinimized });
 	};
 
 	private onMessage = (message: WebViewMessageEvent) => {
 		const message_ = JSON.parse(message.nativeEvent.data) as ElementCallMessageEvent;
 
-        if (message_.type === 'onHangup') {
+		if (message_.type === 'onHangup') {
 			this.TerminateCall();
-			RX.Modal.dismiss('element_call');
+			this.props.closeVideoCall();
 		} else if (
 			message_.type === 'sendEvent' &&
 			message_.eventType === CallEvents.GroupCallMemberPrefix &&
@@ -549,7 +555,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 						mediaPlaybackRequiresUserAction={false}
 						allowsInlineMediaPlayback={true}
 						javaScriptEnabled={true}
-                        mediaCapturePermissionGrantType={'grant'}
+						mediaCapturePermissionGrantType={'grant'}
 					/>
 					{buttonMinimize}
 				</RX.View>

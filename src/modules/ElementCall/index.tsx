@@ -3,13 +3,14 @@ import RX from 'reactxp';
 import {
 	BORDER_RADIUS,
 	BUTTON_FILL,
-	BUTTON_JITSI_BACKGROUND,
+	BUTTON_VIDEOCALL_BACKGROUND,
 	BUTTON_ROUND_WIDTH,
-	JITSI_BORDER,
+	VIDEOCALL_BORDER,
 	OPAQUE_BACKGROUND,
 	PAGE_MARGIN,
 	SPACING,
 	TRANSPARENT_BACKGROUND,
+	HEADER_HEIGHT,
 } from '../../ui';
 import ApiClient from '../../matrix/ApiClient';
 import {
@@ -40,9 +41,11 @@ import IconSvg, { SvgFile } from '../../components/IconSvg';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
-		flex: 1,
-		alignSelf: 'stretch',
-		justifyContent: 'center',
+		position: 'absolute',
+		top: 0,
+		bottom: 0,
+		left: 0,
+		right: 0,
 		backgroundColor: OPAQUE_BACKGROUND,
 	}),
 	containerMinimized: RX.Styles.createViewStyle({
@@ -56,12 +59,14 @@ const styles = {
 		justifyContent: 'center',
 		borderRadius: BORDER_RADIUS,
 		borderWidth: 1,
-		borderColor: JITSI_BORDER,
+		borderColor: VIDEOCALL_BORDER,
 		overflow: 'hidden',
 	}),
 	callContainer: RX.Styles.createViewStyle({
 		flex: 1,
-		margin: 48,
+		margin: PAGE_MARGIN,
+		marginTop: HEADER_HEIGHT / 2,
+		backgroundColor: TRANSPARENT_BACKGROUND,
 	}),
 	callContainerMinimized: RX.Styles.createViewStyle({
 		width: 80,
@@ -69,7 +74,7 @@ const styles = {
 	}),
 	buttonMinimize: RX.Styles.createViewStyle({
 		position: 'absolute',
-		left: 2 * SPACING,
+		left: 3 * SPACING,
 		top: 2 * SPACING,
 		width: BUTTON_ROUND_WIDTH,
 		height: BUTTON_ROUND_WIDTH,
@@ -78,7 +83,7 @@ const styles = {
 		position: 'absolute',
 		width: 80,
 		height: 100,
-		backgroundColor: BUTTON_JITSI_BACKGROUND,
+		backgroundColor: BUTTON_VIDEOCALL_BACKGROUND,
 	}),
 	containerIcon: RX.Styles.createViewStyle({
 		flex: 1,
@@ -249,6 +254,7 @@ class CallWidgetDriver extends WidgetDriver {
 
 interface ElementCallProps {
 	roomId: string;
+	closeVideoCall: () => void;
 }
 
 interface ElementCallState {
@@ -448,7 +454,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 
 		this.widgetApi!.transport.reply(ev.detail, {});
 
-		RX.Modal.dismiss('element_call');
+		this.props.closeVideoCall();
 	};
 
 	private TerminateCall = () => {
