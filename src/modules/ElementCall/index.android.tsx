@@ -17,7 +17,7 @@ import StringUtils from '../../utils/StringUtils';
 import DataStore from '../../stores/DataStore';
 import { GroupCallIntent, GroupCallType, CallEventContent_, CallMemberEventContent_ } from '../../models/MatrixApi';
 import UiStore from '../../stores/UiStore';
-import { APP_WEBSITE_URL } from '../../appconfig';
+import { APP_WEBSITE_URL, ELEMENT_CALL_URL } from '../../appconfig';
 import { ComponentBase } from 'resub';
 import { Msc3401Call } from '../../models/Msc3401Call';
 import IconSvg, { SvgFile } from '../../components/IconSvg';
@@ -115,7 +115,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 	private newMessageSubscription: number;
 	private newCallEventSubscription: number;
 	private callId = '';
-	private elementCallUrl = 'https://call.al4.re';
+	private elementCallUrl = ELEMENT_CALL_URL;
 	private baseUrl = 'https://' + ApiClient.credentials.homeServer;
 	private widgetId = 'quadrixelementcallwidget';
 	private webviewHtml = '';

@@ -280,7 +280,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		this.newCallEventSubscription = DataStore.subscribe(this.newCallEvents, DataStore.CallEventTrigger);
 	}
 
-	public async componentDidMount(): Promise<void> {
+	public componentDidMount(): void {
 		super.componentDidMount();
 		RX.Modal.dismiss('dialog_menu_composer');
 
@@ -315,9 +315,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 			lang: UiStore.getLanguage(),
 		});
 
-		const wellKnown = await ApiClient.getWellKnown(ApiClient.credentials.homeServer).catch(_error => undefined);
-		const preferredDomain = wellKnown ? wellKnown['chat.quadrix.elementcall']?.preferredDomain : undefined;
-		const elementCallUrl = preferredDomain ? 'https://' + preferredDomain : ELEMENT_CALL_URL;
+		const elementCallUrl = ELEMENT_CALL_URL;
 
 		const url = new URL(elementCallUrl);
 		url.pathname = '/room';
