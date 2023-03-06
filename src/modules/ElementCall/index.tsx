@@ -283,11 +283,6 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 
 		this.newMessageSubscription = DataStore.subscribe(this.newMessages, DataStore.MessageTrigger);
 		this.newCallEventSubscription = DataStore.subscribe(this.newCallEvents, DataStore.CallEventTrigger);
-	}
-
-	public componentDidMount(): void {
-		super.componentDidMount();
-		RX.Modal.dismiss('dialog_menu_composer');
 
 		const msc3401Call = DataStore.getRoomSummary(this.props.roomId).msc3401Call;
 
@@ -327,12 +322,11 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		url.hash = `#?${params.toString()}`;
 
 		this.widgetUrl = url.toString();
+	}
 
-		interface ICallWidget extends IWidget {
-			roomId: string;
-			eventId?: string;
-			avatar_url?: string;
-		}
+	public componentDidMount(): void {
+		super.componentDidMount();
+		RX.Modal.dismiss('dialog_menu_composer');
 
 		const callWidget: ICallWidget = {
 			id: 'quadrixelementcallwidget',
