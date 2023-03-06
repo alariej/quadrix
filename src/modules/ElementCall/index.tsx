@@ -137,6 +137,12 @@ interface IStickyActionRequest extends IWidgetApiRequest {
 	data: IStickyActionRequestData;
 }
 
+interface ICallWidget extends IWidget {
+	roomId: string;
+	eventId?: string;
+	avatar_url?: string;
+}
+
 class CallWidgetDriver extends WidgetDriver {
 	private callId = '';
 
