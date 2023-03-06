@@ -274,7 +274,6 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 	private widget!: Widget;
 	private widgetDriver!: CallWidgetDriver;
 	private widgetIframe: React.RefObject<HTMLIFrameElement> = React.createRef();
-	private completeUrl = '';
 	private newMessageSubscription: number;
 	private newCallEventSubscription: number;
 	private callId = '';
@@ -347,12 +346,12 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		this.widgetDriver = new CallWidgetDriver(this.callId);
 		this.widgetApi = new ClientWidgetApi(this.widget, this.widgetIframe.current!, this.widgetDriver);
 
-		this.completeUrl = this.widget?.getCompleteUrl({
+		const completeUrl = this.widget?.getCompleteUrl({
 			widgetRoomId: this.props.roomId,
 			currentUserId: ApiClient.credentials.userIdFull,
 		});
 
-		const parsedUrl = new URL(this.completeUrl);
+		const parsedUrl = new URL(completeUrl);
 
 		parsedUrl.searchParams.set('widgetId', this.widget.id);
 		parsedUrl.searchParams.set('parentUrl', window.location.href.split('#', 2)[0]);
