@@ -18,12 +18,15 @@ import {
 	BUTTON_MENU_COMPOSER_WIDTH,
 	LIGHT_BACKGROUND,
 } from '../ui';
-import { Languages, pickFile, pickImage, videoconference } from '../translations';
+import { Languages, pickFile, pickImage, videoconferenceJoin, videoconferenceStart } from '../translations';
 import AppFont from '../modules/AppFont';
 import { SvgFile } from '../components/IconSvg';
 import { RoomType } from '../models/MatrixApi';
 import AnimatedButton from '../components/AnimatedButton';
 import { LayoutInfo } from 'reactxp/dist/common/Types';
+import DataStore from '../stores/DataStore';
+import EventUtils from '../utils/EventUtils';
+import ApiClient from '../matrix/ApiClient';
 
 const styles = {
 	modalScreen: RX.Styles.createViewStyle({
@@ -64,7 +67,6 @@ interface DialogMenuComposerProps {
 	roomId: string;
 	roomType: RoomType;
 	roomActive: boolean;
-	videoCallActive: boolean;
 	onPressFile: () => void;
 	onPressImage: () => void;
 	onPressVideoCall: () => void;
@@ -179,11 +181,21 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 			);
 		}
 
+		const msc3401Call = DataStore.getMsc3401Call(this.props.roomId);
+		const msc3401CallStatus = EventUtils.getMsc3401CallStatus(msc3401Call!, ApiClient.credentials.userIdFull);
+
 		const videoCallButtonDisabled =
 			this.state.offline ||
-			this.props.videoCallActive ||
+			msc3401CallStatus === 'joined' ||
 			['community', 'notepad'].includes(this.props.roomType) ||
 			!this.props.roomActive;
+
+		let buttonText;
+		if (!videoCallButtonDisabled && msc3401CallStatus === 'ringing') {
+			buttonText = videoconferenceJoin[this.language];
+		} else {
+			buttonText = videoconferenceStart[this.language];
+		}
 
 		const videoCallButton = (
 			<AnimatedButton
@@ -196,7 +208,7 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 				animatedColor={LIGHT_BACKGROUND}
 				onPress={this.props.onPressVideoCall}
 				disabled={videoCallButtonDisabled}
-				text={videoconference[this.language]}
+				text={buttonText}
 				textStyle={[styles.buttonText, { opacity: videoCallButtonDisabled ? 0.3 : 1 }]}
 			/>
 		);

@@ -158,7 +158,6 @@ interface ComposerProps extends RX.CommonProps {
 interface ComposerState {
 	textInput: string | undefined;
 	offline: boolean;
-	videoCallActive: boolean;
 	sendDisabled: boolean;
 	showProgress: boolean;
 	progressValue: number;
@@ -242,9 +241,6 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 			this.replyEvent = nextProps.replyMessage;
 			partialState.showReplyMessage = true;
 		}
-
-		partialState.offline = UiStore.getOffline();
-		partialState.videoCallActive = UiStore.getVideoCallActive();
 
 		return partialState;
 	}
@@ -721,7 +717,6 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 						roomId={this.props.roomId}
 						roomType={this.props.roomType}
 						roomActive={this.props.roomActive}
-						videoCallActive={this.state.videoCallActive}
 						onPressFile={this.onPressFile}
 						onPressImage={this.onPressImage}
 						onPressVideoCall={this.onPressVideoCall}

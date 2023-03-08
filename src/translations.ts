@@ -1349,11 +1349,18 @@ export const pickImage: Translation = {
 	es: 'Elegir una imagen',
 };
 
-export const videoconference: Translation = {
+export const videoconferenceStart: Translation = {
 	en: 'Start videoconference',
 	de: 'Videokonferenz starten',
 	fr: 'Lancer la vidéoconférence',
 	es: 'Iniciar videoconferencia',
+};
+
+export const videoconferenceJoin: Translation = {
+	en: 'Join videoconference',
+	de: 'Videokonferenz beitreten',
+	fr: 'Joindre vidéoconférence',
+	es: 'Unirse a videoconferencia',
 };
 
 export const newVersion = (versionInstalled: string, versionAvailable: string, language: string): string => {
