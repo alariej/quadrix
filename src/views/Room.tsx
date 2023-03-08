@@ -106,6 +106,7 @@ export default class Room extends ComponentBase<RoomProps, RoomState> {
 					showTempForwardedMessage={this.props.showTempForwardedMessage}
 					tempForwardedMessage={this.props.tempForwardedMessage!}
 					onPressSendButton={this.state.onPressSendButton}
+					showVideoCall={this.props.showVideoCall}
 				/>
 			);
 		} else if (this.state.roomPhase === 'invite') {

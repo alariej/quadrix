@@ -1,4 +1,4 @@
-import { CallEventContent_ } from "./MatrixApi";
+import { CallEventContent_ } from './MatrixApi';
 
 export interface Msc3401Call {
 	startTime?: number;
@@ -6,3 +6,5 @@ export interface Msc3401Call {
 	callEventContent?: CallEventContent_;
 	participants?: { [id: string]: boolean };
 }
+
+export type Msc3401CallStatus = 'none' | 'joined' | 'ringing';

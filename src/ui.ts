@@ -102,3 +102,6 @@ export const MARKER_READ_FILL = '#19C9FF';
 export const MARKER_SENT_FILL = 'darkgrey';
 export const EMOJI_TEXT = 'black';
 export const VIDEOCALL_BORDER = 'grey';
+export const JOINEDCALL_BACKGROUND = '#00C3FF';
+export const RINGINGCALL_BACKGROUND = 'limegreen';
+export const REJECTCALL_BACKGROUND = 'red';

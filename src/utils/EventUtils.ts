@@ -19,6 +19,8 @@ import {
 	CallEventContent_,
 } from '../models/MatrixApi';
 import { FilteredChatEvent } from '../models/FilteredChatEvent';
+import { Msc3401Call, Msc3401CallStatus } from '../models/Msc3401Call';
+import differenceInHours from 'date-fns/differenceInHours';
 
 class EventUtils {
 	public filterEvent(event: ClientEvent_, roomType: RoomType): boolean {
@@ -158,6 +160,22 @@ class EventUtils {
 		}
 
 		return systemMessage;
+	}
+
+	public getMsc3401CallStatus(msc3401Call: Msc3401Call, userId: string): Msc3401CallStatus {
+		if (msc3401Call?.participants && differenceInHours(Date.now(), msc3401Call.startTime!) < 12) {
+			const activeParticipants = Object.entries(msc3401Call?.participants).filter(
+				participant => participant[1] === true
+			);
+			if (activeParticipants?.length > 0) {
+				if (msc3401Call.participants[userId]) {
+					return 'joined';
+				} else {
+					return 'ringing';
+				}
+			}
+		}
+		return 'none';
 	}
 }
 

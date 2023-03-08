@@ -19,6 +19,9 @@ import {
 	TRANSPARENT_BACKGROUND,
 	HEADER_STATUS,
 	BUTTON_UNREAD_TEXT,
+	RINGINGCALL_BACKGROUND,
+	REJECTCALL_BACKGROUND,
+	OPAQUE_BACKGROUND,
 } from '../ui';
 import { MESSAGE_COUNT_ADD } from '../appconfig';
 import { ComponentBase } from 'resub';
@@ -43,6 +46,7 @@ import AppFont from '../modules/AppFont';
 import StringUtils from '../utils/StringUtils';
 import FloatingSendButton from '../modules/FloatingSendButton';
 import { FilteredChatEvent, TemporaryMessage } from '../models/FilteredChatEvent';
+import AnimatedButton from './AnimatedButton';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -117,6 +121,36 @@ const styles = {
 		fontSize: FONT_LARGE,
 		margin: 12,
 	}),
+	containerCallRingingButton: RX.Styles.createViewStyle({
+		position: 'absolute',
+		bottom: SPACING,
+		alignSelf: 'center',
+		flexDirection: 'row',
+		borderRadius: BORDER_RADIUS,
+		backgroundColor: OPAQUE_BACKGROUND,
+		paddingHorizontal: OBJECT_MARGIN / 2,
+	}),
+	callAnswerButton: RX.Styles.createViewStyle({
+		height: 42,
+		width: 42,
+		borderRadius: 21,
+		margin: OBJECT_MARGIN,
+		alignItems: 'center',
+		justifyContent: 'center',
+		backgroundColor: RINGINGCALL_BACKGROUND,
+	}),
+	callRejectButton: RX.Styles.createViewStyle({
+		height: 42,
+		width: 42,
+		borderRadius: 21,
+		margin: OBJECT_MARGIN,
+		alignItems: 'center',
+		justifyContent: 'center',
+		backgroundColor: REJECTCALL_BACKGROUND,
+	}),
+	rejectCallIcon: RX.Styles.createViewStyle({
+		transform: [{ rotate: '135deg' }],
+	}),
 };
 
 interface EventListItemInfo extends VirtualListViewItemInfo {
@@ -132,6 +166,7 @@ interface RoomChatState {
 	showMoreButton: boolean;
 	showLoadingButton: boolean;
 	showNewMessageButton: boolean;
+	showRingingCallButton: boolean;
 	offline: boolean;
 }
 
@@ -143,6 +178,7 @@ interface RoomChatProps extends RX.CommonProps {
 	showTempForwardedMessage: (roomId: string, message: FilteredChatEvent, tempId: string) => void;
 	tempForwardedMessage: { message: FilteredChatEvent; tempId: string };
 	onPressSendButton: (() => void) | undefined;
+	showVideoCall: (roomId: string) => void;
 }
 
 export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState> {
@@ -422,9 +458,17 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 			const lastItem = this.eventListItems.pop();
 			this.eventListItems = this.eventListItems.concat(lastItem!);
 		}
+
 		if (!this.state.showArrowButton) {
 			ApiClient.sendReadReceipt(this.props.roomId, this.roomEvents[0].eventId).catch(_error => null);
 			this.setState({ eventListItems: this.eventListItems });
+		}
+
+		const msc3401Call = DataStore.getMsc3401Call(this.props.roomId);
+		const msc3401CallStatus = EventUtils.getMsc3401CallStatus(msc3401Call!, ApiClient.credentials.userIdFull);
+
+		if (msc3401CallStatus === 'ringing') {
+			this.setState({ showRingingCallButton: true });
 		}
 	};
 
@@ -688,6 +732,10 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 		setTimeout(showMoreButton, 1000);
 	};
 
+	private onRejectCall = () => {
+		this.setState({ showRingingCallButton: false });
+	};
+
 	public render(): JSX.Element | null {
 		if (!this.props.roomType) {
 			return null;
@@ -765,6 +813,33 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 			);
 		}
 
+		let callRingingButton: ReactElement | undefined;
+		if (this.state.showRingingCallButton) {
+			callRingingButton = (
+				<RX.View style={styles.containerCallRingingButton}>
+					<AnimatedButton
+						buttonStyle={styles.callAnswerButton}
+						iconSource={require('../resources/svg/RI_call.json') as SvgFile}
+						iconFillColor={'white'}
+						iconHeight={32}
+						iconWidth={32}
+						animatedColor={'#adebad'}
+						onPress={() => this.props.showVideoCall(this.props.roomId)}
+					/>
+					<AnimatedButton
+						buttonStyle={styles.callRejectButton}
+						iconSource={require('../resources/svg/RI_call.json') as SvgFile}
+						iconFillColor={'white'}
+						iconStyle={styles.rejectCallIcon}
+						iconHeight={32}
+						iconWidth={32}
+						animatedColor={'#ff9999'}
+						onPress={this.onRejectCall}
+					/>
+				</RX.View>
+			);
+		}
+
 		const floatingSendButton = (
 			<FloatingSendButton
 				onPressSendButton={this.props.onPressSendButton}
@@ -790,6 +865,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 				{arrowButton}
 				{moreButton}
 				{loadingButton}
+				{callRingingButton}
 				{floatingSendButton}
 			</RX.View>
 		);
