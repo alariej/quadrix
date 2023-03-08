@@ -282,7 +282,10 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		super(props);
 
 		this.newMessageSubscription = DataStore.subscribe(this.newMessages, DataStore.MessageTrigger);
-		this.newCallEventSubscription = DataStore.subscribe(this.newCallEvents, DataStore.CallEventTrigger);
+		this.newCallEventSubscription = DataStore.subscribe(
+			this.newToDeviceCallEvents,
+			DataStore.ToDeviceCallEventTrigger
+		);
 
 		const msc3401Call = DataStore.getRoomSummary(this.props.roomId).msc3401Call;
 
@@ -391,10 +394,10 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		}
 	};
 
-	private newCallEvents = () => {
-		const callEvents = DataStore.getCallEvents();
+	private newToDeviceCallEvents = () => {
+		const events = DataStore.getToDeviceCallEvents();
 
-		callEvents.map(event => {
+		events.map(event => {
 			if (event.content.conf_id === this.callId) {
 				this.widgetApi!.feedToDevice(event as IRoomEvent, false).catch(_error => null);
 			}

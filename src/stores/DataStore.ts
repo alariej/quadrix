@@ -52,7 +52,7 @@ const RoomListTrigger = 'RoomListTrigger';
 const UnreadTotalTrigger = 'UnreadTotalTrigger';
 const RoomSummaryTrigger = 'RoomSummaryTrigger';
 const UserPresenceTrigger = 'UserPresenceTrigger';
-const CallEventTrigger = 'CallEventTrigger';
+const ToDeviceCallEventTrigger = 'ToDeviceCallEventTrigger';
 
 @AutoSubscribeStore
 class DataStore extends StoreBase {
@@ -63,7 +63,7 @@ class DataStore extends StoreBase {
 	private directRoomList: { [id: string]: string } = {};
 	private lastSeenTime: { [id: string]: number } = {};
 	private syncComplete = false;
-	private callEvents: ToDeviceEvent_[] = [];
+	private toDeviceCallEvents: ToDeviceEvent_[] = [];
 
 	public ReadReceiptTrigger = ReadReceiptTrigger;
 	public MessageTrigger = MessageTrigger;
@@ -75,7 +75,7 @@ class DataStore extends StoreBase {
 	public UnreadTotalTrigger = UnreadTotalTrigger;
 	public RoomSummaryTrigger = RoomSummaryTrigger;
 	public UserPresenceTrigger = UserPresenceTrigger;
-	public CallEventTrigger = CallEventTrigger;
+	public ToDeviceCallEventTrigger = ToDeviceCallEventTrigger;
 
 	public buildRoomSummaryList(syncData: SyncResponse_) {
 		this.roomSummaryList = [];
@@ -525,31 +525,31 @@ class DataStore extends StoreBase {
 		syncData.to_device.events.map(event => {
 			switch (event.type) {
 				case 'm.call.invite':
-					this.callEvents.push(event);
+					this.toDeviceCallEvents.push(event);
 					break;
 
 				case 'm.call.candidates':
-					this.callEvents.push(event);
+					this.toDeviceCallEvents.push(event);
 					break;
 
 				case 'm.call.answer':
-					this.callEvents.push(event);
+					this.toDeviceCallEvents.push(event);
 					break;
 
 				case 'm.call.select_answer':
-					this.callEvents.push(event);
+					this.toDeviceCallEvents.push(event);
 					break;
 
 				case 'org.matrix.call.sdp_stream_metadata_changed':
-					this.callEvents.push(event);
+					this.toDeviceCallEvents.push(event);
 					break;
 
 				case 'm.call.negotiate':
-					this.callEvents.push(event);
+					this.toDeviceCallEvents.push(event);
 					break;
 
 				case 'm.call.hangup':
-					this.callEvents.push(event);
+					this.toDeviceCallEvents.push(event);
 					break;
 
 				default:
@@ -557,7 +557,7 @@ class DataStore extends StoreBase {
 			}
 		});
 
-		this.trigger(CallEventTrigger);
+		this.trigger(ToDeviceCallEventTrigger);
 	}
 
 	public updateRoomSummaryListInitial(syncData: SyncResponse_) {
@@ -1223,13 +1223,13 @@ class DataStore extends StoreBase {
 		return this.roomSummaryList[roomIndex].msc3401Call;
 	}
 
-	@autoSubscribeWithKey(CallEventTrigger)
-	public getCallEvents(): ToDeviceEvent_[] {
-		const callEvents = _.cloneDeep(this.callEvents);
+	@autoSubscribeWithKey(ToDeviceCallEventTrigger)
+	public getToDeviceCallEvents(): ToDeviceEvent_[] {
+		const toDeviceCallEvents = _.cloneDeep(this.toDeviceCallEvents);
 
-		this.callEvents = [];
+		this.toDeviceCallEvents = [];
 
-		return callEvents;
+		return toDeviceCallEvents;
 	}
 }
 

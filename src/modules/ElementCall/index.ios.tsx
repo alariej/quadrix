@@ -126,7 +126,10 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		super(props);
 
 		this.newMessageSubscription = DataStore.subscribe(this.newMessages, DataStore.MessageTrigger);
-		this.newCallEventSubscription = DataStore.subscribe(this.newCallEvents, DataStore.CallEventTrigger);
+		this.newCallEventSubscription = DataStore.subscribe(
+			this.newToDeviceCallEvents,
+			DataStore.ToDeviceCallEventTrigger
+		);
 
 		const roomSummary = DataStore.getRoomSummary(this.props.roomId);
 
@@ -392,6 +395,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 
 	public componentDidMount(): void {
 		super.componentDidMount();
+		RX.UserInterface.dismissKeyboard();
 		RX.Modal.dismiss('dialog_menu_composer');
 	}
 
@@ -425,10 +429,10 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		}
 	};
 
-	private newCallEvents = () => {
-		const callEvents = DataStore.getCallEvents();
+	private newToDeviceCallEvents = () => {
+		const events = DataStore.getToDeviceCallEvents();
 
-		callEvents.map(event => {
+		events.map(event => {
 			if (event.content.conf_id === this.callId) {
 				this.webView?.current?.postMessage(JSON.stringify(event));
 			}
