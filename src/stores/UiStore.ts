@@ -9,7 +9,6 @@ import { PAGE_WIDTH_DEFAULT, PAGE_WIDE_PADDING } from '../ui';
 
 const UnknownAccessToken = 'UnknownAccessToken';
 const OfflineTrigger = 'OfflineTrigger';
-const VideoCallActiveTrigger = 'VideoCallActiveTrigger';
 const SelectedRoomTrigger = 'SelectedRoomTrigger';
 const LayoutTrigger = 'LayoutTrigger';
 type DeviceType = 'mobile' | 'desktop';
@@ -37,6 +36,7 @@ class UiStore extends StoreBase {
 	private language: Languages = 'en';
 	private isElectron = false;
 	private isVideoCallActive = false;
+	private videoCallRoomId = '';
 	private appLayout: Layout | undefined;
 	private selectedRoom = '';
 
@@ -141,16 +141,6 @@ class UiStore extends StoreBase {
 
 	public getLocale(): LocaleType {
 		return this.locale;
-	}
-
-	public setVideoCallActive(isVideoCallActive: boolean) {
-		this.isVideoCallActive = isVideoCallActive;
-		this.trigger(VideoCallActiveTrigger);
-	}
-
-	@autoSubscribeWithKey(VideoCallActiveTrigger)
-	public getVideoCallActive(): boolean {
-		return this.isVideoCallActive;
 	}
 
 	public setAppLayout(layout: ViewOnLayoutEvent) {

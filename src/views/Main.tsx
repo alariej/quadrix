@@ -422,12 +422,10 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
 	private showVideoCall = (roomId: string) => {
 		this.videoCallRoomId = roomId;
-		UiStore.setVideoCallActive(true);
 		this.setState({ showVideoCall: true });
 	};
 
 	private closeVideoCall = () => {
-		UiStore.setVideoCallActive(false);
 		this.setState({ showVideoCall: false }, () => {
 			setTimeout(() => {
 				RX.StatusBar.setBackgroundColor(STATUSBAR_BACKGROUND, true);
