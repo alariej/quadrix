@@ -35,8 +35,6 @@ class UiStore extends StoreBase {
 	private locale: LocaleType = enUS;
 	private language: Languages = 'en';
 	private isElectron = false;
-	private isVideoCallActive = false;
-	private videoCallRoomId = '';
 	private appLayout: Layout | undefined;
 	private selectedRoom = '';
 
