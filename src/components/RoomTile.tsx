@@ -18,6 +18,8 @@ import {
 	TILE_BACKGROUND_SELECTED,
 	ICON_REDUCTION_FACTOR,
 	ICON_INFO_SIZE,
+	RINGINGCALL_BACKGROUND,
+	JOINEDCALL_BACKGROUND,
 } from '../ui';
 import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
@@ -46,6 +48,7 @@ import StringUtils from '../utils/StringUtils';
 import { RoomSummary } from '../models/RoomSummary';
 import { User } from '../models/User';
 import { FilteredChatEvent } from '../models/FilteredChatEvent';
+import { Msc3401CallStatus } from '../models/Msc3401Call';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -126,6 +129,16 @@ const styles = {
 		textAlign: 'center',
 		marginLeft: 2 * SPACING,
 	}),
+	callStatus: RX.Styles.createViewStyle({
+		position: 'absolute',
+		bottom: 0,
+		right: 0,
+		height: 22,
+		width: 22,
+		borderRadius: 11,
+		alignItems: 'center',
+		justifyContent: 'center',
+	}),
 };
 
 interface RoomTileProps extends RX.CommonProps {
@@ -143,6 +156,7 @@ interface RoomTileState {
 	contactId: string;
 	type: RoomType;
 	isSelected: boolean;
+	msc3401CallStatus: Msc3401CallStatus | undefined;
 }
 
 export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState> {
@@ -208,6 +222,9 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 			}
 		}
 
+		const msc3401Call = roomSummary.msc3401Call;
+		const msc3401CallStatus = EventUtils.getMsc3401CallStatus(msc3401Call!, ApiClient.credentials.userIdFull);
+
 		return {
 			avatarUrl: StringUtils.mxcToHttp(avatarUrl!, ApiClient.credentials.homeServer),
 			name: name!,
@@ -217,6 +234,7 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 			contactId: roomSummary.contactId!,
 			type: roomSummary.type!,
 			isSelected: selectedRoom === this.props.roomId,
+			msc3401CallStatus: msc3401CallStatus,
 		};
 	}
 
@@ -474,6 +492,30 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 			</RX.Text>
 		);
 
+		let callStatus: ReactElement | undefined;
+		if (['ringing', 'joined'].includes(this.state.msc3401CallStatus!)) {
+			callStatus = (
+				<RX.View
+					style={[
+						styles.callStatus,
+						{
+							backgroundColor:
+								this.state.msc3401CallStatus === 'ringing'
+									? RINGINGCALL_BACKGROUND
+									: JOINEDCALL_BACKGROUND,
+						},
+					]}
+				>
+					<IconSvg
+						source={require('../resources/svg/RI_call.json') as SvgFile}
+						fillColor={'white'}
+						height={16}
+						width={16}
+					/>
+				</RX.View>
+			);
+		}
+
 		return (
 			<RX.View style={styles.container}>
 				<RX.View
@@ -485,7 +527,10 @@ export default class RoomTile extends ComponentBase<RoomTileProps, RoomTileState
 					disableTouchOpacityAnimation={false}
 					activeOpacity={0.8}
 				>
-					<RX.View style={styles.containerAvatar}>{avatar!}</RX.View>
+					<RX.View style={styles.containerAvatar}>
+						{avatar!}
+						{callStatus!}
+					</RX.View>
 					<RX.View style={styles.containerRoomInfo}>
 						<RX.Text
 							style={styles.containerRoomName}
