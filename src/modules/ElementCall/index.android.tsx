@@ -119,7 +119,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 	private baseUrl = 'https://' + ApiClient.credentials.homeServer;
 	private widgetId = 'quadrixelementcallwidget';
 	private webviewHtml = '';
-	private webView!: WebView | null;
+	private webView: React.RefObject<WebView> = React.createRef();
 
 	constructor(props: ElementCallProps) {
 		super(props);
@@ -230,7 +230,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 						const language = "${UiStore.getLanguage()}";
 						const baseUrl = "${this.baseUrl}";
 						const elementCallUrl = "${this.elementCallUrl}";
-			
+
 						const params = new URLSearchParams({
 							embed: "true",
 							preload: "true",
@@ -243,22 +243,22 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 							enableE2e: "false",
 							lang: language,
 						});
-			
+
 						const url = new URL(elementCallUrl);
 						url.pathname = "/room";
 						url.hash = "#?" + params.toString();
 						const widgetUrl = url.toString();
-			
+
 						const parsedUrl = new URL(widgetUrl);
 						parsedUrl.searchParams.set("widgetId", widgetId);
 						parsedUrl.searchParams.set("parentUrl", window.location.href.split("#", 2)[0]);
 						const iFrameSrc = parsedUrl.toString().replace(/%24/g, "$");
-			
+
 						class CallWidgetDriver {
 							validateCapabilities(requested) {
 								return Promise.resolve(requested);
 							}
-			
+
 							sendEvent(eventType, content, stateKey, roomId) {
 								const payload = {
 									type: "sendEvent",
@@ -271,7 +271,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 								const eventId = "event" + Math.round(Math.random() * 1000000);
 								return Promise.resolve({ eventId: eventId, roomId: roomId });
 							}
-			
+
 							sendToDevice(eventType, encrypted, contentMap) {
 								const payload = {
 									type: "sendToDevice",
@@ -282,7 +282,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 								window.ReactNativeWebView.postMessage(JSON.stringify(payload));
 								return Promise.resolve();
 							}
-			
+
 							readStateEvents(eventType, stateKey, limit, roomIds) {
 								var stateEvents;
 								var payload;
@@ -298,7 +298,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 								}
 								return Promise.resolve(stateEvents);
 							}
-			
+
 							async *getTurnServers() {
 								const turnServer = {
 									uris: ["stun:turn.matrix.org"],
@@ -308,34 +308,34 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 								yield await Promise.resolve(turnServer);
 							}
 						}
-			
+
 						const onTileLayout = ev => {
 							ev.preventDefault();
 							widgetApi.transport.reply(ev.detail, {});
 						};
-			
+
 						const onAlwaysOnScreen = ev => {
 							ev.preventDefault();
 							widgetApi.transport.reply(ev.detail, {});
 						};
-			
+
 						const onHangup = ev => {
 							ev.preventDefault();
 							widgetApi.transport.reply(ev.detail, {});
-			
+
 							widgetApi.off("action:im.vector.hangup", onHangup);
 							widgetApi.off("action:io.element.tile_layout", onTileLayout);
 							widgetApi.off("action:set_always_on_screen", onAlwaysOnScreen);
 							widgetApi.removeAllListeners();
 							widgetApi.stop();
-			
+
 							const payload = {
 								type: "onHangup",
 							};
 							window.ReactNativeWebView.postMessage(JSON.stringify(payload));
 							document.removeEventListener("message", handleWebviewRequest);
 						};
-			
+
 						const onReady = async () => {
 							await widgetApi.transport.send("io.element.join", {
 								audioInput: "Default",
@@ -347,6 +347,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 						};
 
 						const handleWebviewRequest = (ev) => {
+                            if (!ev.data) { return; }
 							const event_ = JSON.parse(ev.data);
 							if (event_.type === "org.matrix.msc3401.call.member") {
 								widgetApi.feedEvent(event_, event_.room_id);
@@ -363,22 +364,22 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 								url: widgetUrl,
 								roomId: roomId,
 							};
-			
+
 							const widget = new mxwidgets.Widget(callWidget);
-			
+
 							const callWidgetIframe = document.getElementById("call-widget-iframe");
 							callWidgetIframe.src = iFrameSrc;
 							callWidgetIframe.onload = "";
-			
+
 							const widgetDriver = new CallWidgetDriver();
 							widgetApi = new mxwidgets.ClientWidgetApi(widget, callWidgetIframe, widgetDriver);
-			
+
 							widgetApi.once("ready", onReady);
 
 							document.addEventListener("message", handleWebviewRequest);
 						};
 					</script>
-			
+
 					<iframe
 						id="call-widget-iframe"
 						style="height: 100%; width: 100%; border-width: 0px; border-radius: 0px;"
@@ -423,7 +424,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 				unsigned: {},
 			};
 
-			this.webView?.postMessage(JSON.stringify(event_));
+			this.webView?.current?.postMessage(JSON.stringify(event_));
 		}
 	};
 
@@ -432,7 +433,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 
 		events.map(event => {
 			if (event.content.conf_id === this.callId) {
-				this.webView?.postMessage(JSON.stringify(event));
+				this.webView?.current?.postMessage(JSON.stringify(event));
 			}
 		});
 	};
@@ -543,9 +544,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 			<RX.View style={this.state.isMinimized ? styles.containerMinimized : styles.container}>
 				<RX.View style={this.state.isMinimized ? styles.callContainerMinimized : styles.callContainer}>
 					<WebView
-						ref={ref => {
-							this.webView = ref;
-						}}
+						ref={this.webView}
 						style={{
 							backgroundColor: TRANSPARENT_BACKGROUND,
 						}}
