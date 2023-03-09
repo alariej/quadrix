@@ -62,6 +62,7 @@
     "react-image-file-resizer": "0.4.8",
     "react-native": "0.70.5",
     "react-native-blob-util": "0.17.0",
+    "react-native-callkeep": "^4.3.6",
     "react-native-compressor": "1.6.1",
     "react-native-create-thumbnail": "1.6.3",
     "react-native-device-info": "10.3.0",
