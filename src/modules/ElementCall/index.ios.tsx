@@ -23,6 +23,8 @@ import { Msc3401Call } from '../../models/Msc3401Call';
 import IconSvg, { SvgFile } from '../../components/IconSvg';
 import WebView from 'react-native-webview';
 import { WebViewMessageEvent } from 'react-native-webview/lib/WebViewTypes';
+import RNCallKeep from 'react-native-callkeep';
+import { uuidv4 } from 'react-native-compressor';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -391,6 +393,28 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 				</body>
 			</html>
 		`;
+
+		RNCallKeep.setup({
+			ios: {
+				appName: 'Quadrix',
+			},
+			android: {
+				alertTitle: '',
+				alertDescription: '',
+				cancelButton: '',
+				okButton: '',
+				additionalPermissions: [],
+			},
+		}).catch(console.log);
+
+		const uuid = uuidv4();
+		RNCallKeep.startCall(
+			uuid,
+			this.props.roomId,
+			roomSummary.name,
+			'generic',
+			true,
+		);
 	}
 
 	public componentDidMount(): void {
@@ -404,6 +428,8 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 
 		DataStore.unsubscribe(this.newMessageSubscription);
 		DataStore.unsubscribe(this.newCallEventSubscription);
+
+		RNCallKeep.endAllCalls();
 	}
 
 	private newMessages = () => {
