@@ -34,7 +34,6 @@ const styles = {
 		left: 0,
 		right: 0,
 		backgroundColor: OPAQUE_BACKGROUND,
-		// marginTop: 32,
 	}),
 	containerMinimized: RX.Styles.createViewStyle({
 		position: 'absolute',
@@ -233,7 +232,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 						const language = "${UiStore.getLanguage()}";
 						const baseUrl = "${this.baseUrl}";
 						const elementCallUrl = "${this.elementCallUrl}";
-			
+
 						const params = new URLSearchParams({
 							embed: "true",
 							preload: "true",
@@ -246,22 +245,22 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 							enableE2e: "false",
 							lang: language,
 						});
-			
+
 						const url = new URL(elementCallUrl);
 						url.pathname = "/room";
 						url.hash = "#?" + params.toString();
 						const widgetUrl = url.toString();
-			
+
 						const parsedUrl = new URL(widgetUrl);
 						parsedUrl.searchParams.set("widgetId", widgetId);
 						parsedUrl.searchParams.set("parentUrl", window.location.href.split("#", 2)[0]);
 						const iFrameSrc = parsedUrl.toString().replace(/%24/g, "$");
-			
+
 						class CallWidgetDriver {
 							validateCapabilities(requested) {
 								return Promise.resolve(requested);
 							}
-			
+
 							sendEvent(eventType, content, stateKey, roomId) {
 								const payload = {
 									type: "sendEvent",
@@ -274,7 +273,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 								const eventId = "event" + Math.round(Math.random() * 1000000);
 								return Promise.resolve({ eventId: eventId, roomId: roomId });
 							}
-			
+
 							sendToDevice(eventType, encrypted, contentMap) {
 								const payload = {
 									type: "sendToDevice",
@@ -285,7 +284,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 								window.ReactNativeWebView.postMessage(JSON.stringify(payload));
 								return Promise.resolve();
 							}
-			
+
 							readStateEvents(eventType, stateKey, limit, roomIds) {
 								var stateEvents;
 								var payload;
@@ -301,7 +300,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 								}
 								return Promise.resolve(stateEvents);
 							}
-			
+
 							async *getTurnServers() {
 								const turnServer = {
 									uris: ["stun:turn.matrix.org"],
@@ -311,34 +310,34 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 								yield await Promise.resolve(turnServer);
 							}
 						}
-			
+
 						const onTileLayout = ev => {
 							ev.preventDefault();
 							widgetApi.transport.reply(ev.detail, {});
 						};
-			
+
 						const onAlwaysOnScreen = ev => {
 							ev.preventDefault();
 							widgetApi.transport.reply(ev.detail, {});
 						};
-			
+
 						const onHangup = ev => {
 							ev.preventDefault();
 							widgetApi.transport.reply(ev.detail, {});
-			
+
 							widgetApi.off("action:im.vector.hangup", onHangup);
 							widgetApi.off("action:io.element.tile_layout", onTileLayout);
 							widgetApi.off("action:set_always_on_screen", onAlwaysOnScreen);
 							widgetApi.removeAllListeners();
 							widgetApi.stop();
-			
+
 							const payload = {
 								type: "onHangup",
 							};
 							window.ReactNativeWebView.postMessage(JSON.stringify(payload));
 							window.removeEventListener("message", handleWebviewRequest);
 						};
-			
+
 						const onReady = async () => {
 							await widgetApi.transport.send("io.element.join", {
 								audioInput: "Default",
@@ -367,22 +366,22 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 								url: widgetUrl,
 								roomId: roomId,
 							};
-			
+
 							const widget = new mxwidgets.Widget(callWidget);
-			
+
 							const callWidgetIframe = document.getElementById("call-widget-iframe");
 							callWidgetIframe.src = iFrameSrc;
 							callWidgetIframe.onload = "";
-			
+
 							const widgetDriver = new CallWidgetDriver();
 							widgetApi = new mxwidgets.ClientWidgetApi(widget, callWidgetIframe, widgetDriver);
-			
+
 							widgetApi.once("ready", onReady);
 
 							window.addEventListener("message", handleWebviewRequest);
 						};
 					</script>
-			
+
 					<iframe
 						id="call-widget-iframe"
 						style="height: 100%; width: 100%; border-width: 0px; border-radius: 0px;"
@@ -405,16 +404,10 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 				okButton: '',
 				additionalPermissions: [],
 			},
-		}).catch(console.log);
+		}).catch(_error => null);
 
 		const uuid = uuidv4();
-		RNCallKeep.startCall(
-			uuid,
-			this.props.roomId,
-			roomSummary.name,
-			'generic',
-			true,
-		);
+		RNCallKeep.startCall(uuid, this.props.roomId, roomSummary.name, 'generic', true);
 	}
 
 	public componentDidMount(): void {
