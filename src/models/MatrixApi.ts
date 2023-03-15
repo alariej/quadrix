@@ -17,6 +17,7 @@ export type StateEventType =
 	| 'm.room.join_rules'
 	| 'm.room.canonical_alias'
 	| 'm.room.encryption'
+	| 'm.room.power_levels'
 	| 'org.matrix.msc3401.call'
 	| 'org.matrix.msc3401.call.member';
 
@@ -442,6 +443,11 @@ export interface StateEventContent_ {
 	url?: string;
 	size?: number;
 	mimetype?: string;
+	power_level_content_override?: {
+		events?: {
+			[eventType: string]: number;
+		};
+	};
 }
 
 export interface GetJoinedMembersResponse_ {
