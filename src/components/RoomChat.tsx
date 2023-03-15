@@ -282,6 +282,13 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
 			if (!partialState.offline) {
 				this.sendInitialReadReceipt(nextProps.roomId);
+
+				const msc3401Call = DataStore.getMsc3401Call(nextProps.roomId);
+				const msc3401CallStatus = EventUtils.getMsc3401CallStatus(
+					msc3401Call!,
+					ApiClient.credentials.userIdFull
+				);
+				partialState.showRingingCallButton = msc3401CallStatus === 'ringing' ? true : false;
 			}
 
 			if (!initState && this.virtualListView) {
@@ -335,10 +342,6 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 		if (this.virtualListView) {
 			this.virtualListView.scrollToTop(true, 0);
 		}
-
-		const msc3401Call = DataStore.getMsc3401Call(this.props.roomId);
-		const msc3401CallStatus = EventUtils.getMsc3401CallStatus(msc3401Call!, ApiClient.credentials.userIdFull);
-		this.setState({ showRingingCallButton: msc3401CallStatus === 'ringing' ? true : false });
 	}
 
 	public componentWillUnmount(): void {
