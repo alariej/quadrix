@@ -471,7 +471,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 			this.setState({ eventListItems: this.eventListItems });
 		}
 
-		const msc3401Call = DataStore.getMsc3401Call(this.props.roomId);
+		const msc3401Call = DataStore.getMsc3401Call_(this.props.roomId);
 		const msc3401CallStatus = EventUtils.getMsc3401CallStatus(msc3401Call!, ApiClient.credentials.userIdFull);
 		this.setState({ showRingingCallButton: msc3401CallStatus === 'ringing' ? true : false });
 	};

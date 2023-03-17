@@ -181,7 +181,7 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 			);
 		}
 
-		const msc3401Call = DataStore.getMsc3401Call(this.props.roomId);
+		const msc3401Call = DataStore.getMsc3401Call_(this.props.roomId);
 		const msc3401CallStatus = EventUtils.getMsc3401CallStatus(msc3401Call!, ApiClient.credentials.userIdFull);
 
 		const videoCallButtonDisabled =

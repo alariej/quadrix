@@ -1238,11 +1238,16 @@ class DataStore extends StoreBase {
 		this.lastSeenTime = lastSeenTime;
 	}
 
+	@autoSubscribeWithKey('DummyTrigger')
 	public getMsc3401Call(roomId: string) {
 		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
 		return this.roomSummaryList[roomIndex].msc3401Call;
 	}
 
+	public getMsc3401Call_(roomId: string) {
+		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
+		return this.roomSummaryList[roomIndex].msc3401Call;
+	}
 
 	@autoSubscribeWithKey('DummyTrigger')
 	public getMsc3401Ready(roomId: string) {
