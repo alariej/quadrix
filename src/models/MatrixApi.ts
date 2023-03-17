@@ -232,6 +232,8 @@ export interface RoomEventContent_ {
 	join_rule?: string;
 	topic?: string;
 	users?: { [id: string]: number };
+	'chat.quadrix.notepad'?: boolean; // custom field
+}
 
 export interface PowerLevelEventContent_ {
 	users: {
@@ -451,7 +453,7 @@ export interface NewRoomOptions_ {
 			'org.matrix.msc3401.call.member': number;
 		};
 	};
-	creation_content?: { _is_notepad: boolean };
+	creation_content?: { 'chat.quadrix.notepad': boolean };
 }
 
 export interface PublicRoom_ {

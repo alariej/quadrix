@@ -263,7 +263,15 @@ class DataStore extends StoreBase {
 					break;
 
 				case 'm.room.create':
-					if (content && (<RoomEventContent_>content)._is_notepad) {
+					if (
+						content &&
+						// bubblegum & wires hack
+						// @ts-ignore
+						((<RoomEventContent_>content)._is_notepad || // TODO: remove
+							// @ts-ignore
+							(<RoomEventContent_>content).is_notepad || // TODO: remove
+							(<RoomEventContent_>content)['chat.quadrix.notepad'])
+					) {
 						this.roomSummaryList[roomIndex].type = 'notepad';
 						this.roomSummaryList[roomIndex].active = true;
 						roomEventTriggers.isNewRoomType = true;

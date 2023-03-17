@@ -325,7 +325,7 @@ class ApiClient {
 				name: name,
 				is_direct: false,
 				creation_content: {
-					_is_notepad: true,
+					'chat.quadrix.notepad': true,
 				},
 			};
 		} else if (type === 'group') {
