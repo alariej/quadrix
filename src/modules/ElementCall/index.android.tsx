@@ -558,6 +558,8 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 						mediaPlaybackRequiresUserAction={false}
 						allowsInlineMediaPlayback={true}
 						javaScriptEnabled={true}
+						cacheEnabled={false}
+						cacheMode={'LOAD_NO_CACHE'}
 					/>
 					{buttonMinimize}
 				</RX.View>
