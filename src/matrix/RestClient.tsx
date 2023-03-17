@@ -31,6 +31,7 @@ import {
 	IUploadKeySignaturesResponse,
 	IClaimOTKsResult,
 	IClaimKeysRequest,
+	PowerLevelEventContent_,
 } from '../models/MatrixApi';
 
 export default class RestClient extends GenericRestClient {
@@ -156,7 +157,7 @@ export default class RestClient extends GenericRestClient {
 	public sendStateEvent(
 		roomId: string,
 		type: StateEventType,
-		content: StateEventContent_ | CallEventContent_ | CallMemberEventContent_,
+		content: StateEventContent_ | CallEventContent_ | CallMemberEventContent_ | PowerLevelEventContent_,
 		stateKey?: string
 	): Promise<SendStateEvent_> {
 		return this.performApiPut<SendStateEvent_>('rooms/' + roomId + '/state/' + type + '/' + stateKey, content);
@@ -164,6 +165,14 @@ export default class RestClient extends GenericRestClient {
 
 	public getStateEvents(roomId: string): Promise<ClientEvent_[]> {
 		return this.performApiGet<ClientEvent_[]>('rooms/' + roomId + '/state');
+	}
+
+	public getStateEventContent(
+		roomId: string,
+		eventType: StateEventType,
+		stateKey: string
+	): Promise<PowerLevelEventContent_> {
+		return this.performApiGet<PowerLevelEventContent_>('rooms/' + roomId + '/state/' + eventType + '/' + stateKey);
 	}
 
 	public sendReadReceipt(roomId: string, eventId: string): Promise<void> {

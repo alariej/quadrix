@@ -9,6 +9,7 @@ import {
 	ClientEvent_,
 	MemberEventContent_,
 	MessageEventContent_,
+	PowerLevelEventContent_,
 	PresenceEventContent_,
 	RoomData_,
 	RoomEventContent_,
@@ -249,6 +250,7 @@ class DataStore extends StoreBase {
 				case 'm.room.power_levels':
 					roomEventTriggers.isNewPowerLevelEvent = true;
 					this.setUserPowerLevel(event, roomIndex);
+					this.setMsc3401Ready(event, roomIndex);
 					break;
 
 				case 'm.room.topic':
@@ -290,6 +292,18 @@ class DataStore extends StoreBase {
 				...member,
 			};
 		});
+	}
+
+	private setMsc3401Ready(event: ClientEvent_, roomIndex: number) {
+		const content = event.content as PowerLevelEventContent_;
+		if (!content.events) {
+			return;
+		}
+		const msc3401Call = content.events?.['org.matrix.msc3401.call'];
+
+		if (msc3401Call !== undefined) {
+			this.roomSummaryList[roomIndex].msc3401Ready = true;
+		}
 	}
 
 	private setRoomMember(event: ClientEvent_, roomIndex: number) {
@@ -1163,6 +1177,12 @@ class DataStore extends StoreBase {
 		return this.roomSummaryList[roomIndex].members[userId]?.powerLevel || 0;
 	}
 
+	@autoSubscribeWithKey('DummyTrigger')
+	public getPowerLevel_(roomId: string, userId: string): number {
+		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
+		return this.roomSummaryList[roomIndex].members[userId]?.powerLevel || 0;
+	}
+
 	public setSyncComplete(isComplete: boolean) {
 		this.syncComplete = isComplete;
 		this.trigger(SyncCompleteTrigger);
@@ -1221,6 +1241,13 @@ class DataStore extends StoreBase {
 	public getMsc3401Call(roomId: string) {
 		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
 		return this.roomSummaryList[roomIndex].msc3401Call;
+	}
+
+
+	@autoSubscribeWithKey('DummyTrigger')
+	public getMsc3401Ready(roomId: string) {
+		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
+		return this.roomSummaryList[roomIndex].msc3401Ready || false;
 	}
 
 	@autoSubscribeWithKey(ToDeviceCallEventTrigger)

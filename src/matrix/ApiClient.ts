@@ -35,6 +35,7 @@ import {
 	IKeysUploadResponse,
 	KeySignatures,
 	IUploadKeySignaturesResponse,
+	PowerLevelEventContent_,
 } from '../models/MatrixApi';
 import { RoomSummary } from '../models/RoomSummary';
 import EventUtils from '../utils/EventUtils';
@@ -354,6 +355,14 @@ class ApiClient {
 				],
 				power_level_content_override: {
 					events: {
+						'm.room.avatar': 100,
+						'm.room.canonical_alias': 100,
+						'm.room.encryption': 100,
+						'm.room.history_visibility': 100,
+						'm.room.name': 100,
+						'm.room.power_levels': 100,
+						'm.room.server_acl': 100,
+						'm.room.tombstone': 100,
 						'org.matrix.msc3401.call': 0,
 						'org.matrix.msc3401.call.member': 0,
 					},
@@ -386,7 +395,7 @@ class ApiClient {
 	public sendStateEvent(
 		roomId: string,
 		type: StateEventType,
-		content: StateEventContent_ | CallEventContent_ | CallMemberEventContent_,
+		content: StateEventContent_ | CallEventContent_ | CallMemberEventContent_ | PowerLevelEventContent_,
 		stateKey?: string
 	): Promise<SendStateEvent_> {
 		const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
@@ -397,6 +406,15 @@ class ApiClient {
 	public getStateEvents(roomId: string): Promise<ClientEvent_[]> {
 		const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
 		return restClient.getStateEvents(roomId);
+	}
+
+	public getStateEventContent(
+		roomId: string,
+		eventType: StateEventType,
+		stateKey: string
+	): Promise<PowerLevelEventContent_> {
+		const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
+		return restClient.getStateEventContent(roomId, eventType, stateKey);
 	}
 
 	public async getRoomEvents(

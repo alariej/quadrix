@@ -232,7 +232,31 @@ export interface RoomEventContent_ {
 	join_rule?: string;
 	topic?: string;
 	users?: { [id: string]: number };
-	_is_notepad?: string; // custom field
+
+export interface PowerLevelEventContent_ {
+	users: {
+		[userId: string]: number;
+	};
+	users_default: number;
+	events: {
+		'm.room.name': number;
+		'm.room.power_levels': number;
+		'm.room.history_visibility': number;
+		'm.room.canonical_alias': number;
+		'm.room.avatar': number;
+		'm.room.tombstone': number;
+		'm.room.server_acl': number;
+		'm.room.encryption': number;
+		'org.matrix.msc3401.call': number;
+		'org.matrix.msc3401.call.member': number;
+	};
+	events_default: number;
+	state_default: number;
+	ban: number;
+	kick: number;
+	redact: number;
+	invite: number;
+	historical: number;
 }
 
 export interface IGroupCallDataChannelOptions {
@@ -415,6 +439,14 @@ export interface NewRoomOptions_ {
 	}[];
 	power_level_content_override?: {
 		events: {
+			'm.room.avatar': number;
+			'm.room.canonical_alias': number;
+			'm.room.encryption': number;
+			'm.room.history_visibility': number;
+			'm.room.name': number;
+			'm.room.power_levels': number;
+			'm.room.server_acl': number;
+			'm.room.tombstone': number;
 			'org.matrix.msc3401.call': number;
 			'org.matrix.msc3401.call.member': number;
 		};
@@ -443,11 +475,6 @@ export interface StateEventContent_ {
 	url?: string;
 	size?: number;
 	mimetype?: string;
-	power_level_content_override?: {
-		events?: {
-			[eventType: string]: number;
-		};
-	};
 }
 
 export interface GetJoinedMembersResponse_ {

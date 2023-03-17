@@ -6,7 +6,7 @@ import RoomChat from '../components/RoomChat';
 import DataStore from '../stores/DataStore';
 import { ComponentBase } from 'resub';
 import InviteRoom from '../components/InviteRoom';
-import { RoomPhase, RoomType, StateEventContent_ } from '../models/MatrixApi';
+import { RoomPhase, RoomType } from '../models/MatrixApi';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import { FilteredChatEvent, TemporaryMessage } from '../models/FilteredChatEvent';
 import ApiClient from '../matrix/ApiClient';
@@ -41,33 +41,24 @@ export default class Room extends ComponentBase<RoomProps, RoomState> {
 		const roomPhase = DataStore.getRoomPhase(nextProps.roomId);
 		const roomType = DataStore.getRoomType(nextProps.roomId);
 
-		// temp
-		if (initState || nextProps.roomId !== this.props.roomId) {
-			console.log('--------------------');
-			console.log(roomType);
-			console.log(DataStore.getPowerLevel(nextProps.roomId, ApiClient.credentials.userIdFull));
+		if (
+			(initState || nextProps.roomId !== this.props.roomId) &&
+			['direct', 'group'].includes(roomType!) &&
+			DataStore.getPowerLevel_(nextProps.roomId, ApiClient.credentials.userIdFull) === 100 &&
+			!DataStore.getMsc3401Ready(nextProps.roomId)
+		) {
+			ApiClient.getStateEventContent(nextProps.roomId, 'm.room.power_levels', '')
+				.then(response => {
+					const powerLevels = response;
+					powerLevels.events['org.matrix.msc3401.call'] = 0;
+					powerLevels.events['org.matrix.msc3401.call.member'] = 0;
 
-			if (
-				['direct', 'group'].includes(roomType!) &&
-				DataStore.getPowerLevel(nextProps.roomId, ApiClient.credentials.userIdFull) >= 50
-			) {
-				const eventType = 'm.room.power_levels';
-				const content: StateEventContent_ = {
-					power_level_content_override: {
-						events: {
-							'org.matrix.msc3401.call': 0,
-							'org.matrix.msc3401.call.member': 0,
-						},
-					},
-				};
-				const stateKey = '';
-
-				ApiClient.sendStateEvent(nextProps.roomId, eventType, content, stateKey)
-					.then(console.log)
-					.catch(console.log);
-			}
+					ApiClient.sendStateEvent(nextProps.roomId, 'm.room.power_levels', powerLevels, '').catch(
+						_error => null
+					);
+				})
+				.catch(_error => null);
 		}
-		// temp
 
 		if ((!roomPhase || !roomType) && !SpinnerUtils.isDisplayed('roomspinner')) {
 			SpinnerUtils.showModalSpinner('roomspinner');

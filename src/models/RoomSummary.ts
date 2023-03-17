@@ -30,4 +30,5 @@ export interface RoomSummary {
 	newEventsLimited?: boolean;
 	latestFilteredEvent?: FilteredChatEvent;
 	msc3401Call?: Msc3401Call;
+	msc3401Ready?: boolean;
 }
