@@ -101,6 +101,8 @@ const styles = {
 		color: HEADER_STATUS,
 	}),
 	containerHomeButton: RX.Styles.createViewStyle({
+		width: HEADER_HEIGHT / 2,
+		height: HEADER_HEIGHT / 2,
 		marginLeft: SPACING,
 		overflow: 'visible',
 	}),
@@ -115,7 +117,7 @@ const styles = {
 	unreadNumber: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
 		position: 'absolute',
-		bottom: -8,
+		bottom: -12,
 		right: 0,
 		height: 18,
 		width: 18,
