@@ -32,6 +32,7 @@ import {
 	IClaimOTKsResult,
 	IClaimKeysRequest,
 	PowerLevelEventContent_,
+	CallInviteEventContent_,
 } from '../models/MatrixApi';
 
 export default class RestClient extends GenericRestClient {
@@ -122,6 +123,15 @@ export default class RestClient extends GenericRestClient {
 
 	public sendMessage(roomId: string, messageContent: MessageEventContent_, tempId: string): Promise<void> {
 		return this.performApiPut<void>('rooms/' + roomId + '/send/m.room.message/' + tempId, messageContent);
+	}
+
+	public sendRoomEvent(
+		roomId: string,
+		eventType: string,
+		messageContent: CallInviteEventContent_,
+		tempId: string
+	): Promise<void> {
+		return this.performApiPut<void>('rooms/' + roomId + '/send/' + eventType + '/' + tempId, messageContent);
 	}
 
 	public sendToDevice(eventType: string, transactionId: string, contentMap: unknown): Promise<void> {

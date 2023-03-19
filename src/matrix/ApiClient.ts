@@ -36,6 +36,7 @@ import {
 	KeySignatures,
 	IUploadKeySignaturesResponse,
 	PowerLevelEventContent_,
+	CallInviteEventContent_,
 } from '../models/MatrixApi';
 import { RoomSummary } from '../models/RoomSummary';
 import EventUtils from '../utils/EventUtils';
@@ -532,6 +533,17 @@ class ApiClient {
 		const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
 
 		return restClient.sendMessage(roomId, messageContent, tempId);
+	}
+
+	public sendRoomEvent(
+		roomId: string,
+		eventType: string,
+		messageContent: CallInviteEventContent_,
+		tempId: string
+	): Promise<void> {
+		const restClient = new RestClient(this.credentials.accessToken, this.credentials.homeServer, PREFIX_REST);
+
+		return restClient.sendRoomEvent(roomId, eventType, messageContent, tempId);
 	}
 
 	public sendToDevice(eventType: string, transactionId: string, contentMap: unknown): Promise<void> {

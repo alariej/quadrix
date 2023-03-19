@@ -205,6 +205,16 @@ export interface MessageEventContent_ {
 	_time?: number; // custom field
 }
 
+export interface CallInviteEventContent_ {
+	call_id: string;
+	lifetime: number;
+	offer: {
+		sdp: string;
+		type: string;
+	};
+	version: number;
+}
+
 export interface MemberEventContent_ {
 	avatar_url?: string;
 	displayname?: string;

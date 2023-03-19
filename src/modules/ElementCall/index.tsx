@@ -32,6 +32,7 @@ import {
 	ClientEventType,
 	StateEventType,
 	CallMemberEventContent_,
+	CallInviteEventContent_,
 } from '../../models/MatrixApi';
 import UiStore from '../../stores/UiStore';
 import { ELEMENT_CALL_URL } from '../../appconfig';
@@ -301,6 +302,20 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 			ApiClient.sendStateEvent(this.props.roomId, CallEvents.GroupCallPrefix, content, this.callId).catch(
 				_error => null
 			);
+
+			const inviteContent: CallInviteEventContent_ = {
+				call_id: this.callId,
+				lifetime: 10000,
+				offer: {
+					sdp: '',
+					type: 'offer',
+				},
+				version: 0,
+			};
+
+			const tempId = 'call' + Date.now();
+
+			ApiClient.sendRoomEvent(this.props.roomId, 'm.call.invite', inviteContent, tempId).catch(_error => null);
 		} else {
 			this.callId = msc3401Call.callId;
 		}
