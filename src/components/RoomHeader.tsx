@@ -2,7 +2,6 @@ import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import {
 	HEADER_TEXT,
-	BUTTON_ROUND_WIDTH,
 	BORDER_RADIUS,
 	HEADER_HEIGHT,
 	SPACING,
@@ -18,7 +17,6 @@ import {
 	HEADER_STATUS,
 	AVATAR_FOREGROUND,
 	BUTTON_HEADER_WIDTH,
-	BUTTON_HEADER_MARGIN,
 	BUTTON_HEADER_BACKGROUND,
 } from '../ui';
 import { ComponentBase } from 'resub';
@@ -103,17 +101,13 @@ const styles = {
 		color: HEADER_STATUS,
 	}),
 	containerHomeButton: RX.Styles.createViewStyle({
-		width: BUTTON_ROUND_WIDTH,
-		height: BUTTON_ROUND_WIDTH,
 		marginLeft: SPACING,
 		overflow: 'visible',
-		marginTop: 2,
-		marginRight: 2,
 	}),
 	roundButton: RX.Styles.createViewStyle({
-		borderRadius: (BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN) / 2,
-		width: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
-		height: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
+		width: HEADER_HEIGHT / 2,
+		height: HEADER_HEIGHT / 2,
+		borderRadius: HEADER_HEIGHT / 4,
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: BUTTON_HEADER_BACKGROUND,

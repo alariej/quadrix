@@ -14,11 +14,10 @@ import {
 	ICON_INFO_FILL,
 	OBJECT_MARGIN,
 	PAGE_MARGIN,
-	BUTTON_HEADER_WIDTH,
-	BUTTON_HEADER_MARGIN,
 	PAGE_WIDE_PADDING,
 	BUTTON_MENU_MAIN_WIDTH,
 	LIGHT_BACKGROUND,
+	HEADER_HEIGHT,
 } from '../ui';
 import { about, Languages, logout, newRoom, userSettings } from '../translations';
 import AppFont from '../modules/AppFont';
@@ -206,11 +205,11 @@ export default class DialogMenuMain extends ComponentBase<DialogMenuMainProps, D
 
 		const right =
 			(appLayout.type === 'wide' ? appLayout.screenWidth / 2 + PAGE_WIDE_PADDING : 0) +
-			(BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN) +
+			HEADER_HEIGHT / 2 +
 			PAGE_MARGIN +
 			OBJECT_MARGIN;
 
-		const top = this.props.layout.y + (BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN) / 2;
+		const top = this.props.layout.y + HEADER_HEIGHT / 2 / 2;
 
 		const contextMenu = (
 			<RX.Animated.View style={[this.animatedStyle, styles.buttonContainer, { top: top, right: right }]}>

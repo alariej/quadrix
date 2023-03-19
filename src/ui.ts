@@ -24,7 +24,6 @@ export const BUTTON_LONG_WIDTH = DIALOG_WIDTH - 2 * BUTTON_LOGIN_INFO;
 export const BUTTON_SHORT_WIDTH = 100;
 export const BUTTON_COMPOSER_WIDTH = 32;
 export const BUTTON_HEADER_WIDTH = 18;
-export const BUTTON_HEADER_MARGIN = 12;
 export const BUTTON_HEIGHT = 28;
 export const STACKED_BUTTON_HEIGHT = 34;
 export const AVATAR_WIDTH = 48;

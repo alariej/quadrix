@@ -14,7 +14,6 @@ import {
 	HEADER_STATUS,
 	PAGE_MARGIN,
 	BUTTON_HEADER_WIDTH,
-	BUTTON_HEADER_MARGIN,
 	BUTTON_HEADER_BACKGROUND,
 } from '../ui';
 import ApiClient from '../matrix/ApiClient';
@@ -56,33 +55,28 @@ const styles = {
 		paddingBottom: 1,
 	}),
 	roundButton: RX.Styles.createViewStyle({
-		borderRadius: (BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN) / 2,
-		width: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
-		height: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
+		width: HEADER_HEIGHT / 2,
+		height: HEADER_HEIGHT / 2,
+		borderRadius: HEADER_HEIGHT / 4,
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: BUTTON_HEADER_BACKGROUND,
-		marginTop: 2,
-		marginRight: 2,
 	}),
 	infoButton: RX.Styles.createViewStyle({
-		borderRadius: (BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN) / 2,
-		width: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
-		height: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
+		width: HEADER_HEIGHT / 2,
+		height: HEADER_HEIGHT / 2,
+		borderRadius: HEADER_HEIGHT / 4,
 		justifyContent: 'center',
 		alignItems: 'center',
-		marginTop: 2,
-		marginRight: 2,
 	}),
-	infoContainer: RX.Styles.createViewStyle({
-		position: 'absolute',
-		width: BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN,
-		height: HEADER_HEIGHT - BUTTON_HEADER_WIDTH - BUTTON_HEADER_MARGIN - SPACING,
-		bottom: SPACING,
-		right: 0,
-		alignItems: 'center',
+	buttonContainer: RX.Styles.createViewStyle({
+		marginLeft: SPACING,
+	}),
+	iconContainer: RX.Styles.createViewStyle({
+		width: HEADER_HEIGHT / 2,
+		height: HEADER_HEIGHT / 2,
 		justifyContent: 'center',
-		overflow: 'visible',
+		alignItems: 'center',
 	}),
 	logoutTextDialog: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
@@ -248,7 +242,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 		let disconnected: ReactElement | undefined;
 		if (this.state.offline) {
 			disconnected = (
-				<RX.View style={styles.infoContainer}>
+				<RX.View style={styles.iconContainer}>
 					<IconSvg
 						source={require('../resources/svg/RI_nochat.json') as SvgFile}
 						fillColor={TILE_SYSTEM_TEXT}
@@ -262,24 +256,22 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 		let infoButton: ReactElement | undefined;
 		if (!this.state.offline && this.state.showInfoButton) {
 			infoButton = (
-				<RX.View style={styles.infoContainer}>
-					<AnimatedButton
-						buttonStyle={styles.infoButton}
-						iconSource={require('../resources/svg/RI_info.json') as SvgFile}
-						iconFillColor={TILE_SYSTEM_TEXT}
-						iconHeight={BUTTON_HEADER_WIDTH}
-						iconWidth={BUTTON_HEADER_WIDTH}
-						animatedColor={TILE_SYSTEM_TEXT}
-						onPress={StoreVersion.showDialog}
-					/>
-				</RX.View>
+				<AnimatedButton
+					buttonStyle={styles.infoButton}
+					iconSource={require('../resources/svg/RI_info.json') as SvgFile}
+					iconFillColor={TILE_SYSTEM_TEXT}
+					iconHeight={BUTTON_HEADER_WIDTH}
+					iconWidth={BUTTON_HEADER_WIDTH}
+					animatedColor={TILE_SYSTEM_TEXT}
+					onPress={StoreVersion.showDialog}
+				/>
 			);
 		}
 
 		const width =
 			UiStore.getAppLayout_().pageWidth -
 			2 * PAGE_MARGIN -
-			1 * (BUTTON_HEADER_WIDTH + BUTTON_HEADER_MARGIN + SPACING) -
+			1 * (HEADER_HEIGHT / 2 + SPACING) -
 			2 * 4 -
 			2 * SPACING;
 
@@ -306,17 +298,19 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 						<RX.View style={styles.bracketRight} />
 					</RX.View>
 				</RX.View>
-				<AnimatedButton
-					buttonStyle={styles.roundButton}
-					iconSource={require('../resources/svg/RI_menu.json') as SvgFile}
-					iconFillColor={BUTTON_FILL}
-					iconHeight={BUTTON_HEADER_WIDTH}
-					iconWidth={BUTTON_HEADER_WIDTH}
-					animatedColor={BUTTON_FILL}
-					onPress={this.showMenu}
-				/>
-				{disconnected}
-				{infoButton}
+				<RX.View style={styles.buttonContainer}>
+					<AnimatedButton
+						buttonStyle={styles.roundButton}
+						iconSource={require('../resources/svg/RI_menu.json') as SvgFile}
+						iconFillColor={BUTTON_FILL}
+						iconHeight={BUTTON_HEADER_WIDTH}
+						iconWidth={BUTTON_HEADER_WIDTH}
+						animatedColor={BUTTON_FILL}
+						onPress={this.showMenu}
+					/>
+					{disconnected}
+					{infoButton}
+				</RX.View>
 			</RX.View>
 		);
 	}
