@@ -467,7 +467,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 			);
 			if (!remainingParticipant) {
 				const content: CallEventContent_ = {
-					'm.intent': GroupCallIntent.Room,
+					'm.intent': GroupCallIntent.Prompt,
 					'm.type': GroupCallType.Video,
 					'io.element.ptt': false,
 					'm.terminated': 'call_ended',
