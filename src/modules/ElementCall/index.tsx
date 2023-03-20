@@ -158,16 +158,11 @@ class CallWidgetDriver extends WidgetDriver {
 
 	public async sendEvent(
 		eventType: StateEventType,
-		content: unknown,
+		content: CallMemberEventContent_,
 		stateKey: string,
 		roomId: string
 	): Promise<ISendEventDetails> {
-		const response = await ApiClient.sendStateEvent(
-			roomId,
-			eventType,
-			content as CallMemberEventContent_,
-			stateKey
-		);
+		const response = await ApiClient.sendStateEvent(roomId, eventType, content, stateKey);
 
 		return Promise.resolve({ eventId: response.event_id, roomId: roomId });
 	}
@@ -236,8 +231,12 @@ class CallWidgetDriver extends WidgetDriver {
 				const content = event.content as CallMemberEventContent_;
 				return (
 					event.type === eventType &&
+					event.state_key &&
 					content['m.calls'][0] &&
-					content['m.calls'][0]['m.call_id'] === this.callId
+					content['m.calls'][0]['m.call_id'] === this.callId &&
+					roomSummary.msc3401Call &&
+					roomSummary.msc3401Call.participants &&
+					roomSummary.msc3401Call.participants[event.state_key]
 				);
 			}) as IRoomEvent[];
 			for (let i = 0; i < stateEvents.length; i++) {

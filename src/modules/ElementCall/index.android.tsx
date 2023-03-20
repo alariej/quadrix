@@ -214,8 +214,12 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 			const content = event.content as CallMemberEventContent_;
 			return (
 				event.type === CallEvents.GroupCallMemberPrefix &&
+				event.state_key &&
 				content['m.calls'][0] &&
-				content['m.calls'][0]['m.call_id'] === this.callId
+				content['m.calls'][0]['m.call_id'] === this.callId &&
+				roomSummary.msc3401Call &&
+				roomSummary.msc3401Call.participants &&
+				roomSummary.msc3401Call.participants[event.state_key]
 			);
 		}) as IRoomEvent[];
 		for (let i = 0; i < stateEventsCallMember.length; i++) {
