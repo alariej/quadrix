@@ -19,7 +19,7 @@ import { LinkifyElement } from '../models/LinkifyElement';
 import AppFont from '../modules/AppFont';
 import StringUtils from '../utils/StringUtils';
 import { FilteredChatEvent } from '../models/FilteredChatEvent';
-import { MessageEventContent_ } from '../models/MatrixApi';
+import { LinkPreview_, MessageEventContent_ } from '../models/MatrixApi';
 
 const styles = {
 	containerMessage: RX.Styles.createViewStyle({
@@ -90,9 +90,15 @@ interface TextMessageState {
 
 export default class TextMessage extends RX.Component<TextMessageProps, TextMessageState> {
 	private onPreviewImageFail = (_error: Error) => {
+		// bubblegum & wires hack
+		// for backward compatibility
+		const content = this.props.message.content as MessageEventContent_;
+		// @ts-ignore
+		const urlPreview = content._url_preview || (content.url_preview as LinkPreview_); // TODO: remove
+
 		const linkifyElement: LinkifyElement = {
 			type: '',
-			href: (this.props.message.content as MessageEventContent_)._url_preview!.url,
+			href: urlPreview.url,
 			value: '',
 		};
 
@@ -151,20 +157,24 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 			messageBody = this.props.body;
 		}
 
-		if (content._url_preview) {
+		// bubblegum & wires hack
+		// for backward compatibility
+		// @ts-ignore
+		const urlPreview = content._url_preview || (content.url_preview as LinkPreview_); // TODO: remove
+
+		if (urlPreview) {
 			const linkifyElement: LinkifyElement = {
 				type: 'url',
-				value: content._url_preview.text!,
-				href: content._url_preview.url,
+				value: urlPreview.text!,
+				href: urlPreview.url,
 			};
 
 			const width =
 				UiStore.getAppLayout_().pageWidth - 2 * PAGE_MARGIN - (BUTTON_ROUND_WIDTH + SPACING) - 2 * SPACING;
 
 			let urlPreviewImage;
-			if (content._url_preview.image_url) {
-				const urlPreviewHeight =
-					(width * content._url_preview.image_height!) / (content._url_preview.image_width || 100);
+			if (urlPreview.image_url) {
+				const urlPreviewHeight = (width * urlPreview.image_height!) / (urlPreview.image_width || 100);
 
 				urlPreviewImage = (
 					<RX.View
@@ -177,7 +187,7 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 						<RX.Image
 							resizeMode={'contain'}
 							style={styles.image}
-							source={this.state?.previewUrl || content._url_preview?.image_url}
+							source={this.state?.previewUrl || urlPreview?.image_url}
 							headers={UiStore.getPlatform() === 'ios' ? { 'Cache-Control': 'max-stale' } : undefined}
 							onError={this.onPreviewImageFail}
 						/>
@@ -185,7 +195,7 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 				);
 			}
 
-			const urlPreview = (
+			const urlPreviewView = (
 				<RX.View
 					onContextMenu={() => this.props.showContextDialog()}
 					onLongPress={() => this.props.showContextDialog()}
@@ -197,21 +207,21 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 							styles.text,
 							{
 								marginTop: SPACING,
-								paddingLeft: content._url_preview.image_url ? 0 : SPACING,
-								paddingRight: content._url_preview.image_url ? 0 : SPACING,
+								paddingLeft: urlPreview.image_url ? 0 : SPACING,
+								paddingRight: urlPreview.image_url ? 0 : SPACING,
 							},
 						]}
 						selectable={isSelectable}
 					>
-						{content._url_preview.title}
+						{urlPreview.title}
 					</RX.Text>
 					<RX.Text
 						style={[
 							styles.link,
 							{
 								marginTop: SPACING * 2,
-								paddingLeft: content._url_preview.image_url ? 0 : SPACING,
-								paddingRight: content._url_preview.image_url ? 0 : SPACING,
+								paddingLeft: urlPreview.image_url ? 0 : SPACING,
+								paddingRight: urlPreview.image_url ? 0 : SPACING,
 								maxWidth: width,
 							},
 						]}
@@ -219,12 +229,12 @@ export default class TextMessage extends RX.Component<TextMessageProps, TextMess
 						onContextMenu={() => this.props.showContextDialog()}
 						numberOfLines={UiStore.getPlatform() === 'web' ? 1 : 2}
 					>
-						{content._url_preview.text}
+						{urlPreview.text}
 					</RX.Text>
 				</RX.View>
 			);
 
-			renderContent = urlPreview;
+			renderContent = urlPreviewView;
 		} else if (StringUtils.isAllEmojis(messageBody)) {
 			renderContent = (
 				<RX.Text style={styles.containerText}>
