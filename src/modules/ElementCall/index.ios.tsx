@@ -364,8 +364,8 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 
 						const onReady = async () => {
 							await widgetApi.transport.send("io.element.join", {
-								audioInput: null,
-								videoInput: null,
+								audioInput: "",
+								videoInput: "",
 							});
 							widgetApi.on("action:im.vector.hangup", onHangup);
 							widgetApi.on("action:io.element.tile_layout", onTileLayout);
