@@ -34,8 +34,9 @@ export const APPSTORES_FLATHUB_URL = StoreJson.flathub.url;
 
 // element call
 
-export const ELEMENT_CALL_URL = 'https://element-call.netlify.app/';
+// export const ELEMENT_CALL_URL = 'https://element-call.netlify.app/';
 // export const ELEMENT_CALL_URL = 'https://call.element.io';
+export const ELEMENT_CALL_URL = 'https://call.quadrix.chat';
 
 // push notification gateway
 
