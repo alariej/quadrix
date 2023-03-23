@@ -605,6 +605,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 						mediaCapturePermissionGrantType={'grant'}
 						cacheEnabled={false}
 						cacheMode={'LOAD_NO_CACHE'}
+						applicationNameForUserAgent={'safari'}
 					/>
 					{buttonMinimize}
 				</RX.View>
