@@ -572,7 +572,6 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 						style={{
 							backgroundColor: TRANSPARENT_BACKGROUND,
 						}}
-						scrollEnabled={false}
 						originWhitelist={['*']}
 						source={{
 							html: this.webviewHtml,
@@ -580,10 +579,11 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 						}}
 						onMessage={this.onMessage}
 						mediaPlaybackRequiresUserAction={false}
-						allowsInlineMediaPlayback={true}
 						javaScriptEnabled={true}
 						cacheEnabled={false}
 						cacheMode={'LOAD_NO_CACHE'}
+						mixedContentMode={'always'}
+						// androidLayerType={'hardware'}
 					/>
 					{buttonMinimize}
 				</RX.View>

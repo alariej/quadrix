@@ -581,10 +581,8 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 						onMessage={this.onMessage}
 						mediaPlaybackRequiresUserAction={false}
 						allowsInlineMediaPlayback={true}
-						javaScriptEnabled={true}
 						mediaCapturePermissionGrantType={'grant'}
 						cacheEnabled={false}
-						cacheMode={'LOAD_NO_CACHE'}
 						applicationNameForUserAgent={'safari'}
 					/>
 					{buttonMinimize}
