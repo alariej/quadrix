@@ -242,7 +242,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 					>
 				</head>
 				<body style="background-color: transparent; height: 100%; display: flex; justify-content: center; align-items: center; width: 100%; margin: 0px; padding: 0px">
-					<script type="text/javascript" src="https://unpkg.com/matrix-widget-api@1.1.1/dist/api.js"></script>
+					<script type="text/javascript" src="https://unpkg.com/matrix-widget-api@1.3.1/dist/api.js"></script>
 					<script type="text/javascript">
 						var widgetApi;
 
