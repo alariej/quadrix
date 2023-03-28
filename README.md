@@ -6,7 +6,7 @@
 - No data collection whatsoever
 - Does not support end-to-end encryption (E2EE)
 - No customization, no widgets, no bots, no phone calls
-- Integrated video-conferencing with [Jitsi Meet](https://github.com/jitsi/jitsi-meet/)
+- Integrated video-conferencing with [Element Call](https://github.com/vector-im/element-call)
 - Programmed with [ReactXP](https://github.com/Microsoft/reactxp)
 - React Native apps for Android and iOS
 - Electron apps for Windows, MacOS, and Linux (amd64, arm64, armhf)
@@ -115,7 +115,7 @@ The Quadrix apps do not collect any information whatsover: No user ID's, no IP a
 
 Quadrix is released under the [GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.html), requiring everyone to share their modifications when they also share the software in public. That aspect is commonly referred to as Copyleft.
 
-Copyright (c) 2022 Jean-François Alarie
+Copyright (c) 2023 Jean-François Alarie
 
 ## Contact
 
