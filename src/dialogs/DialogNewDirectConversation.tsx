@@ -155,7 +155,6 @@ export default class DialogNewDirectConversation extends RX.Component<
 
 		if (users.length > 0) {
 			const userTiles = users
-				// .filter(user => user.id === '@dani:al4.re')
 				.sort((a, b) => a.id.localeCompare(b.id))
 				.map((user: User) => {
 					return (
