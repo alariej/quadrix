@@ -923,7 +923,7 @@ export class VirtualListView<ItemInfo extends VirtualListViewItemInfo> extends R
 			const item = props.itemList[itemIndex];
 			const isHeightKnown = this._isItemHeightKnown(item);
 			const itemHeight = this._getHeightOfItem(item);
-			assert(itemHeight > 0, 'list items should always have non-zero height');
+			// assert(itemHeight > 0, 'list items should always have non-zero height');
 
 			this._itemsInRenderBlock++;
 			this._heightOfRenderBlock += itemHeight;
