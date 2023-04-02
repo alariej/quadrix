@@ -319,6 +319,20 @@ class ApiClient {
 				invite: [userId!],
 				// invite_3pid: [emailAddress],
 				is_direct: true,
+				power_level_content_override: {
+					events: {
+						'm.room.avatar': 100,
+						'm.room.canonical_alias': 100,
+						'm.room.encryption': 100,
+						'm.room.history_visibility': 100,
+						'm.room.name': 100,
+						'm.room.power_levels': 100,
+						'm.room.server_acl': 100,
+						'm.room.tombstone': 100,
+						'org.matrix.msc3401.call': 0,
+						'org.matrix.msc3401.call.member': 0,
+					},
+				},
 			};
 		} else if (isNotepad) {
 			options = {
@@ -354,6 +368,8 @@ class ApiClient {
 						},
 					},
 				],
+				name: name,
+				is_direct: false,
 				power_level_content_override: {
 					events: {
 						'm.room.avatar': 100,
@@ -368,8 +384,6 @@ class ApiClient {
 						'org.matrix.msc3401.call.member': 0,
 					},
 				},
-				name: name,
-				is_direct: false,
 			};
 		} else if (type === 'community') {
 			options = {
