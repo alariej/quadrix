@@ -9,9 +9,16 @@ import {
 	lauchedVideoConference,
 	leftVideoConference,
 	joinedVideoConference,
+	terminatedVideoConference,
 } from '../translations';
 import UiStore from '../stores/UiStore';
-import { ClientEvent_, MemberEventContent_, RoomType, CallMemberEventContent_ } from '../models/MatrixApi';
+import {
+	ClientEvent_,
+	MemberEventContent_,
+	RoomType,
+	CallMemberEventContent_,
+	CallEventContent_,
+} from '../models/MatrixApi';
 import { FilteredChatEvent } from '../models/FilteredChatEvent';
 import { Msc3401Call, Msc3401CallStatus } from '../models/Msc3401Call';
 import differenceInHours from 'date-fns/differenceInHours';
@@ -143,7 +150,12 @@ class EventUtils {
 		} else if (event.type === 'm.room.avatar') {
 			systemMessage = event.senderId + hasChangedAvatar[language + '_' + roomType.substr(0, 2)];
 		} else if (event.type === 'org.matrix.msc3401.call') {
-			systemMessage = event.senderId + ' ' + lauchedVideoConference[language];
+			const content = event.content as CallEventContent_;
+			if (content['m.terminated']) {
+				systemMessage = terminatedVideoConference[language];
+			} else {
+				systemMessage = event.senderId + ' ' + lauchedVideoConference[language];
+			}
 		} else if (event.type === 'org.matrix.msc3401.call.member') {
 			const content = event.content as CallMemberEventContent_;
 			if (content['m.calls'].length === 0) {

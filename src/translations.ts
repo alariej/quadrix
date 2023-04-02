@@ -1208,6 +1208,13 @@ export const leftVideoConference: Translation = {
 	es: 'ha dejado la videoconferencia',
 };
 
+export const terminatedVideoConference: Translation = {
+	en: 'The videoconference has ended',
+	de: 'Die Videokonferenz ist beendet',
+	fr: 'La vidéoconférence est terminée',
+	es: 'La videoconferencia ha terminado',
+};
+
 export const youHaveLeftRoom1: Translation = {
 	en_di: 'You have now left the private conversation with ',
 	en_gr: 'You have now left the group ',
