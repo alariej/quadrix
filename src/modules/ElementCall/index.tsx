@@ -2,7 +2,6 @@ import React from 'react';
 import RX from 'reactxp';
 import {
 	BORDER_RADIUS,
-	BUTTON_FILL,
 	BUTTON_VIDEOCALL_BACKGROUND,
 	BUTTON_ROUND_WIDTH,
 	VIDEOCALL_BORDER,
@@ -38,7 +37,8 @@ import UiStore from '../../stores/UiStore';
 import { ELEMENT_CALL_URL } from '../../appconfig';
 import { ComponentBase } from 'resub';
 import { Msc3401Call } from '../../models/Msc3401Call';
-import IconSvg, { SvgFile } from '../../components/IconSvg';
+import { SvgFile } from '../../components/IconSvg';
+import AnimatedButton from '../../components/AnimatedButton';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -65,20 +65,38 @@ const styles = {
 	}),
 	callContainer: RX.Styles.createViewStyle({
 		flex: 1,
-		margin: PAGE_MARGIN,
-		marginTop: HEADER_HEIGHT / 2,
+		margin: 1,
 		backgroundColor: TRANSPARENT_BACKGROUND,
 	}),
 	callContainerMinimized: RX.Styles.createViewStyle({
 		width: 80,
 		height: 100,
 	}),
+	buttonContainer: RX.Styles.createViewStyle({
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
+		alignItems: 'flex-end',
+	}),
 	buttonMinimize: RX.Styles.createViewStyle({
-		position: 'absolute',
-		left: 3 * SPACING,
-		top: 2 * SPACING,
 		width: BUTTON_ROUND_WIDTH,
 		height: BUTTON_ROUND_WIDTH,
+		borderRadius: BUTTON_ROUND_WIDTH / 2,
+		backgroundColor: '#262626',
+		justifyContent: 'center',
+		alignItems: 'center',
+		margin: SPACING,
+	}),
+	buttonClose: RX.Styles.createViewStyle({
+		width: BUTTON_ROUND_WIDTH,
+		height: BUTTON_ROUND_WIDTH,
+		borderRadius: BUTTON_ROUND_WIDTH / 2,
+		backgroundColor: '#262626',
+		justifyContent: 'center',
+		alignItems: 'center',
+		margin: SPACING,
+	}),
+	closeIcon: RX.Styles.createViewStyle({
+		transform: [{ rotate: '45deg' }],
 	}),
 	buttonMaximize: RX.Styles.createViewStyle({
 		position: 'absolute',
@@ -465,9 +483,23 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		ev.preventDefault();
 
 		this.TerminateCall();
-
 		this.widgetApi!.transport.reply(ev.detail, {});
+		this.props.closeVideoCall();
+	};
 
+	private onClose = () => {
+		const content: CallMemberEventContent_ = {
+			'm.calls': [],
+		};
+
+		ApiClient.sendStateEvent(
+			this.props.roomId,
+			CallEvents.GroupCallMemberPrefix,
+			content,
+			ApiClient.credentials.userIdFull
+		).catch(_error => null);
+
+		this.TerminateCall();
 		this.props.closeVideoCall();
 	};
 
@@ -504,9 +536,11 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 	public render(): JSX.Element | null {
 		let buttonMinimize;
 		let buttonMaximize;
+		let buttonClose;
 
 		if (this.state.isMinimized) {
 			buttonMinimize = null;
+			buttonClose = null;
 
 			buttonMaximize = (
 				<RX.Button
@@ -520,21 +554,28 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 			buttonMaximize = null;
 
 			buttonMinimize = (
-				<RX.Button
-					style={styles.buttonMinimize}
+				<AnimatedButton
+					buttonStyle={styles.buttonMinimize}
+					iconSource={require('../../resources/svg/RI_arrowdown.json') as SvgFile}
+					iconFillColor={'white'}
+					iconHeight={24}
+					iconWidth={24}
+					animatedColor={'white'}
 					onPress={() => this.setMinimized(true)}
-					disableTouchOpacityAnimation={true}
-					activeOpacity={1}
-				>
-					<RX.View style={styles.containerIcon}>
-						<IconSvg
-							source={require('../../resources/svg/RI_arrowdown.json') as SvgFile}
-							fillColor={BUTTON_FILL}
-							height={BUTTON_ROUND_WIDTH}
-							width={BUTTON_ROUND_WIDTH}
-						/>
-					</RX.View>
-				</RX.Button>
+				/>
+			);
+
+			buttonClose = (
+				<AnimatedButton
+					buttonStyle={styles.buttonClose}
+					iconSource={require('../../resources/svg/RI_plus.json') as SvgFile}
+					iconFillColor={'red'}
+					iconHeight={24}
+					iconWidth={24}
+					iconStyle={styles.closeIcon}
+					animatedColor={'white'}
+					onPress={this.onClose}
+				/>
 			);
 		}
 
@@ -542,6 +583,10 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 
 		return (
 			<RX.View style={this.state.isMinimized ? styles.containerMinimized : styles.container}>
+				<RX.View style={[styles.buttonContainer, { height: this.state.isMinimized ? 0 : HEADER_HEIGHT }]}>
+					{buttonMinimize}
+					{buttonClose}
+				</RX.View>
 				<RX.View style={this.state.isMinimized ? styles.callContainerMinimized : styles.callContainer}>
 					<iframe
 						style={{
@@ -554,7 +599,6 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 						src={iFrameSrc}
 						allow={'camera;microphone'}
 					/>
-					{buttonMinimize}
 				</RX.View>
 				{buttonMaximize}
 			</RX.View>
