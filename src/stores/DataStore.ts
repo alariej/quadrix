@@ -499,7 +499,7 @@ class DataStore extends StoreBase {
 					time: event.origin_server_ts,
 					senderId: event.sender,
 					previousContent: event.unsigned ? event.unsigned.prev_content : undefined,
-					userId: event.state_key,
+					stateKey: event.state_key,
 					isRedacted:
 						redactedEventIds.includes(event.event_id) ||
 						(content['m.relates_to']?.rel_type === 'm.replace'

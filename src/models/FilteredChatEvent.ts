@@ -13,7 +13,7 @@ export interface FilteredChatEvent {
 	content: MessageEventContent_ | RoomEventContent_ | MemberEventContent_ | CallEventContent_ | PresenceEventContent_;
 	time: number;
 	senderId: string;
-	userId?: string;
+	stateKey?: string;
 	previousContent?:
 		| MessageEventContent_
 		| RoomEventContent_

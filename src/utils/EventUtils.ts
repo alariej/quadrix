@@ -11,12 +11,7 @@ import {
 	joinedVideoConference,
 } from '../translations';
 import UiStore from '../stores/UiStore';
-import {
-	ClientEvent_,
-	MemberEventContent_,
-	RoomType,
-	CallMemberEventContent_,
-} from '../models/MatrixApi';
+import { ClientEvent_, MemberEventContent_, RoomType, CallMemberEventContent_ } from '../models/MatrixApi';
 import { FilteredChatEvent } from '../models/FilteredChatEvent';
 import { Msc3401Call, Msc3401CallStatus } from '../models/Msc3401Call';
 import differenceInHours from 'date-fns/differenceInHours';
@@ -93,7 +88,7 @@ class EventUtils {
 					time: event.origin_server_ts,
 					senderId: event.sender,
 					previousContent: event.unsigned ? event.unsigned.prev_content : undefined,
-					userId: event.state_key,
+					stateKey: event.state_key,
 					dateChangeFlag: dateChangeFlag,
 					tempId: event.unsigned ? event.unsigned.transaction_id : undefined,
 					redacts: event.redacts,
@@ -141,7 +136,7 @@ class EventUtils {
 				(!event.previousContent || (prevContent.membership && prevContent.membership === 'leave'))
 			) {
 				systemMessage =
-					event.senderId + hasInvitedToRoom(event.userId!, language + '_' + roomType.substr(0, 2));
+					event.senderId + hasInvitedToRoom(event.stateKey!, language + '_' + roomType.substr(0, 2));
 			}
 		} else if (event.type === 'm.room.name') {
 			systemMessage = event.senderId + hasRenamedTheRoom[language + '_' + roomType.substr(0, 2)];
