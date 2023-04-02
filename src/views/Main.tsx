@@ -24,9 +24,10 @@ import Pushers from '../modules/Pushers';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import AppFont from '../modules/AppFont';
 import IconSvg, { SvgFile } from '../components/IconSvg';
-import { APP_VERSION, CLEAR_DATASTORE } from '../appconfig';
+import { APP_VERSION, CLEAR_DATASTORE_VERSION } from '../appconfig';
 import { FilteredChatEvent } from '../models/FilteredChatEvent';
 import ElementCall from '../modules/ElementCall';
+import semver from 'semver';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -159,37 +160,39 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
 		Pushers.set(ApiClient.credentials).catch(_error => null);
 
-		if (CLEAR_DATASTORE) {
-			const storedAppVersion = await ApiClient.getStoredAppVersion().catch(_error => null);
+		const storedAppVersion = await ApiClient.getStoredAppVersion().catch(_error => null);
 
-			if (storedAppVersion && storedAppVersion !== APP_VERSION) {
-				await ApiClient.clearDataStore();
-				await ApiClient.storeAppVersion();
-				ApiClient.clearNextSyncToken();
-				DataStore.clearRoomSummaryList();
+		if (
+			storedAppVersion &&
+			semver.gt(APP_VERSION, storedAppVersion) &&
+			semver.lte(storedAppVersion, CLEAR_DATASTORE_VERSION)
+		) {
+			await ApiClient.clearDataStore();
+			await ApiClient.storeAppVersion();
+			ApiClient.clearNextSyncToken();
+			DataStore.clearRoomSummaryList();
 
-				const text = (
-					<RX.Text style={styles.textDialog}>
-						<RX.Text>{clearDatastore[UiStore.getLanguage()]}</RX.Text>
-					</RX.Text>
-				);
+			const text = (
+				<RX.Text style={styles.textDialog}>
+					<RX.Text>{clearDatastore[UiStore.getLanguage()]}</RX.Text>
+				</RX.Text>
+			);
 
-				const onCancel = () => {
-					RX.Modal.dismiss('modal_cleardatastore');
-					if (!DataStore.getSyncComplete()) {
-						SpinnerUtils.showModalSpinner('syncspinner');
-					}
-				};
+			const onCancel = () => {
+				RX.Modal.dismiss('modal_cleardatastore');
+				if (!DataStore.getSyncComplete()) {
+					SpinnerUtils.showModalSpinner('syncspinner');
+				}
+			};
 
-				const dialog = (
-					<DialogContainer
-						content={text}
-						onCancel={onCancel}
-					/>
-				);
+			const dialog = (
+				<DialogContainer
+					content={text}
+					onCancel={onCancel}
+				/>
+			);
 
-				RX.Modal.show(dialog, 'modal_cleardatastore');
-			}
+			RX.Modal.show(dialog, 'modal_cleardatastore');
 		}
 
 		if (!this.isOffline) {
