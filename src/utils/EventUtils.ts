@@ -16,7 +16,6 @@ import {
 	MemberEventContent_,
 	RoomType,
 	CallMemberEventContent_,
-	CallEventContent_,
 } from '../models/MatrixApi';
 import { FilteredChatEvent } from '../models/FilteredChatEvent';
 import { Msc3401Call, Msc3401CallStatus } from '../models/Msc3401Call';
@@ -37,7 +36,7 @@ class EventUtils {
 					event.type === 'm.room.redaction' ||
 					event.type === 'm.room.encrypted' ||
 					event.type === 'm.room.third_party_invite' ||
-					(event.type === 'org.matrix.msc3401.call' && !(<CallEventContent_>event.content)['m.terminated']) ||
+					event.type === 'org.matrix.msc3401.call' ||
 					event.type === 'org.matrix.msc3401.call.member' ||
 					(event.type === 'm.room.member' && roomType !== 'community') ||
 					(event.type === 'm.room.name' &&

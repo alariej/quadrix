@@ -34,7 +34,7 @@ import {
 import MessageTile from './MessageTile';
 import ApiClient from '../matrix/ApiClient';
 import EventUtils from '../utils/EventUtils';
-import { MessageEventContent_, RoomType } from '../models/MatrixApi';
+import { CallEventContent_, MessageEventContent_, RoomType } from '../models/MatrixApi';
 import SystemMessage from './SystemMessage';
 import DialogContainer from '../modules/DialogContainer';
 import UiStore from '../stores/UiStore';
@@ -601,6 +601,12 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 			const systemMessage =
 				timestamp + ' - ' + EventUtils.getSystemMessage(cellRender.item.event, this.props.roomType);
 
+			let hide = false;
+			const content = cellRender.item.event.content as CallEventContent_;
+			if (cellRender.item.event.type === 'org.matrix.msc3401.call' && content['m.terminated']) {
+				hide = true;
+			}
+
 			MessageWrapper = (
 				<RX.View
 					style={styles.containerWrapper}
@@ -609,7 +615,10 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 					activeOpacity={1}
 				>
 					{dateTile}
-					<SystemMessage systemMessage={systemMessage} />
+					<SystemMessage
+						systemMessage={systemMessage}
+						hide={hide}
+					/>
 				</RX.View>
 			);
 		}

@@ -6,11 +6,9 @@ import AppFont from '../modules/AppFont';
 const styles = {
 	containerMessage: RX.Styles.createViewStyle({
 		flexDirection: 'row',
-		marginBottom: SPACING,
 		marginLeft: (BUTTON_ROUND_WIDTH + SPACING) * 0.5,
 		marginRight: (BUTTON_ROUND_WIDTH + SPACING) * 0.5,
 		borderRadius: BORDER_RADIUS,
-		padding: SPACING,
 		backgroundColor: TILE_BACKGROUND,
 	}),
 	containerText: RX.Styles.createTextStyle({
@@ -23,12 +21,22 @@ const styles = {
 
 interface SystemMessageProps {
 	systemMessage: string;
+	hide: boolean;
 }
 
 export default class SystemMessage extends RX.Component<SystemMessageProps, RX.Stateless> {
 	public render(): JSX.Element | null {
 		return (
-			<RX.View style={styles.containerMessage}>
+			<RX.View
+				style={[
+					styles.containerMessage,
+					{
+						height: this.props.hide ? 0 : undefined,
+						padding: this.props.hide ? 0 : SPACING,
+						marginBottom: this.props.hide ? 0 : SPACING,
+					},
+				]}
+			>
 				<RX.Text style={styles.containerText}>{this.props.systemMessage}</RX.Text>
 			</RX.View>
 		);
