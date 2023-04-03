@@ -8,10 +8,10 @@
   "author": "Jean-François Alarie <alariej@quadrix.chat>",
   "homepage": "https://quadrix.chat",
   "scripts": {
-    "rn-cli": "node scripts/react-native.js",
-    "start:rn-dev": "npm run rn-cli -- start --reset-cache",
-    "start:android": "npm run rn-cli -- run-android",
-    "start:ios": "npm run rn-cli -- run-ios",
+    "rncli": "node scripts/react-native.js",
+    "start:rndev": "npm run rncli -- start --reset-cache",
+    "start:android": "npm run rncli -- run-android",
+    "start:ios": "npm run rncli -- run-ios",
     "start:web": "cross-env platform=web webpack serve --config=web/webpack/dev.js --progress --mode=development --host 0.0.0.0",
     "build:web": "cross-env platform=web webpack --config=web/webpack/prod.js --progress --mode=production",
     "lint": "eslint --config .eslintrc --ext .ts,.tsx src"
