@@ -7,7 +7,7 @@ interface AnimatedSpinnerProps {
 }
 
 const animatedSizeStart = 1;
-const animatedSizeStop = 0.5;
+const animatedSizeStop = 0.333;
 const animatedDuration = 250;
 const loopDuration = 1500;
 const easing = RX.Animated.Easing.Out();
@@ -127,7 +127,7 @@ export default class AnimatedSpinner extends RX.Component<AnimatedSpinnerProps, 
 							height: this.props.size / 3,
 							width: this.props.size / 3,
 							borderRadius: this.props.size / 15,
-							margin: this.props.size / 15,
+							margin: -this.props.size / 15,
 							backgroundColor: this.props.color,
 						},
 					]}
@@ -139,7 +139,7 @@ export default class AnimatedSpinner extends RX.Component<AnimatedSpinnerProps, 
 							height: this.props.size / 3,
 							width: this.props.size / 3,
 							borderRadius: this.props.size / 15,
-							margin: this.props.size / 15,
+							margin: -this.props.size / 15,
 							backgroundColor: this.props.color,
 						},
 					]}
@@ -151,7 +151,7 @@ export default class AnimatedSpinner extends RX.Component<AnimatedSpinnerProps, 
 							height: this.props.size / 3,
 							width: this.props.size / 3,
 							borderRadius: this.props.size / 15,
-							margin: this.props.size / 15,
+							margin: -this.props.size / 15,
 							backgroundColor: this.props.color,
 						},
 					]}
