@@ -12,7 +12,8 @@ import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
 
-  private final ReactNativeHost mReactNativeHost = new DefaultReactNativeHost(this) {
+  private final ReactNativeHost mReactNativeHost =
+  new DefaultReactNativeHost(this) {
     @Override
     public boolean getUseDeveloperSupport() {
       return BuildConfig.DEBUG;
@@ -33,8 +34,8 @@ public class MainApplication extends Application implements ReactApplication {
     }
 
     @Override
-    protected @Nullable String getBundleAssetName() {
-      return "app.bundle";
+    protected boolean isNewArchEnabled() {
+      return BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
     }
 
     @Override
@@ -52,5 +53,6 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
+    ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
   }
 }
