@@ -272,7 +272,14 @@ class FileHandler {
 						ReactNativeBlobUtil.fs.unlink(thumbnailUrl!).catch(_error => null);
 					});
 
-				if (fetchPost.respInfo.status === 200) {
+				let data;
+				try {
+					data = JSON.parse(fetchPost.data) as { content_uri: string };
+				} catch (_error) {
+					data = undefined;
+				}
+
+				if (data?.content_uri?.includes('mxc://')) {
 					const data = JSON.parse(fetchPost.data) as { content_uri: string };
 					thumbnailUrl = data.content_uri;
 				}
@@ -289,7 +296,7 @@ class FileHandler {
 			ReactNativeBlobUtil.wrap(file.uri.replace('file://', ''))
 		)
 			.uploadProgress({ interval: 100 }, (written, total) => {
-				fetchProgress(uploadingFile[UiStore.getLanguage()], written / total);
+				fetchProgress(uploadingFile[UiStore.getLanguage()], total ? written / total : 0);
 			})
 			.catch(error => {
 				return Promise.reject(error);
@@ -300,9 +307,14 @@ class FileHandler {
 				}
 			});
 
-		if (response.respInfo.status === 200) {
-			const data = JSON.parse(response.data) as { content_uri: string };
+		let data;
+		try {
+			data = JSON.parse(response.data) as { content_uri: string };
+		} catch (_error) {
+			data = undefined;
+		}
 
+		if (data?.content_uri?.includes('mxc://')) {
 			const uploadFileInfo: UploadFileInfo = {
 				uri: data.content_uri,
 				fileName: fileName,

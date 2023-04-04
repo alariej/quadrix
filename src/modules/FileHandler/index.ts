@@ -348,7 +348,7 @@ class FileHandler {
 				width: thumbnail.width,
 			};
 
-			thumbnailUrl = fetchPost.data.content_uri;
+			thumbnailUrl = fetchPost?.data?.content_uri;
 		}
 
 		axiosInstance.defaults.headers.post['Content-Type'] = file.type;
@@ -358,7 +358,7 @@ class FileHandler {
 				return Promise.reject(error);
 			});
 
-		if (response.status === 200) {
+		if (response?.data?.content_uri?.includes('mxc://')) {
 			const uploadFileInfo: UploadFileInfo = {
 				uri: response.data.content_uri,
 				fileName: fileName,
