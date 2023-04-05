@@ -457,7 +457,16 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 			[DeviceKind.videoInput]: [],
 		};
 
-		devices.forEach(device => devices_[device.kind].push(device));
+		devices.forEach(device => {
+			if (
+				UiStore.getIsElectron() &&
+				UiStore.getDesktopOS() === 'MacOS' &&
+				device.label.toLowerCase().includes('iphone')
+			) {
+				return;
+			}
+			devices_[device.kind].push(device);
+		});
 
 		await this.widgetApi!.transport.send(CallWidgetActions.JoinCall, {
 			audioInput: devices_[DeviceKind.audioInput][0].label,
