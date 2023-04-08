@@ -233,7 +233,9 @@ if (!hasLock) {
 		// mainWindow.loadFile(path.join(__dirname, 'build-web', 'index.html')).catch(_error => null);
 		// mainWindow.loadFile('build-web/index.html').catch(_error => null);
 		// mainWindow.loadURL('http://localhost:9999').catch(_error => null);
-		// mainWindow.webContents.openDevTools()
+		// mainWindow.webContents.openDevTools();
+
+		mainWindow.webContents.setWebRTCIPHandlingPolicy('default');
 
 		mainWindow.on('close', event => {
 			event.preventDefault();
