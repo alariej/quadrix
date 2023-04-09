@@ -13,7 +13,7 @@ const animatedEasing = RX.Animated.Easing.InOutBack();
 
 interface FloatingSendButtonProps {
 	offline: boolean;
-	onPressSendButton: (() => void) | undefined;
+	onPressSendButton: ((e: RX.Types.SyntheticEvent) => void) | undefined;
 }
 
 interface FloatingSendButtonState {
@@ -100,6 +100,7 @@ export default class FloatingSendButton extends Component<FloatingSendButtonProp
 					bottom: bottom,
 					right: 12,
 				}}
+				ignorePointerEvents={true}
 			>
 				<RX.Animated.View style={this.animatedStyle}>
 					<AnimatedButton

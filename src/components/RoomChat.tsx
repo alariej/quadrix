@@ -876,10 +876,10 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 					keyboardShouldPersistTaps={true}
 				/>
 				{arrowButton}
-				{moreButton}
 				{loadingButton}
 				{callRingingButton}
 				{floatingSendButton}
+				{moreButton}
 			</RX.View>
 		);
 	}

@@ -1,8 +1,9 @@
+import RX from 'reactxp';
 import { Component } from 'react';
 
 interface FloatingSendButtonProps {
 	offline: boolean;
-	onPressSendButton: (() => void) | undefined;
+	onPressSendButton: ((e: RX.Types.SyntheticEvent) => void) | undefined;
 }
 
 interface FloatingSendButtonState {
