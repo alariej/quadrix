@@ -446,7 +446,15 @@ class ApiClient {
 			};
 		} else {
 			filter = {
-				types: ['m.room.message', 'm.room.member', 'm.room.name', 'm.room.avatar', 'm.room.encrypted'],
+				types: [
+					'm.room.message',
+					'm.room.member',
+					'm.room.name',
+					'm.room.avatar',
+					'm.room.encrypted',
+					'org.matrix.msc3401.call',
+					'org.matrix.msc3401.call.member',
+				],
 			};
 		}
 
