@@ -15,10 +15,12 @@ import { ImageInfo_, MessageEventContent_ } from '../models/MatrixApi';
 const styles = {
 	containerMessage: RX.Styles.createViewStyle({
 		cursor: 'pointer',
+		margin: -SPACING,
 	}),
 	image: RX.Styles.createImageStyle({
 		flex: 1,
-		borderRadius: BORDER_RADIUS - 2,
+		borderTopLeftRadius: BORDER_RADIUS,
+		borderTopRightRadius: BORDER_RADIUS,
 	}),
 	spinnerContainer: RX.Styles.createViewStyle({
 		position: 'absolute',
@@ -67,8 +69,7 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 
 		this.state = { showSpinner: false };
 
-		const width =
-			UiStore.getAppLayout_().pageWidth - 2 * PAGE_MARGIN - (BUTTON_ROUND_WIDTH + SPACING) - 2 * SPACING;
+		const width = UiStore.getAppLayout_().pageWidth - 2 * PAGE_MARGIN - (BUTTON_ROUND_WIDTH + SPACING);
 
 		const content = props.message.content as MessageEventContent_;
 		const info = content.info as ImageInfo_;

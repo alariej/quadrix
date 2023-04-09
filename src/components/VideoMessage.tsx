@@ -14,7 +14,9 @@ const styles = {
 	container: RX.Styles.createViewStyle({
 		flex: 1,
 		overflow: 'hidden',
-		borderRadius: BORDER_RADIUS - 2,
+		margin: -SPACING,
+		borderTopLeftRadius: BORDER_RADIUS,
+		borderTopRightRadius: BORDER_RADIUS,
 	}),
 	videoContainer: RX.Styles.createViewStyle({
 		flex: 1,
@@ -55,8 +57,7 @@ export default class VideoMessage extends RX.Component<VideoMessageProps, RX.Sta
 
 		this.isThumbnail = !!info?.thumbnail_url;
 
-		const width =
-			UiStore.getAppLayout_().pageWidth - 2 * PAGE_MARGIN - (BUTTON_ROUND_WIDTH + SPACING) - 2 * SPACING;
+		const width = UiStore.getAppLayout_().pageWidth - 2 * PAGE_MARGIN - (BUTTON_ROUND_WIDTH + SPACING);
 
 		this.url = StringUtils.mxcToHttp(content.url!, ApiClient.credentials.homeServer);
 
