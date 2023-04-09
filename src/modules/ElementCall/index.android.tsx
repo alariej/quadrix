@@ -390,10 +390,15 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 
 						const handleWebviewRequest = (ev) => {
                             if (!ev.data) { return; }
-							const event_ = JSON.parse(ev.data);
-							if (event_.type === "${CallEvents.GroupCallMemberPrefix}") {
+							let event_;
+							try {
+								event_ = JSON.parse(ev.data);
+							} catch (error) {
+								event_ = null;
+							}
+							if (event_ && event_.type === "${CallEvents.GroupCallMemberPrefix}") {
 								widgetApi.feedEvent(event_, event_.room_id);
-							} else {
+							} else if (event_ && event_.type) {
 								widgetApi.feedToDevice(event_, false);
 							}
 						}

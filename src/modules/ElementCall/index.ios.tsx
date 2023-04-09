@@ -388,12 +388,17 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 							widgetApi.on("action:set_always_on_screen", onAlwaysOnScreen);
 						};
 
-						var handleWebviewRequest = (ev) => {
+						const handleWebviewRequest = (ev) => {
                             if (!ev.data) { return; }
-							const event_ = JSON.parse(ev.data);
-							if (event_.type === "${CallEvents.GroupCallMemberPrefix}") {
+							let event_;
+							try {
+								event_ = JSON.parse(ev.data);
+							} catch (error) {
+								event_ = null;
+							}
+							if (event_ && event_.type === "${CallEvents.GroupCallMemberPrefix}") {
 								widgetApi.feedEvent(event_, event_.room_id);
-							} else if (event_.type) {
+							} else if (event_ && event_.type) {
 								widgetApi.feedToDevice(event_, false);
 							}
 						}
