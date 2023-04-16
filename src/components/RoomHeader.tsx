@@ -15,7 +15,6 @@ import {
 	TRANSPARENT_BACKGROUND,
 	HEADER_STATUS,
 	AVATAR_FOREGROUND,
-	BUTTON_HEADER_WIDTH,
 	BUTTON_HEADER_BACKGROUND,
 	BUTTON_FILL_HEADER,
 	OPAQUE_VLIGHT_BACKGROUND,
@@ -486,8 +485,8 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 						iconStyle={{ marginRight: 2 }}
 						iconSource={require('../resources/svg/RI_arrowleft.json') as SvgFile}
 						iconFillColor={BUTTON_FILL_HEADER}
-						iconHeight={(BUTTON_HEADER_WIDTH * 4) / 3}
-						iconWidth={(BUTTON_HEADER_WIDTH * 4) / 3}
+						iconHeight={32}
+						iconWidth={32}
 						animatedColor={BUTTON_FILL_HEADER}
 						onPress={this.onPressHomeButton}
 					/>

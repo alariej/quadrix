@@ -302,8 +302,8 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 						buttonStyle={styles.roundButton}
 						iconSource={require('../resources/svg/RI_menu.json') as SvgFile}
 						iconFillColor={BUTTON_FILL_HEADER}
-						iconHeight={BUTTON_HEADER_WIDTH}
-						iconWidth={BUTTON_HEADER_WIDTH}
+						iconHeight={22}
+						iconWidth={22}
 						animatedColor={BUTTON_FILL_HEADER}
 						onPress={this.showMenu}
 					/>
