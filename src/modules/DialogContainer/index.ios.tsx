@@ -194,6 +194,12 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
 
 		let cancelButton: ReactElement | undefined = undefined;
 		if (this.props.cancelButton) {
+			let iconSource: SvgFile;
+			if (!this.props.confirmButton) {
+				iconSource = require('../../resources/svg/RI_checksingle.json') as SvgFile;
+			} else {
+				iconSource = require('../../resources/svg/RI_cancel.json') as SvgFile;
+			}
 			cancelButton = (
 				<AnimatedButton
 					buttonStyle={this.props.buttonStyle || styles.buttonCancel}
