@@ -3,7 +3,7 @@ import RX from 'reactxp';
 import StringUtils from '../utils/StringUtils';
 import ApiClient from '../matrix/ApiClient';
 import FullScreenImage from './FullScreenImage';
-import { SPACING, BUTTON_ROUND_WIDTH, PAGE_MARGIN, BORDER_RADIUS, TILE_SYSTEM_TEXT } from '../ui';
+import { SPACING, BUTTON_ROUND_WIDTH, TILE_SYSTEM_TEXT, PAGE_PADDING_CHAT, BORDER_RADIUS_CHAT } from '../ui';
 import UiStore from '../stores/UiStore';
 import Spinner from './Spinner';
 import CachedImage from '../modules/CachedImage';
@@ -19,8 +19,8 @@ const styles = {
 	}),
 	image: RX.Styles.createImageStyle({
 		flex: 1,
-		borderTopLeftRadius: BORDER_RADIUS,
-		borderTopRightRadius: BORDER_RADIUS,
+		borderTopLeftRadius: BORDER_RADIUS_CHAT,
+		borderTopRightRadius: BORDER_RADIUS_CHAT,
 	}),
 	spinnerContainer: RX.Styles.createViewStyle({
 		position: 'absolute',
@@ -69,7 +69,7 @@ export default class ImageMessage extends RX.Component<ImageMessageProps, ImageM
 
 		this.state = { showSpinner: false };
 
-		const width = UiStore.getAppLayout_().pageWidth - 2 * PAGE_MARGIN - (BUTTON_ROUND_WIDTH + SPACING);
+		const width = UiStore.getAppLayout_().pageWidth - 2 * PAGE_PADDING_CHAT - (BUTTON_ROUND_WIDTH + SPACING);
 
 		const content = props.message.content as MessageEventContent_;
 		const info = content.info as ImageInfo_;

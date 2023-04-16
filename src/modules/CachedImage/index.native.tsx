@@ -1,7 +1,7 @@
 import React from 'react';
 import RX from 'reactxp';
 import FastImage, { OnLoadEvent } from 'react-native-fast-image';
-import { APP_BACKGROUND } from '../../ui';
+import { CONTENT_BACKGROUND } from '../../ui';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -32,7 +32,8 @@ export default class CachedImage extends RX.Component<CachedImageProps, RX.State
 	constructor(props: CachedImageProps) {
 		super(props);
 
-		this.backgroundColor = this.props.animated && this.props.mimeType === 'image/jpeg' ? APP_BACKGROUND : undefined;
+		this.backgroundColor =
+			this.props.animated && this.props.mimeType === 'image/jpeg' ? CONTENT_BACKGROUND : undefined;
 
 		this.animatedOpacity = RX.Animated.createValue(this.props.animated ? 0 : 1);
 		this.animatedStyle = RX.Styles.createAnimatedViewStyle({

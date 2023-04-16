@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import RX from 'reactxp';
 import ApiClient from '../matrix/ApiClient';
-import { SPACING, BUTTON_ROUND_WIDTH, PAGE_MARGIN, BORDER_RADIUS, TILE_BACKGROUND, STATUSBAR_BACKGROUND } from '../ui';
+import { SPACING, BUTTON_ROUND_WIDTH, TILE_BACKGROUND, PAGE_PADDING_CHAT, BORDER_RADIUS_CHAT } from '../ui';
 import UiStore from '../stores/UiStore';
 import FullScreenVideo from './FullScreenVideo';
 import CachedImage from '../modules/CachedImage';
@@ -15,8 +15,8 @@ const styles = {
 		flex: 1,
 		overflow: 'hidden',
 		margin: -SPACING,
-		borderTopLeftRadius: BORDER_RADIUS,
-		borderTopRightRadius: BORDER_RADIUS,
+		borderTopLeftRadius: BORDER_RADIUS_CHAT,
+		borderTopRightRadius: BORDER_RADIUS_CHAT,
 	}),
 	videoContainer: RX.Styles.createViewStyle({
 		flex: 1,
@@ -57,7 +57,7 @@ export default class VideoMessage extends RX.Component<VideoMessageProps, RX.Sta
 
 		this.isThumbnail = !!info?.thumbnail_url;
 
-		const width = UiStore.getAppLayout_().pageWidth - 2 * PAGE_MARGIN - (BUTTON_ROUND_WIDTH + SPACING);
+		const width = UiStore.getAppLayout_().pageWidth - 2 * PAGE_PADDING_CHAT - (BUTTON_ROUND_WIDTH + SPACING);
 
 		this.url = StringUtils.mxcToHttp(content.url!, ApiClient.credentials.homeServer);
 
@@ -120,7 +120,7 @@ export default class VideoMessage extends RX.Component<VideoMessageProps, RX.Sta
 			);
 		} else {
 			video = (
-				<RX.View style={[styles.imageContainer, { backgroundColor: STATUSBAR_BACKGROUND }]}>
+				<RX.View style={[styles.imageContainer, { backgroundColor: 'lightgrey' }]}>
 					<RX.View style={styles.playIcon}>
 						<IconSvg
 							source={require('../resources/svg/RI_play.json') as SvgFile}

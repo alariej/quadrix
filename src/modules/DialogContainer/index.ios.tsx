@@ -12,7 +12,6 @@ import {
 	DIALOG_WIDTH,
 	SPACING,
 	OBJECT_MARGIN,
-	BUTTON_DISABLED_TEXT,
 	BUTTON_CANCEL_BACKGROUND,
 	BUTTON_LONG_TEXT,
 } from '../../ui';
@@ -20,6 +19,8 @@ import UiStore from '../../stores/UiStore';
 import { cancel } from '../../translations';
 import { KeyboardAvoidingView } from 'react-native';
 import AppFont from '../../modules/AppFont';
+import AnimatedButton from '../../components/AnimatedButton';
+import { SvgFile } from '../../components/IconSvg';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -53,13 +54,13 @@ const styles = {
 		flexDirection: 'row',
 	}),
 	buttonConfirm: RX.Styles.createViewStyle({
-		width: DIALOG_WIDTH / 2 - OBJECT_MARGIN / 2,
+		width: DIALOG_WIDTH / 2 - SPACING,
 		height: BUTTON_HEIGHT,
 		borderRadius: BUTTON_HEIGHT / 2,
 		backgroundColor: BUTTON_MODAL_BACKGROUND,
 	}),
 	buttonCancel: RX.Styles.createViewStyle({
-		width: DIALOG_WIDTH / 2 - OBJECT_MARGIN / 2,
+		width: DIALOG_WIDTH / 2 - SPACING,
 		height: BUTTON_HEIGHT,
 		borderRadius: BUTTON_HEIGHT / 2,
 		backgroundColor: BUTTON_CANCEL_BACKGROUND,
@@ -67,14 +68,12 @@ const styles = {
 	buttonTextConfirm: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
 		fontSize: FONT_LARGE,
-		marginVertical: SPACING,
 		textAlign: 'center',
 		color: BUTTON_MODAL_TEXT,
 	}),
 	buttonTextCancel: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
 		fontSize: FONT_LARGE,
-		marginVertical: SPACING,
 		textAlign: 'center',
 		color: BUTTON_LONG_TEXT,
 	}),
@@ -101,6 +100,7 @@ interface DialogContainerProps {
 	buttonStyle?: RX.Types.ButtonStyleRuleSet;
 	buttonTextStyle?: RX.Types.TextStyleRuleSet;
 	animated?: boolean;
+	isSearchDialog?: boolean;
 }
 
 export default class DialogContainer extends RX.Component<DialogContainerProps, RX.Stateless> {
@@ -167,45 +167,46 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
 			);
 		}
 
+		let iconSource: SvgFile;
+		if (this.props.isSearchDialog) {
+			iconSource = require('../../resources/svg/RI_search.json') as SvgFile;
+		} else {
+			iconSource = require('../../resources/svg/RI_checksingle.json') as SvgFile;
+		}
 		let confirmButton: ReactElement | undefined = undefined;
 		if (this.props.confirmButton) {
 			confirmButton = (
-				<RX.Button
-					style={styles.buttonConfirm}
+				<AnimatedButton
+					buttonStyle={styles.buttonConfirm}
+					iconSource={iconSource}
+					iconStyle={{ position: 'absolute', right: SPACING, opacity: this.props.confirmDisabled ? 0.3 : 1 }}
+					iconFillColor={'limegreen'}
+					iconHeight={this.props.isSearchDialog ? 16 : 20}
+					iconWidth={this.props.isSearchDialog ? 16 : 20}
+					animatedColor={'white'}
 					onPress={this.onConfirmButtonClick}
-					disabledOpacity={1}
-					disableTouchOpacityAnimation={false}
-					underlayColor={BUTTON_DISABLED_TEXT}
-					activeOpacity={0.8}
 					disabled={this.props.confirmDisabled}
-				>
-					<RX.Text
-						allowFontScaling={false}
-						style={[styles.buttonTextConfirm, disabledStyle]}
-					>
-						{this.props.confirmButtonText || 'OK'}
-					</RX.Text>
-				</RX.Button>
+					text={this.props.confirmButtonText || 'OK'}
+					textStyle={[styles.buttonTextConfirm, disabledStyle]}
+				/>
 			);
 		}
 
 		let cancelButton: ReactElement | undefined = undefined;
 		if (this.props.cancelButton) {
 			cancelButton = (
-				<RX.Button
-					style={this.props.buttonStyle || styles.buttonCancel}
+				<AnimatedButton
+					buttonStyle={this.props.buttonStyle || styles.buttonCancel}
+					iconSource={iconSource}
+					iconStyle={{ position: 'absolute', right: SPACING }}
+					iconFillColor={this.props.confirmButton ? 'red' : 'limegreen'}
+					iconHeight={20}
+					iconWidth={20}
+					animatedColor={'white'}
 					onPress={this.onCancelButtonClick}
-					disableTouchOpacityAnimation={false}
-					underlayColor={BUTTON_DISABLED_TEXT}
-					activeOpacity={0.8}
-				>
-					<RX.Text
-						allowFontScaling={false}
-						style={this.props.buttonTextStyle || styles.buttonTextCancel}
-					>
-						{this.props.cancelButtonText || cancel[UiStore.getLanguage()]}
-					</RX.Text>
-				</RX.Button>
+					text={this.props.cancelButtonText || cancel[UiStore.getLanguage()]}
+					textStyle={this.props.buttonTextStyle || styles.buttonTextCancel}
+				/>
 			);
 		}
 

@@ -57,7 +57,7 @@ export default class Spinner extends RX.Component<SpinnerProps, SpinnerState> {
 	}
 
 	public render(): JSX.Element | null {
-		const size = !this.props.size || this.props.size === 'large' ? 48 : 14;
+		const size = !this.props.size || this.props.size === 'large' ? 48 : 18;
 
 		let spinner: ReactElement | null;
 		if (this.state.isVisible) {

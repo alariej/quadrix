@@ -16,7 +16,6 @@ import {
 	PLACEHOLDER_TEXT,
 	TRANSPARENT_BACKGROUND,
 	FONT_NORMAL,
-	LOGO_FILL,
 	LINK_TEXT,
 	BUTTON_LOGIN_INFO,
 } from '../ui';
@@ -76,7 +75,7 @@ const styles = {
 		width: BUTTON_LONG_WIDTH,
 		height: BUTTON_HEIGHT,
 		borderRadius: BORDER_RADIUS,
-		marginBottom: SPACING,
+		marginBottom: 1,
 		backgroundColor: INPUT_BACKGROUND,
 	}),
 	mainButton: RX.Styles.createViewStyle({
@@ -405,7 +404,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 			>
 				<IconSvg
 					source={require('../resources/svg/RI_expand.json') as SvgFile}
-					fillColor={BUTTON_LONG_BACKGROUND}
+					fillColor={'white'}
 					height={20}
 					width={20}
 				/>
@@ -422,7 +421,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 			>
 				<IconSvg
 					source={require('../resources/svg/RI_info.json') as SvgFile}
-					fillColor={BUTTON_LONG_BACKGROUND}
+					fillColor={'white'}
 					height={20}
 					width={20}
 				/>
@@ -473,7 +472,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 						source={require('../resources/svg/logo.json') as SvgFile}
 						height={72}
 						width={72}
-						fillColor={LOGO_FILL}
+						fillColor={'white'}
 					/>
 				</RX.View>
 				<RX.View style={styles.containerUserInput}>

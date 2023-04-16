@@ -3,7 +3,6 @@ import RX from 'reactxp';
 import {
 	TILE_BACKGROUND,
 	FOOTER_TEXT,
-	BORDER_RADIUS,
 	SPACING,
 	FONT_NORMAL,
 	TILE_SYSTEM_TEXT,
@@ -13,9 +12,10 @@ import {
 	MARKER_SENT_FILL,
 	TILE_BACKGROUND_OWN,
 	PAGE_MARGIN,
-	APP_BACKGROUND,
 	SENDER_TEXT,
 	ICON_INFO_FILL,
+	BORDER_RADIUS_CHAT,
+	CONTENT_BACKGROUND,
 } from '../ui';
 import ImageMessage from './ImageMessage';
 import FileMessage from './FileMessage';
@@ -42,7 +42,7 @@ const styles = {
 		backgroundColor: TRANSPARENT_BACKGROUND,
 	}),
 	containerTile: RX.Styles.createViewStyle({
-		borderRadius: BORDER_RADIUS,
+		borderRadius: BORDER_RADIUS_CHAT,
 		marginBottom: SPACING,
 		padding: SPACING,
 		minWidth: 84,
@@ -104,7 +104,7 @@ const styles = {
 		position: 'absolute',
 		bottom: 0,
 		height: 1,
-		backgroundColor: APP_BACKGROUND,
+		backgroundColor: CONTENT_BACKGROUND,
 		overflow: 'visible',
 		shadowOffset: Shadow.small.offset,
 		shadowColor: Shadow.small.color,
@@ -291,11 +291,11 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 		let borderBottomRightRadius;
 
 		if (['direct', 'group'].includes(this.props.roomType)) {
-			(borderBottomLeftRadius = isOwnMessage ? 0 : BORDER_RADIUS),
-				(borderBottomRightRadius = isOwnMessage ? BORDER_RADIUS : 0);
+			(borderBottomLeftRadius = isOwnMessage ? 0 : BORDER_RADIUS_CHAT),
+				(borderBottomRightRadius = isOwnMessage ? BORDER_RADIUS_CHAT : 0);
 		} else {
-			borderBottomLeftRadius = BORDER_RADIUS;
-			borderBottomRightRadius = BORDER_RADIUS;
+			borderBottomLeftRadius = BORDER_RADIUS_CHAT;
+			borderBottomRightRadius = BORDER_RADIUS_CHAT;
 		}
 
 		this.tileStyle = RX.Styles.createViewStyle(

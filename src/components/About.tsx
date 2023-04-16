@@ -16,7 +16,7 @@ import AppFont from '../modules/AppFont';
 import Shadow from '../modules/Shadow';
 import UiStore from '../stores/UiStore';
 import { termsPrivacyLicense } from '../translations';
-import { APP_BACKGROUND, FONT_LARGE, FONT_NORMAL, LINK_TEXT, LOGO_FILL, MODAL_CONTENT_TEXT, SPACING } from '../ui';
+import { CONTENT_BACKGROUND, FONT_LARGE, FONT_NORMAL, LINK_TEXT, LOGO_FILL, MODAL_CONTENT_TEXT, SPACING } from '../ui';
 import IconSvg, { SvgFile } from './IconSvg';
 
 const styles = {
@@ -63,7 +63,7 @@ const styles = {
 		marginVertical: 12,
 		paddingHorizontal: 12,
 		borderRadius: 24 / 2,
-		backgroundColor: APP_BACKGROUND,
+		backgroundColor: CONTENT_BACKGROUND,
 		overflow: 'visible',
 		shadowOffset: Shadow.medium.offset,
 		shadowColor: Shadow.medium.color,

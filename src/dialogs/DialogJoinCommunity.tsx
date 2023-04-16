@@ -309,6 +309,7 @@ export default class DialogJoinCommunity extends RX.Component<DialogJoinCommunit
 				cancelButtonText={cancel[this.language]}
 				onConfirm={this.searchCommunities}
 				onCancel={() => RX.Modal.dismissAll()}
+				isSearchDialog={true}
 			/>
 		);
 

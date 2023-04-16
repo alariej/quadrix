@@ -12,8 +12,7 @@ import {
 	SPACING,
 	TILE_HEIGHT,
 	TRANSPARENT_BACKGROUND,
-	BUTTON_UNREAD_TEXT,
-	BORDER_RADIUS,
+	CONTENT_BACKGROUND,
 } from '../ui';
 import RoomListHeader from '../components/RoomListHeader';
 import {
@@ -31,6 +30,7 @@ import { MessageEventContent_ } from '../models/MatrixApi';
 const styles = {
 	container: RX.Styles.createViewStyle({
 		flex: 1,
+		backgroundColor: CONTENT_BACKGROUND,
 	}),
 	roomWrapper: RX.Styles.createViewStyle({
 		backgroundColor: OPAQUE_DUMMY_BACKGROUND,
@@ -171,10 +171,10 @@ export default class RoomList extends ComponentBase<RoomListProps, RoomListState
 				>
 					<IconSvg
 						source={require('../resources/svg/RI_arrowup.json') as SvgFile}
-						style={{ backgroundColor: iconColor, borderRadius: BORDER_RADIUS }}
-						fillColor={BUTTON_UNREAD_TEXT}
-						height={20}
-						width={20}
+						style={{ backgroundColor: iconColor, borderRadius: 11 }}
+						fillColor={'white'}
+						height={22}
+						width={22}
 					/>
 				</RX.Button>
 			);

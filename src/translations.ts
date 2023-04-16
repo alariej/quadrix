@@ -47,13 +47,6 @@ export const inviteUser: Translation = {
 	es: 'Invitar',
 };
 
-export const searchUser: Translation = {
-	en: 'Search...',
-	de: 'Suchen...',
-	fr: 'Chercher...',
-	es: 'Buscar...',
-};
-
 export const searchInstruction: Translation = {
 	en: 'Search for a user or directly enter a Matrix user ID (@user:server)',
 	de: 'Suchen Sie nach einem Benutzer oder geben Sie direkt eine Matrix ID (@benutzer:server) ein',
@@ -195,10 +188,10 @@ export const theCommunity: Translation = {
 };
 
 export const search: Translation = {
-	en: 'Search',
-	de: 'Suchen',
-	fr: 'Chercher',
-	es: 'Buscar',
+	en: 'Search...',
+	de: 'Suchen...',
+	fr: 'Chercher...',
+	es: 'Buscar...',
 };
 
 export const communityName: Translation = {

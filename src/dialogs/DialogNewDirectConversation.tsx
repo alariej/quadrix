@@ -33,7 +33,7 @@ import {
 	doesntSeemToExist,
 	warningNoSelfDirect,
 	Languages,
-	searchUser,
+	search,
 	tooManySearchResults,
 	noSearchResults,
 	enterSearch,
@@ -46,6 +46,8 @@ import SpinnerUtils from '../utils/SpinnerUtils';
 import AppFont from '../modules/AppFont';
 import StringUtils from '../utils/StringUtils';
 import KeyboardAwareView from '../modules/KeyboardAwareView';
+import AnimatedButton from '../components/AnimatedButton';
+import { SvgFile } from '../components/IconSvg';
 
 const styles = {
 	modalScreen: RX.Styles.createViewStyle({
@@ -88,13 +90,13 @@ const styles = {
 		marginVertical: OBJECT_MARGIN,
 	}),
 	buttonConfirm: RX.Styles.createViewStyle({
-		width: DIALOG_WIDTH / 2 - OBJECT_MARGIN / 2,
+		width: DIALOG_WIDTH / 2 - SPACING,
 		height: BUTTON_HEIGHT,
 		borderRadius: BUTTON_HEIGHT / 2,
 		backgroundColor: BUTTON_MODAL_BACKGROUND,
 	}),
 	buttonCancel: RX.Styles.createViewStyle({
-		width: DIALOG_WIDTH / 2 - OBJECT_MARGIN / 2,
+		width: DIALOG_WIDTH / 2 - SPACING,
 		height: BUTTON_HEIGHT,
 		borderRadius: BUTTON_HEIGHT / 2,
 		backgroundColor: BUTTON_CANCEL_BACKGROUND,
@@ -381,37 +383,44 @@ export default class DialogNewDirectConversation extends RX.Component<
 			);
 		}
 
+		let iconSource: SvgFile;
+		if (this.state.isSearch) {
+			iconSource = require('../resources/svg/RI_search.json') as SvgFile;
+		} else {
+			iconSource = require('../resources/svg/RI_checksingle.json') as SvgFile;
+		}
+
 		const buttons = (
 			<RX.View style={[styles.buttonContainer, { justifyContent: 'space-between' }]}>
-				<RX.Button
-					style={styles.buttonConfirm}
+				<AnimatedButton
+					buttonStyle={styles.buttonConfirm}
+					iconSource={iconSource}
+					iconStyle={{
+						position: 'absolute',
+						right: SPACING,
+						opacity: this.state.isConfirmDisabled ? 0.3 : 1,
+					}}
+					iconFillColor={'limegreen'}
+					iconHeight={this.state.isSearch ? 16 : 20}
+					iconWidth={this.state.isSearch ? 16 : 20}
+					animatedColor={'white'}
 					onPress={this.state.isSearch ? this.searchOnServer : this.createNewDirect}
-					disabledOpacity={1}
-					disableTouchOpacityAnimation={true}
 					disabled={this.state.isConfirmDisabled}
-					activeOpacity={1}
-				>
-					<RX.Text
-						allowFontScaling={false}
-						style={[styles.buttonTextConfirm, disabledStyle]}
-					>
-						{this.state.isSearch ? searchUser[this.language] : inviteUser[this.language]}
-					</RX.Text>
-				</RX.Button>
-
-				<RX.Button
-					style={styles.buttonCancel}
+					text={this.state.isSearch ? search[this.language] : inviteUser[this.language]}
+					textStyle={[styles.buttonTextConfirm, disabledStyle]}
+				/>
+				<AnimatedButton
+					buttonStyle={styles.buttonCancel}
+					iconSource={require('../resources/svg/RI_cancel.json') as SvgFile}
+					iconStyle={{ position: 'absolute', right: SPACING }}
+					iconFillColor={'red'}
+					iconHeight={20}
+					iconWidth={20}
+					animatedColor={'white'}
 					onPress={() => RX.Modal.dismissAll()}
-					disableTouchOpacityAnimation={true}
-					activeOpacity={1}
-				>
-					<RX.Text
-						allowFontScaling={false}
-						style={styles.buttonTextCancel}
-					>
-						{cancel[this.language]}
-					</RX.Text>
-				</RX.Button>
+					text={cancel[this.language]}
+					textStyle={styles.buttonTextCancel}
+				/>
 			</RX.View>
 		);
 

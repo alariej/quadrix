@@ -614,7 +614,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 
 		return (
 			<RX.View style={this.state.isMinimized ? styles.containerMinimized : styles.container}>
-				<RX.View style={[styles.buttonContainer, { height: this.state.isMinimized ? 0 : HEADER_HEIGHT }]}>
+				<RX.View style={[styles.buttonContainer, { height: this.state.isMinimized ? 0 : HEADER_HEIGHT - 1 }]}>
 					{buttonMinimize}
 					{buttonClose}
 				</RX.View>

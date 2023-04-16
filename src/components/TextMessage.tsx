@@ -7,10 +7,10 @@ import {
 	BUTTON_ROUND_WIDTH,
 	SPACING,
 	PAGE_MARGIN,
-	BORDER_RADIUS,
 	FONT_EMOJI_LARGE,
 	FONT_NORMAL,
 	TILE_SYSTEM_TEXT,
+	BORDER_RADIUS_CHAT,
 } from '../ui';
 import UiStore from '../stores/UiStore';
 import * as linkify from 'linkifyjs';
@@ -69,7 +69,7 @@ const styles = {
 	}),
 	image: RX.Styles.createImageStyle({
 		flex: 1,
-		borderRadius: BORDER_RADIUS - 2,
+		borderRadius: BORDER_RADIUS_CHAT - SPACING,
 	}),
 	containerImage: RX.Styles.createViewStyle({
 		flex: 1,

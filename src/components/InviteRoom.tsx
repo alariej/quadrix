@@ -10,7 +10,8 @@ import {
 	BUTTON_MODAL_TEXT,
 	TILE_MESSAGE_TEXT,
 	OBJECT_MARGIN,
-	APP_BACKGROUND,
+	CONTENT_BACKGROUND,
+	SPACING,
 } from '../ui';
 import { User } from '../models/User';
 import ApiClient from '../matrix/ApiClient';
@@ -21,12 +22,14 @@ import { acceptInvitation, rejectInvitation, hasInvitedYou } from '../translatio
 import { ErrorResponse_, RoomType } from '../models/MatrixApi';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import AppFont from '../modules/AppFont';
+import AnimatedButton from './AnimatedButton';
+import { SvgFile } from './IconSvg';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
 		flex: 1,
 		justifyContent: 'center',
-		backgroundColor: APP_BACKGROUND,
+		backgroundColor: CONTENT_BACKGROUND,
 	}),
 	containerText: RX.Styles.createViewStyle({
 		flex: 1,
@@ -37,13 +40,23 @@ const styles = {
 		alignItems: 'center',
 	}),
 	button: RX.Styles.createViewStyle({
+		flexDirection: 'row',
+		alignItems: 'center',
+		padding: SPACING,
 		borderRadius: BUTTON_HEIGHT / 2,
 		width: BUTTON_LONG_WIDTH,
 		height: BUTTON_HEIGHT,
 		backgroundColor: BUTTON_LONG_BACKGROUND,
 		margin: OBJECT_MARGIN,
+		shadowOffset: { width: 1, height: 1 },
+		shadowColor: 'grey',
+		shadowRadius: 3,
+		elevation: 3,
+		shadowOpacity: 1,
+		overflow: 'visible',
 	}),
 	buttonText: RX.Styles.createTextStyle({
+		flex: 1,
 		fontFamily: AppFont.fontFamily,
 		fontSize: FONT_LARGE,
 		textAlign: 'center',
@@ -148,36 +161,32 @@ export default class InviteRoom extends ComponentBase<InviteRoomProps, InviteRoo
 						</RX.Text>
 					</RX.View>
 					<RX.View style={styles.containerButtons}>
-						<RX.Button
-							style={styles.button}
+						<AnimatedButton
+							buttonStyle={styles.button}
+							iconSource={require('../resources/svg/RI_checksingle.json') as SvgFile}
+							iconStyle={{ position: 'absolute', right: SPACING, opacity: this.state.offline ? 0.3 : 1 }}
+							iconFillColor={'limegreen'}
+							iconHeight={24}
+							iconWidth={24}
+							animatedColor={'white'}
 							onPress={this.onPressAccept}
-							disableTouchOpacityAnimation={true}
-							activeOpacity={1}
 							disabled={this.state.offline}
-							disabledOpacity={0.15}
-						>
-							<RX.Text
-								allowFontScaling={false}
-								style={styles.buttonText}
-							>
-								{acceptInvitation[language]}
-							</RX.Text>
-						</RX.Button>
-						<RX.Button
-							style={styles.button}
+							text={acceptInvitation[language]}
+							textStyle={[styles.buttonText, { opacity: this.state.offline ? 0.3 : 1 }]}
+						/>
+						<AnimatedButton
+							buttonStyle={styles.button}
+							iconSource={require('../resources/svg/RI_cancel.json') as SvgFile}
+							iconStyle={{ position: 'absolute', right: SPACING, opacity: this.state.offline ? 0.3 : 1 }}
+							iconFillColor={'red'}
+							iconHeight={24}
+							iconWidth={24}
+							animatedColor={'white'}
 							onPress={this.onPressReject}
-							disableTouchOpacityAnimation={true}
-							activeOpacity={1}
 							disabled={this.state.offline}
-							disabledOpacity={0.15}
-						>
-							<RX.Text
-								allowFontScaling={false}
-								style={styles.buttonText}
-							>
-								{rejectInvitation[language]}
-							</RX.Text>
-						</RX.Button>
+							text={rejectInvitation[language]}
+							textStyle={[styles.buttonText, { opacity: this.state.offline ? 0.3 : 1 }]}
+						/>
 					</RX.View>
 				</RX.View>
 			</RX.View>

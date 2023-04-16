@@ -7,7 +7,7 @@ import UiStore from './stores/UiStore';
 import DataStore from './stores/DataStore';
 import { ViewOnLayoutEvent } from 'reactxp/dist/common/Types';
 import { ComponentBase } from 'resub';
-import { APP_BACKGROUND, STATUSBAR_BACKGROUND } from './ui';
+import { APP_BACKGROUND } from './ui';
 import FileHandler from './modules/FileHandler';
 import NetInfo from './modules/NetInfo';
 
@@ -72,7 +72,7 @@ export class App extends ComponentBase<AppProps, AppState> {
 	public async componentDidMount(): Promise<void> {
 		super.componentDidMount();
 
-		RX.StatusBar.setBackgroundColor(STATUSBAR_BACKGROUND, true);
+		RX.StatusBar.setBackgroundColor(APP_BACKGROUND, true);
 		RX.StatusBar.setBarStyle('dark-content', true);
 
 		const credentials = await ApiClient.getStoredCredentials();

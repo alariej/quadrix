@@ -9,12 +9,13 @@ import {
 	FONT_NORMAL,
 	FONT_LARGE,
 	SPACING,
-	BUTTON_FILL,
 	TRANSPARENT_BACKGROUND,
-	HEADER_STATUS,
 	PAGE_MARGIN,
 	BUTTON_HEADER_WIDTH,
 	BUTTON_HEADER_BACKGROUND,
+	LOGO_FILL,
+	BUTTON_FILL_HEADER,
+	HEADER_TEXT,
 } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogNewRoom from '../dialogs/DialogNewRoom';
@@ -35,7 +36,7 @@ const styles = {
 	container: RX.Styles.createViewStyle({
 		flexDirection: 'row',
 		height: HEADER_HEIGHT,
-		marginBottom: 1,
+		backgroundColor: LOGO_FILL,
 	}),
 	containerHeader: RX.Styles.createViewStyle({
 		flex: 1,
@@ -51,7 +52,7 @@ const styles = {
 		textAlign: 'center',
 		fontFamily: AppFont.fontFamily,
 		fontSize: FONT_NORMAL,
-		color: HEADER_STATUS,
+		color: HEADER_TEXT,
 		paddingBottom: 1,
 	}),
 	roundButton: RX.Styles.createViewStyle({
@@ -89,8 +90,7 @@ const styles = {
 	bracketLeft: RX.Styles.createViewStyle({
 		height: 22,
 		width: 3,
-		borderColor: HEADER_STATUS,
-		opacity: 0.5,
+		borderColor: HEADER_TEXT,
 		borderLeftWidth: 1,
 		borderTopWidth: 1,
 		borderBottomWidth: 1,
@@ -100,8 +100,7 @@ const styles = {
 	bracketRight: RX.Styles.createViewStyle({
 		height: 22,
 		width: 3,
-		borderColor: HEADER_STATUS,
-		opacity: 0.5,
+		borderColor: HEADER_TEXT,
 		borderLeftWidth: 0,
 		borderTopWidth: 1,
 		borderBottomWidth: 1,
@@ -302,10 +301,10 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 					<AnimatedButton
 						buttonStyle={styles.roundButton}
 						iconSource={require('../resources/svg/RI_menu.json') as SvgFile}
-						iconFillColor={BUTTON_FILL}
+						iconFillColor={BUTTON_FILL_HEADER}
 						iconHeight={BUTTON_HEADER_WIDTH}
 						iconWidth={BUTTON_HEADER_WIDTH}
-						animatedColor={BUTTON_FILL}
+						animatedColor={BUTTON_FILL_HEADER}
 						onPress={this.showMenu}
 					/>
 					{disconnected}

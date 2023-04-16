@@ -17,11 +17,12 @@ import {
 	LIGHT_BACKGROUND,
 	OBJECT_MARGIN,
 	TRANSPARENT_BACKGROUND,
-	HEADER_STATUS,
-	BUTTON_UNREAD_TEXT,
 	RINGINGCALL_BACKGROUND,
 	REJECTCALL_BACKGROUND,
 	OPAQUE_BACKGROUND,
+	PAGE_PADDING_CHAT,
+	LABEL_TEXT,
+	CONTENT_BACKGROUND,
 } from '../ui';
 import { MESSAGE_COUNT_ADD } from '../appconfig';
 import { ComponentBase } from 'resub';
@@ -52,6 +53,10 @@ const styles = {
 	container: RX.Styles.createViewStyle({
 		flex: 1,
 		borderRadius: BORDER_RADIUS,
+		paddingTop: SPACING,
+		paddingRight: PAGE_PADDING_CHAT,
+		paddingLeft: PAGE_PADDING_CHAT,
+		backgroundColor: CONTENT_BACKGROUND,
 	}),
 	arrowButton: RX.Styles.createViewStyle({
 		position: 'absolute',
@@ -79,14 +84,13 @@ const styles = {
 	}),
 	containerLoadingButton: RX.Styles.createViewStyle({
 		position: 'absolute',
-		bottom: 0,
+		bottom: SPACING,
 		alignSelf: 'center',
 	}),
 	loadingButton: RX.Styles.createViewStyle({
 		flexDirection: 'row',
 		width: BUTTON_LONG_WIDTH,
 		height: BUTTON_HEIGHT,
-		borderRadius: BUTTON_HEIGHT / 2,
 		backgroundColor: LIGHT_BACKGROUND,
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -112,7 +116,7 @@ const styles = {
 	date: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
 		fontSize: FONT_NORMAL,
-		color: HEADER_STATUS,
+		color: LABEL_TEXT,
 	}),
 	textDialog: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
@@ -769,10 +773,10 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 				>
 					<IconSvg
 						source={require('../resources/svg/RI_arrowup.json') as SvgFile}
-						style={{ backgroundColor: iconColor, borderRadius: BORDER_RADIUS }}
-						fillColor={BUTTON_UNREAD_TEXT}
-						height={20}
-						width={20}
+						style={{ backgroundColor: iconColor, borderRadius: 11 }}
+						fillColor={'white'}
+						height={22}
+						width={22}
 					/>
 				</RX.Button>
 			);
@@ -793,10 +797,10 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 				>
 					<IconSvg
 						source={require('../resources/svg/RI_more.json') as SvgFile}
-						style={{ backgroundColor: BUTTON_FILL, borderRadius: BORDER_RADIUS }}
-						fillColor={BUTTON_UNREAD_TEXT}
-						height={20}
-						width={20}
+						style={{ backgroundColor: BUTTON_FILL, borderRadius: 11 }}
+						fillColor={'white'}
+						height={22}
+						width={22}
 					/>
 				</RX.Button>
 			);

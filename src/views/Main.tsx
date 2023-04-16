@@ -6,12 +6,11 @@ import {
 	PAGE_MARGIN,
 	MODAL_CONTENT_TEXT,
 	FONT_LARGE,
-	COMPOSER_BORDER,
 	PAGE_WIDE_PADDING,
 	TRANSPARENT_BACKGROUND,
 	HEADER_HEIGHT,
-	STATUSBAR_BACKGROUND,
-	BUTTON_HEADER_BACKGROUND,
+	CONTENT_BACKGROUND,
+	APP_BACKGROUND,
 } from '../ui';
 import DataStore from '../stores/DataStore';
 import ApiClient from '../matrix/ApiClient';
@@ -55,12 +54,13 @@ const styles = {
 	}),
 	paddingLeft: RX.Styles.createViewStyle({
 		width: PAGE_WIDE_PADDING,
+		marginTop: HEADER_HEIGHT,
+		backgroundColor: CONTENT_BACKGROUND,
 	}),
 	paddingRight: RX.Styles.createViewStyle({
 		width: PAGE_WIDE_PADDING,
-		borderWidth: 0,
-		borderLeftWidth: 1,
-		borderColor: COMPOSER_BORDER,
+		marginTop: HEADER_HEIGHT,
+		backgroundColor: CONTENT_BACKGROUND,
 	}),
 	background: RX.Styles.createViewStyle({
 		position: 'absolute',
@@ -86,7 +86,7 @@ interface MainState {
 const animatedRoomDurationIn = 200;
 const animatedRoomDurationOut = 850;
 const animatedContainerDuration = 250;
-const matrixSize = 160;
+const matrixSize = 64;
 
 export default class Main extends ComponentBase<MainProps, MainState> {
 	private message!: FilteredChatEvent;
@@ -316,7 +316,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 	};
 
 	private shareContent = (event: { url: string }) => {
-		RX.StatusBar.setBackgroundColor(STATUSBAR_BACKGROUND, true);
+		RX.StatusBar.setBackgroundColor(APP_BACKGROUND, true);
 		RX.StatusBar.setBarStyle('dark-content', true);
 
 		this.showRoomList();
@@ -431,7 +431,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 	private closeVideoCall = () => {
 		this.setState({ showVideoCall: false }, () => {
 			setTimeout(() => {
-				RX.StatusBar.setBackgroundColor(STATUSBAR_BACKGROUND, true);
+				RX.StatusBar.setBackgroundColor(APP_BACKGROUND, true);
 				RX.StatusBar.setBarStyle('dark-content', true);
 			}, 2000);
 		});
@@ -451,7 +451,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 					source={require('../resources/svg/matrix.json') as SvgFile}
 					height={matrixSize}
 					width={matrixSize}
-					fillColor={BUTTON_HEADER_BACKGROUND}
+					fillColor={CONTENT_BACKGROUND}
 				/>
 			</RX.View>
 		);
@@ -507,12 +507,12 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 					]}
 				>
 					{roomListPage}
-					{paddingLeft}
-					{paddingRight}
 					<RX.Animated.View
 						ignorePointerEvents={true}
 						style={[styles.containerAnimatedRoom, this.animatedRoomStyle]}
 					>
+						{paddingLeft}
+						{paddingRight}
 						{roomPage}
 					</RX.Animated.View>
 				</RX.Animated.View>

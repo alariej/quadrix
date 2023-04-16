@@ -70,7 +70,7 @@ const styles = {
 		width: BUTTON_LONG_WIDTH,
 		height: BUTTON_HEIGHT,
 		backgroundColor: BUTTON_MODAL_BACKGROUND,
-		marginTop: OBJECT_MARGIN,
+		marginTop: SPACING,
 	}),
 	topic: RX.Styles.createViewStyle({
 		flex: 1,
@@ -103,6 +103,7 @@ const styles = {
 	}),
 	containerButtons: RX.Styles.createViewStyle({
 		alignItems: 'center',
+		marginTop: OBJECT_MARGIN * 3,
 	}),
 	textDialog: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,

@@ -11,13 +11,14 @@ import {
 	ICON_REDUCTION_FACTOR,
 	BUTTON_UNREAD_TEXT,
 	BUTTON_UNREAD_BACKGROUND,
-	BUTTON_FILL,
 	AVATAR_BACKGROUND,
 	TRANSPARENT_BACKGROUND,
 	HEADER_STATUS,
 	AVATAR_FOREGROUND,
 	BUTTON_HEADER_WIDTH,
 	BUTTON_HEADER_BACKGROUND,
+	BUTTON_FILL_HEADER,
+	OPAQUE_VLIGHT_BACKGROUND,
 } from '../ui';
 import { ComponentBase } from 'resub';
 import DataStore from '../stores/DataStore';
@@ -43,7 +44,6 @@ const styles = {
 	container: RX.Styles.createViewStyle({
 		flexDirection: 'row',
 		height: HEADER_HEIGHT,
-		marginBottom: 1,
 	}),
 	containerRoomHeader: RX.Styles.createViewStyle({
 		flex: 1,
@@ -59,7 +59,9 @@ const styles = {
 		alignItems: 'center',
 		width: AVATAR_HEADER_WIDTH,
 		height: AVATAR_HEADER_WIDTH,
+		borderRadius: AVATAR_HEADER_WIDTH / 2,
 		cursor: 'pointer',
+		backgroundColor: 'white',
 	}),
 	avatar: RX.Styles.createImageStyle({
 		flex: 1,
@@ -437,7 +439,15 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 		}
 
 		return (
-			<RX.View style={styles.container}>
+			<RX.View
+				style={[
+					styles.container,
+					{
+						backgroundColor:
+							UiStore.getAppLayout_().type === 'narrow' ? undefined : OPAQUE_VLIGHT_BACKGROUND,
+					},
+				]}
+			>
 				<RX.View
 					style={styles.containerRoomHeader}
 					onPress={() => this.onPressHeader()}
@@ -475,10 +485,10 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 						buttonStyle={styles.roundButton}
 						iconStyle={{ marginRight: 2 }}
 						iconSource={require('../resources/svg/RI_arrowleft.json') as SvgFile}
-						iconFillColor={BUTTON_FILL}
+						iconFillColor={BUTTON_FILL_HEADER}
 						iconHeight={(BUTTON_HEADER_WIDTH * 4) / 3}
 						iconWidth={(BUTTON_HEADER_WIDTH * 4) / 3}
-						animatedColor={BUTTON_FILL}
+						animatedColor={BUTTON_FILL_HEADER}
 						onPress={this.onPressHomeButton}
 					/>
 					{unread}

@@ -59,7 +59,7 @@ export default class EmojiPicker extends RX.Component<EmojiPickerProps, RX.State
 								borderColor: COMPOSER_BORDER,
 								paddingBottom: SPACING,
 								marginBottom: SPACING,
-						  }
+						  } // eslint-disable-line no-mixed-spaces-and-tabs
 						: undefined,
 				]}
 				onPress={(event: RX.Types.SyntheticEvent) => event.stopPropagation()}
