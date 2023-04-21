@@ -1201,6 +1201,12 @@ export const leftVideoConference: Translation = {
 	es: 'ha dejado la videoconferencia',
 };
 
+export const declinedVideoConference: Translation = {
+	en: 'has declined the videoconference',
+	de: 'hat die Videokonferenz abgelehnt',
+	fr: 'a décliné la vidéoconférence',
+	es: 'ha declinado la videoconferencia',
+};
 export const terminatedVideoConference: Translation = {
 	en: 'The videoconference has ended',
 	de: 'Die Videokonferenz ist beendet',

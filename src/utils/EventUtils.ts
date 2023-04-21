@@ -10,6 +10,7 @@ import {
 	leftVideoConference,
 	joinedVideoConference,
 	terminatedVideoConference,
+	declinedVideoConference,
 } from '../translations';
 import UiStore from '../stores/UiStore';
 import {
@@ -159,7 +160,11 @@ class EventUtils {
 		} else if (event.type === 'org.matrix.msc3401.call.member') {
 			const content = event.content as CallMemberEventContent_;
 			if (content['m.calls'].length === 0) {
-				systemMessage = event.senderId + ' ' + leftVideoConference[language];
+				if (content['chat.quadrix.call.id']) {
+					systemMessage = event.senderId + ' ' + declinedVideoConference[language];
+				} else {
+					systemMessage = event.senderId + ' ' + leftVideoConference[language];
+				}
 			} else {
 				systemMessage = event.senderId + ' ' + joinedVideoConference[language];
 			}

@@ -35,7 +35,7 @@ import {
 import MessageTile from './MessageTile';
 import ApiClient from '../matrix/ApiClient';
 import EventUtils from '../utils/EventUtils';
-import { CallEventContent_, MessageEventContent_, RoomType } from '../models/MatrixApi';
+import { CallEventContent_, CallMemberEventContent_, MessageEventContent_, RoomType } from '../models/MatrixApi';
 import SystemMessage from './SystemMessage';
 import DialogContainer from '../modules/DialogContainer';
 import UiStore from '../stores/UiStore';
@@ -477,7 +477,10 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
 		const msc3401Call = DataStore.getMsc3401Call_(this.props.roomId);
 		const msc3401CallStatus = EventUtils.getMsc3401CallStatus(msc3401Call!, ApiClient.credentials.userIdFull);
-		this.setState({ showRingingCallButton: msc3401CallStatus === 'ringing' ? true : false });
+		const msc3401CallDeclined = msc3401Call?.participants![ApiClient.credentials.userIdFull] === false;
+		this.setState({
+			showRingingCallButton: msc3401CallStatus === 'ringing' && !msc3401CallDeclined ? true : false,
+		});
 	};
 
 	private newReadReceipt = () => {
@@ -749,7 +752,19 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 		setTimeout(showMoreButton, 1000);
 	};
 
-	private onRejectCall = () => {
+	private onRejectCall = async () => {
+		const content: CallMemberEventContent_ = {
+			'm.calls': [],
+			'chat.quadrix.call.id': DataStore.getMsc3401Call_(this.props.roomId)?.callId,
+		};
+
+		await ApiClient.sendStateEvent(
+			this.props.roomId,
+			'org.matrix.msc3401.call.member',
+			content,
+			ApiClient.credentials.userIdFull
+		).catch(_error => null);
+
 		this.setState({ showRingingCallButton: false });
 	};
 

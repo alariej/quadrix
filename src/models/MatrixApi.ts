@@ -324,6 +324,7 @@ interface IGroupCallRoomMemberCallState {
 
 interface IGroupCallRoomMemberState {
 	'm.calls': IGroupCallRoomMemberCallState[];
+	'chat.quadrix.call.id'?: string;
 }
 
 export type CallMemberEventContent_ = IGroupCallRoomMemberState;
