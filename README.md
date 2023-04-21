@@ -79,7 +79,7 @@
 - [x] Redacting
 - [ ] Multiple Matrix accounts
 - [x] New user registration (support for ReCaptcha, email address)
-- [x] VoIP (Jitsi Meet only)
+- [x] VoIP (Element Call)
 - [ ] Reactions
 - [x] Message editing (displaying only)
 - [ ] Room upgrades
@@ -99,7 +99,7 @@ Additionally for iOS:
 - `npm run start:web` - starts Webpack and serves the web app on http://localhost:9999
 - `npm run start:rndev` - starts the React Native development server
 - `npm run start:android` - starts the Android version of the app and opens it in an emulator or connected device
-- `npm run start:ios` - starts the iOS version of the app and opens it in a simulator
+- `npm run start:ios` - starts the iOS version of the app and opens it in a simulator or connected device
 
 ## Issues & Bugs
 
