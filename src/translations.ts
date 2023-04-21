@@ -1207,6 +1207,14 @@ export const declinedVideoConference: Translation = {
 	fr: 'a décliné la vidéoconférence',
 	es: 'ha declinado la videoconferencia',
 };
+
+export const anyoneHere: Translation = {
+	en: 'Anyone here?',
+	de: 'Jemand da?',
+	fr: "Quelqu'un ici?",
+	es: '¿Alguien aquí?',
+};
+
 export const terminatedVideoConference: Translation = {
 	en: 'The videoconference has ended',
 	de: 'Die Videokonferenz ist beendet',

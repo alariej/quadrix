@@ -29,6 +29,7 @@ import { SvgFile } from '../../components/IconSvg';
 import WebView from 'react-native-webview';
 import { WebViewMessageEvent } from 'react-native-webview/lib/WebViewTypes';
 import AnimatedButton from '../../components/AnimatedButton';
+import VideoconfMembers from '../../components/VideoconfMembers';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -133,6 +134,7 @@ interface ElementCallProps {
 
 interface ElementCallState {
 	isMinimized: boolean;
+	showMemberList: boolean;
 }
 
 export default class ElementCall extends ComponentBase<ElementCallProps, ElementCallState> {
@@ -144,6 +146,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 	private widgetId = 'quadrixelementcallwidget';
 	private webviewHtml = '';
 	private webView: React.RefObject<WebView> = React.createRef();
+	private startMemberListMinimized = false;
 
 	constructor(props: ElementCallProps) {
 		super(props);
@@ -207,6 +210,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 			ApiClient.sendRoomEvent(this.props.roomId, 'm.call.invite', inviteContent, tempId).catch(_error => null);
 		} else {
 			this.callId = msc3401Call.callId;
+			this.startMemberListMinimized = true;
 		}
 
 		const content: CallEventContent_ = {
@@ -564,16 +568,22 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		}
 	};
 
+	private onLoad = () => {
+		this.setState({ showMemberList: true });
+	};
+
 	public render(): JSX.Element | null {
 		const url = APP_WEBSITE_URL;
 
 		let buttonMinimize;
 		let buttonMaximize;
 		let buttonClose;
+		let videoconfMembers;
 
 		if (this.state.isMinimized) {
 			buttonMinimize = null;
 			buttonClose = null;
+			videoconfMembers = null;
 
 			buttonMaximize = (
 				<RX.Button
@@ -585,6 +595,15 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 			);
 		} else {
 			buttonMaximize = null;
+
+			if (this.state.showMemberList) {
+				videoconfMembers = (
+					<VideoconfMembers
+						roomId={this.props.roomId}
+						startMinimized={this.startMemberListMinimized}
+					/>
+				);
+			}
 
 			buttonMinimize = (
 				<AnimatedButton
@@ -636,9 +655,11 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 						mediaCapturePermissionGrantType={'grant'}
 						cacheEnabled={false}
 						applicationNameForUserAgent={'safari'}
+						onLoad={this.onLoad}
 					/>
 				</RX.View>
 				{buttonMaximize}
+				{videoconfMembers}
 			</RX.View>
 		);
 	}

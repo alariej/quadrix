@@ -39,6 +39,7 @@ import { ComponentBase } from 'resub';
 import { Msc3401Call } from '../../models/Msc3401Call';
 import { SvgFile } from '../../components/IconSvg';
 import AnimatedButton from '../../components/AnimatedButton';
+import VideoconfMembers from '../../components/VideoconfMembers';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -284,6 +285,7 @@ interface ElementCallProps {
 interface ElementCallState {
 	parsedUrl: URL | undefined;
 	isMinimized: boolean;
+	showMemberList: boolean;
 }
 
 export default class ElementCall extends ComponentBase<ElementCallProps, ElementCallState> {
@@ -295,6 +297,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 	private newMessageSubscription: number;
 	private newCallEventSubscription: number;
 	private callId = '';
+	private startMemberListMinimized = false;
 
 	constructor(props: ElementCallProps) {
 		super(props);
@@ -335,6 +338,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 			ApiClient.sendRoomEvent(this.props.roomId, 'm.call.invite', inviteContent, tempId).catch(_error => null);
 		} else {
 			this.callId = msc3401Call.callId;
+			this.startMemberListMinimized = true;
 		}
 
 		const params = new URLSearchParams({
@@ -542,14 +546,20 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 		this.setState({ isMinimized: isMinimized });
 	};
 
+	private onLoad = () => {
+		this.setState({ showMemberList: true });
+	};
+
 	public render(): JSX.Element | null {
 		let buttonMinimize;
 		let buttonMaximize;
 		let buttonClose;
+		let videoconfMembers;
 
 		if (this.state.isMinimized) {
 			buttonMinimize = null;
 			buttonClose = null;
+			videoconfMembers = null;
 
 			buttonMaximize = (
 				<RX.Button
@@ -561,6 +571,15 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 			);
 		} else {
 			buttonMaximize = null;
+
+			if (this.state.showMemberList) {
+				videoconfMembers = (
+					<VideoconfMembers
+						roomId={this.props.roomId}
+						startMinimized={this.startMemberListMinimized}
+					/>
+				);
+			}
 
 			buttonMinimize = (
 				<AnimatedButton
@@ -607,9 +626,11 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 						ref={this.widgetIframe}
 						src={iFrameSrc}
 						allow={'camera;microphone'}
+						onLoad={this.onLoad}
 					/>
 				</RX.View>
 				{buttonMaximize}
+				{videoconfMembers}
 			</RX.View>
 		);
 	}
