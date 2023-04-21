@@ -376,8 +376,6 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
 	private onPressAddButton = (event: RX.Types.SyntheticEvent) => {
 		event.stopPropagation();
 
-		RX.Modal.dismiss('memberlist');
-
 		const users = DataStore.getUsers();
 
 		if (users.length > 0) {
