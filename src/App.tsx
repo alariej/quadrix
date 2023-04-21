@@ -6,7 +6,6 @@ import ApiClient from './matrix/ApiClient';
 import UiStore from './stores/UiStore';
 import DataStore from './stores/DataStore';
 import { ViewOnLayoutEvent } from 'reactxp/dist/common/Types';
-import { ComponentBase } from 'resub';
 import { APP_BACKGROUND } from './ui';
 import FileHandler from './modules/FileHandler';
 import NetInfo from './modules/NetInfo';
@@ -26,11 +25,15 @@ interface AppProps {
 	sharedContent?: string;
 }
 
-export class App extends ComponentBase<AppProps, AppState> {
+export class App extends RX.Component<AppProps, AppState> {
 	private sharedContent = '';
 
 	constructor(props: AppProps) {
 		super(props);
+
+		this.state = {
+			startPage: undefined,
+		};
 
 		NetInfo.isConnected()
 			.then(response => {
@@ -70,8 +73,6 @@ export class App extends ComponentBase<AppProps, AppState> {
 	}
 
 	public async componentDidMount(): Promise<void> {
-		super.componentDidMount();
-
 		RX.StatusBar.setBackgroundColor(APP_BACKGROUND, true);
 		RX.StatusBar.setBarStyle('dark-content', true);
 
@@ -99,8 +100,6 @@ export class App extends ComponentBase<AppProps, AppState> {
 	}
 
 	public componentWillUnmount(): void {
-		super.componentWillUnmount();
-
 		NetInfo.connectivityChangedEvent.unsubscribe(_isConnected => null);
 	}
 
