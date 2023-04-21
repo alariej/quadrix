@@ -11,6 +11,17 @@ const animatedSizeStart = 0;
 const animatedDuration = 500;
 const animatedEasing = RX.Animated.Easing.InOutBack();
 
+const styles = {
+	button: RX.Styles.createViewStyle({
+		width: 80,
+		height: BUTTON_HEIGHT,
+		borderRadius: BUTTON_HEIGHT / 2,
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: BUTTON_FILL,
+	}),
+};
+
 interface FloatingSendButtonProps {
 	offline: boolean;
 	onPressSendButton: ((e: RX.Types.SyntheticEvent) => void) | undefined;
@@ -104,14 +115,7 @@ export default class FloatingSendButton extends Component<FloatingSendButtonProp
 			>
 				<RX.Animated.View style={this.animatedStyle}>
 					<AnimatedButton
-						buttonStyle={{
-							width: 80,
-							height: BUTTON_HEIGHT,
-							borderRadius: BUTTON_HEIGHT / 2,
-							justifyContent: 'center',
-							alignItems: 'center',
-							backgroundColor: BUTTON_FILL,
-						}}
+						buttonStyle={styles.button}
 						iconSource={require('../../resources/svg/RI_send.json') as SvgFile}
 						iconFillColor={'white'}
 						iconHeight={20}
