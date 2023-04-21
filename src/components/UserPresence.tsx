@@ -7,7 +7,7 @@ import { Languages, online, todayWord, yesterdayWord } from '../translations';
 import UiStore from '../stores/UiStore';
 import { differenceInDays, differenceInMilliseconds, format, isToday, isYesterday } from 'date-fns';
 import IconSvg, { SvgFile } from './IconSvg';
-import { SPACING } from '../ui';
+import { FONT_LARGE, HEADER_STATUS, SPACING } from '../ui';
 import AppFont from '../modules/AppFont';
 
 const styles = {
@@ -23,8 +23,10 @@ interface UserPresenceState {
 
 interface UserPresenceProps extends RX.CommonProps {
 	userId: string;
-	fontColor: string;
-	fontSize: number;
+	fontColor?: string;
+	fontSize?: number;
+	bullet?: boolean;
+	bulletWidth?: number;
 }
 
 export default class UserPresence extends ComponentBase<UserPresenceProps, UserPresenceState> {
@@ -77,6 +79,25 @@ export default class UserPresence extends ComponentBase<UserPresenceProps, UserP
 	};
 
 	public render(): JSX.Element | null {
+		if (this.props.bullet) {
+			let isOnline = false;
+			if (differenceInMilliseconds(new Date(), this.state.lastSeenTime) < 30000) {
+				isOnline = true;
+				setTimeout(this.resetPresence, 31000);
+			}
+			const bullet = (
+				<RX.View
+					style={{
+						height: this.props.bulletWidth,
+						width: this.props.bulletWidth,
+						borderRadius: this.props.bulletWidth! / 2,
+						backgroundColor: isOnline ? 'limegreen' : 'red',
+					}}
+				/>
+			);
+			return bullet;
+		}
+
 		let lastSeenText = '';
 
 		if (!this.state.lastSeenTime || this.state.lastSeenTime < 100) {
@@ -103,9 +124,9 @@ export default class UserPresence extends ComponentBase<UserPresenceProps, UserP
 			<IconSvg
 				source={require('../resources/svg/RI_activity.json') as SvgFile}
 				style={{ marginRight: SPACING }}
-				fillColor={this.props.fontColor}
-				height={this.props.fontSize}
-				width={this.props.fontSize}
+				fillColor={this.props.fontColor || HEADER_STATUS}
+				height={this.props.fontSize || FONT_LARGE}
+				width={this.props.fontSize || FONT_LARGE}
 			/>
 		);
 
