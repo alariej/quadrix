@@ -79,6 +79,9 @@ const styles = {
 		alignItems: 'center',
 		maxHeight: FONT_LARGE + 4,
 		marginBottom: SPACING,
+		fontFamily: AppFont.fontFamily,
+		fontSize: FONT_LARGE,
+		color: HEADER_TEXT,
 	}),
 	roomName: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
