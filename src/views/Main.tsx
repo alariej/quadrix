@@ -10,6 +10,7 @@ import {
 	TRANSPARENT_BACKGROUND,
 	HEADER_HEIGHT,
 	CONTENT_BACKGROUND,
+	BUTTON_FILL,
 	APP_BACKGROUND,
 } from '../ui';
 import DataStore from '../stores/DataStore';
@@ -54,21 +55,26 @@ const styles = {
 	}),
 	paddingLeft: RX.Styles.createViewStyle({
 		width: PAGE_WIDE_PADDING,
-		marginTop: HEADER_HEIGHT,
 		backgroundColor: CONTENT_BACKGROUND,
+		borderTopWidth: HEADER_HEIGHT,
+		borderColor: APP_BACKGROUND,
 	}),
 	paddingRight: RX.Styles.createViewStyle({
 		width: PAGE_WIDE_PADDING,
-		marginTop: HEADER_HEIGHT,
 		backgroundColor: CONTENT_BACKGROUND,
+		borderTopWidth: HEADER_HEIGHT,
+		borderColor: APP_BACKGROUND,
 	}),
 	background: RX.Styles.createViewStyle({
 		position: 'absolute',
-		top: HEADER_HEIGHT,
+		top: 0,
 		bottom: 0,
 		alignItems: 'center',
 		justifyContent: 'center',
 		overflow: 'visible',
+		backgroundColor: CONTENT_BACKGROUND,
+		borderTopWidth: HEADER_HEIGHT,
+		borderColor: APP_BACKGROUND,
 	}),
 };
 
@@ -86,7 +92,7 @@ interface MainState {
 const animatedRoomDurationIn = 200;
 const animatedRoomDurationOut = 850;
 const animatedContainerDuration = 250;
-const matrixSize = 64;
+const matrixSize = 84;
 
 export default class Main extends ComponentBase<MainProps, MainState> {
 	private message!: FilteredChatEvent;
@@ -316,7 +322,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 	};
 
 	private shareContent = (event: { url: string }) => {
-		RX.StatusBar.setBackgroundColor(APP_BACKGROUND, true);
+		RX.StatusBar.setBackgroundColor(BUTTON_FILL, true);
 		RX.StatusBar.setBarStyle('dark-content', true);
 
 		this.showRoomList();
@@ -431,7 +437,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 	private closeVideoCall = () => {
 		this.setState({ showVideoCall: false }, () => {
 			setTimeout(() => {
-				RX.StatusBar.setBackgroundColor(APP_BACKGROUND, true);
+				RX.StatusBar.setBackgroundColor(BUTTON_FILL, true);
 				RX.StatusBar.setBarStyle('dark-content', true);
 			}, 2000);
 		});
@@ -443,15 +449,23 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 		}
 
 		const backgroundPadding = this.state.layout.type === 'wide' ? PAGE_WIDE_PADDING * 2 : 0;
-		const offset = 1.5 * this.state.layout.pageWidth - PAGE_MARGIN + backgroundPadding;
+		const offset = this.state.layout.pageWidth - PAGE_MARGIN;
 
 		const backgroundImage = (
-			<RX.View style={[styles.background, { left: offset - matrixSize / 2 }]}>
+			<RX.View
+				style={[
+					styles.background,
+					{
+						left: offset,
+						width: this.state.layout.pageWidth + backgroundPadding,
+					},
+				]}
+			>
 				<IconSvg
 					source={require('../resources/svg/matrix.json') as SvgFile}
 					height={matrixSize}
 					width={matrixSize}
-					fillColor={CONTENT_BACKGROUND}
+					fillColor={'white'}
 				/>
 			</RX.View>
 		);

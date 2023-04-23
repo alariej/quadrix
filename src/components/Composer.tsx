@@ -6,7 +6,6 @@ import {
 	BORDER_RADIUS,
 	SPACING,
 	FONT_LARGE,
-	BUTTON_FILL,
 	BUTTON_COMPOSER_WIDTH,
 	DIALOG_WIDTH,
 	MODAL_CONTENT_BACKGROUND,
@@ -16,8 +15,9 @@ import {
 	TILE_BACKGROUND,
 	PLACEHOLDER_TEXT,
 	BORDER_RADIUS_CHAT,
-	COMPOSER_BACKGROUND,
 	BUTTON_FILL_HEADER,
+	BORDER_RADIUS_BUTTON,
+	APP_BACKGROUND,
 } from '../ui';
 import FileHandler from '../modules/FileHandler';
 import ApiClient from '../matrix/ApiClient';
@@ -55,6 +55,7 @@ const styles = {
 		flexDirection: 'row',
 		paddingTop: SPACING,
 		paddingBottom: SPACING,
+		backgroundColor: APP_BACKGROUND,
 	}),
 	textInputContainer: RX.Styles.createViewStyle({
 		flex: 1,
@@ -756,7 +757,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 				style={[
 					styles.container,
 					{
-						backgroundColor: this.isNarrow ? undefined : COMPOSER_BACKGROUND,
+						borderBottomLeftRadius: this.isNarrow ? undefined : BORDER_RADIUS_BUTTON,
 					},
 				]}
 				ref={component => (this.containerView = component!)}
@@ -766,10 +767,10 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 					buttonStyle={styles.button}
 					iconSource={require('../resources/svg/RI_menu.json') as SvgFile}
 					iconStyle={{ opacity: this.state.offline || !this.props.roomActive ? 0.3 : 1 }}
-					iconFillColor={this.isNarrow ? BUTTON_FILL_HEADER : BUTTON_FILL}
+					iconFillColor={BUTTON_FILL_HEADER}
 					iconHeight={18}
 					iconWidth={18}
-					animatedColor={this.isNarrow ? BUTTON_FILL_HEADER : BUTTON_FILL}
+					animatedColor={BUTTON_FILL_HEADER}
 					onPress={this.showMenu}
 					disabled={this.state.offline || !this.props.roomActive}
 				/>
@@ -778,14 +779,14 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 					ref={component => (this.buttonComponent = component!)}
 					onPressIn={this.toggleEmojiPicker}
 					disableTouchOpacityAnimation={false}
-					underlayColor={this.isNarrow ? BUTTON_FILL_HEADER : BUTTON_FILL}
+					underlayColor={BUTTON_FILL_HEADER}
 					activeOpacity={0.7}
 					disabled={!this.props.roomActive}
 					disabledOpacity={0.3}
 				>
 					<IconSvg
 						source={require('../resources/svg/RI_smiley.json') as SvgFile}
-						fillColor={this.isNarrow ? BUTTON_FILL_HEADER : BUTTON_FILL}
+						fillColor={BUTTON_FILL_HEADER}
 						height={20}
 						width={20}
 					/>
@@ -819,10 +820,10 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 					iconStyle={{
 						opacity: this.state.offline || !this.props.roomActive || this.state.sendDisabled ? 0.3 : 1,
 					}}
-					iconFillColor={this.isNarrow ? BUTTON_FILL_HEADER : BUTTON_FILL}
+					iconFillColor={BUTTON_FILL_HEADER}
 					iconHeight={20}
 					iconWidth={20}
-					animatedColor={this.isNarrow ? BUTTON_FILL_HEADER : BUTTON_FILL}
+					animatedColor={BUTTON_FILL_HEADER}
 					onPress={this.onPressSendButton}
 					disabled={this.state.offline || !this.props.roomActive || this.state.sendDisabled}
 				/>

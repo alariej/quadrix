@@ -6,7 +6,7 @@ import ApiClient from './matrix/ApiClient';
 import UiStore from './stores/UiStore';
 import DataStore from './stores/DataStore';
 import { ViewOnLayoutEvent } from 'reactxp/dist/common/Types';
-import { APP_BACKGROUND } from './ui';
+import { APP_BACKGROUND, BUTTON_FILL } from './ui';
 import FileHandler from './modules/FileHandler';
 import NetInfo from './modules/NetInfo';
 
@@ -73,7 +73,7 @@ export class App extends RX.Component<AppProps, AppState> {
 	}
 
 	public async componentDidMount(): Promise<void> {
-		RX.StatusBar.setBackgroundColor(APP_BACKGROUND, true);
+		RX.StatusBar.setBackgroundColor(BUTTON_FILL, true);
 		RX.StatusBar.setBarStyle('dark-content', true);
 
 		const credentials = await ApiClient.getStoredCredentials();

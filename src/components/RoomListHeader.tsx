@@ -13,9 +13,9 @@ import {
 	PAGE_MARGIN,
 	BUTTON_HEADER_WIDTH,
 	BUTTON_HEADER_BACKGROUND,
-	LOGO_FILL,
 	BUTTON_FILL_HEADER,
 	HEADER_TEXT,
+	APP_BACKGROUND,
 } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogNewRoom from '../dialogs/DialogNewRoom';
@@ -36,7 +36,7 @@ const styles = {
 	container: RX.Styles.createViewStyle({
 		flexDirection: 'row',
 		height: HEADER_HEIGHT,
-		backgroundColor: LOGO_FILL,
+		backgroundColor: APP_BACKGROUND,
 	}),
 	containerHeader: RX.Styles.createViewStyle({
 		flex: 1,

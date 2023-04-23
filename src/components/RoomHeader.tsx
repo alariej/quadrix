@@ -17,7 +17,7 @@ import {
 	AVATAR_FOREGROUND,
 	BUTTON_HEADER_BACKGROUND,
 	BUTTON_FILL_HEADER,
-	OPAQUE_VLIGHT_BACKGROUND,
+	APP_BACKGROUND,
 } from '../ui';
 import { ComponentBase } from 'resub';
 import DataStore from '../stores/DataStore';
@@ -43,6 +43,7 @@ const styles = {
 	container: RX.Styles.createViewStyle({
 		flexDirection: 'row',
 		height: HEADER_HEIGHT,
+		backgroundColor: APP_BACKGROUND,
 	}),
 	containerRoomHeader: RX.Styles.createViewStyle({
 		flex: 1,
@@ -438,15 +439,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 		}
 
 		return (
-			<RX.View
-				style={[
-					styles.container,
-					{
-						backgroundColor:
-							UiStore.getAppLayout_().type === 'narrow' ? undefined : OPAQUE_VLIGHT_BACKGROUND,
-					},
-				]}
-			>
+			<RX.View style={styles.container}>
 				<RX.View
 					style={styles.containerRoomHeader}
 					onPress={() => this.onPressHeader()}
