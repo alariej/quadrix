@@ -354,7 +354,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 			lang: UiStore.getLanguage(),
 		});
 
-		const elementCallUrl = ELEMENT_CALL_URL;
+		const elementCallUrl = UiStore.getElementCallUrl() || ELEMENT_CALL_URL;
 
 		const url = new URL(elementCallUrl);
 		url.pathname = '/room';

@@ -32,11 +32,13 @@ export const APPSTORES_ANDROID_URL = StoreJson.googleplay.url;
 export const APPSTORES_WINDOWS_URL = StoreJson.microsoft.url;
 export const APPSTORES_FLATHUB_URL = StoreJson.flathub.url;
 
+// widgets
+
+export const WIDGETS_URL = 'https://raw.githubusercontent.com/alariej/quadrix/dev/widgets.json';
+
 // element call
 
-// export const ELEMENT_CALL_URL = 'https://element-call.netlify.app/';
-// export const ELEMENT_CALL_URL = 'https://call.element.io';
-export const ELEMENT_CALL_URL = 'https://call.quadrix.chat';
+export const ELEMENT_CALL_URL = 'https://call.element.io';
 
 // push notification gateway
 

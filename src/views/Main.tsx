@@ -24,10 +24,11 @@ import Pushers from '../modules/Pushers';
 import SpinnerUtils from '../utils/SpinnerUtils';
 import AppFont from '../modules/AppFont';
 import IconSvg, { SvgFile } from '../components/IconSvg';
-import { APP_VERSION, CLEAR_DATASTORE_VERSION } from '../appconfig';
+import { APP_VERSION, CLEAR_DATASTORE_VERSION, WIDGETS_URL } from '../appconfig';
 import { FilteredChatEvent } from '../models/FilteredChatEvent';
 import ElementCall from '../modules/ElementCall';
 import semver from 'semver';
+import axios from 'axios';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -165,6 +166,24 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 		UiStore.setUnknownAccessToken(false);
 
 		Pushers.set(ApiClient.credentials).catch(_error => null);
+
+		if (!this.isOffline) {
+			axios
+				.request({
+					url: WIDGETS_URL,
+					method: 'GET',
+				})
+				.then(response => {
+					interface WidgetsData {
+						elementcall: { url: string };
+					}
+					const widgetsData = response?.data as WidgetsData;
+					if (widgetsData) {
+						UiStore.setElementCallUrl(widgetsData.elementcall.url);
+					}
+				})
+				.catch(_error => null);
+		}
 
 		const storedAppVersion = await ApiClient.getStoredAppVersion().catch(_error => null);
 

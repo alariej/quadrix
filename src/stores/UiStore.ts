@@ -37,6 +37,7 @@ class UiStore extends StoreBase {
 	private isElectron = false;
 	private appLayout: Layout | undefined;
 	private selectedRoom = '';
+	private elementCallUrl = '';
 
 	public setUnknownAccessToken(isUnknown: boolean) {
 		this.unknownAccessToken = isUnknown;
@@ -173,6 +174,14 @@ class UiStore extends StoreBase {
 	@autoSubscribeWithKey(SelectedRoomTrigger)
 	public getSelectedRoom(): string {
 		return this.selectedRoom;
+	}
+
+	public setElementCallUrl(url: string) {
+		this.elementCallUrl = url;
+	}
+
+	public getElementCallUrl(): string {
+		return this.elementCallUrl;
 	}
 }
 

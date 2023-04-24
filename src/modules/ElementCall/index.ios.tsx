@@ -141,7 +141,6 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 	private newMessageSubscription: number;
 	private newCallEventSubscription: number;
 	private callId = '';
-	private elementCallUrl = ELEMENT_CALL_URL;
 	private baseUrl = 'https://' + ApiClient.credentials.homeServer;
 	private widgetId = 'quadrixelementcallwidget';
 	private webviewHtml = '';
@@ -275,7 +274,7 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 						const widgetId = "${this.widgetId}";
 						const language = "${UiStore.getLanguage()}";
 						const baseUrl = "${this.baseUrl}";
-						const elementCallUrl = "${this.elementCallUrl}";
+						const elementCallUrl = "${UiStore.getElementCallUrl() || ELEMENT_CALL_URL}";
 
 						const params = new URLSearchParams({
 							embed: "true",
