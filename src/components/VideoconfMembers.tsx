@@ -18,8 +18,6 @@ import AnimatedButton from './AnimatedButton';
 import IconSvg, { SvgFile } from './IconSvg';
 import { ComponentBase } from 'resub';
 import { Msc3401Call } from '../models/Msc3401Call';
-import { anyoneHere } from '../translations';
-import UiStore from '../stores/UiStore';
 import { MessageEventContent_ } from '../models/MatrixApi';
 
 const USER_TILE_HEIGHT = 24;
@@ -70,7 +68,7 @@ const styles = {
 	}),
 	pingButton: RX.Styles.createViewStyle({
 		flexDirection: 'row',
-		width: 148,
+		width: 96,
 		height: BUTTON_HEIGHT,
 		borderRadius: BUTTON_HEIGHT / 2,
 		justifyContent: 'center',
@@ -82,7 +80,7 @@ const styles = {
 	pingButtonText: RX.Styles.createTextStyle({
 		flex: 1,
 		fontFamily: AppFont.fontFamily,
-		fontSize: FONT_NORMAL,
+		fontSize: 18,
 		color: 'white',
 		textAlign: 'center',
 	}),
@@ -192,7 +190,7 @@ export default class VideoconfMembers extends ComponentBase<VideoconfMembersProp
 	private onPressPingButton = () => {
 		const content: MessageEventContent_ = {
 			msgtype: 'm.text',
-			body: anyoneHere[UiStore.getLanguage()],
+			body: '👋',
 		};
 		const tempId = 'text' + Date.now();
 
@@ -233,7 +231,7 @@ export default class VideoconfMembers extends ComponentBase<VideoconfMembersProp
 			pingButton = (
 				<AnimatedButton
 					buttonStyle={styles.pingButton}
-					text={'"' + anyoneHere[UiStore.getLanguage()] + '"'}
+					text={'👋'}
 					textStyle={styles.pingButtonText}
 					iconSource={require('../resources/svg/RI_send.json') as SvgFile}
 					iconStyle={styles.pingIcon}
