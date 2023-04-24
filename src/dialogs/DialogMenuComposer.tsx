@@ -27,6 +27,7 @@ import { LayoutInfo } from 'reactxp/dist/common/Types';
 import DataStore from '../stores/DataStore';
 import EventUtils from '../utils/EventUtils';
 import ApiClient from '../matrix/ApiClient';
+import DialogElementCallUrl from './DialogElementCallUrl';
 
 const styles = {
 	modalScreen: RX.Styles.createViewStyle({
@@ -55,6 +56,15 @@ const styles = {
 		margin: SPACING,
 		textAlign: 'left',
 		color: BUTTON_MODAL_TEXT,
+	}),
+	videoConferenceButton: RX.Styles.createViewStyle({
+		flexDirection: 'row',
+	}),
+	videoConferenceOptionButton: RX.Styles.createViewStyle({
+		width: 24,
+		height: STACKED_BUTTON_HEIGHT,
+		alignContent: 'center',
+		alignItems: 'center',
 	}),
 };
 
@@ -145,6 +155,14 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 		RX.Modal.dismiss('dialog_menu_composer');
 	};
 
+	private onPressVideoConferenceOptionButton = () => {
+		this.dismissDialog();
+		RX.Modal.show(
+			<DialogElementCallUrl onPressVideoCall={this.props.onPressVideoCall} />,
+			'video_conference_options'
+		);
+	};
+
 	public render(): JSX.Element | null {
 		const fileButton = (
 			<AnimatedButton
@@ -198,19 +216,35 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 		}
 
 		const videoCallButton = (
-			<AnimatedButton
-				buttonStyle={styles.buttonDialog}
-				iconSource={require('../resources/svg/RI_videoconf.json') as SvgFile}
-				iconStyle={{ opacity: videoCallButtonDisabled ? 0.3 : 1 }}
-				iconFillColor={ICON_INFO_FILL}
-				iconHeight={ICON_INFO_SIZE}
-				iconWidth={ICON_INFO_SIZE}
-				animatedColor={LIGHT_BACKGROUND}
-				onPress={this.props.onPressVideoCall}
-				disabled={videoCallButtonDisabled}
-				text={buttonText}
-				textStyle={[styles.buttonText, { opacity: videoCallButtonDisabled ? 0.3 : 1 }]}
-			/>
+			<RX.View
+				style={styles.videoConferenceButton}
+				// onLongPress={this.onPressVideoConferenceOptionButton}
+				// onContextMenu={this.onPressVideoConferenceOptionButton}
+			>
+				<AnimatedButton
+					buttonStyle={styles.buttonDialog}
+					iconSource={require('../resources/svg/RI_videoconf.json') as SvgFile}
+					iconStyle={{ opacity: videoCallButtonDisabled ? 0.3 : 1 }}
+					iconFillColor={ICON_INFO_FILL}
+					iconHeight={ICON_INFO_SIZE}
+					iconWidth={ICON_INFO_SIZE}
+					animatedColor={LIGHT_BACKGROUND}
+					onPress={this.props.onPressVideoCall}
+					disabled={videoCallButtonDisabled}
+					text={buttonText}
+					textStyle={[styles.buttonText, { opacity: videoCallButtonDisabled ? 0.3 : 1 }]}
+				/>
+				<AnimatedButton
+					buttonStyle={styles.videoConferenceOptionButton}
+					iconSource={require('../resources/svg/RI_expand.json') as SvgFile}
+					iconFillColor={'white'}
+					iconHeight={20}
+					iconWidth={20}
+					animatedColor={'white'}
+					onPress={this.onPressVideoConferenceOptionButton}
+					disabled={videoCallButtonDisabled}
+				/>
+			</RX.View>
 		);
 
 		const appLayout = UiStore.getAppLayout_();
