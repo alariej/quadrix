@@ -17,6 +17,7 @@ import {
 	BORDER_RADIUS_CHAT,
 	BUTTON_FILL_HEADER,
 	APP_BACKGROUND,
+	CONTENT_BACKGROUND,
 } from '../ui';
 import FileHandler from '../modules/FileHandler';
 import ApiClient from '../matrix/ApiClient';
@@ -193,6 +194,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 	private replyEvent: FilteredChatEvent | undefined;
 	private containerView: RX.View | undefined;
 	private isNativeMobile: boolean;
+	private isNarrow: boolean;
 
 	constructor(props: ComposerProps) {
 		super(props);
@@ -203,6 +205,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 		this.isWeb = platform === 'web';
 		this.isAndroid = platform === 'android';
 		this.isNativeMobile = ['android', 'ios'].includes(platform);
+		this.isNarrow = UiStore.getAppLayout_().type === 'narrow';
 
 		const numLines = 10;
 		const paddingVertical = this.isAndroid ? 2 : (BUTTON_COMPOSER_WIDTH - (FONT_LARGE + 4)) / 2;
@@ -751,7 +754,16 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 
 		return (
 			<RX.View
-				style={styles.container}
+				style={[
+					styles.container,
+					{
+						borderRightWidth: this.isNarrow ? 0 : 1,
+						borderTopWidth: this.isNarrow ? 0 : 1,
+						borderLeftWidth: 0,
+						borderBottomWidth: 0,
+						borderColor: this.isNarrow ? undefined : CONTENT_BACKGROUND,
+					},
+				]}
 				ref={component => (this.containerView = component!)}
 				onLayout={() => null}
 			>
