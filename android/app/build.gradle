@@ -28,8 +28,8 @@ android {
         applicationId "chat.quadrix.android"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 86
-        versionName "1.6.1"
+        versionCode 87
+        versionName "1.6.2"
     }
     splits {
         abi {
