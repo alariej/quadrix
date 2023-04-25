@@ -105,10 +105,11 @@ const styles = {
 		fontSize: FONT_NORMAL,
 		color: HEADER_STATUS,
 	}),
-	containerHomeButton: RX.Styles.createViewStyle({
+	containerRoundButton: RX.Styles.createViewStyle({
 		width: HEADER_HEIGHT / 2,
 		height: HEADER_HEIGHT / 2,
 		marginLeft: SPACING,
+		marginRight: SPACING,
 		overflow: 'visible',
 	}),
 	roundButton: RX.Styles.createViewStyle({
@@ -475,7 +476,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 						<RX.View style={styles.containerSubtitle}>{subtitle}</RX.View>
 					</RX.View>
 				</RX.View>
-				<RX.View style={styles.containerHomeButton}>
+				<RX.View style={styles.containerRoundButton}>
 					<AnimatedButton
 						buttonStyle={styles.roundButton}
 						iconStyle={{ marginRight: 2 }}

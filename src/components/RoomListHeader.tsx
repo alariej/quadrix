@@ -55,6 +55,12 @@ const styles = {
 		color: HEADER_TEXT,
 		paddingBottom: 1,
 	}),
+	containerRoundButton: RX.Styles.createViewStyle({
+		width: HEADER_HEIGHT / 2,
+		height: HEADER_HEIGHT,
+		marginLeft: SPACING,
+		marginRight: SPACING,
+	}),
 	roundButton: RX.Styles.createViewStyle({
 		width: HEADER_HEIGHT / 2,
 		height: HEADER_HEIGHT / 2,
@@ -69,9 +75,6 @@ const styles = {
 		borderRadius: HEADER_HEIGHT / 4,
 		justifyContent: 'center',
 		alignItems: 'center',
-	}),
-	buttonContainer: RX.Styles.createViewStyle({
-		marginLeft: SPACING,
 	}),
 	iconContainer: RX.Styles.createViewStyle({
 		width: HEADER_HEIGHT / 2,
@@ -297,7 +300,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 						<RX.View style={styles.bracketRight} />
 					</RX.View>
 				</RX.View>
-				<RX.View style={styles.buttonContainer}>
+				<RX.View style={styles.containerRoundButton}>
 					<AnimatedButton
 						buttonStyle={styles.roundButton}
 						iconSource={require('../resources/svg/RI_menu.json') as SvgFile}
