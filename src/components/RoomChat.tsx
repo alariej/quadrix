@@ -421,9 +421,15 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 				}
 			} else {
 				if (!this.eventIds[event.tempId || event.eventId]) {
+					let hide = false;
+					const content = event.content as CallEventContent_;
+					if (event.type === 'org.matrix.msc3401.call' && content['m.terminated']) {
+						hide = true;
+					}
+
 					const messageInfo: EventListItemInfo = {
 						key: event.tempId || event.eventId,
-						height: MESSAGE_HEIGHT_DEFAULT,
+						height: hide ? 0 : MESSAGE_HEIGHT_DEFAULT,
 						template: 'event',
 						measureHeight: true,
 						event: event,
