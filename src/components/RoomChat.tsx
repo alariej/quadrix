@@ -400,6 +400,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 		this.roomEvents = newRoomEvents.concat(this.roomEvents);
 
 		const newEventListItems: EventListItemInfo[] = [];
+		let isCallEvent = false;
 
 		for (let i = 0; i < newRoomEvents.length; i++) {
 			const event = newRoomEvents[i];
@@ -422,9 +423,12 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 			} else {
 				if (!this.eventIds[event.tempId || event.eventId]) {
 					let hide = false;
-					const content = event.content as CallEventContent_;
-					if (event.type === 'org.matrix.msc3401.call' && content['m.terminated']) {
-						hide = true;
+					if (['org.matrix.msc3401.call', 'org.matrix.msc3401.call.member'].includes(event.type)) {
+						isCallEvent = true;
+						const content = event.content as CallEventContent_;
+						if (event.type === 'org.matrix.msc3401.call' && content['m.terminated']) {
+							hide = true;
+						}
 					}
 
 					const messageInfo: EventListItemInfo = {
@@ -480,9 +484,17 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 			ApiClient.sendReadReceipt(this.props.roomId, this.roomEvents[0].eventId).catch(_error => null);
 		}
 
-		const msc3401Call = DataStore.getMsc3401Call_(this.props.roomId);
-		const msc3401CallStatus = EventUtils.getMsc3401CallStatus(msc3401Call!, ApiClient.credentials.userIdFull);
-		const msc3401CallDeclined = msc3401Call?.participants![ApiClient.credentials.userIdFull] === false;
+		if (isCallEvent) {
+			const msc3401Call = DataStore.getMsc3401Call_(this.props.roomId);
+			const msc3401CallStatus = EventUtils.getMsc3401CallStatus(msc3401Call!, ApiClient.credentials.userIdFull);
+			const msc3401CallDeclined = msc3401Call?.participants![ApiClient.credentials.userIdFull] === false;
+			const showRingingCallButton = msc3401CallStatus === 'ringing' && !msc3401CallDeclined;
+
+			if (this.state.showRingingCallButton !== showRingingCallButton) {
+				this.setState({ showRingingCallButton: showRingingCallButton });
+			}
+		}
+
 		this.setState({ eventListItems: this.eventListItems });
 	};
 
