@@ -234,7 +234,10 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 					const eventIndex = this.roomEvents.findIndex(event_ => event_.eventId === editedEventId);
 					if (eventIndex > -1) {
 						if (event.time > ((this.roomEvents[eventIndex].content as MessageEventContent_)._time || 0)) {
-							this.roomEvents[eventIndex].content = content['m.new_content']!;
+							this.roomEvents[eventIndex].content = {
+								...this.roomEvents[eventIndex].content,
+								...content['m.new_content']!,
+							};
 						}
 						this.roomEvents[eventIndex].isEdited = true;
 						(this.roomEvents[eventIndex].content as MessageEventContent_)._time = event.time;
