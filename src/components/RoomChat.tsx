@@ -478,15 +478,12 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
 		if (!this.state.showArrowButton) {
 			ApiClient.sendReadReceipt(this.props.roomId, this.roomEvents[0].eventId).catch(_error => null);
-			this.setState({ eventListItems: this.eventListItems });
 		}
 
 		const msc3401Call = DataStore.getMsc3401Call_(this.props.roomId);
 		const msc3401CallStatus = EventUtils.getMsc3401CallStatus(msc3401Call!, ApiClient.credentials.userIdFull);
 		const msc3401CallDeclined = msc3401Call?.participants![ApiClient.credentials.userIdFull] === false;
-		this.setState({
-			showRingingCallButton: msc3401CallStatus === 'ringing' && !msc3401CallDeclined ? true : false,
-		});
+		this.setState({ eventListItems: this.eventListItems });
 	};
 
 	private newReadReceipt = () => {

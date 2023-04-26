@@ -64,7 +64,7 @@ export interface VirtualListViewItemInfo extends VirtualListCellInfo {
 	isNavigable?: boolean;
 }
 
-export type VirtualListViewCellRenderDetails<T extends VirtualListViewItemInfo> = VirtualListCellRenderDetails<T>
+export type VirtualListViewCellRenderDetails<T extends VirtualListViewItemInfo> = VirtualListCellRenderDetails<T>;
 
 export interface VirtualListViewProps<ItemInfo extends VirtualListViewItemInfo>
 	extends RX.CommonStyledProps<RX.Types.ViewStyleRuleSet, VirtualListView<ItemInfo>> {
@@ -547,7 +547,7 @@ export class VirtualListView<ItemInfo extends VirtualListViewItemInfo> extends R
 			? Math.min(
 					Math.max(this._layoutHeight * this._renderOverdrawFactor, this._minOverdrawAmount),
 					this._maxOverdrawAmount
-			)
+			  ) // eslint-disable-line no-mixed-spaces-and-tabs
 			: 0;
 	}
 
@@ -1255,6 +1255,10 @@ export class VirtualListView<ItemInfo extends VirtualListViewItemInfo> extends R
 		for (let i = 0; i < this._itemsInRenderBlock; i++) {
 			const itemIndex = this._itemsAboveRenderBlock + i;
 			const item = this.props.itemList[itemIndex];
+
+			if (!item) {
+				return;
+			}
 
 			const virtualCellInfo = this._activeCells.get(item.key)!;
 			assert(Boolean(virtualCellInfo), 'Active Cell not found for key ' + item.key + ', index=' + i);
