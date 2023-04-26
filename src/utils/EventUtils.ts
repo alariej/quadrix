@@ -100,7 +100,7 @@ class EventUtils {
 					dateChangeFlag: dateChangeFlag,
 					tempId: event.unsigned ? event.unsigned.transaction_id : undefined,
 					redacts: event.redacts,
-					isRedacted: Object.keys(event.content).length === 0,
+					isRedacted: ['m.room.message'].includes(event.type) && Object.keys(event.content).length === 0,
 					isEdited: Boolean(event.unsigned?.['m.relations']?.['m.replace']),
 				};
 			});

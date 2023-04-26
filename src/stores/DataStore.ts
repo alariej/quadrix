@@ -505,7 +505,7 @@ class DataStore extends StoreBase {
 						(content['m.relates_to']?.rel_type === 'm.replace'
 							? redactedEventIds.includes(content['m.relates_to'].event_id!)
 							: false) ||
-						Object.keys(event.content).length === 0,
+						(['m.room.message'].includes(event.type) && Object.keys(event.content).length === 0),
 					isEdited: Boolean(event.unsigned?.['m.relations']?.['m.replace']),
 				};
 				break;
