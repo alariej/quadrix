@@ -972,7 +972,6 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 						event={this.props.event}
 						roomType={this.props.roomType}
 						replyMessage={this.props.replyMessage}
-						readMarkerType={this.props.readMarkerType}
 						isRedacted={false}
 						withSenderDetails={this.state.withSenderDetails}
 						setReplyMessage={() => null}

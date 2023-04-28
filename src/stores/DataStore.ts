@@ -1105,26 +1105,19 @@ class DataStore extends StoreBase {
 		return this.lastSeenTime[userId] || 0;
 	}
 
-	// used in roomchat
-	@autoSubscribeWithKey(ReadReceiptTrigger)
-	public getReadMarker(roomId: string): number {
+	@autoSubscribeWithKey('DummyTrigger')
+	public _getReadReceipts(roomId: string): { [id: string]: { eventId: string; timestamp: number } } | undefined {
 		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
+		return this.roomSummaryList[roomIndex].readReceipts;
+	}
 
-		let readMarker = 0;
-		for (const userId in this.roomSummaryList[roomIndex].readReceipts) {
-			if (userId !== ApiClient.credentials.userIdFull && this.userIsActive_(roomIndex, userId)) {
-				readMarker = Math.min(
-					this.roomSummaryList[roomIndex].readReceipts![userId].timestamp,
-					readMarker ? readMarker : this.roomSummaryList[roomIndex].readReceipts![userId].timestamp
-				);
-			}
-		}
-
-		return readMarker;
+	public getReadReceipts(roomId: string): { [id: string]: { eventId: string; timestamp: number } } | undefined {
+		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
+		return this.roomSummaryList[roomIndex].readReceipts;
 	}
 
 	@autoSubscribeWithKey('DummyTrigger')
-	public getReadReceipt(roomId: string, userId: string): number {
+	public getLastReadReceiptTimestamp(roomId: string, userId: string): number {
 		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
 		return this.roomSummaryList[roomIndex].readReceipts![userId]?.timestamp;
 	}

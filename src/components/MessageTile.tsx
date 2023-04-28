@@ -16,6 +16,7 @@ import {
 	ICON_INFO_FILL,
 	BORDER_RADIUS_CHAT,
 	CONTENT_BACKGROUND,
+	FONT_MEDIUM,
 } from '../ui';
 import ImageMessage from './ImageMessage';
 import FileMessage from './FileMessage';
@@ -87,6 +88,14 @@ const styles = {
 		flex: 1,
 		overflow: 'visible',
 	}),
+	markerText: RX.Styles.createTextStyle({
+		position: 'absolute',
+		top: 0,
+		right: 17,
+		fontFamily: AppFont.fontFamily,
+		fontSize: FONT_MEDIUM,
+		color: MARKER_READ_FILL,
+	}),
 	spinner: RX.Styles.createViewStyle({
 		flex: 1,
 		alignSelf: 'flex-end',
@@ -118,7 +127,7 @@ interface MessageTileProps {
 	roomId: string;
 	event: FilteredChatEvent;
 	roomType: RoomType;
-	readMarkerType?: string;
+	readMarker?: { read: number; total: number };
 	replyMessage?: FilteredChatEvent;
 	setReplyMessage: (message: FilteredChatEvent) => void;
 	onPressReply?: (eventId: string) => void;
@@ -136,7 +145,7 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 
 	public shouldComponentUpdate(nextProps: MessageTileProps): boolean {
 		return (
-			this.props.readMarkerType !== nextProps.readMarkerType ||
+			this.props.readMarker?.read !== nextProps.readMarker?.read ||
 			this.props.isRedacted !== nextProps.isRedacted ||
 			this.props.body !== nextProps.body ||
 			this.props.withSenderDetails !== nextProps.withSenderDetails
@@ -158,7 +167,6 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 						event={this.props.event}
 						layout={layout}
 						roomType={this.props.roomType}
-						readMarkerType={this.props.readMarkerType}
 						replyMessage={this.props.replyMessage}
 						setReplyMessage={this.props.setReplyMessage}
 						showTempForwardedMessage={this.props.showTempForwardedMessage}
@@ -390,31 +398,46 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 
 		let readMarker: ReactElement | null = null;
 		if (ApiClient.credentials.userIdFull === this.props.event.senderId) {
-			if (this.props.readMarkerType === 'read' && this.props.roomType !== 'notepad') {
-				readMarker = (
-					<RX.View style={styles.containerMarker}>
-						<IconSvg
-							source={require('../resources/svg/IO_checkdouble.json') as SvgFile}
-							fillColor={MARKER_READ_FILL}
-							height={17}
-							width={17}
-							style={{ alignSelf: 'flex-end' }}
-						/>
-					</RX.View>
-				);
-			} else if (this.props.readMarkerType === 'sent' && this.props.roomType !== 'notepad') {
-				readMarker = (
-					<RX.View style={styles.containerMarker}>
-						<IconSvg
-							source={require('../resources/svg/IO_checksingle.json') as SvgFile}
-							fillColor={MARKER_SENT_FILL}
-							height={17}
-							width={17}
-							style={{ alignSelf: 'flex-end' }}
-						/>
-					</RX.View>
-				);
-			} else if (this.props.readMarkerType === 'sending') {
+			if (this.props.roomType !== 'notepad' && this.props.readMarker && this.props.readMarker.read !== -1) {
+				if (this.props.readMarker.read === this.props.readMarker.total) {
+					readMarker = (
+						<RX.View style={styles.containerMarker}>
+							<IconSvg
+								source={require('../resources/svg/IO_checkdouble.json') as SvgFile}
+								fillColor={MARKER_READ_FILL}
+								height={17}
+								width={17}
+								style={{ alignSelf: 'flex-end' }}
+							/>
+						</RX.View>
+					);
+				} else if (this.props.readMarker.read === 0) {
+					readMarker = (
+						<RX.View style={styles.containerMarker}>
+							<IconSvg
+								source={require('../resources/svg/IO_checksingle.json') as SvgFile}
+								fillColor={MARKER_SENT_FILL}
+								height={17}
+								width={17}
+								style={{ alignSelf: 'flex-end' }}
+							/>
+						</RX.View>
+					);
+				} else if (this.props.readMarker.read > 0) {
+					readMarker = (
+						<RX.View style={styles.containerMarker}>
+							<IconSvg
+								source={require('../resources/svg/IO_checksingle.json') as SvgFile}
+								fillColor={MARKER_READ_FILL}
+								height={17}
+								width={17}
+								style={{ alignSelf: 'flex-end' }}
+							/>
+							<RX.Text style={styles.markerText}>{this.props.readMarker?.read}</RX.Text>
+						</RX.View>
+					);
+				}
+			} else if (this.props.readMarker?.read === -1) {
 				readMarker = (
 					<RX.View style={styles.containerMarker}>
 						<RX.View style={styles.spinner}>

@@ -44,6 +44,7 @@ export const ICON_REDUCTION_FACTOR = 1.8;
 export const FONT_XLARGE = 18;
 export const FONT_LARGE = 16;
 export const FONT_NORMAL = 14;
+export const FONT_MEDIUM = 12;
 export const FONT_SMALL = 11;
 export const FONT_EMOJI_LARGE = 32;
 

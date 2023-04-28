@@ -159,7 +159,7 @@ const styles = {
 
 interface EventListItemInfo extends VirtualListViewItemInfo {
 	event: FilteredChatEvent;
-	readMarkerType: string;
+	readMarker?: { read: number; total: number };
 	isRedacted?: boolean;
 	body?: string;
 }
@@ -192,7 +192,6 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 	private timelineLimited = false;
 	private newMessageSubscription: number;
 	private newReadReceiptSubscription: number;
-	private readMarkerTime = 0;
 	private language: Languages = 'en';
 	private locale: Locale;
 	private roomEvents: FilteredChatEvent[] = [];
@@ -214,11 +213,11 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 		partialState.offline = UiStore.getOffline();
 
 		if (initState || this.props.roomId !== nextProps.roomId) {
-			this.readMarkerTime = DataStore.getReadMarker(nextProps.roomId);
-
 			this.roomEvents = DataStore.getAllRoomEvents(nextProps.roomId);
 			this.eventListItems = [];
 			this.eventIds = {};
+
+			const readReceipts = DataStore._getReadReceipts(nextProps.roomId);
 
 			for (let i = 0; i < this.roomEvents.length; i++) {
 				const event = this.roomEvents[i];
@@ -250,7 +249,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 							template: 'event',
 							measureHeight: true,
 							event: event,
-							readMarkerType: event.time > this.readMarkerTime ? 'sent' : 'read',
+							readMarker: this.getReadMarker(event.senderId, readReceipts, event.time),
 							isRedacted: event.isRedacted,
 							body: (event.content as MessageEventContent_).body,
 						};
@@ -386,7 +385,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 			template: 'event',
 			measureHeight: true,
 			event: tempMessageEvent,
-			readMarkerType: 'sending',
+			readMarker: { read: -1, total: 0 },
 		};
 
 		return [tempMessageInfo].concat(this.eventListItems);
@@ -395,6 +394,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 	private newMessages = () => {
 		const newRoomEvents = DataStore.getNewRoomEvents(this.props.roomId);
 		const newEventsLimited = DataStore.getNewEventsLimited(this.props.roomId);
+		const readReceipts = DataStore.getReadReceipts(this.props.roomId);
 
 		if (newRoomEvents.length === 0 || newRoomEvents[0].eventId === this.roomEvents[0].eventId) {
 			return;
@@ -440,7 +440,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 						template: 'event',
 						measureHeight: true,
 						event: event,
-						readMarkerType: event.time > this.readMarkerTime ? 'sent' : 'read',
+						readMarker: this.getReadMarker(event.senderId, readReceipts, event.time),
 					};
 
 					newEventListItems.push(messageInfo);
@@ -501,39 +501,67 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 		this.setState({ eventListItems: this.eventListItems });
 	};
 
-	private newReadReceipt = () => {
-		const readMarkerTime = DataStore.getReadMarker(this.props.roomId);
+	private getReadMarker = (
+		senderId: string,
+		readReceipts: { [id: string]: { eventId: string; timestamp: number } } | undefined,
+		eventTime: number
+	): { read: number; total: number } | undefined => {
+		if (senderId !== ApiClient.credentials.userIdFull || !readReceipts) {
+			return undefined;
+		}
 
-		if (readMarkerTime > this.readMarkerTime) {
-			this.readMarkerTime = readMarkerTime;
-
-			let newReadItem = false;
-
-			for (let i = 0; i < this.eventListItems.length; i++) {
-				if (this.eventListItems[i].readMarkerType === 'read') {
-					break;
-				} else if (this.readMarkerTime >= this.eventListItems[i].event.time) {
-					newReadItem = true;
-					this.eventListItems[i].readMarkerType = 'read';
+		let read = 0;
+		let total = 0;
+		for (const userId in readReceipts) {
+			if (userId !== ApiClient.credentials.userIdFull) {
+				total++;
+				if (readReceipts[userId].timestamp >= eventTime) {
+					read++;
 				}
 			}
+		}
 
-			if (newReadItem) {
-				// HACK: need to cut and repaste the last message to force a re-render of the VLV
-				// voodoo: although push does the same as concat, VLV does not update
-				const lastItem = this.eventListItems.pop();
-				this.eventListItems = this.eventListItems.concat(lastItem!);
+		return { read: read, total: total };
+	};
 
-				if (!this.state.showArrowButton) {
-					this.setState({ eventListItems: this.eventListItems });
+	private newReadReceipt = () => {
+		const readReceipts = DataStore.getReadReceipts(this.props.roomId);
+
+		let newReadItem = false;
+		for (let i = 0; i < this.eventListItems.length; i++) {
+			if (this.eventListItems[i].readMarker?.read === this.eventListItems[i].readMarker?.total) {
+				break;
+			} else {
+				const readMarker = this.getReadMarker(
+					this.eventListItems[i].event.senderId,
+					readReceipts,
+					this.eventListItems[i].event.time
+				);
+				if (this.eventListItems[i].readMarker?.read !== readMarker?.read) {
+					newReadItem = true;
+					this.eventListItems[i].readMarker = readMarker;
 				}
+			}
+		}
+
+		if (newReadItem) {
+			// HACK: need to cut and repaste the last message to force a re-render of the VLV
+			// voodoo: although push does the same as concat, VLV does not update
+			const lastItem = this.eventListItems.pop();
+			this.eventListItems = this.eventListItems.concat(lastItem!);
+
+			if (!this.state.showArrowButton) {
+				this.setState({ eventListItems: this.eventListItems });
 			}
 		}
 	};
 
 	private sendInitialReadReceipt = (roomId: string) => {
-		const lastReadReceipt = DataStore.getReadReceipt(roomId, ApiClient.credentials.userIdFull);
-		if (this.roomEvents[0]?.time > lastReadReceipt) {
+		const lastReadReceiptTimestamp = DataStore.getLastReadReceiptTimestamp(
+			roomId,
+			ApiClient.credentials.userIdFull
+		);
+		if (this.roomEvents[0]?.time > lastReadReceiptTimestamp) {
 			ApiClient.sendReadReceipt(roomId, this.roomEvents[0].eventId).catch(_error => null);
 		}
 	};
@@ -609,7 +637,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 						roomId={this.props.roomId}
 						event={cellRender.item.event}
 						roomType={this.props.roomType}
-						readMarkerType={cellRender.item.readMarkerType}
+						readMarker={cellRender.item.readMarker}
 						replyMessage={replyEvent}
 						setReplyMessage={this.props.setReplyMessage}
 						onPressReply={this.gotoMessage}
@@ -713,6 +741,8 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
 				const olderEventListItems: EventListItemInfo[] = [];
 
+				const readReceipts = DataStore.getReadReceipts(this.props.roomId);
+
 				for (let i = 0; i < response.events.length; i++) {
 					const event = response.events[i];
 					const content = event.content as MessageEventContent_;
@@ -727,7 +757,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 								template: 'event',
 								measureHeight: true,
 								event: event,
-								readMarkerType: event.time > this.readMarkerTime ? 'sent' : 'read',
+								readMarker: this.getReadMarker(event.senderId, readReceipts, event.time),
 								isRedacted: event.isRedacted,
 								body: content.body,
 							};
