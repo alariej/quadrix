@@ -23,6 +23,7 @@ import {
 	PAGE_PADDING_CHAT,
 	LABEL_TEXT,
 	CONTENT_BACKGROUND,
+	HEADER_HEIGHT,
 } from '../ui';
 import { MESSAGE_COUNT_ADD } from '../appconfig';
 import { ComponentBase } from 'resub';
@@ -127,10 +128,9 @@ const styles = {
 	}),
 	containerCallRingingButton: RX.Styles.createViewStyle({
 		position: 'absolute',
-		bottom: SPACING,
 		alignSelf: 'center',
 		flexDirection: 'row',
-		borderRadius: BORDER_RADIUS,
+		borderRadius: 16,
 		backgroundColor: OPAQUE_BACKGROUND,
 		paddingHorizontal: OBJECT_MARGIN / 2,
 	}),
@@ -896,7 +896,12 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 		let callRingingButton: ReactElement | undefined;
 		if (this.state.showRingingCallButton) {
 			callRingingButton = (
-				<RX.View style={styles.containerCallRingingButton}>
+				<RX.View
+					style={[
+						styles.containerCallRingingButton,
+						{ bottom: UiStore.getAppLayout_().screenHeight / 2 - HEADER_HEIGHT },
+					]}
+				>
 					<AnimatedButton
 						buttonStyle={styles.callAnswerButton}
 						iconSource={require('../resources/svg/RI_call.json') as SvgFile}
