@@ -35,6 +35,8 @@ const styles = {
 	memberListContainer: RX.Styles.createViewStyle({
 		flexDirection: 'row',
 		maxHeight: MAX_LENGTH * USER_TILE_HEIGHT,
+		borderBottomLeftRadius: BORDER_RADIUS,
+		borderTopLeftRadius: BORDER_RADIUS,
 	}),
 	maximizeIcon: RX.Styles.createViewStyle({
 		transform: [{ rotate: '180deg' }],

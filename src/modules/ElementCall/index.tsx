@@ -1,7 +1,6 @@
 import React from 'react';
 import RX from 'reactxp';
 import {
-	BORDER_RADIUS,
 	BUTTON_VIDEOCALL_BACKGROUND,
 	BUTTON_ROUND_WIDTH,
 	VIDEOCALL_BORDER,
@@ -59,7 +58,7 @@ const styles = {
 		backgroundColor: TRANSPARENT_BACKGROUND,
 		alignItems: 'center',
 		justifyContent: 'center',
-		borderRadius: BORDER_RADIUS,
+		borderRadius: 3,
 		borderWidth: 1,
 		borderColor: VIDEOCALL_BORDER,
 		overflow: 'hidden',
