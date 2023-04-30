@@ -14,7 +14,8 @@
     "start:ios": "npm run rncli -- run-ios",
     "start:web": "cross-env platform=web webpack serve --config=web/webpack/dev.js --progress --mode=development --host 0.0.0.0",
     "build:web": "cross-env platform=web webpack --config=web/webpack/prod.js --progress --mode=production",
-    "lint": "eslint --config .eslintrc --ext .ts,.tsx src"
+    "lint": "eslint --config .eslintrc --ext .ts,.tsx src",
+    "postinstall": "patch-package"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -57,13 +58,14 @@
     "linkifyjs": "4.1.1",
     "lodash": "4.17.21",
     "matrix-widget-api": "1.3.1",
+    "patch-package": "7.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-image-file-resizer": "0.4.8",
     "react-native": "0.71.7",
     "react-native-blob-util": "0.17.3",
     "react-native-compressor": "1.6.1",
-    "react-native-create-thumbnail": "v2.0.0-rc.2",
+    "react-native-create-thumbnail": "1.6.4",
     "react-native-device-info": "10.6.0",
     "react-native-document-picker": "8.2.0",
     "react-native-fast-image": "8.6.3",
