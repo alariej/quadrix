@@ -49,6 +49,7 @@ import StringUtils from '../utils/StringUtils';
 import FloatingSendButton from '../modules/FloatingSendButton';
 import { FilteredChatEvent, TemporaryMessage } from '../models/FilteredChatEvent';
 import AnimatedButton from './AnimatedButton';
+import { ReadReceipt } from '../models/ReadReceipt';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -503,7 +504,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
 	private getReadMarker = (
 		senderId: string,
-		readReceipts: { [id: string]: { eventId: string; timestamp: number } } | undefined,
+		readReceipts: ReadReceipt | undefined,
 		eventTime: number
 	): { read: number; total: number } | undefined => {
 		if (senderId !== ApiClient.credentials.userIdFull || !readReceipts) {

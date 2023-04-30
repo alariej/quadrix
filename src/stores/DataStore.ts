@@ -24,6 +24,7 @@ import { differenceInDays } from 'date-fns';
 import { INACTIVE_DAYS } from '../appconfig';
 import { FilteredChatEvent } from '../models/FilteredChatEvent';
 import * as _ from 'lodash';
+import { ReadReceipt } from '../models/ReadReceipt';
 
 interface RoomEventTriggers {
 	isNewMessageEvent?: boolean;
@@ -892,7 +893,7 @@ class DataStore extends StoreBase {
 			return false;
 		}
 
-		const newReceipts: { [id: string]: { eventId: string; timestamp: number } } = {};
+		const newReceipts: ReadReceipt = {};
 
 		roomObj.ephemeral.events
 			.filter(event => event.type === 'm.receipt')

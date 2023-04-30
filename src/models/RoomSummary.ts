@@ -1,6 +1,7 @@
 import { FilteredChatEvent } from './FilteredChatEvent';
 import { ClientEvent_, RoomPhase, RoomType } from './MatrixApi';
 import { Msc3401Call } from './Msc3401Call';
+import { ReadReceipt } from './ReadReceipt';
 import { User } from './User';
 
 export interface RoomSummary {
@@ -24,7 +25,7 @@ export interface RoomSummary {
 	timelineToken?: string;
 	timelineLimited?: boolean;
 	joinRule?: string;
-	readReceipts?: { [id: string]: { eventId: string; timestamp: number } };
+	readReceipts?: ReadReceipt;
 	thirdPartyInviteId?: string;
 	topic?: string;
 	newEventsLimited?: boolean;
