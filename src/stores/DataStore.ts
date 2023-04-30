@@ -895,22 +895,26 @@ class DataStore extends StoreBase {
 
 		const newReceipts: ReadReceipt = {};
 
+		const newDate = new Date();
+
 		roomObj.ephemeral.events
 			.filter(event => event.type === 'm.receipt')
 			.map(event => {
 				const content = event.content;
 				for (const eventId in content) {
 					for (const userId in content[eventId]['m.read']) {
-						newReceipts[userId] = {
-							eventId: eventId,
-							timestamp: content[eventId]['m.read'][userId].ts,
-						};
+						if (differenceInDays(newDate, content[eventId]['m.read'][userId].ts) < INACTIVE_DAYS) {
+							newReceipts[userId] = {
+								eventId: eventId,
+								timestamp: content[eventId]['m.read'][userId].ts,
+							};
 
-						// HACK: fake presence
-						this.lastSeenTime[userId] = Math.max(
-							this.lastSeenTime[userId] || 0,
-							newReceipts[userId].timestamp
-						);
+							// HACK: fake presence
+							this.lastSeenTime[userId] = Math.max(
+								this.lastSeenTime[userId] || 0,
+								newReceipts[userId].timestamp
+							);
+						}
 					}
 				}
 			});
@@ -1106,15 +1110,32 @@ class DataStore extends StoreBase {
 		return this.lastSeenTime[userId] || 0;
 	}
 
-	@autoSubscribeWithKey('DummyTrigger')
-	public _getReadReceipts(roomId: string): { [id: string]: { eventId: string; timestamp: number } } | undefined {
-		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
-		return this.roomSummaryList[roomIndex].readReceipts;
+	// TODO: eventually get rid of this, since stale readreceipts are now eliminated on sync
+	private activeReadReceipts(roomIndex: number): ReadReceipt | undefined {
+		const readReceipts = this.roomSummaryList[roomIndex].readReceipts;
+		if (readReceipts) {
+			const newDate = new Date();
+			for (const id in readReceipts) {
+				if (
+					this.roomSummaryList[roomIndex].members[id].membership !== 'join' ||
+					differenceInDays(newDate, readReceipts[id].timestamp) >= INACTIVE_DAYS
+				) {
+					delete readReceipts[id];
+				}
+			}
+		}
+		return readReceipts;
 	}
 
-	public getReadReceipts(roomId: string): { [id: string]: { eventId: string; timestamp: number } } | undefined {
+	@autoSubscribeWithKey('DummyTrigger')
+	public _getReadReceipts(roomId: string): ReadReceipt | undefined {
 		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
-		return this.roomSummaryList[roomIndex].readReceipts;
+		return this.activeReadReceipts(roomIndex);
+	}
+
+	public getReadReceipts(roomId: string): ReadReceipt | undefined {
+		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
+		return this.activeReadReceipts(roomIndex);
 	}
 
 	@autoSubscribeWithKey('DummyTrigger')
@@ -1123,6 +1144,7 @@ class DataStore extends StoreBase {
 		return this.roomSummaryList[roomIndex].readReceipts![userId]?.timestamp;
 	}
 
+	// TODO: Clean up this crap
 	private userIsActive_(roomIndex: number, userId: string): boolean {
 		const lastSeenTime = this.getLastSeenTime_(userId);
 
@@ -1131,12 +1153,11 @@ class DataStore extends StoreBase {
 		if (isActive) {
 			return true;
 		} else {
-			const readReceipt = this.roomSummaryList[roomIndex].readReceipts![userId];
-
-			if (!readReceipt) {
-				return true;
+			const activeReadReceipts = this.activeReadReceipts(roomIndex);
+			if (activeReadReceipts) {
+				return activeReadReceipts[userId] !== undefined;
 			} else {
-				return differenceInDays(new Date(), readReceipt.timestamp) < INACTIVE_DAYS;
+				return false;
 			}
 		}
 	}
