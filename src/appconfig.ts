@@ -48,5 +48,5 @@ export const PUSH_GATEWAY_URL = 'https://push.quadrix.chat/_matrix/push/v1/notif
 
 export const MESSAGE_COUNT_INC = 120;
 export const MESSAGE_COUNT_ADD = 120;
-export const INACTIVE_DAYS = 30;
+export const INACTIVE_DAYS = 60;
 export const CLEAR_DATASTORE_VERSION = '1.4.8';
