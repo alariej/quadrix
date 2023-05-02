@@ -28,6 +28,7 @@ import StringUtils from '../utils/StringUtils';
 import UserPresence from './UserPresence';
 import DialogUserTile from '../dialogs/DialogUserTile';
 import { RoomType } from '../models/MatrixApi';
+import UserUtils from '../utils/UserUtils';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -188,7 +189,7 @@ export default class UserTile extends RX.Component<UserTileProps, RX.Stateless> 
 			} else if (
 				this.props.roomId &&
 				!['community', 'notepad'].includes(roomType!) &&
-				!DataStore.userIsActive(this.props.roomId, this.props.user.id)
+				!UserUtils.userIsActive(this.props.user.id)
 			) {
 				status = (
 					<RX.View style={styles.containerStatus}>

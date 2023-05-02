@@ -38,6 +38,7 @@ import FileHandler from '../modules/FileHandler';
 import CachedImage from '../modules/CachedImage';
 import StringUtils from '../utils/StringUtils';
 import AnimatedButton from './AnimatedButton';
+import UserUtils from '../utils/UserUtils';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -393,7 +394,7 @@ export default class RoomHeader extends ComponentBase<RoomHeaderProps, RoomHeade
 			for (const member of userArray) {
 				const separator = memberRenderArray.length ? ', ' : '';
 				let memberRender: ReactElement;
-				if (member.membership === 'invite' || !DataStore.userIsActive(this.props.roomId, member.id)) {
+				if (member.membership === 'invite' || !UserUtils.userIsActive_(member.id)) {
 					memberRender = (
 						<RX.Text
 							allowFontScaling={false}
