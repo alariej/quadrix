@@ -402,24 +402,24 @@ export default class MessageTile extends RX.Component<MessageTileProps, RX.State
 		let readMarker: ReactElement | null = null;
 		if (ApiClient.credentials.userIdFull === this.props.event.senderId) {
 			if (this.props.roomType !== 'notepad' && this.props.readMarker && this.props.readMarker.read !== -1) {
-				if (this.props.readMarker.read === this.props.readMarker.total) {
+				if (this.props.readMarker.read === 0) {
 					readMarker = (
 						<RX.View style={styles.containerMarker}>
 							<IconSvg
-								source={require('../resources/svg/IO_checkdouble.json') as SvgFile}
-								fillColor={MARKER_READ_FILL}
+								source={require('../resources/svg/IO_checksingle.json') as SvgFile}
+								fillColor={MARKER_SENT_FILL}
 								height={17}
 								width={17}
 								style={{ alignSelf: 'flex-end' }}
 							/>
 						</RX.View>
 					);
-				} else if (this.props.readMarker.read === 0) {
+				} else if (this.props.readMarker.read === this.props.readMarker.total) {
 					readMarker = (
 						<RX.View style={styles.containerMarker}>
 							<IconSvg
-								source={require('../resources/svg/IO_checksingle.json') as SvgFile}
-								fillColor={MARKER_SENT_FILL}
+								source={require('../resources/svg/IO_checkdouble.json') as SvgFile}
+								fillColor={MARKER_READ_FILL}
 								height={17}
 								width={17}
 								style={{ alignSelf: 'flex-end' }}
