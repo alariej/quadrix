@@ -244,6 +244,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 			partialState.showReplyMessage = true;
 		}
 
+		partialState.offline = UiStore.getOffline();
+
 		return partialState;
 	}
 
