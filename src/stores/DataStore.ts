@@ -20,8 +20,6 @@ import {
 	SyncResponse_,
 	ToDeviceEvent_,
 } from '../models/MatrixApi';
-import { differenceInDays } from 'date-fns';
-import { INACTIVE_DAYS } from '../appconfig';
 import { FilteredChatEvent } from '../models/FilteredChatEvent';
 import * as _ from 'lodash';
 import { ReadReceipt } from '../models/ReadReceipt';
@@ -895,15 +893,17 @@ class DataStore extends StoreBase {
 
 		const newReceipts: ReadReceipt = {};
 
-		const newDate = new Date();
-
 		roomObj.ephemeral.events
 			.filter(event => event.type === 'm.receipt')
 			.map(event => {
 				const content = event.content;
 				for (const eventId in content) {
 					for (const userId in content[eventId]['m.read']) {
-						if (differenceInDays(newDate, content[eventId]['m.read'][userId].ts) < INACTIVE_DAYS) {
+						if (
+							!this.roomSummaryList[roomIndex].members[userId] ||
+							!this.roomSummaryList[roomIndex].members[userId].membership ||
+							this.roomSummaryList[roomIndex].members[userId].membership === 'join'
+						) {
 							newReceipts[userId] = {
 								eventId: eventId,
 								timestamp: content[eventId]['m.read'][userId].ts,
@@ -1106,7 +1106,7 @@ class DataStore extends StoreBase {
 		return this.lastSeenTime[userId] || 0;
 	}
 
-	private getLastSeenTime_(userId: string): number {
+	public getLastSeenTime_(userId: string): number {
 		return this.lastSeenTime[userId] || 0;
 	}
 
@@ -1114,12 +1114,8 @@ class DataStore extends StoreBase {
 	private activeReadReceipts(roomIndex: number): ReadReceipt | undefined {
 		const readReceipts = this.roomSummaryList[roomIndex].readReceipts;
 		if (readReceipts) {
-			const newDate = new Date();
 			for (const id in readReceipts) {
-				if (
-					this.roomSummaryList[roomIndex].members[id].membership !== 'join' ||
-					differenceInDays(newDate, readReceipts[id].timestamp) >= INACTIVE_DAYS
-				) {
+				if (this.roomSummaryList[roomIndex].members[id]?.membership !== 'join') {
 					delete readReceipts[id];
 				}
 			}
