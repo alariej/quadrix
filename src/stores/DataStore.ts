@@ -1144,29 +1144,6 @@ class DataStore extends StoreBase {
 		return this.roomSummaryList[roomIndex].readReceipts![userId]?.timestamp;
 	}
 
-	// TODO: Clean up this crap
-	private userIsActive_(roomIndex: number, userId: string): boolean {
-		const lastSeenTime = this.getLastSeenTime_(userId);
-
-		const isActive = differenceInDays(new Date(), lastSeenTime) < INACTIVE_DAYS;
-
-		if (isActive) {
-			return true;
-		} else {
-			const activeReadReceipts = this.activeReadReceipts(roomIndex);
-			if (activeReadReceipts) {
-				return activeReadReceipts[userId] !== undefined;
-			} else {
-				return false;
-			}
-		}
-	}
-
-	public userIsActive(roomId: string, userId: string): boolean {
-		const roomIndex = this.roomSummaryList.findIndex((roomSummary: RoomSummary) => roomSummary.id === roomId);
-		return this.userIsActive_(roomIndex, userId);
-	}
-
 	public getUsers(): User[] {
 		const users: { [id: string]: User } = {};
 
