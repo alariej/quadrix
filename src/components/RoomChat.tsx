@@ -50,6 +50,7 @@ import FloatingSendButton from '../modules/FloatingSendButton';
 import { FilteredChatEvent, TemporaryMessage } from '../models/FilteredChatEvent';
 import AnimatedButton from './AnimatedButton';
 import { ReadReceipt } from '../models/ReadReceipt';
+import UserUtils from '../utils/UserUtils';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -109,6 +110,7 @@ const styles = {
 	containerWrapper: RX.Styles.createViewStyle({
 		flex: 1,
 		backgroundColor: OPAQUE_DUMMY_BACKGROUND,
+		overflow: 'visible',
 	}),
 	containerDate: RX.Styles.createViewStyle({
 		alignSelf: 'center',
@@ -160,7 +162,7 @@ const styles = {
 
 interface EventListItemInfo extends VirtualListViewItemInfo {
 	event: FilteredChatEvent;
-	readMarker?: { read: number; total: number };
+	readMarker: { read: number; total: number };
 	isRedacted?: boolean;
 	body?: string;
 }
@@ -197,6 +199,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 	private locale: Locale;
 	private roomEvents: FilteredChatEvent[] = [];
 	private eventIds: { [eventId: string]: string } = {};
+	private activeUsers: { [memberId: string]: boolean } = {};
 
 	constructor(props: RoomChatProps) {
 		super(props);
@@ -219,6 +222,10 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 			this.eventIds = {};
 
 			const readReceipts = DataStore._getReadReceipts(nextProps.roomId);
+
+			for (const memberId in readReceipts) {
+				this.activeUsers[memberId] = UserUtils.userIsActive(memberId);
+			}
 
 			for (let i = 0; i < this.roomEvents.length; i++) {
 				const event = this.roomEvents[i];
@@ -394,8 +401,6 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
 	private newMessages = () => {
 		const newRoomEvents = DataStore.getNewRoomEvents(this.props.roomId);
-		const newEventsLimited = DataStore.getNewEventsLimited(this.props.roomId);
-		const readReceipts = DataStore.getReadReceipts(this.props.roomId);
 
 		if (newRoomEvents.length === 0 || newRoomEvents[0].eventId === this.roomEvents[0].eventId) {
 			return;
@@ -435,6 +440,11 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 						}
 					}
 
+					let readReceipts;
+					if (event.senderId === ApiClient.credentials.userIdFull) {
+						readReceipts = DataStore.getReadReceipts(this.props.roomId);
+					}
+
 					const messageInfo: EventListItemInfo = {
 						key: event.tempId || event.eventId,
 						height: hide ? 0 : MESSAGE_HEIGHT_DEFAULT,
@@ -449,6 +459,8 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 				}
 			}
 		}
+
+		const newEventsLimited = DataStore.getNewEventsLimited(this.props.roomId);
 
 		if (newEventListItems.length > 0) {
 			if (newEventsLimited) {
@@ -506,17 +518,20 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 		senderId: string,
 		readReceipts: ReadReceipt | undefined,
 		eventTime: number
-	): { read: number; total: number } | undefined => {
+	): { read: number; total: number } => {
 		if (senderId !== ApiClient.credentials.userIdFull || !readReceipts) {
-			return undefined;
+			return { read: 0, total: 0 };
 		}
 
 		let read = 0;
 		let total = 0;
-		for (const userId in readReceipts) {
-			if (userId !== ApiClient.credentials.userIdFull) {
+		for (const memberId in readReceipts) {
+			if (
+				memberId !== ApiClient.credentials.userIdFull &&
+				(readReceipts[memberId].timestamp >= eventTime || this.activeUsers[memberId])
+			) {
 				total++;
-				if (readReceipts[userId].timestamp >= eventTime) {
+				if (readReceipts[memberId].timestamp >= eventTime) {
 					read++;
 				}
 			}
@@ -530,7 +545,10 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 
 		let newReadItem = false;
 		for (let i = 0; i < this.eventListItems.length; i++) {
-			if (this.eventListItems[i].readMarker?.read === this.eventListItems[i].readMarker?.total) {
+			if (
+				this.eventListItems[i].readMarker.read > 0 &&
+				this.eventListItems[i].readMarker.read === this.eventListItems[i].readMarker?.total
+			) {
 				break;
 			} else {
 				const readMarker = this.getReadMarker(
@@ -551,9 +569,7 @@ export default class RoomChat extends ComponentBase<RoomChatProps, RoomChatState
 			const lastItem = this.eventListItems.pop();
 			this.eventListItems = this.eventListItems.concat(lastItem!);
 
-			if (!this.state.showArrowButton) {
-				this.setState({ eventListItems: this.eventListItems });
-			}
+			this.setState({ eventListItems: this.eventListItems });
 		}
 	};
 
