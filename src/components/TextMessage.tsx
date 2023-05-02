@@ -44,7 +44,7 @@ const styles = {
 		fontFamily: AppFont.fontFamily,
 		fontSize: FONT_EMOJI_LARGE,
 		color: TILE_MESSAGE_TEXT,
-		lineHeight: FONT_EMOJI_LARGE + 4,
+		lineHeight: FONT_EMOJI_LARGE + 6,
 		overflow: 'visible',
 	}),
 	handle: RX.Styles.createTextStyle({
