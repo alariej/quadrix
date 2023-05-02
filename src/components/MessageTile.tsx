@@ -66,16 +66,19 @@ const styles = {
 	footer: RX.Styles.createViewStyle({
 		flex: 1,
 		flexDirection: 'row',
+		overflow: 'visible',
 	}),
 	footerDetails: RX.Styles.createViewStyle({
 		flex: 1,
 		flexDirection: 'column',
+		overflow: 'visible',
 	}),
 	footerSenderId: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
 		flexShrink: 1,
 		fontSize: FONT_NORMAL,
 		color: SENDER_TEXT,
+		overflow: 'visible',
 	}),
 	footerTimestamp: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
