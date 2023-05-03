@@ -71,10 +71,9 @@ ios/Podfile.lock
 android/app/upload.keystore
 android/keystore.properties
 ios/applesigningcertificate.p12
-macos_alarie_dev.provisionprofile
 ios/Podfile.lock
 .vscode/settings.json
 flatpak/.flatpak-builder/*
 flatpak/generated-sources.json
 package-lock.json
-electron/quadrix_store.provisionprofile
+*.provisionprofile
