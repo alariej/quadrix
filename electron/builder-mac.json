@@ -1,0 +1,37 @@
+{
+	"appId": "chat.quadrix.mac",
+	"productName": "quadrix.chat",
+	"mac": {
+		"category": "public.app-category.productivity",
+		"target": "mas",
+		"icon": "resources/mac/icon.icns",
+        "identity": null,
+        "hardenedRuntime": true,
+        "gatekeeperAssess": false
+	},
+	"mas": {
+        "type": "distribution",
+        "identity": "Jean-Francois Alarie (W988UQ8696)",
+        "hardenedRuntime": false,
+        "provisioningProfile": "quadrix_mac_app_store.provisionprofile",
+		"entitlements": "macos/entitlements.mas.plist",
+		"entitlementsInherit": "macos/entitlements.mas.inherit.plist",
+        "entitlementsLoginHelper": "macos/entitlementsLoginHelper.mas.plist",
+        "extendInfo": "macos/custom.plist"
+	},
+	"files": [
+		"!*",
+		"!**/*",
+		"electron-main.js",
+        "build-web/*"
+	],
+	"extraResources": [
+		"resources/mac/icon.icns",
+        "macos/de.lproj",
+        "macos/en.lproj",
+        "macos/fr.lproj"
+	],
+	"directories": {
+		"output": "dist"
+	}
+}
