@@ -53,8 +53,8 @@ yarn-error.log
 
 # Web dist
 #
-electron/build*
-electron/dist*
+electron/build-web
+electron/dist
 
 ios/Pods/
 .vscode/launch.json
