@@ -1,14 +1,14 @@
 {
 	"googleplay": {
-		"version": "1.6.0",
+		"version": "1.6.5",
 		"url": "https://play.google.com/store/apps/details?id=chat.quadrix.android"
 	},
 	"appstore": {
-		"version": "1.6.0",
+		"version": "1.6.5",
 		"url": "https://apps.apple.com/us/app/quadrix-chat/id1576110553"
 	},
 	"macappstore": {
-		"version": "1.6.0",
+		"version": "1.6.5",
 		"url": "https://apps.apple.com/us/app/quadrix-chat-desktop/id1577585119"
 	},
 	"microsoft": {
@@ -17,16 +17,16 @@
 	},
 	"snapstore": {
 		"version": {
-			"amd64": "1.6.0",
-			"arm64": "1.6.0",
-			"armhf": "1.6.0"
+			"amd64": "1.6.5",
+			"arm64": "1.6.5",
+			"armhf": "1.6.5"
 		},
 		"url": "https://snapcraft.io/quadrix"
 	},
 	"flathub": {
 		"version": {
-			"amd64": "1.6.0",
-			"arm64": "1.6.0"
+			"amd64": "1.6.5",
+			"arm64": "1.6.5"
 		},
 		"url": "https://flathub.org/apps/details/chat.quadrix.Quadrix"
 	}
