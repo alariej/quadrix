@@ -109,8 +109,6 @@ Please report issues, problems, crashes, bugs, etc. in the [Issues](https://gith
 
 Quadrix is provided without warranty of any kind. In no event shall the copyright holder be liable for any claim, damages or other liability arising from the use of this software.
 
-When using Quadrix, you are required to abide by any applicable laws. You can not use Quadrix for unlawful, illegal, defamatory, harmful, abusive, hateful, or ethnically offensive purposes.
-
 The Quadrix apps do not collect any information whatsover: No user ID's, no IP addresses, no messaging statistics, no usage data, no crash analytics, no nothing. However, the homeserver provider chosen by the user, the push notification service for mobile devices ([Firebase Cloud Messaging](https://firebase.google.com/support/privacy)) and the video-conferencing service ([Element Call](https://github.com/vector-im/element-call)) might collect usage data and other information for their own purposes. Please refer to their respective privacy policies for additional information.
 
 Quadrix is released under the [GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.html), requiring everyone to share their modifications when they also share the software in public. That aspect is commonly referred to as Copyleft.
