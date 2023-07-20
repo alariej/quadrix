@@ -90,6 +90,7 @@ interface DialogContainerProps {
 	buttonTextStyle?: RX.Types.TextStyleRuleSet;
 	animated?: boolean;
 	isSearchDialog?: boolean;
+	noButtonIcon?: boolean;
 }
 
 export default class DialogContainer extends RX.Component<DialogContainerProps, RX.Stateless> {
@@ -170,6 +171,7 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
 					disabled={this.props.confirmDisabled}
 					text={this.props.confirmButtonText || 'OK'}
 					textStyle={[styles.buttonTextConfirm, disabledStyle]}
+					noIcon={this.props.noButtonIcon}
 				/>
 			);
 		}
@@ -194,6 +196,7 @@ export default class DialogContainer extends RX.Component<DialogContainerProps, 
 					onPress={this.onCancelButtonClick}
 					text={this.props.cancelButtonText || cancel[UiStore.getLanguage()]}
 					textStyle={this.props.buttonTextStyle || styles.buttonTextCancel}
+					noIcon={this.props.noButtonIcon}
 				/>
 			);
 		}

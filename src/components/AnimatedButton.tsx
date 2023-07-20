@@ -24,6 +24,7 @@ interface AnimatedButtonProps {
 	animatedColor: string;
 	text?: string;
 	textStyle?: RX.Types.TextStyleRuleSet | RX.Types.TextStyleRuleSet[];
+	noIcon?: boolean;
 }
 
 export default class AnimatedButton extends RX.Component<AnimatedButtonProps, RX.Stateless> {
@@ -79,6 +80,19 @@ export default class AnimatedButton extends RX.Component<AnimatedButtonProps, RX
 			);
 		}
 
+		let icon;
+		if (!this.props.noIcon) {
+			icon = (
+				<IconSvg
+					source={this.props.iconSource}
+					style={this.props.iconStyle}
+					fillColor={this.props.iconFillColor}
+					height={this.props.iconHeight}
+					width={this.props.iconWidth}
+				/>
+			);
+		}
+
 		return (
 			<RX.View style={styles.container}>
 				<RX.Button
@@ -91,13 +105,7 @@ export default class AnimatedButton extends RX.Component<AnimatedButtonProps, RX
 					disabledOpacity={1}
 				>
 					{buttonText}
-					<IconSvg
-						source={this.props.iconSource}
-						style={this.props.iconStyle}
-						fillColor={this.props.iconFillColor}
-						height={this.props.iconHeight}
-						width={this.props.iconWidth}
-					/>
+					{icon}
 				</RX.Button>
 				<RX.Animated.View
 					style={[
