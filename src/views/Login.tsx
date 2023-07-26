@@ -18,6 +18,8 @@ import {
 	FONT_NORMAL,
 	LINK_TEXT,
 	BUTTON_LOGIN_INFO,
+	LOGO_FILL,
+	LABEL_TEXT,
 } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
@@ -94,7 +96,7 @@ const styles = {
 		fontFamily: AppFont.fontFamily,
 		textAlign: 'center',
 		fontSize: FONT_LARGE,
-		color: HEADER_TEXT,
+		color: LABEL_TEXT,
 		width: BUTTON_LONG_WIDTH,
 		paddingVertical: SPACING,
 	}),
@@ -404,7 +406,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 			>
 				<IconSvg
 					source={require('../resources/svg/RI_expand.json') as SvgFile}
-					fillColor={'white'}
+					fillColor={LABEL_TEXT}
 					height={20}
 					width={20}
 				/>
@@ -421,7 +423,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 			>
 				<IconSvg
 					source={require('../resources/svg/RI_info.json') as SvgFile}
-					fillColor={'white'}
+					fillColor={LABEL_TEXT}
 					height={20}
 					width={20}
 				/>
@@ -472,7 +474,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 						source={require('../resources/svg/logo.json') as SvgFile}
 						height={72}
 						width={72}
-						fillColor={'white'}
+						fillColor={LOGO_FILL}
 					/>
 				</RX.View>
 				<RX.View style={styles.containerUserInput}>

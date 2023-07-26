@@ -16,8 +16,7 @@ import {
 	PLACEHOLDER_TEXT,
 	BORDER_RADIUS_CHAT,
 	BUTTON_FILL_HEADER,
-	APP_BACKGROUND,
-	CONTENT_BACKGROUND,
+	LOGO_FILL,
 } from '../ui';
 import FileHandler from '../modules/FileHandler';
 import ApiClient from '../matrix/ApiClient';
@@ -55,7 +54,7 @@ const styles = {
 		flexDirection: 'row',
 		paddingTop: SPACING,
 		paddingBottom: SPACING,
-		backgroundColor: APP_BACKGROUND,
+		backgroundColor: LOGO_FILL,
 	}),
 	textInputContainer: RX.Styles.createViewStyle({
 		flex: 1,
@@ -759,11 +758,7 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 				style={[
 					styles.container,
 					{
-						borderRightWidth: this.isNarrow ? 0 : 1,
-						borderTopWidth: this.isNarrow ? 0 : 1,
-						borderLeftWidth: 0,
-						borderBottomWidth: 0,
-						borderColor: this.isNarrow ? undefined : CONTENT_BACKGROUND,
+						borderBottomLeftRadius: this.isNarrow ? undefined : 6,
 					},
 				]}
 				ref={component => (this.containerView = component!)}

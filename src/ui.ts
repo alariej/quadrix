@@ -52,7 +52,7 @@ export const FONT_EMOJI_LARGE = 32;
 
 export const LOGO_FILL = '#FF8000';
 export const SPINNER_FILL = LOGO_FILL;
-export const APP_BACKGROUND = LOGO_FILL;
+export const APP_BACKGROUND = '#F2EEE8';
 export const CONTENT_BACKGROUND = '#F2EEE8';
 export const COMPOSER_BACKGROUND = '#F4DEC5';
 export const OPAQUE_BACKGROUND = 'rgba(0, 0, 0, 0.7)';

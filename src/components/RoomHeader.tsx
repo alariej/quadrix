@@ -17,7 +17,7 @@ import {
 	AVATAR_FOREGROUND,
 	BUTTON_HEADER_BACKGROUND,
 	BUTTON_FILL_HEADER,
-	APP_BACKGROUND,
+	LOGO_FILL,
 } from '../ui';
 import { ComponentBase } from 'resub';
 import DataStore from '../stores/DataStore';
@@ -44,7 +44,7 @@ const styles = {
 	container: RX.Styles.createViewStyle({
 		flexDirection: 'row',
 		height: HEADER_HEIGHT,
-		backgroundColor: APP_BACKGROUND,
+		backgroundColor: LOGO_FILL,
 	}),
 	containerRoomHeader: RX.Styles.createViewStyle({
 		flex: 1,

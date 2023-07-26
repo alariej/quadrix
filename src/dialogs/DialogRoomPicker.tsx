@@ -10,7 +10,7 @@ import {
 	SPACING,
 	TILE_HEIGHT,
 	FONT_LARGE,
-	APP_BACKGROUND,
+	LOGO_FILL,
 } from '../ui';
 import UiStore from '../stores/UiStore';
 import AppFont from '../modules/AppFont';
@@ -31,9 +31,9 @@ const styles = {
 		alignSelf: 'center',
 		borderRadius: BORDER_RADIUS,
 		width: TILE_WIDTH,
-		marginBottom: SPACING,
+		marginBottom: 1,
 		padding: SPACING,
-		backgroundColor: APP_BACKGROUND,
+		backgroundColor: LOGO_FILL,
 	}),
 	labelText: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,

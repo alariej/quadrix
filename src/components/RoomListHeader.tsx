@@ -11,11 +11,10 @@ import {
 	SPACING,
 	TRANSPARENT_BACKGROUND,
 	PAGE_MARGIN,
-	BUTTON_HEADER_WIDTH,
 	BUTTON_HEADER_BACKGROUND,
 	BUTTON_FILL_HEADER,
 	HEADER_TEXT,
-	APP_BACKGROUND,
+	LOGO_FILL,
 } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogNewRoom from '../dialogs/DialogNewRoom';

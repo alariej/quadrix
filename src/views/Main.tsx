@@ -12,6 +12,7 @@ import {
 	CONTENT_BACKGROUND,
 	BUTTON_FILL,
 	APP_BACKGROUND,
+	LOGO_FILL,
 } from '../ui';
 import DataStore from '../stores/DataStore';
 import ApiClient from '../matrix/ApiClient';
@@ -58,13 +59,22 @@ const styles = {
 		width: PAGE_WIDE_PADDING,
 		backgroundColor: CONTENT_BACKGROUND,
 		borderTopWidth: HEADER_HEIGHT,
-		borderColor: APP_BACKGROUND,
+		borderColor: LOGO_FILL,
 	}),
 	paddingRight: RX.Styles.createViewStyle({
 		width: PAGE_WIDE_PADDING,
 		backgroundColor: CONTENT_BACKGROUND,
-		borderTopWidth: HEADER_HEIGHT,
-		borderColor: APP_BACKGROUND,
+		borderTopWidth: HEADER_HEIGHT + 20,
+		borderColor: LOGO_FILL,
+	}),
+	cornerCover: RX.Styles.createViewStyle({
+		position: 'absolute',
+		top: HEADER_HEIGHT,
+		left: PAGE_WIDE_PADDING,
+		height: 20,
+		width: PAGE_WIDE_PADDING,
+		backgroundColor: APP_BACKGROUND,
+		borderTopRightRadius: 6,
 	}),
 	background: RX.Styles.createViewStyle({
 		position: 'absolute',
@@ -522,9 +532,23 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 
 		let paddingLeft;
 		let paddingRight;
+		let cornerCover;
 		if (this.state.layout.type === 'wide') {
 			paddingLeft = <RX.View style={styles.paddingLeft} />;
 			paddingRight = <RX.View style={styles.paddingRight} />;
+			cornerCover = (
+				<RX.View
+					style={{
+						position: 'absolute',
+						top: HEADER_HEIGHT,
+						left: PAGE_WIDE_PADDING,
+						height: 20,
+						width: PAGE_WIDE_PADDING,
+						backgroundColor: APP_BACKGROUND,
+						borderTopRightRadius: 6,
+					}}
+				/>
+			);
 		}
 
 		return (
@@ -546,6 +570,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 					>
 						{paddingLeft}
 						{paddingRight}
+						{cornerCover}
 						{roomPage}
 					</RX.Animated.View>
 				</RX.Animated.View>
