@@ -523,6 +523,7 @@ export default class Login extends RX.Component<LoginProps, LoginState> {
 				buttonStyle={styles.mainButton}
 				buttonTextStyle={styles.mainButtonText}
 				scrollEnabled={UiStore.getPlatform() === 'android'}
+				noButtonIcon={true}
 			/>
 		);
 
