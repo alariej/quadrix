@@ -6,20 +6,18 @@ import MessageTile from '../components/MessageTile';
 import DialogRoomPicker from './DialogRoomPicker';
 import {
 	OPAQUE_BACKGROUND,
-	BUTTON_MODAL_BACKGROUND,
 	BUTTON_MODAL_TEXT,
-	BUTTON_DISABLED_TEXT,
 	BORDER_RADIUS,
 	STACKED_BUTTON_HEIGHT,
 	FONT_LARGE,
-	SPACING,
 	TRANSPARENT_BACKGROUND,
 	OPAQUE_LIGHT_BACKGROUND,
 	OBJECT_MARGIN,
-	ICON_INFO_SIZE,
-	ICON_INFO_FILL,
 	BUTTON_WARNING_TEXT,
 	BUTTON_MENU_WIDTH,
+	LIGHT_BACKGROUND,
+	HEADER_TEXT,
+	OPAQUE_MEDIUM_BACKGROUND,
 } from '../ui';
 import { LayoutInfo } from 'reactxp/dist/common/Types';
 import DataStore from '../stores/DataStore';
@@ -60,8 +58,9 @@ import SpinnerUtils from '../utils/SpinnerUtils';
 import Spinner from '../components/Spinner';
 import AppFont from '../modules/AppFont';
 import StringUtils from '../utils/StringUtils';
-import IconSvg, { SvgFile } from '../components/IconSvg';
+import { SvgFile } from '../components/IconSvg';
 import { FilteredChatEvent } from '../models/FilteredChatEvent';
+import MenuButton from '../components/MenuButton';
 
 const styles = {
 	modalScreen: RX.Styles.createViewStyle({
@@ -79,28 +78,19 @@ const styles = {
 		overflow: 'visible',
 	}),
 	buttonDialog: RX.Styles.createViewStyle({
-		flexDirection: 'row',
-		alignItems: 'center',
-		padding: SPACING,
-		borderRadius: BORDER_RADIUS,
 		width: BUTTON_MENU_WIDTH,
-		height: STACKED_BUTTON_HEIGHT,
-		backgroundColor: BUTTON_MODAL_BACKGROUND,
-		marginBottom: 1,
-		shadowOffset: { width: -1, height: 1 },
-		shadowColor: OPAQUE_LIGHT_BACKGROUND,
-		shadowRadius: 3,
-		elevation: 3,
-		shadowOpacity: 1,
-		overflow: 'visible',
+		height: 32,
+		borderRadius: 32 / 2,
+		backgroundColor: OPAQUE_MEDIUM_BACKGROUND,
+		marginBottom: 5,
 	}),
 	buttonText: RX.Styles.createTextStyle({
 		flex: 1,
 		fontFamily: AppFont.fontFamily,
 		fontSize: FONT_LARGE,
-		margin: SPACING,
+		marginLeft: OBJECT_MARGIN,
 		textAlign: 'left',
-		color: BUTTON_MODAL_TEXT,
+		color: HEADER_TEXT,
 	}),
 	boldText: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
@@ -678,230 +668,160 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 			) {
 				n++;
 				detailsButton = (
-					<RX.Button
-						style={styles.buttonDialog}
+					<MenuButton
+						buttonStyle={styles.buttonDialog}
+						iconSource={require('../resources/svg/RI_info.json') as SvgFile}
+						iconStyle={{ opacity: this.state.offline ? 0.3 : 1 }}
+						iconFillColor={HEADER_TEXT}
+						iconHeight={20}
+						iconWidth={20}
+						animatedColor={LIGHT_BACKGROUND}
 						onPress={event => this.viewDetails(event)}
-						disableTouchOpacityAnimation={true}
-						activeOpacity={1}
-					>
-						<RX.Text
-							allowFontScaling={false}
-							style={[
-								styles.buttonText,
-								this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined,
-							]}
-						>
-							{details[this.language]}
-						</RX.Text>
-						<IconSvg
-							source={require('../resources/svg/RI_info.json') as SvgFile}
-							fillColor={ICON_INFO_FILL}
-							height={ICON_INFO_SIZE}
-							width={ICON_INFO_SIZE}
-						/>
-					</RX.Button>
+						disabled={this.state.offline}
+						text={details[this.language]}
+						textStyle={[styles.buttonText, { opacity: this.state.offline ? 0.3 : 1 }]}
+						buttonHeight={32}
+					/>
 				);
 			}
 
 			if (this.isMedia && (this.isElectron || this.isMobile)) {
 				n++;
 				openButton = (
-					<RX.Button
-						style={styles.buttonDialog}
+					<MenuButton
+						buttonStyle={styles.buttonDialog}
+						iconSource={require('../resources/svg/RI_msg_open.json') as SvgFile}
+						iconStyle={{ opacity: this.state.offline ? 0.3 : 1 }}
+						iconFillColor={HEADER_TEXT}
+						iconHeight={20}
+						iconWidth={20}
+						animatedColor={LIGHT_BACKGROUND}
 						onPress={event => this.viewFile(event)}
-						disableTouchOpacityAnimation={true}
-						activeOpacity={1}
 						disabled={this.state.offline}
-						disabledOpacity={1}
-					>
-						<RX.Text
-							allowFontScaling={false}
-							style={[
-								styles.buttonText,
-								this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined,
-							]}
-						>
-							{open[this.language]}
-						</RX.Text>
-						<IconSvg
-							source={require('../resources/svg/RI_msg_open.json') as SvgFile}
-							fillColor={ICON_INFO_FILL}
-							height={ICON_INFO_SIZE}
-							width={ICON_INFO_SIZE}
-						/>
-					</RX.Button>
+						text={open[this.language]}
+						textStyle={[styles.buttonText, { opacity: this.state.offline ? 0.3 : 1 }]}
+						buttonHeight={32}
+					/>
 				);
 			}
 
 			if (this.isMedia && (this.isElectron || this.isMobile)) {
 				n++;
 				saveAsButton = (
-					<RX.Button
-						style={styles.buttonDialog}
+					<MenuButton
+						buttonStyle={styles.buttonDialog}
+						iconSource={require('../resources/svg/RI_msg_save.json') as SvgFile}
+						iconStyle={{ opacity: this.state.offline ? 0.3 : 1 }}
+						iconFillColor={HEADER_TEXT}
+						iconHeight={20}
+						iconWidth={20}
+						animatedColor={LIGHT_BACKGROUND}
 						onPress={event => this.saveFile(event)}
-						disableTouchOpacityAnimation={true}
-						activeOpacity={1}
 						disabled={this.state.offline}
-						disabledOpacity={1}
-					>
-						<RX.Text
-							allowFontScaling={false}
-							style={[
-								styles.buttonText,
-								this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined,
-							]}
-						>
-							{save[this.language]}
-						</RX.Text>
-						<IconSvg
-							source={require('../resources/svg/RI_msg_save.json') as SvgFile}
-							fillColor={ICON_INFO_FILL}
-							height={ICON_INFO_SIZE}
-							width={ICON_INFO_SIZE}
-						/>
-					</RX.Button>
+						text={save[this.language]}
+						textStyle={[styles.buttonText, { opacity: this.state.offline ? 0.3 : 1 }]}
+						buttonHeight={32}
+					/>
 				);
 			}
 
 			if (this.isMobile) {
 				n++;
 				shareButton = (
-					<RX.Button
-						style={styles.buttonDialog}
+					<MenuButton
+						buttonStyle={styles.buttonDialog}
+						iconSource={require('../resources/svg/RI_msg_share.json') as SvgFile}
+						iconStyle={{ opacity: this.state.offline ? 0.3 : 1 }}
+						iconFillColor={HEADER_TEXT}
+						iconHeight={20}
+						iconWidth={20}
+						animatedColor={LIGHT_BACKGROUND}
 						onPress={event => this.shareExternal(event)}
-						disableTouchOpacityAnimation={true}
-						activeOpacity={1}
 						disabled={this.state.offline}
-						disabledOpacity={1}
-					>
-						<RX.Text
-							allowFontScaling={false}
-							style={[
-								styles.buttonText,
-								this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined,
-							]}
-						>
-							{share[this.language]}
-						</RX.Text>
-						<IconSvg
-							source={require('../resources/svg/RI_msg_share.json') as SvgFile}
-							fillColor={ICON_INFO_FILL}
-							height={ICON_INFO_SIZE}
-							width={ICON_INFO_SIZE}
-						/>
-					</RX.Button>
+						text={share[this.language]}
+						textStyle={[styles.buttonText, { opacity: this.state.offline ? 0.3 : 1 }]}
+						buttonHeight={32}
+					/>
 				);
 			}
 
 			if (this.props.roomType !== 'notepad') {
 				n++;
 				replyButton = (
-					<RX.Button
-						style={styles.buttonDialog}
+					<MenuButton
+						buttonStyle={styles.buttonDialog}
+						iconSource={require('../resources/svg/RI_msg_reply.json') as SvgFile}
+						iconStyle={{ opacity: this.state.offline ? 0.3 : 1 }}
+						iconFillColor={HEADER_TEXT}
+						iconHeight={20}
+						iconWidth={20}
+						animatedColor={LIGHT_BACKGROUND}
 						onPress={this.setReplyMessage}
-						disableTouchOpacityAnimation={true}
-						activeOpacity={1}
 						disabled={this.state.offline}
-						disabledOpacity={1}
-					>
-						<RX.Text
-							allowFontScaling={false}
-							style={[
-								styles.buttonText,
-								this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined,
-							]}
-						>
-							{reply[this.language]}
-						</RX.Text>
-						<IconSvg
-							source={require('../resources/svg/RI_msg_reply.json') as SvgFile}
-							fillColor={ICON_INFO_FILL}
-							height={ICON_INFO_SIZE}
-							width={ICON_INFO_SIZE}
-						/>
-					</RX.Button>
+						text={reply[this.language]}
+						textStyle={[styles.buttonText, { opacity: this.state.offline ? 0.3 : 1 }]}
+						buttonHeight={32}
+					/>
 				);
 			}
 
 			forwardButton = (
-				<RX.Button
-					style={styles.buttonDialog}
+				<MenuButton
+					buttonStyle={styles.buttonDialog}
+					iconSource={require('../resources/svg/RI_msg_forward.json') as SvgFile}
+					iconStyle={{ opacity: this.state.offline ? 0.3 : 1 }}
+					iconFillColor={HEADER_TEXT}
+					iconHeight={20}
+					iconWidth={20}
+					animatedColor={LIGHT_BACKGROUND}
 					onPress={event => this.showRoomList(event)}
-					disableTouchOpacityAnimation={true}
-					activeOpacity={1}
 					disabled={this.state.offline}
-					disabledOpacity={1}
-				>
-					<RX.Text
-						allowFontScaling={false}
-						style={[styles.buttonText, this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined]}
-					>
-						{forward[this.language]}
-					</RX.Text>
-					<IconSvg
-						source={require('../resources/svg/RI_msg_forward.json') as SvgFile}
-						fillColor={ICON_INFO_FILL}
-						height={ICON_INFO_SIZE}
-						width={ICON_INFO_SIZE}
-					/>
-				</RX.Button>
+					text={forward[this.language]}
+					textStyle={[styles.buttonText, { opacity: this.state.offline ? 0.3 : 1 }]}
+					buttonHeight={32}
+				/>
 			);
 
 			if (ApiClient.credentials.userIdFull === this.props.event.senderId) {
 				n++;
 				deleteButton = (
-					<RX.Button
-						style={styles.buttonDialog}
+					<MenuButton
+						buttonStyle={styles.buttonDialog}
+						iconSource={require('../resources/svg/RI_msg_delete.json') as SvgFile}
+						iconStyle={{ opacity: this.state.offline ? 0.3 : 1 }}
+						iconFillColor={HEADER_TEXT}
+						iconHeight={20}
+						iconWidth={20}
+						animatedColor={LIGHT_BACKGROUND}
 						onPress={this.confirmDeleteMessage}
-						disableTouchOpacityAnimation={true}
-						activeOpacity={1}
-					>
-						<RX.Text
-							allowFontScaling={false}
-							style={[
-								styles.buttonText,
-								this.state.offline ? { color: BUTTON_DISABLED_TEXT } : undefined,
-							]}
-						>
-							{deleteMessage[this.language]}
-						</RX.Text>
-						<IconSvg
-							source={require('../resources/svg/RI_msg_delete.json') as SvgFile}
-							fillColor={ICON_INFO_FILL}
-							height={ICON_INFO_SIZE}
-							width={ICON_INFO_SIZE}
-						/>
-					</RX.Button>
+						disabled={this.state.offline}
+						text={deleteMessage[this.language]}
+						textStyle={[styles.buttonText, { opacity: this.state.offline ? 0.3 : 1 }]}
+						buttonHeight={32}
+					/>
 				);
 			}
 
 			if (this.props.roomType === 'community') {
 				n++;
 				reportButton = (
-					<RX.Button
-						style={styles.buttonDialog}
+					<MenuButton
+						buttonStyle={styles.buttonDialog}
+						iconSource={require('../resources/svg/RI_msg_report.json') as SvgFile}
+						iconStyle={{ opacity: this.state.offline ? 0.3 : 1 }}
+						iconFillColor={HEADER_TEXT}
+						iconHeight={20}
+						iconWidth={20}
+						animatedColor={LIGHT_BACKGROUND}
 						onPress={this.confirmReportMessage}
-						disableTouchOpacityAnimation={true}
-						activeOpacity={1}
 						disabled={this.state.offline}
-						disabledOpacity={1}
-					>
-						<RX.Text
-							allowFontScaling={false}
-							style={[
-								styles.buttonText,
-								{ color: this.state.offline ? BUTTON_DISABLED_TEXT : BUTTON_WARNING_TEXT },
-							]}
-						>
-							{report[this.language]}
-						</RX.Text>
-						<IconSvg
-							source={require('../resources/svg/RI_msg_report.json') as SvgFile}
-							fillColor={BUTTON_WARNING_TEXT}
-							height={ICON_INFO_SIZE}
-							width={ICON_INFO_SIZE}
-						/>
-					</RX.Button>
+						text={report[this.language]}
+						textStyle={[
+							styles.buttonText,
+							{ color: BUTTON_WARNING_TEXT, opacity: this.state.offline ? 0.3 : 1 },
+						]}
+						buttonHeight={32}
+					/>
 				);
 			}
 

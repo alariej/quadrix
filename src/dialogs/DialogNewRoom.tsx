@@ -5,23 +5,20 @@ import DialogNewNotepad from './DialogNewNotepad';
 import DialogNewDirectConversation from './DialogNewDirectConversation';
 import DialogJoinCommunity from './DialogJoinCommunity';
 import {
-	BUTTON_MODAL_BACKGROUND,
-	BUTTON_MODAL_TEXT,
 	OPAQUE_BACKGROUND,
-	BORDER_RADIUS,
 	DIALOG_WIDTH,
-	SPACING,
 	AVATAR_TILE_WIDTH,
-	TILE_HEIGHT,
 	FONT_LARGE,
-	AVATAR_FOREGROUND,
 	OBJECT_MARGIN,
-	ICON_REDUCTION_FACTOR,
+	STACKED_BUTTON_HEIGHT,
+	HEADER_TEXT,
+	LIGHT_BACKGROUND,
 } from '../ui';
 import UiStore from '../stores/UiStore';
 import { createNewConv, createNewGroup, joinPublicComm, createNewNote } from '../translations';
-import IconSvg, { SvgFile } from '../components/IconSvg';
+import { SvgFile } from '../components/IconSvg';
 import AppFont from '../modules/AppFont';
+import MenuButton from '../components/MenuButton';
 
 const styles = {
 	containerButtons: RX.Styles.createViewStyle({
@@ -29,23 +26,19 @@ const styles = {
 		alignItems: 'center',
 		justifyContent: 'center',
 	}),
-	containerButton: RX.Styles.createViewStyle({
-		flexDirection: 'row',
-		alignItems: 'center',
-		borderRadius: BORDER_RADIUS,
+	buttonDialog: RX.Styles.createViewStyle({
 		width: DIALOG_WIDTH,
-		height: TILE_HEIGHT,
-		backgroundColor: BUTTON_MODAL_BACKGROUND,
-		padding: SPACING,
-		marginBottom: 1,
-		cursor: 'pointer',
+		height: STACKED_BUTTON_HEIGHT,
+		marginBottom: 10,
 	}),
 	buttonText: RX.Styles.createTextStyle({
-		fontFamily: AppFont.fontFamily,
 		flex: 1,
+		fontFamily: AppFont.fontFamily,
 		fontSize: FONT_LARGE,
-		color: BUTTON_MODAL_TEXT,
+		color: HEADER_TEXT,
+		marginLeft: OBJECT_MARGIN,
 		marginRight: OBJECT_MARGIN,
+		textAlign: 'left',
 	}),
 	modalScreen: RX.Styles.createViewStyle({
 		flex: 1,
@@ -108,22 +101,18 @@ export default class DialogNewRoom extends RX.Component<DialogNewRoomProps, RX.S
 			(UiStore.getIsElectron() && UiStore.getDesktopOS() === 'Linux')
 		) {
 			joinCommunityButton = (
-				<RX.View
-					style={styles.containerButton}
+				<MenuButton
+					buttonStyle={styles.buttonDialog}
+					iconSource={require('../resources/svg/RI_public.json') as SvgFile}
+					iconFillColor={HEADER_TEXT}
+					iconHeight={20}
+					iconWidth={20}
+					animatedColor={LIGHT_BACKGROUND}
 					onPress={event => this.joinCommunity(event)}
-					disableTouchOpacityAnimation={false}
-					activeOpacity={0.8}
-				>
-					<RX.View style={styles.containerAvatar}>
-						<IconSvg
-							source={require('../resources/svg/RI_public.json') as SvgFile}
-							fillColor={AVATAR_FOREGROUND}
-							height={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
-							width={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
-						/>
-					</RX.View>
-					<RX.Text style={styles.buttonText}>{joinPublicComm[language]}</RX.Text>
-				</RX.View>
+					text={joinPublicComm[language]}
+					textStyle={styles.buttonText}
+					numberOfLines={2}
+				/>
 			);
 		}
 
@@ -139,57 +128,43 @@ export default class DialogNewRoom extends RX.Component<DialogNewRoomProps, RX.S
 					disableTouchOpacityAnimation={true}
 					activeOpacity={1}
 				>
-					<RX.View
-						style={styles.containerButton}
+					<MenuButton
+						buttonStyle={styles.buttonDialog}
+						iconSource={require('../resources/svg/RI_user.json') as SvgFile}
+						iconFillColor={HEADER_TEXT}
+						iconHeight={20}
+						iconWidth={20}
+						animatedColor={LIGHT_BACKGROUND}
 						onPress={event => this.startNewConversation(event)}
-						disableTouchOpacityAnimation={false}
-						activeOpacity={0.8}
-					>
-						<RX.View style={styles.containerAvatar}>
-							<IconSvg
-								source={require('../resources/svg/RI_user.json') as SvgFile}
-								fillColor={AVATAR_FOREGROUND}
-								height={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
-								width={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
-							/>
-						</RX.View>
-						<RX.Text style={styles.buttonText}>{createNewConv[language]}</RX.Text>
-					</RX.View>
-					<RX.View
-						style={styles.containerButton}
+						text={createNewConv[language]}
+						textStyle={styles.buttonText}
+						numberOfLines={2}
+					/>
+					<MenuButton
+						buttonStyle={styles.buttonDialog}
+						iconSource={require('../resources/svg/RI_users.json') as SvgFile}
+						iconFillColor={HEADER_TEXT}
+						iconHeight={20}
+						iconWidth={20}
+						animatedColor={LIGHT_BACKGROUND}
 						onPress={event => this.createNewGroup(event)}
-						disableTouchOpacityAnimation={false}
-						activeOpacity={0.8}
-					>
-						<RX.View style={styles.containerAvatar}>
-							<IconSvg
-								source={require('../resources/svg/RI_users.json') as SvgFile}
-								fillColor={AVATAR_FOREGROUND}
-								height={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
-								width={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
-							/>
-						</RX.View>
-						<RX.Text style={styles.buttonText}>{createNewGroup[language]}</RX.Text>
-					</RX.View>
-
+						text={createNewGroup[language]}
+						textStyle={styles.buttonText}
+						numberOfLines={2}
+					/>
 					{joinCommunityButton!}
-
-					<RX.View
-						style={styles.containerButton}
+					<MenuButton
+						buttonStyle={styles.buttonDialog}
+						iconSource={require('../resources/svg/RI_notepad.json') as SvgFile}
+						iconFillColor={HEADER_TEXT}
+						iconHeight={20}
+						iconWidth={20}
+						animatedColor={LIGHT_BACKGROUND}
 						onPress={event => this.createNewNotepad(event)}
-						disableTouchOpacityAnimation={false}
-						activeOpacity={0.8}
-					>
-						<RX.View style={styles.containerAvatar}>
-							<IconSvg
-								source={require('../resources/svg/RI_notepad.json') as SvgFile}
-								fillColor={AVATAR_FOREGROUND}
-								height={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
-								width={AVATAR_TILE_WIDTH / ICON_REDUCTION_FACTOR}
-							/>
-						</RX.View>
-						<RX.Text style={styles.buttonText}>{createNewNote[language]}</RX.Text>
-					</RX.View>
+						text={createNewNote[language]}
+						textStyle={styles.buttonText}
+						numberOfLines={2}
+					/>
 				</RX.View>
 			</RX.View>
 		);

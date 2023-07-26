@@ -4,25 +4,20 @@ import { ComponentBase } from 'resub';
 import UiStore from '../stores/UiStore';
 import {
 	OPAQUE_BACKGROUND,
-	BUTTON_MODAL_BACKGROUND,
-	BUTTON_MODAL_TEXT,
-	BORDER_RADIUS,
 	STACKED_BUTTON_HEIGHT,
 	FONT_LARGE,
-	SPACING,
-	ICON_INFO_SIZE,
-	ICON_INFO_FILL,
 	OBJECT_MARGIN,
 	PAGE_MARGIN,
 	PAGE_WIDE_PADDING,
 	BUTTON_MENU_MAIN_WIDTH,
 	LIGHT_BACKGROUND,
 	HEADER_HEIGHT,
+	HEADER_TEXT,
 } from '../ui';
 import { about, Languages, logout, newRoom, userSettings } from '../translations';
 import AppFont from '../modules/AppFont';
 import { SvgFile } from '../components/IconSvg';
-import AnimatedButton from '../components/AnimatedButton';
+import MenuButton from '../components/MenuButton';
 import { LayoutInfo } from 'reactxp/dist/common/Types';
 
 const styles = {
@@ -36,22 +31,17 @@ const styles = {
 		flexDirection: 'column',
 	}),
 	buttonDialog: RX.Styles.createViewStyle({
-		flexDirection: 'row',
-		alignItems: 'center',
-		padding: SPACING,
-		borderRadius: BORDER_RADIUS,
 		width: BUTTON_MENU_MAIN_WIDTH,
 		height: STACKED_BUTTON_HEIGHT,
-		backgroundColor: BUTTON_MODAL_BACKGROUND,
-		marginBottom: 1,
+		marginBottom: 10,
 	}),
 	buttonText: RX.Styles.createTextStyle({
 		flex: 1,
 		fontFamily: AppFont.fontFamily,
 		fontSize: FONT_LARGE,
-		margin: SPACING,
+		marginLeft: OBJECT_MARGIN,
 		textAlign: 'left',
-		color: BUTTON_MODAL_TEXT,
+		color: HEADER_TEXT,
 	}),
 };
 
@@ -142,13 +132,13 @@ export default class DialogMenuMain extends ComponentBase<DialogMenuMainProps, D
 
 	public render(): JSX.Element | null {
 		const newChatButton = (
-			<AnimatedButton
+			<MenuButton
 				buttonStyle={styles.buttonDialog}
 				iconSource={require('../resources/svg/RI_newchat.json') as SvgFile}
 				iconStyle={{ opacity: this.state.offline ? 0.3 : 1 }}
-				iconFillColor={ICON_INFO_FILL}
-				iconHeight={ICON_INFO_SIZE}
-				iconWidth={ICON_INFO_SIZE}
+				iconFillColor={HEADER_TEXT}
+				iconHeight={20}
+				iconWidth={20}
 				animatedColor={LIGHT_BACKGROUND}
 				onPress={this.props.onPressNewChat}
 				disabled={this.state.offline}
@@ -158,13 +148,13 @@ export default class DialogMenuMain extends ComponentBase<DialogMenuMainProps, D
 		);
 
 		const settingsButton = (
-			<AnimatedButton
+			<MenuButton
 				buttonStyle={styles.buttonDialog}
 				iconSource={require('../resources/svg/RI_settings.json') as SvgFile}
 				iconStyle={{ opacity: this.state.offline ? 0.3 : 1 }}
-				iconFillColor={ICON_INFO_FILL}
-				iconHeight={ICON_INFO_SIZE}
-				iconWidth={ICON_INFO_SIZE}
+				iconFillColor={HEADER_TEXT}
+				iconHeight={24}
+				iconWidth={24}
 				animatedColor={LIGHT_BACKGROUND}
 				onPress={this.props.onPressSettings}
 				disabled={this.state.offline}
@@ -174,12 +164,12 @@ export default class DialogMenuMain extends ComponentBase<DialogMenuMainProps, D
 		);
 
 		const aboutButton = (
-			<AnimatedButton
+			<MenuButton
 				buttonStyle={styles.buttonDialog}
 				iconSource={require('../resources/svg/RI_info.json') as SvgFile}
-				iconFillColor={ICON_INFO_FILL}
-				iconHeight={ICON_INFO_SIZE}
-				iconWidth={ICON_INFO_SIZE}
+				iconFillColor={HEADER_TEXT}
+				iconHeight={26}
+				iconWidth={26}
 				animatedColor={LIGHT_BACKGROUND}
 				onPress={this.props.onPressAbout}
 				text={about[this.language]}
@@ -188,12 +178,12 @@ export default class DialogMenuMain extends ComponentBase<DialogMenuMainProps, D
 		);
 
 		const logoutButton = (
-			<AnimatedButton
+			<MenuButton
 				buttonStyle={styles.buttonDialog}
 				iconSource={require('../resources/svg/RI_power.json') as SvgFile}
-				iconFillColor={ICON_INFO_FILL}
-				iconHeight={ICON_INFO_SIZE}
-				iconWidth={ICON_INFO_SIZE}
+				iconFillColor={HEADER_TEXT}
+				iconHeight={22}
+				iconWidth={22}
 				animatedColor={LIGHT_BACKGROUND}
 				onPress={this.props.onPressLogout}
 				text={logout[this.language]}

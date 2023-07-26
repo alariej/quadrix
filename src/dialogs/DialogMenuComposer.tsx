@@ -4,29 +4,26 @@ import { ComponentBase } from 'resub';
 import UiStore from '../stores/UiStore';
 import {
 	OPAQUE_BACKGROUND,
-	BUTTON_MODAL_BACKGROUND,
-	BUTTON_MODAL_TEXT,
-	BORDER_RADIUS,
 	STACKED_BUTTON_HEIGHT,
 	FONT_LARGE,
 	SPACING,
-	ICON_INFO_SIZE,
-	ICON_INFO_FILL,
 	PAGE_MARGIN,
 	PAGE_WIDE_PADDING,
 	BUTTON_COMPOSER_WIDTH,
 	BUTTON_MENU_COMPOSER_WIDTH,
 	LIGHT_BACKGROUND,
+	OBJECT_MARGIN,
+	HEADER_TEXT,
 } from '../ui';
 import { Languages, pickFile, pickImage, videoconferenceJoin, videoconferenceStart } from '../translations';
 import AppFont from '../modules/AppFont';
 import { SvgFile } from '../components/IconSvg';
 import { RoomType } from '../models/MatrixApi';
-import AnimatedButton from '../components/AnimatedButton';
 import { LayoutInfo } from 'reactxp/dist/common/Types';
 import DataStore from '../stores/DataStore';
 import EventUtils from '../utils/EventUtils';
 import ApiClient from '../matrix/ApiClient';
+import MenuButton from '../components/MenuButton';
 
 const styles = {
 	modalScreen: RX.Styles.createViewStyle({
@@ -39,22 +36,17 @@ const styles = {
 		flexDirection: 'column',
 	}),
 	buttonDialog: RX.Styles.createViewStyle({
-		flexDirection: 'row',
-		alignItems: 'center',
-		padding: SPACING,
-		borderRadius: BORDER_RADIUS,
 		width: BUTTON_MENU_COMPOSER_WIDTH,
 		height: STACKED_BUTTON_HEIGHT,
-		backgroundColor: BUTTON_MODAL_BACKGROUND,
-		marginBottom: 1,
+		marginBottom: 10,
 	}),
 	buttonText: RX.Styles.createTextStyle({
 		flex: 1,
 		fontFamily: AppFont.fontFamily,
 		fontSize: FONT_LARGE,
-		margin: SPACING,
+		marginLeft: OBJECT_MARGIN,
 		textAlign: 'left',
-		color: BUTTON_MODAL_TEXT,
+		color: HEADER_TEXT,
 	}),
 };
 
@@ -147,13 +139,13 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 
 	public render(): JSX.Element | null {
 		const fileButton = (
-			<AnimatedButton
+			<MenuButton
 				buttonStyle={styles.buttonDialog}
 				iconSource={require('../resources/svg/RI_attach.json') as SvgFile}
 				iconStyle={{ opacity: this.state.offline ? 0.3 : 1 }}
-				iconFillColor={ICON_INFO_FILL}
-				iconHeight={ICON_INFO_SIZE}
-				iconWidth={ICON_INFO_SIZE}
+				iconFillColor={HEADER_TEXT}
+				iconHeight={22}
+				iconWidth={22}
 				animatedColor={LIGHT_BACKGROUND}
 				onPress={this.props.onPressFile}
 				disabled={this.state.offline}
@@ -165,13 +157,13 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 		let imageButton;
 		if (['ios', 'android'].includes(UiStore.getPlatform())) {
 			imageButton = (
-				<AnimatedButton
+				<MenuButton
 					buttonStyle={styles.buttonDialog}
 					iconSource={require('../resources/svg/RI_image.json') as SvgFile}
 					iconStyle={{ opacity: this.state.offline ? 0.3 : 1 }}
-					iconFillColor={ICON_INFO_FILL}
-					iconHeight={ICON_INFO_SIZE}
-					iconWidth={ICON_INFO_SIZE}
+					iconFillColor={HEADER_TEXT}
+					iconHeight={22}
+					iconWidth={22}
 					animatedColor={LIGHT_BACKGROUND}
 					onPress={this.props.onPressImage}
 					disabled={this.state.offline}
@@ -198,13 +190,13 @@ export default class DialogMenuComposer extends ComponentBase<DialogMenuComposer
 		}
 
 		const videoCallButton = (
-			<AnimatedButton
+			<MenuButton
 				buttonStyle={styles.buttonDialog}
 				iconSource={require('../resources/svg/RI_videoconf.json') as SvgFile}
 				iconStyle={{ opacity: videoCallButtonDisabled ? 0.3 : 1 }}
-				iconFillColor={ICON_INFO_FILL}
-				iconHeight={ICON_INFO_SIZE}
-				iconWidth={ICON_INFO_SIZE}
+				iconFillColor={HEADER_TEXT}
+				iconHeight={20}
+				iconWidth={20}
 				animatedColor={LIGHT_BACKGROUND}
 				onPress={this.props.onPressVideoCall}
 				disabled={videoCallButtonDisabled}
