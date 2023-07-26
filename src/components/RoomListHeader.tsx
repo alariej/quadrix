@@ -31,11 +31,15 @@ import About from './About';
 import AnimatedButton from './AnimatedButton';
 import StoreVersion from '../modules/StoreVersion';
 
+const bracketHeight = 22;
+const bracketWidth = 3;
+const bracketBorderWidth = 1;
+
 const styles = {
 	container: RX.Styles.createViewStyle({
 		flexDirection: 'row',
 		height: HEADER_HEIGHT,
-		backgroundColor: APP_BACKGROUND,
+		backgroundColor: LOGO_FILL,
 	}),
 	containerHeader: RX.Styles.createViewStyle({
 		flex: 1,
@@ -57,8 +61,7 @@ const styles = {
 	containerRoundButton: RX.Styles.createViewStyle({
 		width: HEADER_HEIGHT / 2,
 		height: HEADER_HEIGHT,
-		marginLeft: SPACING,
-		marginRight: SPACING,
+		justifyContent: 'center',
 	}),
 	roundButton: RX.Styles.createViewStyle({
 		width: HEADER_HEIGHT / 2,
@@ -90,23 +93,23 @@ const styles = {
 		marginHorizontal: 24,
 	}),
 	bracketLeft: RX.Styles.createViewStyle({
-		height: 22,
-		width: 3,
+		height: bracketHeight,
+		width: bracketWidth,
 		borderColor: HEADER_TEXT,
-		borderLeftWidth: 1,
-		borderTopWidth: 1,
-		borderBottomWidth: 1,
+		borderLeftWidth: bracketBorderWidth,
+		borderTopWidth: bracketBorderWidth,
+		borderBottomWidth: bracketBorderWidth,
 		borderRightWidth: 0,
 		marginRight: SPACING,
 	}),
 	bracketRight: RX.Styles.createViewStyle({
-		height: 22,
-		width: 3,
+		height: bracketHeight,
+		width: bracketWidth,
 		borderColor: HEADER_TEXT,
 		borderLeftWidth: 0,
-		borderTopWidth: 1,
-		borderBottomWidth: 1,
-		borderRightWidth: 1,
+		borderTopWidth: bracketBorderWidth,
+		borderBottomWidth: bracketBorderWidth,
+		borderRightWidth: bracketBorderWidth,
 		marginLeft: SPACING,
 	}),
 };
@@ -246,7 +249,7 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 				<RX.View style={styles.iconContainer}>
 					<IconSvg
 						source={require('../resources/svg/RI_nochat.json') as SvgFile}
-						fillColor={TILE_SYSTEM_TEXT}
+						fillColor={BUTTON_FILL_HEADER}
 						height={14}
 						width={14}
 					/>
@@ -260,9 +263,9 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 				<AnimatedButton
 					buttonStyle={styles.infoButton}
 					iconSource={require('../resources/svg/RI_info.json') as SvgFile}
-					iconFillColor={TILE_SYSTEM_TEXT}
-					iconHeight={BUTTON_HEADER_WIDTH}
-					iconWidth={BUTTON_HEADER_WIDTH}
+					iconFillColor={BUTTON_FILL_HEADER}
+					iconHeight={22}
+					iconWidth={22}
 					animatedColor={TILE_SYSTEM_TEXT}
 					onPress={StoreVersion.showDialog}
 				/>
@@ -272,8 +275,8 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 		const width =
 			UiStore.getAppLayout_().pageWidth -
 			2 * PAGE_MARGIN -
-			1 * (HEADER_HEIGHT / 2 + SPACING) -
-			2 * 4 -
+			2 * (HEADER_HEIGHT / 2) -
+			2 * (bracketWidth + bracketBorderWidth) -
 			2 * SPACING;
 
 		return (
@@ -282,6 +285,10 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 				ref={component => (this.containerView = component!)}
 				onLayout={() => null}
 			>
+				<RX.View style={styles.containerRoundButton}>
+					{disconnected}
+					{infoButton}
+				</RX.View>
 				<RX.View
 					style={styles.containerHeader}
 					disableTouchOpacityAnimation={true}
@@ -309,8 +316,6 @@ export default class RoomListHeader extends ComponentBase<RoomListHeaderProps, R
 						animatedColor={BUTTON_FILL_HEADER}
 						onPress={this.showMenu}
 					/>
-					{disconnected}
-					{infoButton}
 				</RX.View>
 			</RX.View>
 		);

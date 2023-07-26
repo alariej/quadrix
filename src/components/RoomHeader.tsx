@@ -108,9 +108,8 @@ const styles = {
 	}),
 	containerRoundButton: RX.Styles.createViewStyle({
 		width: HEADER_HEIGHT / 2,
-		height: HEADER_HEIGHT / 2,
-		marginLeft: SPACING,
-		marginRight: SPACING,
+		height: HEADER_HEIGHT,
+		justifyContent: 'center',
 		overflow: 'visible',
 	}),
 	roundButton: RX.Styles.createViewStyle({
@@ -124,8 +123,8 @@ const styles = {
 	unreadNumber: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
 		position: 'absolute',
-		bottom: -12,
-		right: 0,
+		top: HEADER_HEIGHT / 2 + 8,
+		right: SPACING,
 		height: 18,
 		width: 18,
 		borderRadius: 9,
