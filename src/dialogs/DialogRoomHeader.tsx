@@ -19,7 +19,6 @@ import {
 	OPAQUE_BACKGROUND,
 	BORDER_RADIUS,
 	TILE_WIDTH,
-	BUTTON_LONG_WIDTH,
 	BUTTON_HEIGHT,
 	SPACING,
 	FONT_LARGE,
@@ -65,13 +64,6 @@ const styles = {
 		minHeight: TILE_HEIGHT + 1,
 		maxHeight: 360, // TODO: make this dynamic
 	}),
-	button: RX.Styles.createViewStyle({
-		borderRadius: BUTTON_HEIGHT / 2,
-		width: BUTTON_LONG_WIDTH,
-		height: BUTTON_HEIGHT,
-		backgroundColor: BUTTON_MODAL_BACKGROUND,
-		marginTop: SPACING,
-	}),
 	topic: RX.Styles.createViewStyle({
 		flex: 1,
 		borderRadius: BORDER_RADIUS,
@@ -102,8 +94,16 @@ const styles = {
 		textAlign: 'center',
 	}),
 	containerButtons: RX.Styles.createViewStyle({
+		flex: 0,
 		alignItems: 'center',
-		marginTop: OBJECT_MARGIN * 3,
+		marginBottom: OBJECT_MARGIN,
+	}),
+	button: RX.Styles.createViewStyle({
+		borderRadius: BUTTON_HEIGHT / 2,
+		width: TILE_WIDTH,
+		height: BUTTON_HEIGHT,
+		backgroundColor: BUTTON_MODAL_BACKGROUND,
+		marginTop: SPACING,
 	}),
 	textDialog: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
@@ -555,20 +555,22 @@ export default class DialogRoomHeader extends ComponentBase<DialogRoomHeaderProp
 				onPress={() => RX.Modal.dismissAll()}
 				disableTouchOpacityAnimation={true}
 			>
-				{topicTile}
-				<RX.View
-					style={[styles.modalView, { height: this.state.userListItems.length * (TILE_HEIGHT + 1) }]}
-					onPress={(event: RX.Types.SyntheticEvent) => event.stopPropagation()}
-					disableTouchOpacityAnimation={true}
-					activeOpacity={1}
-				>
-					<VirtualListView
-						itemList={this.state.userListItems}
-						renderItem={this.renderItem}
-						skipRenderIfItemUnchanged={true}
-						animateChanges={true}
-					/>
-					{spinner}
+				<RX.View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+					{topicTile}
+					<RX.View
+						style={[styles.modalView, { height: this.state.userListItems.length * (TILE_HEIGHT + 1) }]}
+						onPress={(event: RX.Types.SyntheticEvent) => event.stopPropagation()}
+						disableTouchOpacityAnimation={true}
+						activeOpacity={1}
+					>
+						<VirtualListView
+							itemList={this.state.userListItems}
+							renderItem={this.renderItem}
+							skipRenderIfItemUnchanged={true}
+							animateChanges={true}
+						/>
+						{spinner}
+					</RX.View>
 				</RX.View>
 				<RX.View style={styles.containerButtons}>
 					{addUserButton}
