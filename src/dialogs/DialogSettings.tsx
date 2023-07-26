@@ -24,7 +24,6 @@ import {
 	BUTTON_MODAL_BACKGROUND,
 	OPAQUE_BACKGROUND,
 	AVATAR_FOREGROUND,
-	BUTTON_LONG_WIDTH,
 	OBJECT_MARGIN,
 	ICON_REDUCTION_FACTOR,
 	ICON_INFO_SIZE,
@@ -229,7 +228,7 @@ const styles = {
 	}),
 	buttonDelete: RX.Styles.createButtonStyle({
 		borderRadius: BUTTON_HEIGHT / 2,
-		width: BUTTON_LONG_WIDTH,
+		width: DIALOG_WIDTH,
 		height: BUTTON_HEIGHT,
 		backgroundColor: 'white',
 		marginBottom: OBJECT_MARGIN,
