@@ -24,6 +24,7 @@ import {
 	LABEL_TEXT,
 	CONTENT_BACKGROUND,
 	HEADER_HEIGHT,
+	TILE_BACKGROUND_SELECTED,
 } from '../ui';
 import { MESSAGE_COUNT_ADD } from '../appconfig';
 import { ComponentBase } from 'resub';
@@ -114,8 +115,13 @@ const styles = {
 	}),
 	containerDate: RX.Styles.createViewStyle({
 		alignSelf: 'center',
+		justifyContent: 'center',
 		marginTop: OBJECT_MARGIN - SPACING,
 		marginBottom: OBJECT_MARGIN,
+		height: 20,
+		paddingHorizontal: OBJECT_MARGIN,
+		borderRadius: 20 / 2,
+		backgroundColor: TILE_BACKGROUND_SELECTED,
 	}),
 	date: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
