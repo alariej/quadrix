@@ -137,8 +137,7 @@ const styles = {
 		paddingHorizontal: CONTAINER_PADDING,
 		height: BUTTON_HEIGHT,
 		borderRadius: BORDER_RADIUS,
-		borderWidth: 1,
-		borderColor: INPUT_BORDER,
+		backgroundColor: 'whitesmoke',
 	}),
 	userId: RX.Styles.createTextInputStyle({
 		fontFamily: AppFont.fontFamily,
