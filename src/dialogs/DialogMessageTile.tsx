@@ -322,8 +322,8 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 						size: info.size,
 						h: info.h,
 						w: info.w,
-						thumbnail_url: info.thumbnail_info,
-						thumbnail_info: info.thumbnail_url,
+						thumbnail_url: info.thumbnail_url,
+						thumbnail_info: info.thumbnail_info,
 					} as ImageInfo_;
 					break;
 
@@ -335,8 +335,8 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 						size: info.size,
 						h: info.h,
 						w: info.w,
-						thumbnail_url: info.thumbnail_info,
-						thumbnail_info: info.thumbnail_url,
+						thumbnail_url: info.thumbnail_url,
+						thumbnail_info: info.thumbnail_info,
 					} as VideoInfo_;
 					break;
 
@@ -345,8 +345,8 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 					contentInfo = {
 						mimetype: info.mimetype,
 						size: info.size,
-						thumbnail_url: info.thumbnail_info,
-						thumbnail_info: info.thumbnail_url,
+						thumbnail_url: info.thumbnail_url,
+						thumbnail_info: info.thumbnail_info,
 					} as FileInfo_;
 					break;
 			}
