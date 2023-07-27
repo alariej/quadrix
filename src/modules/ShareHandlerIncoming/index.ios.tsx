@@ -55,7 +55,7 @@ class ShareHandlerIncoming {
 		const dialogRoomPicker = (
 			<DialogRoomPicker
 				onPressRoom={roomId => this.askSendContent(roomId, sharedContent[m - 1], showTempForwardedMessage)}
-				label={sendTo[UiStore.getLanguage()] + '...'}
+				label={sendTo[UiStore.getLanguage()] + ' ...'}
 			/>
 		);
 
