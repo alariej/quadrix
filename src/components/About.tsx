@@ -19,6 +19,10 @@ import { termsPrivacyLicense } from '../translations';
 import { CONTENT_BACKGROUND, FONT_LARGE, FONT_NORMAL, LINK_TEXT, LOGO_FILL, MODAL_CONTENT_TEXT, SPACING } from '../ui';
 import IconSvg, { SvgFile } from './IconSvg';
 
+const storeIconSize = 26;
+const logoMargin = 3;
+const logoPadding = 7;
+
 const styles = {
 	containerAbout: RX.Styles.createViewStyle({
 		padding: SPACING,
@@ -34,7 +38,19 @@ const styles = {
 	}),
 	logostore: RX.Styles.createViewStyle({
 		flex: 1,
-		margin: 5,
+		height: storeIconSize + logoPadding * 2,
+		width: storeIconSize + logoPadding * 2,
+		borderRadius: (storeIconSize + logoPadding * 2) / 2,
+		margin: logoMargin,
+		alignItems: 'center',
+		justifyContent: 'center',
+		backgroundColor: CONTENT_BACKGROUND,
+		overflow: 'visible',
+		shadowOffset: Shadow.medium.offset,
+		shadowColor: Shadow.medium.color,
+		shadowRadius: Shadow.medium.radius,
+		elevation: Shadow.medium.elevation,
+		shadowOpacity: Shadow.medium.opacity,
 	}),
 	link: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
@@ -86,7 +102,6 @@ export default class About extends RX.Component<unknown, RX.Stateless> {
 	};
 
 	public render(): JSX.Element | null {
-		const storeIconSize = 28;
 		const storeIconColor = 'grey';
 
 		let sponsorButton;
@@ -187,7 +202,7 @@ export default class About extends RX.Component<unknown, RX.Stateless> {
 					{termsPrivacyLicense[UiStore.getLanguage()]}
 				</RX.Text>
 				{sponsorButton}
-				<RX.View style={[styles.stores, { width: numLogo * (storeIconSize + 2 * 5) }]}>
+				<RX.View style={[styles.stores, { width: numLogo * (storeIconSize + 2 * (logoMargin + logoPadding)) }]}>
 					{androidLogo}
 					<RX.Button
 						style={styles.logostore}
