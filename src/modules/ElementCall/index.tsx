@@ -316,6 +316,8 @@ export default class ElementCall extends ComponentBase<ElementCallProps, Element
 				'io.element.ptt': false,
 			};
 
+			// this probably needs to change
+			// to solve the issue of calls being launched simultaneously by 2 users
 			this.callId = StringUtils.getRandomString(8);
 
 			ApiClient.sendStateEvent(this.props.roomId, CallEvents.GroupCallPrefix, content, this.callId).catch(
