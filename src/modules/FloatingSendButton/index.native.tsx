@@ -2,7 +2,7 @@ import RX from 'reactxp';
 import React, { Component } from 'react';
 import AnimatedButton from '../../components/AnimatedButton';
 import { SvgFile } from '../../components/IconSvg';
-import { BUTTON_FILL, BUTTON_HEIGHT } from '../../ui';
+import { BUTTON_FILL } from '../../ui';
 import { EmitterSubscription, Keyboard } from 'react-native';
 import { hasNotch } from 'react-native-device-info';
 import UiStore from '../../stores/UiStore';
@@ -14,8 +14,8 @@ const animatedEasing = RX.Animated.Easing.InOutBack();
 const styles = {
 	button: RX.Styles.createViewStyle({
 		width: 80,
-		height: BUTTON_HEIGHT,
-		borderRadius: BUTTON_HEIGHT / 2,
+		height: 32,
+		borderRadius: 32 / 2,
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: BUTTON_FILL,
