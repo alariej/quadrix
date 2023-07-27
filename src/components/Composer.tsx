@@ -48,6 +48,7 @@ import AsyncStorage from '../modules/AsyncStorage';
 import DialogMenuComposer from '../dialogs/DialogMenuComposer';
 import AnimatedButton from './AnimatedButton';
 import { FilteredChatEvent, TemporaryMessage } from '../models/FilteredChatEvent';
+import Sound from '../modules/Sound';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
@@ -313,6 +314,8 @@ export default class Composer extends ComponentBase<ComposerProps, ComposerState
 	};
 
 	private onPressSendButton = async () => {
+		Sound.play('plop');
+
 		if (!this.textInput) {
 			return;
 		}
