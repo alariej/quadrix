@@ -8,7 +8,6 @@ import {
 	OPAQUE_BACKGROUND,
 	BUTTON_MODAL_TEXT,
 	BORDER_RADIUS,
-	STACKED_BUTTON_HEIGHT,
 	FONT_LARGE,
 	TRANSPARENT_BACKGROUND,
 	OPAQUE_LIGHT_BACKGROUND,
@@ -62,6 +61,9 @@ import { SvgFile } from '../components/IconSvg';
 import { FilteredChatEvent } from '../models/FilteredChatEvent';
 import MenuButton from '../components/MenuButton';
 
+const buttonHeight = 32;
+const buttonMargin = 1;
+
 const styles = {
 	modalScreen: RX.Styles.createViewStyle({
 		flex: 1,
@@ -79,10 +81,10 @@ const styles = {
 	}),
 	buttonDialog: RX.Styles.createViewStyle({
 		width: BUTTON_MENU_WIDTH,
-		height: 32,
-		borderRadius: 32 / 2,
+		height: buttonHeight,
+		borderRadius: buttonHeight / 2,
 		backgroundColor: OPAQUE_MEDIUM_BACKGROUND,
-		marginBottom: 5,
+		marginBottom: buttonMargin,
 	}),
 	buttonText: RX.Styles.createTextStyle({
 		flex: 1,
@@ -243,7 +245,7 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 		this.confirmationDialog = (
 			<DialogRoomPicker
 				onPressRoom={this.confirmForwardMessage}
-				label={forwardTo[this.language] + '...'}
+				label={forwardTo[this.language] + ' ...'}
 				backgroundColor={OPAQUE_LIGHT_BACKGROUND}
 			/>
 		);
@@ -834,8 +836,8 @@ export default class DialogMessageTile extends ComponentBase<DialogMessageTilePr
 			}
 
 			const appLayout = UiStore.getAppLayout_();
-			const containerHeight = n * (STACKED_BUTTON_HEIGHT + 2 * 1);
-			let top = (this.props.layout.height - containerHeight - 1) / 2;
+			const containerHeight = n * (buttonHeight + 2 * buttonMargin);
+			let top = (this.props.layout.height - containerHeight - buttonMargin) / 2;
 			top = Math.min(top, appLayout.screenHeight - this.props.layout.y - containerHeight);
 			top = Math.max(top, -1 * this.props.layout.y);
 
