@@ -188,10 +188,10 @@ export const theCommunity: Translation = {
 };
 
 export const search: Translation = {
-	en: 'Search...',
-	de: 'Suchen...',
-	fr: 'Chercher...',
-	es: 'Buscar...',
+	en: 'Search ...',
+	de: 'Suchen ...',
+	fr: 'Chercher ...',
+	es: 'Buscar ...',
 };
 
 export const communityName: Translation = {
@@ -703,10 +703,10 @@ export const wrote: Translation = {
 };
 
 export const shareWith: Translation = {
-	en: 'Share with...',
-	de: 'Teilen mit...',
-	fr: 'Partager avec...',
-	es: 'Compartir con...',
+	en: 'Share with ...',
+	de: 'Teilen mit ...',
+	fr: 'Partager avec ...',
+	es: 'Compartir con ...',
 };
 
 export const sending: Translation = {
@@ -867,10 +867,10 @@ export const fileHasBeenSaved: Translation = {
 };
 
 export const fileHasBeenSavedAndroid: Translation = {
-	en: "...has been saved to your device's Download folder.",
-	de: '...wurde im Ordner Download Ihres Geräts gespeichert.',
-	fr: '...a été sauvegardé dans le dossier Download de votre appareil.',
-	es: '...se ha guardado en la carpeta Download de su dispositivo.',
+	en: "... has been saved to your device's Download folder.",
+	de: '... wurde im Ordner Download Ihres Geräts gespeichert.',
+	fr: '... a été sauvegardé dans le dossier Download de votre appareil.',
+	es: '... se ha guardado en la carpeta Download de su dispositivo.',
 };
 
 export const toFolder: Translation = {
@@ -1268,10 +1268,10 @@ export const syncError: Translation = {
 };
 
 export const pleaseWait: Translation = {
-	en: 'Please wait...',
-	de: 'Bitte warten...',
-	fr: 'Veuillez attendre...',
-	es: 'Por favor, espera...',
+	en: 'Please wait ...',
+	de: 'Bitte warten ...',
+	fr: 'Veuillez attendre ...',
+	es: 'Por favor, espera ...',
 };
 
 export const compressingVideo: Translation = {
@@ -1322,10 +1322,10 @@ export const deleteAccount: Translation = {
 };
 
 export const newRoom: Translation = {
-	en: 'New...',
-	de: 'Neu...',
-	fr: 'Nouveau...',
-	es: 'Nuevo...',
+	en: 'New ...',
+	de: 'Neu ...',
+	fr: 'Nouveau ...',
+	es: 'Nuevo ...',
 };
 
 export const about: Translation = {
@@ -1411,10 +1411,10 @@ export const clearDatastore: Translation = {
 };
 
 export const writeMessage: Translation = {
-	en: 'Write a message...',
-	de: 'Nachricht schreiben...',
-	fr: 'Écrire un message...',
-	es: 'Escribir un mensaje...',
+	en: 'Write a message ...',
+	de: 'Nachricht schreiben ...',
+	fr: 'Écrire un message ...',
+	es: 'Escribir un mensaje ...',
 };
 
 export const serverInfo_1: Translation = {
