@@ -10,7 +10,6 @@ import {
 	TRANSPARENT_BACKGROUND,
 	HEADER_HEIGHT,
 	CONTENT_BACKGROUND,
-	BUTTON_FILL,
 	APP_BACKGROUND,
 	LOGO_FILL,
 } from '../ui';
@@ -33,6 +32,10 @@ import axios from 'axios';
 
 const styles = {
 	container: RX.Styles.createViewStyle({
+		flex: 1,
+		backgroundColor: APP_BACKGROUND,
+	}),
+	animatedContainer: RX.Styles.createViewStyle({
 		flex: 1,
 		flexDirection: 'row',
 		padding: PAGE_MARGIN,
@@ -351,7 +354,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 	};
 
 	private shareContent = (event: { url: string }) => {
-		RX.StatusBar.setBackgroundColor(BUTTON_FILL, true);
+		RX.StatusBar.setBackgroundColor(LOGO_FILL, true);
 		RX.StatusBar.setBarStyle('dark-content', true);
 
 		this.showRoomList();
@@ -466,7 +469,7 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 	private closeVideoCall = () => {
 		this.setState({ showVideoCall: false }, () => {
 			setTimeout(() => {
-				RX.StatusBar.setBackgroundColor(BUTTON_FILL, true);
+				RX.StatusBar.setBackgroundColor(LOGO_FILL, true);
 				RX.StatusBar.setBarStyle('dark-content', true);
 			}, 2000);
 		});
@@ -536,26 +539,14 @@ export default class Main extends ComponentBase<MainProps, MainState> {
 		if (this.state.layout.type === 'wide') {
 			paddingLeft = <RX.View style={styles.paddingLeft} />;
 			paddingRight = <RX.View style={styles.paddingRight} />;
-			cornerCover = (
-				<RX.View
-					style={{
-						position: 'absolute',
-						top: HEADER_HEIGHT,
-						left: PAGE_WIDE_PADDING,
-						height: 20,
-						width: PAGE_WIDE_PADDING,
-						backgroundColor: APP_BACKGROUND,
-						borderTopRightRadius: 6,
-					}}
-				/>
-			);
+			cornerCover = <RX.View style={styles.cornerCover} />;
 		}
 
 		return (
-			<RX.View style={{ flex: 1 }}>
+			<RX.View style={styles.container}>
 				<RX.Animated.View
 					style={[
-						styles.container,
+						styles.animatedContainer,
 						this.animatedContainerStyle,
 						{
 							width: this.state.layout.containerWidth,
