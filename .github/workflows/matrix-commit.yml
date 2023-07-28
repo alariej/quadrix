@@ -14,7 +14,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: matrix-commit
-      uses: krazykirby99999/matrix-commit@v1
+      uses: i10b/matrix-commit@v1
 
       with:
         homeserver: ${{ secrets.BOT_HOMESERVER }}
