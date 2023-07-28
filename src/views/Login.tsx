@@ -20,6 +20,7 @@ import {
 	BUTTON_LOGIN_INFO,
 	LOGO_FILL,
 	LABEL_TEXT,
+	CONTENT_BACKGROUND,
 } from '../ui';
 import ApiClient from '../matrix/ApiClient';
 import DialogContainer from '../modules/DialogContainer';
@@ -58,6 +59,7 @@ import NetInfo from '../modules/NetInfo';
 const styles = {
 	container: RX.Styles.createViewStyle({
 		flex: 1,
+		backgroundColor: CONTENT_BACKGROUND,
 	}),
 	containerDialog: RX.Styles.createViewStyle({
 		alignItems: 'center',
