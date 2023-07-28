@@ -12,6 +12,8 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		20F508F9B6022104AE8A549F /* Pods_quadrix.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 359000D40FC308FA835DD2DA /* Pods_quadrix.framework */; };
+		A91FDFEF2A742ACE00875B6F /* plop.wav in Resources */ = {isa = PBXBuildFile; fileRef = A91FDFEE2A742ACE00875B6F /* plop.wav */; };
+		A91FDFF02A742ACE00875B6F /* plop.wav in Resources */ = {isa = PBXBuildFile; fileRef = A91FDFEE2A742ACE00875B6F /* plop.wav */; };
 		A93995CE25FBB9E6006AF4C9 /* ding.wav in Resources */ = {isa = PBXBuildFile; fileRef = A93995CD25FBB9E5006AF4C9 /* ding.wav */; };
 		A93995CF25FBB9E6006AF4C9 /* ding.wav in Resources */ = {isa = PBXBuildFile; fileRef = A93995CD25FBB9E5006AF4C9 /* ding.wav */; };
 		A93A19B925F6C6FB009A1CF9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A93A19B825F6C6FB009A1CF9 /* GoogleService-Info.plist */; };
@@ -76,6 +78,7 @@
 		71A96AF39A614A34C952177C /* Pods-quadrix.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-quadrix.release.xcconfig"; path = "Target Support Files/Pods-quadrix/Pods-quadrix.release.xcconfig"; sourceTree = "<group>"; };
 		7C6B3D4ECE75949693113338 /* Pods-quadrix-quadrixTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-quadrix-quadrixTests.release.xcconfig"; path = "Target Support Files/Pods-quadrix-quadrixTests/Pods-quadrix-quadrixTests.release.xcconfig"; sourceTree = "<group>"; };
 		839FF70F8674CF088D1B97E4 /* Pods-quadrix-quadrixTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-quadrix-quadrixTests.debug.xcconfig"; path = "Target Support Files/Pods-quadrix-quadrixTests/Pods-quadrix-quadrixTests.debug.xcconfig"; sourceTree = "<group>"; };
+		A91FDFEE2A742ACE00875B6F /* plop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = plop.wav; sourceTree = "<group>"; };
 		A92A2C7D260D264700FA3A54 /* QuadrixShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QuadrixShareExtension.entitlements; sourceTree = "<group>"; };
 		A93995CD25FBB9E5006AF4C9 /* ding.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ding.wav; sourceTree = "<group>"; };
 		A93A19B825F6C6FB009A1CF9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -179,6 +182,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				A91FDFEE2A742ACE00875B6F /* plop.wav */,
 				A977923D26565BFD009D2FE1 /* Launch.xcassets */,
 				A977923A26565A9B009D2FE1 /* LaunchScreen.storyboard */,
 				A93995CD25FBB9E5006AF4C9 /* ding.wav */,
@@ -346,6 +350,7 @@
 				A977923C26565A9B009D2FE1 /* LaunchScreen.storyboard in Resources */,
 				A9B5EC76282951AD0059C328 /* Images.xcassets in Resources */,
 				A93995CF25FBB9E6006AF4C9 /* ding.wav in Resources */,
+				A91FDFF02A742ACE00875B6F /* plop.wav in Resources */,
 				A977923F26565BFD009D2FE1 /* Launch.xcassets in Resources */,
 				A93A19BA25F6C6FB009A1CF9 /* GoogleService-Info.plist in Resources */,
 			);
@@ -356,6 +361,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A977923E26565BFD009D2FE1 /* Launch.xcassets in Resources */,
+				A91FDFEF2A742ACE00875B6F /* plop.wav in Resources */,
 				A959E1BA26A463C200460759 /* InfoPlist.strings in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				A977923B26565A9B009D2FE1 /* LaunchScreen.storyboard in Resources */,
