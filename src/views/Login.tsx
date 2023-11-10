@@ -4,7 +4,6 @@ import {
 	BUTTON_LONG_BACKGROUND,
 	BUTTON_LONG_TEXT,
 	INPUT_BACKGROUND,
-	HEADER_TEXT,
 	MODAL_CONTENT_TEXT,
 	BORDER_RADIUS,
 	CONTAINER_PADDING,
@@ -130,7 +129,7 @@ const styles = {
 	terms: RX.Styles.createTextStyle({
 		fontFamily: AppFont.fontFamily,
 		fontSize: FONT_NORMAL,
-		color: HEADER_TEXT,
+		color: LABEL_TEXT,
 		textDecorationLine: 'underline',
 		textAlign: 'center',
 		padding: 12,
