@@ -159,7 +159,7 @@ class EventUtils {
 			}
 		} else if (event.type === 'org.matrix.msc3401.call.member') {
 			const content = event.content as CallMemberEventContent_;
-			if (content['m.calls'].length === 0) {
+			if (content['m.calls'] && content['m.calls'].length === 0) {
 				if (content['chat.quadrix.call.id']) {
 					systemMessage = event.senderId + ' ' + declinedVideoConference[language];
 				} else {

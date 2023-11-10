@@ -215,6 +215,7 @@ class DataStore extends StoreBase {
 					if (this.roomSummaryList[roomIndex].msc3401Call) {
 						roomEventTriggers.isNewCallEvent = true;
 						if (
+							(<CallMemberEventContent_>content)['m.calls'] &&
 							(<CallMemberEventContent_>content)['m.calls'][0] &&
 							(<CallMemberEventContent_>content)['m.calls'][0]['m.call_id'] ===
 								this.roomSummaryList[roomIndex].msc3401Call?.callId
